@@ -1,0 +1,131 @@
+name: Release
+
+concurrency:
+  group: nativeaot-release-${{ github.ref }}
+  cancel-in-progress: false
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  prepare-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Ensure release exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            echo "Release already exists: ${{ github.ref_name }}"
+          else
+            gh release create "${{ github.ref_name }}" --title "${{ github.ref_name }}" --generate-notes --verify-tag --draft
+          fi
+
+  publish:
+    name: Publish ${{ matrix.os }}
+    needs: prepare-release
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+            archive: tar.gz
+          - os: windows-latest
+            rid: win-x64
+            archive: zip
+          - os: macos-latest
+            rid: osx-arm64
+            archive: tar.gz
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # v5.3.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish NativeAOT binary
+        shell: pwsh
+        run: |
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
+          New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+
+          dotnet publish scenario2cast.cs `
+            -c Release `
+            -r ${{ matrix.rid }} `
+            --self-contained true `
+            -p:PublishAot=true `
+            -p:StripSymbols=true `
+            -p:DebugType=None `
+            -o $artifactDir
+
+      - name: Smoke test published binary
+        shell: pwsh
+        run: |
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
+          $binaryName = if ($IsWindows) { "scenario2cast.exe" } else { "scenario2cast" }
+          $binaryPath = Join-Path $artifactDir $binaryName
+          $outputPath = Join-Path $artifactDir "smoke.cast"
+
+          if (-not (Test-Path $binaryPath)) {
+            throw "Published binary not found: $binaryPath"
+          }
+
+          & $binaryPath examples/basic.yaml $outputPath
+
+          if (-not (Test-Path $outputPath)) {
+            throw "Smoke test did not create expected output: $outputPath"
+          }
+
+      - name: Package release assets
+        shell: pwsh
+        run: |
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
+          $archiveBaseName = "scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
+          $archivePath = Join-Path $env:GITHUB_WORKSPACE "$archiveBaseName.${{ matrix.archive }}"
+          $checksumPath = "$archivePath.sha256"
+
+          if ($IsWindows) {
+            if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
+            Compress-Archive -Path (Join-Path $artifactDir '*') -DestinationPath $archivePath
+            $hash = (Get-FileHash -Algorithm SHA256 -Path $archivePath).Hash.ToLowerInvariant()
+            Set-Content -Path $checksumPath -Value "$hash  $([System.IO.Path]::GetFileName($archivePath))" -NoNewline
+          }
+          else {
+            tar -czf $archivePath -C $artifactDir .
+            $hash = (sha256sum $archivePath).Split(' ')[0]
+            Set-Content -Path $checksumPath -Value "$hash  $([System.IO.Path]::GetFileName($archivePath))" -NoNewline
+          }
+
+          if (-not (Test-Path $archivePath)) {
+            throw "Archive not found: $archivePath"
+          }
+
+          if (-not (Test-Path $checksumPath)) {
+            throw "Checksum not found: $checksumPath"
+          }
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $archiveBaseName = "scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
+          $archivePath = Join-Path $env:GITHUB_WORKSPACE "$archiveBaseName.${{ matrix.archive }}"
+          $checksumPath = "$archivePath.sha256"
+
+          gh release upload "${{ github.ref_name }}" $archivePath $checksumPath --clobber

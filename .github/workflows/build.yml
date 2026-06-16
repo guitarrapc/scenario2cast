@@ -1,0 +1,76 @@
+name: Build
+
+concurrency:
+  group: nativeaot-build-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+          - os: macos-latest
+            rid: osx-arm64
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # v5.3.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish NativeAOT binary
+        shell: pwsh
+        run: |
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "artifacts/${{ matrix.rid }}"
+          New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+
+          dotnet publish scenario2cast.cs `
+            -c Release `
+            -r ${{ matrix.rid }} `
+            --self-contained true `
+            -p:PublishAot=true `
+            -p:StripSymbols=true `
+            -p:DebugType=None `
+            -o $artifactDir
+
+      - name: Smoke test published binary
+        shell: pwsh
+        run: |
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "artifacts/${{ matrix.rid }}"
+          $binaryName = if ($IsWindows) { "scenario2cast.exe" } else { "scenario2cast" }
+          $binaryPath = Join-Path $artifactDir $binaryName
+          $outputPath = Join-Path $artifactDir "smoke.cast"
+
+          if (-not (Test-Path $binaryPath)) {
+            throw "Published binary not found: $binaryPath"
+          }
+
+          & $binaryPath examples/basic.yaml $outputPath
+
+          if (-not (Test-Path $outputPath)) {
+            throw "Smoke test did not create expected output: $outputPath"
+          }
