@@ -6,7 +6,7 @@ English | [日本語](README-ja.md)
 
 Generate [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) files from YAML scenario files. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and emits a cast file with simulated typing plus real command output.
 
-![](examples/basic.gif)
+![](samples/basic.gif)
 
 **Motivation**
 
@@ -36,31 +36,31 @@ scenario2cast init scenario.yaml
 scenario2cast scenario.yaml [output.cast]
 
 # If `output.cast` is omitted, output is written next to the scenario file with the `.cast` extension.
-scenario2cast examples/basic.yaml
+scenario2cast samples/basic.yaml
 
 # Specify output path
-scenario2cast examples/basic.yaml basic.cast
+scenario2cast samples/basic.yaml basic.cast
 
 # Play with asciinema
 asciinema play basic.cast
 
 # Convert to gif with agg (Linux/macOS)
-docker run --rm -v "${PWD}:/data" kayvan/agg /data/examples/basic.cast /data/examples/basic.gif
+docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
 
 # Convert to gif with agg (Windows PowerShell)
-docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/examples/basic.cast /data/examples/basic.gif
+docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
 ```
 
 ### Demo The README Workflow As A Scenario
 
-If you want to show the exact README flow as a cast/gif demo, use [examples/readme-demo.yaml](examples/readme-demo.yaml).
+If you want to show the exact README flow as a cast/gif demo, use [samples/readme-demo.yaml](samples/readme-demo.yaml).
 
 ```bash
 # This scenario runs:
-# 1) cat examples/basic.yaml
-# 2) scenario2cast examples/basic.yaml examples/basic.cast
-# 3) docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/examples/basic.cast /data/examples/basic.gif
-scenario2cast examples/readme-demo.yaml examples/readme-demo.cast
+# 1) cat samples/basic.yaml
+# 2) scenario2cast samples/basic.yaml samples/basic.cast
+# 3) docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
+scenario2cast samples/readme-demo.yaml samples/readme-demo.cast
 ```
 
 The scenario intentionally uses per-step `pre-delay` and `post-delay` overrides so each phase has enough pause for explanation.

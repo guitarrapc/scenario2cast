@@ -6,7 +6,7 @@
 
 YAMLシナリオファイルから [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) ファイルを生成するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行してその出力を使った cast ファイルを生成します。
 
-![](examples/basic.gif)
+![](samples/basic.gif)
 
 **動機**
 
@@ -36,16 +36,16 @@ scenario2cast init scenario.yaml
 scenario2cast scenario.yaml [output.cast]
 
 # `output.cast` を省略すると、シナリオファイルと同じディレクトリに `.cast` 拡張子で出力します。
-scenario2cast examples/basic.yaml
+scenario2cast samples/basic.yaml
 
 # 出力先を指定
-scenario2cast examples/basic.yaml basic.cast
+scenario2cast samples/basic.yaml basic.cast
 
 # asciinema で再生
 asciinema play basic.cast
 
 # agg で gif に変換
-docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/examples/basic.cast /data/examples/basic.gif
+docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
 ```
 
 **注意事項**

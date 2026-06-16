@@ -11,7 +11,7 @@ settings:
   post-delay: 1.2 # pause after output before next step
 
 steps:
-  - run: cat examples/basic.yaml
-  - run: scenario2cast examples/basic.yaml examples/basic.cast
-  - run: docker run --rm -v "$PWD:/data" kayvan/agg /data/examples/basic.cast /data/examples/basic.gif
+  - run: cat samples/basic.yaml
+  - run: scenario2cast samples/basic.yaml samples/basic.cast
+  - run: docker run --rm -v "$PWD:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
     execution-duration: 1.0

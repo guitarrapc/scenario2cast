@@ -63,6 +63,6 @@ jobs:
 
           test -f "$binary_path"
 
-          "$binary_path" examples/basic.yaml "$output_path"
+          "$binary_path" samples/basic.yaml "$output_path"
 
           test -f "$output_path"
