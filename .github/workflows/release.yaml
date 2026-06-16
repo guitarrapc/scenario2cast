@@ -18,14 +18,15 @@ jobs:
       contents: write
     steps:
       - name: Ensure release exists
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
             echo "Release already exists: ${{ github.ref_name }}"
           else
             gh release create "${{ github.ref_name }}" --title "${{ github.ref_name }}" --generate-notes --verify-tag --draft
           fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
 
   publish:
     name: Publish ${{ matrix.os }}
