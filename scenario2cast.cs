@@ -3,7 +3,6 @@
 #:property Nullable=enable
 #:property ImplicitUsings=enable
 #:package YamlDotNet@18.0.0
-#:package Vecc.YamlDotNet.Analyzers.StaticGenerator@18.0.0
 
 // scenario2cast - Generate asciinema v2 cast files from YAML scenario files.
 //
