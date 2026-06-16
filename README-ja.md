@@ -49,9 +49,9 @@ settings:
   prompt: "$ "
   typing-speed: 0.05       # 1文字あたりの平均秒数
   typing-jitter: 0.015     # ジッター幅 ±秒
-  pre-command-delay: 0.8   # 次の step のタイピング開始前の停止時間
-  post-command-delay: 1.5  # プロンプト表示後・次の step 入力までの停止時間
-  command-execution-duration: 0.7 # 任意。各コマンド実行の cast 上待機時間の既定値 (既定: 0.1)
+  pre-delay: 0.8           # 次の step のタイピング開始前の停止時間
+  post-delay: 1.5          # プロンプト表示後・次の step 入力までの停止時間
+  execution-duration: 0.7  # 任意。各コマンド実行の cast 上待機時間
 
 steps:
   # 文字列で書くだけ（シンプルな方法）
@@ -78,9 +78,9 @@ steps:
 | `run` | 実行するコマンド | 必須 |
 | `typing-speed` | 1文字あたりの平均秒数 | `settings.typing-speed` |
 | `typing-jitter` | ジッター幅 | `settings.typing-jitter` |
-| `pre-delay` | タイピング前の停止時間 | `settings.pre-command-delay` |
-| `post-delay` | プロンプト表示後の停止時間 | `settings.post-command-delay` |
-| `execution-duration` | このコマンド実行の cast 上待機時間を上書き | `settings.command-execution-duration` |
+| `pre-delay` | タイピング前の停止時間 | `settings.pre-delay` |
+| `post-delay` | プロンプト表示後の停止時間 | `settings.post-delay` |
+| `execution-duration` | このコマンド実行の cast 上待機時間を上書き | `settings.execution-duration` |
 
 ## 注意事項
 
@@ -89,7 +89,7 @@ steps:
 - cast 出力の改行は OS に関係なく `\r\n` に正規化されます（端末レンダラー互換のため）
 - 同じシナリオファイルに対するタイピングシミュレーションは決定的です
 - cast ヘッダーの `timestamp` も同じシナリオファイルで決定的です
-- 未指定時のコマンド実行待機は cast 上で固定 `0.1s` です
+- 未指定時のコマンド実行待機は cast 上で固定 `0.05s` です
 - `execution-duration` は cast 上の待機時間だけを変更し、実コマンド自体は完了まで実行されます
 - Linux/macOS のデフォルトは `$SHELL`、未設定時は `bash` です
 - Windows のデフォルトは `pwsh`、未導入時は `powershell` です

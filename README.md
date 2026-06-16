@@ -49,9 +49,9 @@ settings:
   prompt: "$ "
   typing-speed: 0.05       # Seconds per character (average)
   typing-jitter: 0.015     # Random jitter (+/- seconds)
-  pre-command-delay: 0.8   # Pause before typing next step
-  post-command-delay: 1.5  # Pause after prompt appears before next step typing
-  command-execution-duration: 0.1 # Optional. Default cast wait per command (default: 0.05)
+  pre-delay: 0.8           # Pause before typing next step
+  post-delay: 1.5          # Pause after prompt appears before next step typing
+  execution-duration: 0.1  # Optional. Default cast wait per command
 
 steps:
   # Simple string command
@@ -78,9 +78,9 @@ steps:
 | `run` | Command to execute | required |
 | `typing-speed` | Seconds per typed character | `settings.typing-speed` |
 | `typing-jitter` | Typing jitter range | `settings.typing-jitter` |
-| `pre-delay` | Pause before command typing | `settings.pre-command-delay` |
-| `post-delay` | Pause after prompt appears | `settings.post-command-delay` |
-| `execution-duration` | Override cast wait for this command execution | `settings.command-execution-duration` |
+| `pre-delay` | Pause before command typing | `settings.pre-delay` |
+| `post-delay` | Pause after prompt appears | `settings.post-delay` |
+| `execution-duration` | Override cast wait for this command execution | `settings.execution-duration` |
 
 ## Notes
 
@@ -89,7 +89,7 @@ steps:
 - Cast output newlines are normalized to `\r\n` across all OSes for terminal renderer compatibility.
 - Typing simulation is deterministic for the same scenario file.
 - Cast header `timestamp` is deterministic for the same scenario file.
-- If unspecified, command execution waits use a fixed `0.1s` in the cast timeline.
+- If unspecified, command execution waits use a fixed `0.05s` in the cast timeline.
 - `execution-duration` changes only the cast timeline; the real command still runs to completion.
 - Linux/macOS default: `$SHELL`, fallback to `bash`.
 - Windows default: `pwsh`, fallback to `powershell`.

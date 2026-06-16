@@ -77,9 +77,9 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
     var prompt    = AsString(s, "prompt", DefaultPrompt);
     var speed     = AsDouble(s, "typing-speed", DefaultSpeed);
     var jitter    = AsDouble(s, "typing-jitter", DefaultJitter);
-    var preDelay  = AsDouble(s, "pre-command-delay", DefaultPreDelay);
-    var postDelay = AsDouble(s, "post-command-delay", DefaultPostDelay);
-    var defaultExecutionDuration = AsDouble(s, "command-execution-duration", DefaultCommandExecutionDuration);
+    var preDelay  = AsDouble(s, "pre-delay", AsDouble(s, "pre-command-delay", DefaultPreDelay));
+    var postDelay = AsDouble(s, "post-delay", AsDouble(s, "post-command-delay", DefaultPostDelay));
+    var defaultExecutionDuration = AsDouble(s, "execution-duration", DefaultCommandExecutionDuration);
     var events = new List<CastEvent>();
     var rng    = new Random(deterministicSeed);
     double t   = 0.5;
