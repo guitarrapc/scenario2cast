@@ -6,6 +6,31 @@
 
 YAMLシナリオファイルから [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) ファイルを生成するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行してその出力を使った cast ファイルを生成します。
 
+サンプルシナリオ`samples/basic.yaml`で生成したcastをgifに変換すると...!タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなデモが簡単に作れます。
+
+```yaml
+title: "Basic Demo"
+width: 80
+height: 24
+shell: bash
+
+settings:
+  prompt: "$ "
+  typing-speed: 0.02 # average seconds per keystroke
+  typing-jitter: 0.01 # random variance (±) per keystroke
+  pre-delay: 0.4 # pause before typing starts
+  post-delay: 1.0 # pause after output before next step
+
+steps:
+  - echo "Hello, World!"
+  - echo "Current directory:"
+  - pwd
+  - echo "Wait for 2 seconds..."
+  - run: sleep 2
+    execution-duration: 1.0
+  - echo "Done!"
+```
+
 ![](samples/basic.gif)
 
 **動機**
@@ -29,23 +54,26 @@ chmod +x ./scenario2cast
 # 最小シナリオを作成
 scenario2cast init scenario.yaml
 
-# 省略すると、現在のディレクトリに `scenario.yaml` として初期ファイルを生成します。
+# 省略すると、現在のディレクトリに`scenario.yaml`として初期ファイルを生成します。
 # scenario2cast init
 
 # 実行
 scenario2cast scenario.yaml [output.cast]
 
-# `output.cast` を省略すると、シナリオファイルと同じディレクトリに `.cast` 拡張子で出力します。
+# `output.cast`を省略すると、シナリオファイルと同じディレクトリに`.cast`拡張子で出力します。
 scenario2cast samples/basic.yaml
 
 # 出力先を指定
 scenario2cast samples/basic.yaml basic.cast
 
-# asciinema で再生
+# asciinemaで再生
 asciinema play basic.cast
 
-# agg で gif に変換
-docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
+# gifに変換 (Linux/macOS) - GIF変換時のデフォルトフォントサイズは16です。小さすぎる・大きすぎると感じたらフォントサイズを調整してください。
+docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
+
+# gifに変換 (Windows PowerShell)
+docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
 ```
 
 **注意事項**

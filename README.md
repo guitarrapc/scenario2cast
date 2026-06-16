@@ -6,6 +6,31 @@ English | [日本語](README-ja.md)
 
 Generate [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) files from YAML scenario files. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and emits a cast file with simulated typing plus real command output.
 
+Sample scenario `samples/basic.yaml` generates a cast that looks like this when converted to gif...! You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic demos.
+
+```yaml
+title: "Basic Demo"
+width: 80
+height: 24
+shell: bash
+
+settings:
+  prompt: "$ "
+  typing-speed: 0.02 # average seconds per keystroke
+  typing-jitter: 0.01 # random variance (±) per keystroke
+  pre-delay: 0.4 # pause before typing starts
+  post-delay: 1.0 # pause after output before next step
+
+steps:
+  - echo "Hello, World!"
+  - echo "Current directory:"
+  - pwd
+  - echo "Wait for 2 seconds..."
+  - run: sleep 2
+    execution-duration: 1.0
+  - echo "Done!"
+```
+
 ![](samples/basic.gif)
 
 **Motivation**
@@ -44,11 +69,11 @@ scenario2cast samples/basic.yaml basic.cast
 # Play with asciinema
 asciinema play basic.cast
 
-# Convert to gif with agg (Linux/macOS)
-docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
+# Convert to gif with agg (Linux/macOS) - GIF default font size is 16, adjust font size if you feel too small or large
+docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
 
 # Convert to gif with agg (Windows PowerShell)
-docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
+docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
 ```
 
 ### Demo The README Workflow As A Scenario
