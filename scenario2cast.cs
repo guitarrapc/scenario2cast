@@ -71,10 +71,10 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell)
 {
     var s = scenario.Settings ?? new();
     var prompt    = AsString(s, "prompt", DefaultPrompt);
-    var speed     = AsDouble(s, "typing_speed", DefaultSpeed);
-    var jitter    = AsDouble(s, "typing_jitter", DefaultJitter);
-    var preDelay  = AsDouble(s, "pre_command_delay", DefaultPreDelay);
-    var postDelay = AsDouble(s, "post_command_delay", DefaultPostDelay);
+    var speed     = AsDouble(s, "typing-speed", DefaultSpeed);
+    var jitter    = AsDouble(s, "typing-jitter", DefaultJitter);
+    var preDelay  = AsDouble(s, "pre-command-delay", DefaultPreDelay);
+    var postDelay = AsDouble(s, "post-command-delay", DefaultPostDelay);
     var events = new List<CastEvent>();
     var rng    = new Random();
     double t   = 0.5;
@@ -87,10 +87,10 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell)
         var command = ParseCommand(item);
         if (string.IsNullOrWhiteSpace(command.Cmd)) continue;
 
-        var cmdSpeed  = AsDouble(command.Extra, "typing_speed", speed);
-        var cmdJitter = AsDouble(command.Extra, "typing_jitter", jitter);
-        var cmdPre    = AsDouble(command.Extra, "pre_delay", preDelay);
-        var cmdPost   = AsDouble(command.Extra, "post_delay", postDelay);
+        var cmdSpeed  = AsDouble(command.Extra, "typing-speed", speed);
+        var cmdJitter = AsDouble(command.Extra, "typing-jitter", jitter);
+        var cmdPre    = AsDouble(command.Extra, "pre-delay", preDelay);
+        var cmdPost   = AsDouble(command.Extra, "post-delay", postDelay);
 
         foreach (var ch in command.Cmd)
         {
@@ -205,8 +205,15 @@ static string AsString(Dictionary<string, object> d, string key, string def)
     => d.TryGetValue(key, out var v) && v is not null ? v.ToString() ?? def : def;
 
 static double AsDouble(Dictionary<string, object> d, string key, double def)
-    => d.TryGetValue(key, out var v) &&
-       double.TryParse(v?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var r) ? r : def;
+{
+    if (d.TryGetValue(key, out var value) &&
+        double.TryParse(value?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
+    {
+        return parsed;
+    }
+
+    return def;
+}
 
 static ShellLaunch ResolveShell(Scenario scenario)
 {

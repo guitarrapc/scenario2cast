@@ -47,10 +47,10 @@ shell: bash             # Optional command shell override
 
 settings:
   prompt: "$ "
-  typing_speed: 0.05       # Seconds per character (average)
-  typing_jitter: 0.015     # Random jitter (+/- seconds)
-  pre_command_delay: 0.8   # Pause before typing next command
-  post_command_delay: 1.5  # Pause after output before next prompt
+  typing-speed: 0.05       # Seconds per character (average)
+  typing-jitter: 0.015     # Random jitter (+/- seconds)
+  pre-command-delay: 0.8   # Pause before typing next step
+  post-command-delay: 1.5  # Pause after output before next prompt
 
 steps:
   # Simple string command
@@ -59,12 +59,12 @@ steps:
 
   # Mapping command with per-command overrides
   - run: git log --oneline -10
-    post_delay: 3.0
+    post-delay: 3.0
 
   - run: git status
-    typing_speed: 0.10
-    pre_delay: 1.5
-    post_delay: 2.0
+    typing-speed: 0.10
+    pre-delay: 1.5
+    post-delay: 2.0
 ```
 
 ### Command Keys
@@ -72,10 +72,10 @@ steps:
 | Key | Description | Default |
 |------|------|-----------|
 | `run` | Command to execute | required |
-| `typing_speed` | Seconds per typed character | `settings.typing_speed` |
-| `typing_jitter` | Typing jitter range | `settings.typing_jitter` |
-| `pre_delay` | Pause before command typing | `settings.pre_command_delay` |
-| `post_delay` | Pause after command output | `settings.post_command_delay` |
+| `typing-speed` | Seconds per typed character | `settings.typing-speed` |
+| `typing-jitter` | Typing jitter range | `settings.typing-jitter` |
+| `pre-delay` | Pause before command typing | `settings.pre-command-delay` |
+| `post-delay` | Pause after command output | `settings.post-command-delay` |
 
 ## Notes
 

@@ -8,26 +8,26 @@ shell: bash
 
 settings:
   prompt: "$ "
-  typing_speed: 0.06
-  typing_jitter: 0.02
-  pre_command_delay: 1.0
-  post_command_delay: 2.0
+  typing-speed: 0.06
+  typing-jitter: 0.02
+  pre-command-delay: 1.0
+  post-command-delay: 2.0
 
 steps:
   - git --version
 
   # Show current status - linger a bit longer so viewers can read it
   - run: git status
-    post_delay: 3.0
+    post-delay: 3.0
 
   - run: git log --oneline -5
-    post_delay: 3.0
+    post-delay: 3.0
 
   # Fast command, shorter pause after
   - run: git branch
-    post_delay: 1.0
+    post-delay: 1.0
 
   # Slower typing to emphasise the command
   - run: git diff --stat HEAD~1
-    typing_speed: 0.10
-    post_delay: 3.0
+    typing-speed: 0.10
+    post-delay: 3.0

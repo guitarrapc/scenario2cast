@@ -47,10 +47,10 @@ shell: bash             # 実行シェルを指定 (任意)
 
 settings:
   prompt: "$ "
-  typing_speed: 0.05       # 1文字あたりの平均秒数
-  typing_jitter: 0.015     # ジッター幅 ±秒
-  pre_command_delay: 0.8   # タイピング開始前の停止時間
-  post_command_delay: 1.5  # 出力後・次プロンプトまでの停止時間
+  typing-speed: 0.05       # 1文字あたりの平均秒数
+  typing-jitter: 0.015     # ジッター幅 ±秒
+  pre-command-delay: 0.8   # 次の step のタイピング開始前の停止時間
+  post-command-delay: 1.5  # 出力後・次プロンプトまでの停止時間
 
 steps:
   # 文字列で書くだけ（シンプルな方法）
@@ -59,12 +59,12 @@ steps:
 
   # dict で書くと個別設定が可能
   - run: git log --oneline -10
-    post_delay: 3.0
+    post-delay: 3.0
 
   - run: git status
-    typing_speed: 0.10
-    pre_delay: 1.5
-    post_delay: 2.0
+    typing-speed: 0.10
+    pre-delay: 1.5
+    post-delay: 2.0
 ```
 
 ### コマンド設定一覧
@@ -72,10 +72,10 @@ steps:
 | キー | 説明 | デフォルト |
 |------|------|-----------|
 | `run` | 実行するコマンド | 必須 |
-| `typing_speed` | 1文字あたりの平均秒数 | `settings.typing_speed` |
-| `typing_jitter` | ジッター幅 | `settings.typing_jitter` |
-| `pre_delay` | タイピング前の停止時間 | `settings.pre_command_delay` |
-| `post_delay` | 出力後の停止時間 | `settings.post_command_delay` |
+| `typing-speed` | 1文字あたりの平均秒数 | `settings.typing-speed` |
+| `typing-jitter` | ジッター幅 | `settings.typing-jitter` |
+| `pre-delay` | タイピング前の停止時間 | `settings.pre-command-delay` |
+| `post-delay` | 出力後の停止時間 | `settings.post-command-delay` |
 
 ## 注意事項
 
