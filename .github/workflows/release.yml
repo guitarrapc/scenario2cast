@@ -43,7 +43,7 @@ jobs:
             archive: tar.gz
           - os: windows-latest
             rid: win-x64
-            archive: zip
+            archive: tar.gz
           - os: macos-latest
             rid: osx-arm64
             archive: tar.gz
@@ -59,73 +59,60 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish NativeAOT binary
-        shell: pwsh
+        shell: bash
         run: |
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
-          New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+          artifact_dir="$GITHUB_WORKSPACE/release/${{ matrix.rid }}"
+          mkdir -p "$artifact_dir"
 
-          dotnet publish scenario2cast.cs `
-            -c Release `
-            -r ${{ matrix.rid }} `
-            --self-contained true `
-            -p:PublishAot=true `
-            -p:StripSymbols=true `
-            -p:DebugType=None `
-            -o $artifactDir
+          dotnet publish scenario2cast.cs -c Release -r "${{ matrix.rid }}" \
+            --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None -o "$artifact_dir"
 
       - name: Smoke test published binary
-        shell: pwsh
+        shell: bash
         run: |
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
-          $binaryName = if ($IsWindows) { "scenario2cast.exe" } else { "scenario2cast" }
-          $binaryPath = Join-Path $artifactDir $binaryName
-          $outputPath = Join-Path $artifactDir "smoke.cast"
+          artifact_dir="$GITHUB_WORKSPACE/release/${{ matrix.rid }}"
+          binary_name="scenario2cast"
+          if [[ "${{ matrix.rid }}" == win-* ]]; then
+            binary_name="scenario2cast.exe"
+          fi
 
-          if (-not (Test-Path $binaryPath)) {
-            throw "Published binary not found: $binaryPath"
-          }
+          binary_path="$artifact_dir/$binary_name"
+          output_path="$artifact_dir/smoke.cast"
 
-          & $binaryPath examples/basic.yaml $outputPath
+          test -f "$binary_path"
 
-          if (-not (Test-Path $outputPath)) {
-            throw "Smoke test did not create expected output: $outputPath"
-          }
+          "$binary_path" examples/basic.yaml "$output_path"
+
+          test -f "$output_path"
 
       - name: Package release assets
-        shell: pwsh
+        shell: bash
         run: |
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "release/${{ matrix.rid }}"
-          $archiveBaseName = "scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
-          $archivePath = Join-Path $env:GITHUB_WORKSPACE "$archiveBaseName.${{ matrix.archive }}"
-          $checksumPath = "$archivePath.sha256"
+          artifact_dir="$GITHUB_WORKSPACE/release/${{ matrix.rid }}"
+          archive_base_name="scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
+          archive_path="$GITHUB_WORKSPACE/${archive_base_name}.tar.gz"
+          checksum_path="$archive_path.sha256"
 
-          if ($IsWindows) {
-            if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
-            Compress-Archive -Path (Join-Path $artifactDir '*') -DestinationPath $archivePath
-            $hash = (Get-FileHash -Algorithm SHA256 -Path $archivePath).Hash.ToLowerInvariant()
-            Set-Content -Path $checksumPath -Value "$hash  $([System.IO.Path]::GetFileName($archivePath))" -NoNewline
-          }
-          else {
-            tar -czf $archivePath -C $artifactDir .
-            $hash = (sha256sum $archivePath).Split(' ')[0]
-            Set-Content -Path $checksumPath -Value "$hash  $([System.IO.Path]::GetFileName($archivePath))" -NoNewline
-          }
+          tar -czf "$archive_path" -C "$artifact_dir" .
 
-          if (-not (Test-Path $archivePath)) {
-            throw "Archive not found: $archivePath"
-          }
+          if command -v sha256sum >/dev/null 2>&1; then
+            checksum_value=$(sha256sum "$archive_path" | awk '{print $1}')
+          else
+            checksum_value=$(shasum -a 256 "$archive_path" | awk '{print $1}')
+          fi
 
-          if (-not (Test-Path $checksumPath)) {
-            throw "Checksum not found: $checksumPath"
-          }
+          printf '%s  %s\n' "$checksum_value" "$(basename "$archive_path")" > "$checksum_path"
+
+          test -f "$archive_path"
+          test -f "$checksum_path"
 
       - name: Upload release assets
         env:
           GH_TOKEN: ${{ github.token }}
-        shell: pwsh
+        shell: bash
         run: |
-          $archiveBaseName = "scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
-          $archivePath = Join-Path $env:GITHUB_WORKSPACE "$archiveBaseName.${{ matrix.archive }}"
-          $checksumPath = "$archivePath.sha256"
+          archive_base_name="scenario2cast-${{ github.ref_name }}-${{ matrix.rid }}"
+          archive_path="$GITHUB_WORKSPACE/${archive_base_name}.tar.gz"
+          checksum_path="$archive_path.sha256"
 
-          gh release upload "${{ github.ref_name }}" $archivePath $checksumPath --clobber
+          gh release upload "${{ github.ref_name }}" "$archive_path" "$checksum_path" --clobber

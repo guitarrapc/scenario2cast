@@ -43,34 +43,27 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish NativeAOT binary
-        shell: pwsh
+        shell: bash
         run: |
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "artifacts/${{ matrix.rid }}"
-          New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+          artifact_dir="$GITHUB_WORKSPACE/artifacts/${{ matrix.rid }}"
+          mkdir -p "$artifact_dir"
 
-          dotnet publish scenario2cast.cs `
-            -c Release `
-            -r ${{ matrix.rid }} `
-            --self-contained true `
-            -p:PublishAot=true `
-            -p:StripSymbols=true `
-            -p:DebugType=None `
-            -o $artifactDir
+          dotnet publish scenario2cast.cs -c Release -r "${{ matrix.rid }}" --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None -o "$artifact_dir"
 
       - name: Smoke test published binary
-        shell: pwsh
+        shell: bash
         run: |
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "artifacts/${{ matrix.rid }}"
-          $binaryName = if ($IsWindows) { "scenario2cast.exe" } else { "scenario2cast" }
-          $binaryPath = Join-Path $artifactDir $binaryName
-          $outputPath = Join-Path $artifactDir "smoke.cast"
+          artifact_dir="$GITHUB_WORKSPACE/artifacts/${{ matrix.rid }}"
+          binary_name="scenario2cast"
+          if [[ "${{ matrix.rid }}" == win-* ]]; then
+            binary_name="scenario2cast.exe"
+          fi
 
-          if (-not (Test-Path $binaryPath)) {
-            throw "Published binary not found: $binaryPath"
-          }
+          binary_path="$artifact_dir/$binary_name"
+          output_path="$artifact_dir/smoke.cast"
 
-          & $binaryPath examples/basic.yaml $outputPath
+          test -f "$binary_path"
 
-          if (-not (Test-Path $outputPath)) {
-            throw "Smoke test did not create expected output: $outputPath"
-          }
+          "$binary_path" examples/basic.yaml "$output_path"
+
+          test -f "$output_path"
