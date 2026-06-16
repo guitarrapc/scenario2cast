@@ -51,7 +51,7 @@ settings:
   typing-jitter: 0.015     # Random jitter (+/- seconds)
   pre-command-delay: 0.8   # Pause before typing next step
   post-command-delay: 1.5  # Pause after prompt appears before next step typing
-  command-execution-duration: 0.7 # Optional. Default cast wait per command (default: 0.1)
+  command-execution-duration: 0.1 # Optional. Default cast wait per command (default: 0.05)
 
 steps:
   # Simple string command
