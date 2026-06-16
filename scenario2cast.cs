@@ -110,7 +110,6 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         if (!string.IsNullOrEmpty(output))
         {
             events.Add(new CastEvent(Math.Round(t, 6), NormalizeNewlines(output)));
-            t += Math.Min(0.004 * output.Length, 2.0);
         }
 
         events.Add(new CastEvent(Math.Round(t, 6), prompt));
