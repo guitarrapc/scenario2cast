@@ -58,10 +58,10 @@ commands:
   - ls -la
 
   # dict で書くと個別設定が可能
-  - cmd: git log --oneline -10
+  - run: git log --oneline -10
     post_delay: 3.0
 
-  - cmd: git status
+  - run: git status
     typing_speed: 0.10
     pre_delay: 1.5
     post_delay: 2.0
@@ -71,7 +71,7 @@ commands:
 
 | キー | 説明 | デフォルト |
 |------|------|-----------|
-| `cmd` | 実行するコマンド | 必須 |
+| `run` | 実行するコマンド | 必須 |
 | `typing_speed` | 1文字あたりの平均秒数 | `settings.typing_speed` |
 | `typing_jitter` | ジッター幅 | `settings.typing_jitter` |
 | `pre_delay` | タイピング前の停止時間 | `settings.pre_command_delay` |

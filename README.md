@@ -58,10 +58,10 @@ commands:
   - ls -la
 
   # Mapping command with per-command overrides
-  - cmd: git log --oneline -10
+  - run: git log --oneline -10
     post_delay: 3.0
 
-  - cmd: git status
+  - run: git status
     typing_speed: 0.10
     pre_delay: 1.5
     post_delay: 2.0
@@ -71,7 +71,7 @@ commands:
 
 | Key | Description | Default |
 |------|------|-----------|
-| `cmd` | Command to execute | required |
+| `run` | Command to execute | required |
 | `typing_speed` | Seconds per typed character | `settings.typing_speed` |
 | `typing_jitter` | Typing jitter range | `settings.typing_jitter` |
 | `pre_delay` | Pause before command typing | `settings.pre_command_delay` |

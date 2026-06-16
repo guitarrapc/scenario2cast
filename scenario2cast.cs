@@ -124,8 +124,9 @@ static CommandEntry ParseCommand(object item)
     if (item is IDictionary<object, object> map)
     {
         var extra = map.ToDictionary(kv => kv.Key.ToString() ?? "", kv => kv.Value);
-        var cmd = extra.TryGetValue("cmd", out var v) ? v?.ToString() ?? "" : "";
-        extra.Remove("cmd");
+        var cmd = extra.TryGetValue("run", out var runValue) ? runValue?.ToString() ?? "" : "";
+
+        extra.Remove("run");
         return new CommandEntry { Cmd = cmd, Extra = extra };
     }
     return new CommandEntry();
