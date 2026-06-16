@@ -159,7 +159,7 @@ Use `dotnet` for local development, debugging, or publishing.
 
 ```bash
 # Local run
-dotnet run scenario2cast.cs <scenario.yaml> [output.cast]
+dotnet run scenario2cast.cs -- <scenario.yaml> [output.cast]
 
 # build
 dotnet publish scenario2cast.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None

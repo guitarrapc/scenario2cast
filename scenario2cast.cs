@@ -25,7 +25,7 @@ const double DefaultSpeed     = 0.05;
 const double DefaultJitter    = 0.015;
 const double DefaultPreDelay  = 0.8;
 const double DefaultPostDelay = 1.5;
-const double DefaultCommandExecutionDuration = 0.05;
+const double DefaultExecutionDuration = 0.05;
 const string AppVersion = "0.1.0";
 
 if (args.Length < 1)
@@ -116,7 +116,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
     var jitter    = settings.TypingJitter ?? DefaultJitter;
     var preDelay  = settings.PreDelay ?? DefaultPreDelay;
     var postDelay = settings.PostDelay ?? DefaultPostDelay;
-    var defaultExecutionDuration = settings.ExecutionDuration ?? DefaultCommandExecutionDuration;
+    var defaultExecutionDuration = settings.ExecutionDuration ?? DefaultExecutionDuration;
     var events = new List<CastEvent>();
     var rng    = new Random(deterministicSeed);
     double t   = 0.5;
@@ -439,22 +439,22 @@ static long ComputeDeterministicTimestamp(int seed)
 
 static string CreateInitialScenarioYaml()
 {
-    return """
+    return $"""
     # scenario2cast starter scenario. Edit the values below and add commands under steps.
     title: "My App"            # Optional cast title
-    # width: 120                 # Default: 120
+    # width: 80                  # Default: 80
     # height: 24                 # Default: 24
     # cwd: /your/path            # Optional working directory for all steps
     # shell: bash                # Optional shell override: bash, pwsh, powershell, or a path
 
     # Default settings for all steps. Can be overridden per step by using a mapping with "run" and timing keys.
     # settings:
-    #   prompt: "$ "             # Default prompt shown before each command
-    #   typing-speed: 0.05       # Seconds per character on average. Default: 0.05 (50ms)
-    #   typing-jitter: 0.015     # Random typing variance (+/- seconds). Default: 0.015 (15ms)
-    #   pre-delay: 0.8           # Pause before typing each step. Default: 0.8
-    #   post-delay: 1.5          # Pause after output before the next step. Default: 1.5
-    #   execution-duration: 0.05 # Optional cast wait after command execution. Default: 0.05
+    #   prompt: "{DefaultPrompt}"             # Default prompt shown before each command. Default: "{DefaultPrompt}"
+    #   typing-speed: {DefaultSpeed}       # Seconds per character on average. Default: {DefaultSpeed}
+    #   typing-jitter: {DefaultJitter}     # Random typing variance (+/- seconds). Default: {DefaultJitter}
+    #   pre-delay: {DefaultPreDelay}           # Pause before typing each step. Default: {DefaultPreDelay}
+    #   post-delay: {DefaultPostDelay}          # Pause after output before the next step. Default: {DefaultPostDelay}
+    #   execution-duration: {DefaultExecutionDuration} # Optional cast wait after command execution. Default: {DefaultExecutionDuration}
 
     # Add one command per step. Use a mapping when you want to override per-command timing.
     steps:
