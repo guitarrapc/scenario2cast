@@ -106,10 +106,12 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         t += 0.15;
 
         Console.Error.WriteLine($"  running: {command.Cmd}");
-        var output = RunCommand(command.Cmd, scenario.Cwd, shell);
-        if (!string.IsNullOrEmpty(output))
+        var execution = RunCommand(command.Cmd, scenario.Cwd, shell);
+        t += execution.ElapsedSeconds;
+
+        if (!string.IsNullOrEmpty(execution.Output))
         {
-            events.Add(new CastEvent(Math.Round(t, 6), NormalizeNewlines(output)));
+            events.Add(new CastEvent(Math.Round(t, 6), NormalizeNewlines(execution.Output)));
         }
 
         events.Add(new CastEvent(Math.Round(t, 6), prompt));
@@ -134,7 +136,7 @@ static CommandEntry ParseCommand(object item)
     return new CommandEntry();
 }
 
-static string RunCommand(string cmd, string? cwd, ShellLaunch shell)
+static CommandExecution RunCommand(string cmd, string? cwd, ShellLaunch shell)
 {
     var psi = new ProcessStartInfo(shell.FileName)
     {
@@ -149,11 +151,13 @@ static string RunCommand(string cmd, string? cwd, ShellLaunch shell)
     if (!string.IsNullOrWhiteSpace(cwd)) psi.WorkingDirectory = cwd;
 
     using var proc = new Process { StartInfo = psi };
+    var sw = Stopwatch.StartNew();
     proc.Start();
     var stdout = proc.StandardOutput.ReadToEnd();
     var stderr = proc.StandardError.ReadToEnd();
     proc.WaitForExit();
-    return stdout + stderr;
+    sw.Stop();
+    return new CommandExecution(stdout + stderr, sw.Elapsed.TotalSeconds);
 }
 
 static string NormalizeNewlines(string s)
@@ -398,6 +402,8 @@ static long ComputeDeterministicTimestamp(int seed)
 }
 
 record CastEvent(double Time, string Data);
+
+record CommandExecution(string Output, double ElapsedSeconds);
 
 record ShellLaunch(string FileName, string[] Arguments, string EnvValue, string DisplayName);
 

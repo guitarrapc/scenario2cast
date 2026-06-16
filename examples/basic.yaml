@@ -14,4 +14,6 @@ steps:
   - echo "Hello, World!"
   - echo "Current directory:"
   - pwd
+  - echo "Wait for 2 seconds..."
+  - sleep 2
   - echo "Done!"
