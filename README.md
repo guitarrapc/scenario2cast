@@ -1,95 +1,88 @@
 # scenario2cast
 
-YAMLシナリオファイルから [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) ファイルを生成するツールです。
+Generate [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) files from YAML scenario files.
 
-asciinema をインストール・起動する必要はありません。コマンドを並べたYAMLを書くだけで、実際にコマンドを実行してその出力を使ったcastファイルを生成します。
+You do not need to install or launch asciinema to record. Write a YAML scenario with commands, and this tool executes those commands and emits a cast file with simulated typing plus real command output.
 
-## 仕組み
+## How It Works
 
-1. YAMLシナリオにコマンドを列挙する
-2. ツールがコマンドを一文字ずつ入力しているようなイベントをcastファイルに書き出す（タイピング速度はランダムジッターで自然に見える）
-3. コマンドを実際に実行して出力をcastファイルに書き出す
+1. List commands in a YAML scenario.
+2. The tool writes cast events that look like human typing (with random jitter).
+3. The tool executes each command and writes real output to the cast.
 
-## インストール
+## Requirements
+
+- .NET 10 SDK (for C# file-based apps)
+
+## Usage
 
 ```bash
-pip install pyyaml
+dotnet run scenario2cast.cs <scenario.yaml> [output.cast]
 ```
 
-Python 3.8 以上が必要です。
-
-## 使い方
+If `output.cast` is omitted, the output is written next to the scenario file with the `.cast` extension.
 
 ```bash
-python scenario2cast.py <scenario.yaml> [output.cast]
-```
+# Basic
+dotnet run scenario2cast.cs examples/basic.yaml
 
-`output.cast` を省略すると、シナリオファイルと同じディレクトリに `.cast` 拡張子で出力します。
+# Specify output path
+dotnet run scenario2cast.cs examples/basic.yaml demo.cast
 
-```bash
-# 基本
-python scenario2cast.py examples/basic.yaml
-
-# 出力先を指定
-python scenario2cast.py examples/basic.yaml demo.cast
-
-# asciinema で再生
+# Play with asciinema
 asciinema play demo.cast
 ```
 
-## シナリオファイル形式
+## Scenario Format
 
 ```yaml
-title: "デモタイトル"   # cast のタイトル（任意）
-width: 120              # ターミナル幅（デフォルト: 120）
-height: 24              # ターミナル高さ（デフォルト: 24）
-cwd: /path/to/dir       # コマンドを実行するディレクトリ（任意）
+title: "Demo Title"    # Optional cast title
+width: 120              # Terminal width (default: 120)
+height: 24              # Terminal height (default: 24)
+cwd: /path/to/dir       # Optional working directory for all commands
 
 settings:
-  prompt: "$ "          # プロンプト文字列（デフォルト: "$ "）
-  typing_speed: 0.05    # 1文字あたりの平均秒数（デフォルト: 0.05）
-  typing_jitter: 0.015  # ジッター幅 ±秒（デフォルト: 0.015）
-  pre_command_delay: 0.8   # タイピング開始前の停止時間（デフォルト: 0.8）
-  post_command_delay: 1.5  # 出力後・次プロンプトまでの停止時間（デフォルト: 1.5）
+  prompt: "$ "
+  typing_speed: 0.05       # Seconds per character (average)
+  typing_jitter: 0.015     # Random jitter (+/- seconds)
+  pre_command_delay: 0.8   # Pause before typing next command
+  post_command_delay: 1.5  # Pause after output before next prompt
 
 commands:
-  # 文字列で書くだけ（シンプルな方法）
+  # Simple string command
   - echo "Hello, World!"
   - ls -la
 
-  # dict で書くと個別設定が可能
+  # Mapping command with per-command overrides
   - cmd: git log --oneline -10
-    post_delay: 3.0         # この出力の後は長めに停止
+    post_delay: 3.0
 
   - cmd: git status
-    typing_speed: 0.10      # ゆっくりタイプ
+    typing_speed: 0.10
     pre_delay: 1.5
     post_delay: 2.0
 ```
 
-### コマンド設定一覧
+### Command Keys
 
-| キー | 説明 | デフォルト |
+| Key | Description | Default |
 |------|------|-----------|
-| `cmd` | 実行するコマンド | （必須） |
-| `typing_speed` | 1文字あたりの平均秒数 | `settings.typing_speed` |
-| `typing_jitter` | ジッター幅 | `settings.typing_jitter` |
-| `pre_delay` | タイピング前の停止時間 | `settings.pre_command_delay` |
-| `post_delay` | 出力後の停止時間 | `settings.post_command_delay` |
+| `cmd` | Command to execute | required |
+| `typing_speed` | Seconds per typed character | `settings.typing_speed` |
+| `typing_jitter` | Typing jitter range | `settings.typing_jitter` |
+| `pre_delay` | Pause before command typing | `settings.pre_command_delay` |
+| `post_delay` | Pause after command output | `settings.post_command_delay` |
 
-## 注意事項
+## Notes
 
-- コマンドはシステムのデフォルトシェル（Linux/macOS: `$SHELL`、Windows: `COMSPEC`）で実行されます
-- インタラクティブなコマンド（`vim`、`htop` など）は使用しないでください
-- Windows では `echo "text"` が `"text"` とクォート付きで出力される場合があります（`echo text` を使うか Git Bash / WSL 経由で実行してください）
-- 実際にコマンドが実行されるため、副作用のあるコマンドは注意して使用してください
+- Commands run in the system default shell (`$SHELL` on Linux/macOS, `COMSPEC` on Windows).
+- Avoid interactive commands such as `vim` or `htop`.
+- On Windows, `echo "text"` may output with quotes; use `echo text` or run via Git Bash/WSL if needed.
+- Commands are executed for real, so be careful with side effects.
 
-## サンプル
+## Examples
 
 ```bash
-# 基本サンプル
-python scenario2cast.py examples/basic.yaml
-
-# Git ワークフローサンプル（git リポジトリ内で実行）
-python scenario2cast.py examples/git-demo.yaml
+dotnet run scenario2cast.cs examples/basic.yaml
+dotnet run scenario2cast.cs examples/git-demo.yaml
 ```
