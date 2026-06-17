@@ -1,10 +1,20 @@
 title: "Highlight Demo"
 width: 80
-height: 14
+height: 24
 shell: bash
 
 steps:
-  - run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
+  - name: comment color is cyan
+    run: echo hello
+  - name: "[yellow] comment color override"
+    run: echo world
+  - name: run & stdout color default
+    run: date
+  - name: run color override
+    run: date
+    run-highlight: bright-magenta
+  - name: stdout color override
+    run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
     highlight:
       - color: red
         at: "1:7-"
@@ -12,9 +22,8 @@ steps:
         at: "2:7-10"
       - color: blue
         at: "2-3"
-  - name: default cyan comment
-    run: echo hello
-  - name: "[yellow] attention comment"
-    run: echo world
-  - run: date
-    run-highlight: bright-magenta
+  - name: stderr color default is red
+    run: echo "plain stderr sample" 1>&2
+  - name: stderr color override
+    run: echo "plain stderr sample override color" 1>&2
+    stderr-color: bright-yellow

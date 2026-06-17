@@ -76,20 +76,6 @@ docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samp
 docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
 ```
 
-### Demo The README Workflow As A Scenario
-
-If you want to show the exact README flow as a cast/gif demo, use [samples/readme-demo.yaml](samples/readme-demo.yaml).
-
-```bash
-# This scenario runs:
-# 1) cat samples/basic.yaml
-# 2) scenario2cast samples/basic.yaml samples/basic.cast
-# 3) docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif
-scenario2cast samples/readme-demo.yaml samples/readme-demo.cast
-```
-
-The scenario intentionally uses per-step `pre-delay` and `post-delay` overrides so each phase has enough pause for explanation.
-
 **Notes**
 
 - Use top-level `shell` to choose the command shell.
@@ -119,6 +105,7 @@ settings:
   pre-delay: 0.8           # Pause before typing next step
   post-delay: 1.5          # Pause after prompt appears before next step typing
   execution-duration: 0.1  # Optional. Default cast wait per command
+  stderr-color: red        # default color for stderr text when stderr has no ANSI SGR sequences. (default: red)
 
 steps:
   # Writing a command as a string applies default settings from `settings`
@@ -136,7 +123,54 @@ steps:
 
   - run: sleep 2
     execution-duration: 0.4
+
+  # run highlight
+  - run: git log --oneline -3
+    run-highlight: bright-cyan
+
+  # stdout highlight
+  - run: git status
+    highlight:
+      - color: yellow
+        at: "4"                   # line 4
+      - color: red
+        at: "6-10:3-"             # multi-line column band. lines 6-10, columns 3 to end of line
+
+  # stderr highlight (if stderr has no ANSI SGR color)
+  - run: echo "plain stderr" 1>&2
+
+  # Override default stderr color for this step
+  - run: echo "stderr override" 1>&2
+    stderr-color: bright-yellow
 ```
+
+- `highlight` is step-only (map-form `run` step).
+- `run-highlight` is step-only (map-form `run` step).
+- `stderr-color` supports both scopes: `settings.stderr-color` default + step `stderr-color` override.
+- Existing ANSI on stderr is preserved; `stderr-color` applies only when stderr has no ANSI SGR.
+
+### Color Names (ANSI SGR)
+
+`highlight`, `run-highlight`, and `stderr-color` use the same 16-color foreground palette.
+
+| Name | ANSI SGR |
+|------|----------|
+| `black` | `30` |
+| `red` | `31` |
+| `green` | `32` |
+| `yellow` | `33` |
+| `blue` | `34` |
+| `magenta` | `35` |
+| `cyan` | `36` |
+| `white` | `37` |
+| `bright-black` (`gray`, `grey`) | `90` |
+| `bright-red` | `91` |
+| `bright-green` | `92` |
+| `bright-yellow` | `93` |
+| `bright-blue` | `94` |
+| `bright-magenta` | `95` |
+| `bright-cyan` | `96` |
+| `bright-white` | `97` |
 
 ### Command Keys
 
@@ -148,6 +182,14 @@ steps:
 | `pre-delay` | Pause before command typing | `settings.pre-delay` |
 | `post-delay` | Pause after prompt appears | `settings.post-delay` |
 | `execution-duration` | Override cast wait for this command execution | `settings.execution-duration` |
+| `run-highlight` | Color the typed command text | none (step-only) |
+| `stderr-color` | Default color for stderr when stderr has no ANSI SGR | `settings.stderr-color` |
+
+### settings-only / step-only notes
+
+- `highlight` does not have a `settings` default in this version.
+- `run-highlight` does not have a `settings` default in this version.
+- `stderr-color` is available in both `settings` and step mapping.
 
 ## Development
 
