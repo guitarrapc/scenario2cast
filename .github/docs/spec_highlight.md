@@ -158,6 +158,7 @@ Line and column numbers are 1-based.
 |---|---|
 | `L` | Entire line `L` |
 | `L1-L2` | Entire lines `L1`..`L2` |
+| `L-` | Lines `L`..end of output |
 | `L:C` | Single character |
 | `L:C1-C2` | Columns `C1`..`C2` on one line |
 | `L:C-` | Column `C` to EOL |
@@ -172,6 +173,7 @@ Informal parse:
 at        ::= line_part [ ":" col_part ]
 line_part ::= positive_integer
             | positive_integer "-" positive_integer
+            | positive_integer "-"
 col_part  ::= positive_integer
             | positive_integer "-" positive_integer
             | positive_integer "-"

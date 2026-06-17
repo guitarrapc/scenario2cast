@@ -144,7 +144,9 @@ steps:
       - color: yellow
         at: "4"                   # 4行目
       - color: red
-        at: "6-10:3-"             # 複数行カラム帯。6-10行目、3列目から行末
+        at: "6-7:3-"             # 複数行カラム帯。6-7行目、3列目から行末
+      - color: bright-cyan
+        at: "8-"                  # 8行目から出力末尾まで
 
   # stderr highlight（stderr に ANSI SGR がない場合）
   - run: echo "plain stderr" 1>&2

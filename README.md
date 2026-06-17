@@ -144,7 +144,9 @@ steps:
       - color: yellow
         at: "4"                   # line 4
       - color: red
-        at: "6-10:3-"             # multi-line column band. lines 6-10, columns 3 to end of line
+        at: "6-7:3-"             # multi-line column band. lines 6-7, columns 3 to end of line
+      - color: bright-cyan
+        at: "8-"                  # line 8 to end of output
 
   # stderr highlight (if stderr has no ANSI SGR color)
   - run: echo "plain stderr" 1>&2

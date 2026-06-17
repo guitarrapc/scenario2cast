@@ -668,7 +668,7 @@ static string ApplyHighlights(string output, List<HighlightSpec> specs, string c
 
 static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpen, string cmd)
 {
-    if (!TryParseAt(at, out var lineLo, out var lineHi, out var colLo, out var colHi, out var openColEnd, out var hasCol))
+    if (!TryParseAt(at, out var lineLo, out var lineHi, out var openLineEnd, out var colLo, out var colHi, out var openColEnd, out var hasCol))
     {
         Warn("highlight", cmd, $"invalid at '{at}'");
         return;
@@ -681,7 +681,11 @@ static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpe
         return;
     }
 
-    if (lineHi > lineCount)
+    if (openLineEnd)
+    {
+        lineHi = lineCount;
+    }
+    else if (lineHi > lineCount)
     {
         Warn("highlight", cmd, $"at '{at}': lines {lineCount + 1}-{lineHi} are missing");
         lineHi = lineCount;
@@ -741,15 +745,15 @@ static void AppendPaintedLine(StringBuilder sb, string line, string[]? row)
     if (!string.IsNullOrEmpty(cur)) sb.Append(SgrReset);
 }
 
-static bool TryParseAt(string at, out int lineLo, out int lineHi, out int colLo, out int colHi, out bool openColEnd, out bool hasCol)
+static bool TryParseAt(string at, out int lineLo, out int lineHi, out bool openLineEnd, out int colLo, out int colHi, out bool openColEnd, out bool hasCol)
 {
     lineLo = lineHi = colLo = colHi = 0;
-    openColEnd = hasCol = false;
+    openLineEnd = openColEnd = hasCol = false;
     var span = at.AsSpan().Trim();
     if (span.IsEmpty) return false;
 
     var colon = span.IndexOf(':');
-    if (!TryParseSpan(span[..(colon >= 0 ? colon : span.Length)], out lineLo, out lineHi))
+    if (!TryParseSpan(span[..(colon >= 0 ? colon : span.Length)], allowOpenEnd: true, out lineLo, out lineHi, out openLineEnd))
         return false;
 
     if (colon < 0) return true;
@@ -757,12 +761,23 @@ static bool TryParseAt(string at, out int lineLo, out int lineHi, out int colLo,
     return TryParseColSpan(span[(colon + 1)..], out colLo, out colHi, out openColEnd);
 }
 
-static bool TryParseSpan(ReadOnlySpan<char> span, out int lo, out int hi)
+static bool TryParseSpan(ReadOnlySpan<char> span, bool allowOpenEnd, out int lo, out int hi, out bool openEnd)
 {
     lo = hi = 0;
+    openEnd = false;
     var dash = span.IndexOf('-');
     if (dash < 0)
         return TryPosInt(span, out lo) && (hi = lo) > 0;
+
+    if (allowOpenEnd && dash == span.Length - 1)
+    {
+        if (!TryPosInt(span[..dash], out lo) || lo < 1)
+            return false;
+
+        hi = lo;
+        openEnd = true;
+        return true;
+    }
 
     if (!TryPosInt(span[..dash], out lo) || !TryPosInt(span[(dash + 1)..], out hi) || lo < 1 || hi < 1)
         return false;
@@ -782,7 +797,7 @@ static bool TryParseColSpan(ReadOnlySpan<char> span, out int lo, out int hi, out
         return TryPosInt(span, out lo) && lo > 0;
     }
 
-    return TryParseSpan(span, out lo, out hi);
+    return TryParseSpan(span, allowOpenEnd: false, out lo, out hi, out _);
 }
 
 static bool TryPosInt(ReadOnlySpan<char> span, out int value)
