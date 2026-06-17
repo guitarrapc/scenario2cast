@@ -17,7 +17,7 @@ This spec defines declarative coloring controls that keep demos readable without
 - `stderr-color` fallback coloring for stderr text that has no ANSI SGR.
 - Colorized `name` comment lines with optional `[style]` prefix.
 - Shared 16-color foreground palette (normal + bright).
-- Style-capable color values: `bold`, `underline`, `background`, `intensity` combinations.
+- Style-capable color values: `bold`, `underline`, `background`, `bright` combinations.
 - Direct ANSI SGR literal input (for example `1;31`, `\e[1;31m`).
 - Range-based output targeting via `at`.
 - Warning-and-continue behavior for invalid values and out-of-range targets.
@@ -74,7 +74,7 @@ Accepted forms:
 
 - Named foreground color: `red`, `bright-cyan`
 - Token composition (space/comma/`+` separated):
-  - Style tokens: `bold`, `underline`, `bright` (`intensity` alias)
+  - Style tokens: `bold`, `underline`, `bright`
   - Foreground tokens: `<name>`, `fg:<name>`
   - Background tokens: `bg:<name>`
 - Raw ANSI SGR literal:
@@ -90,7 +90,7 @@ Examples:
 
 - `bold bright-yellow`
 - `underline fg:bright-cyan bg:black`
-- `intensity red bg:bright-black`
+- `bright red bg:bright-black`
 - `\e[1;4;97;44m`
 
 ## YAML Contract
@@ -245,7 +245,7 @@ steps:
 
 | Date | Change |
 |---|---|
-| 2026-06-17 | Extended color values to style strings (bold/underline/background/intensity) and SGR literal input across `highlight`, `run-highlight`, `stderr-color`, and `name` prefix. |
+| 2026-06-17 | Extended color values to style strings (bold/underline/background/bright) and SGR literal input across `highlight`, `run-highlight`, `stderr-color`, and `name` prefix. |
 | 2026-06-17 | Reorganized document as a unified coloring spec (`highlight`, `run-highlight`, `stderr-color`, `name` color prefix). |
 | 2026-06-17 | Implemented `stderr-color` behavior with ANSI-preserving fallback semantics. |
 | 2026-06-17 | Implemented `run-highlight` for typed command text. |

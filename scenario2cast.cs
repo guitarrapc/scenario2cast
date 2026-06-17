@@ -566,7 +566,7 @@ static bool TryParseStyleWords(string raw, out string codes)
             continue;
         }
 
-        if (token is "bright" or "intensity")
+        if (token is "bright")
         {
             intensityRequested = true;
             continue;

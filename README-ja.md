@@ -187,7 +187,7 @@ steps:
 `highlight.color`、`run-highlight`、`stderr-color` には、単純なカラー名に加えてスタイル文字列も指定できます。
 
 - カラー名: `red`、`bright-cyan`
-- スタイルトークン: `bold`、`underline`、`bright`（`intensity` も同義）
+- スタイルトークン: `bold`、`underline`、`bright`
 - 前景/背景プレフィックス: `fg:bright-white`、`bg:blue`
 - 生 SGR リテラル: `1;31`、`\e[1;31m`、`\x1b[1;31m`
 
