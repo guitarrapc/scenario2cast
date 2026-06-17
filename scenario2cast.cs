@@ -1,4 +1,4 @@
-﻿#:sdk Microsoft.NET.Sdk
+#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
 #:property Version=0.1.0
 #:property Nullable=enable
@@ -133,6 +133,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         var cmdPre    = GetDouble(command.Extra, preDelay, "pre-delay");
         var cmdPost   = GetDouble(command.Extra, postDelay, "post-delay");
         var cmdExecutionDuration = GetDouble(command.Extra, defaultExecutionDuration, "execution-duration");
+        var hasRunHighlight = TryGetRunHighlight(command.Extra, command.Cmd, out var runHighlightColor);
 
         if (events.Count == 0)
             t += preDelay;
@@ -147,12 +148,18 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         events.Add(new CastEvent(Math.Round(t, 6), prompt));
         t += 0.05;
 
+        if (hasRunHighlight)
+            events.Add(new CastEvent(Math.Round(t, 6), SgrOpen(runHighlightColor)));
+
         foreach (var ch in command.Cmd)
         {
             events.Add(new CastEvent(Math.Round(t, 6), ch.ToString()));
             var delay = cmdSpeed + rng.NextDouble() * 2 * cmdJitter - cmdJitter;
             t += Math.Max(delay, 0.005);
         }
+
+        if (hasRunHighlight)
+            events.Add(new CastEvent(Math.Round(t, 6), SgrReset));
 
         events.Add(new CastEvent(Math.Round(t, 6), "\r\n"));
         t += 0.15;
@@ -275,6 +282,25 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
 
 static void WarnName(string cmd, string detail)
     => Console.Error.WriteLine($"Warning: name ({cmd}): {detail}");
+
+static bool TryGetRunHighlight(Dictionary<string, object?> extra, string cmd, out byte colorIndex)
+{
+    colorIndex = 0;
+    if (!extra.TryGetValue("run-highlight", out var raw))
+        return false;
+
+    var value = raw?.ToString();
+    if (!TryColorIndex(value, out colorIndex))
+    {
+        WarnRunHighlight(cmd, $"unknown color '{value}'");
+        return false;
+    }
+
+    return true;
+}
+
+static void WarnRunHighlight(string cmd, string detail)
+    => Console.Error.WriteLine($"Warning: run-highlight ({cmd}): {detail}");
 
 // Highlight parsing and application
 
