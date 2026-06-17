@@ -19,7 +19,7 @@ const double DefaultJitter    = 0.015;
 const double DefaultPreDelay  = 0.2;
 const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
-const byte DefaultStderrColorIndex = 2; // red
+const string DefaultStderrColorSpec = "red";
 const string AppVersion = "0.2.0";
 const string SgrReset = "\u001b[0m";
 
@@ -112,7 +112,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
     var preDelay  = settings.PreDelay ?? DefaultPreDelay;
     var postDelay = settings.PostDelay ?? DefaultPostDelay;
     var defaultExecutionDuration = settings.ExecutionDuration ?? DefaultExecutionDuration;
-    var defaultStderrColorIndex = ParseColorOrFallback(settings.StderrColor, DefaultStderrColorIndex, "settings.stderr-color");
+    var defaultStderrStyle = ParseStyleOrFallback(settings.StderrColor, SgrNamed(DefaultStderrColorSpec), "settings.stderr-color");
     var events = new List<CastEvent>();
     var rng    = new Random(deterministicSeed);
     double t   = 0.5;
@@ -128,8 +128,8 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         var cmdPre    = GetDouble(command.Extra, preDelay, "pre-delay");
         var cmdPost   = GetDouble(command.Extra, postDelay, "post-delay");
         var cmdExecutionDuration = GetDouble(command.Extra, defaultExecutionDuration, "execution-duration");
-        var cmdStderrColorIndex = GetOverrideColor(command.Extra, "stderr-color", defaultStderrColorIndex, "stderr-color", command.Cmd);
-        var hasRunHighlight = TryGetStepColor(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightColor);
+        var cmdStderrStyle = GetOverrideStyle(command.Extra, "stderr-color", defaultStderrStyle, "stderr-color", command.Cmd);
+        var hasRunHighlight = TryGetStepStyle(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightStyle);
 
         if (events.Count == 0)
             t += preDelay;
@@ -144,8 +144,8 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         events.Add(new CastEvent(Math.Round(t, 6), prompt));
         t += 0.05;
 
-        if (hasRunHighlight)
-            events.Add(new CastEvent(Math.Round(t, 6), SgrOpen(runHighlightColor)));
+        if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+            events.Add(new CastEvent(Math.Round(t, 6), runHighlightStyle));
 
         foreach (var ch in command.Cmd)
         {
@@ -154,7 +154,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
             t += Math.Max(delay, 0.005);
         }
 
-        if (hasRunHighlight)
+        if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
             events.Add(new CastEvent(Math.Round(t, 6), SgrReset));
 
         events.Add(new CastEvent(Math.Round(t, 6), "\r\n"));
@@ -163,7 +163,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         Console.Error.WriteLine($"  running: {command.Cmd}");
         var execution = RunCommand(command.Cmd, scenario.Cwd, shell);
         t += cmdExecutionDuration;
-        var mergedOutput = MergeCommandOutput(execution, cmdStderrColorIndex);
+        var mergedOutput = MergeCommandOutput(execution, cmdStderrStyle);
 
         if (!string.IsNullOrEmpty(mergedOutput))
         {
@@ -243,23 +243,23 @@ static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell)
     return new CommandOutput(stdout, stderr);
 }
 
-static string MergeCommandOutput(CommandOutput output, byte stderrColorIndex)
+static string MergeCommandOutput(CommandOutput output, string stderrStyle)
 {
     if (string.IsNullOrEmpty(output.Stdout))
     {
-        if (string.IsNullOrEmpty(output.Stderr) || stderrColorIndex == 0 || ContainsAnsiSgr(output.Stderr))
+        if (string.IsNullOrEmpty(output.Stderr) || string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(output.Stderr))
             return output.Stderr;
 
-        return string.Concat(SgrOpen(stderrColorIndex), output.Stderr, SgrReset);
+        return string.Concat(stderrStyle, output.Stderr, SgrReset);
     }
 
     if (string.IsNullOrEmpty(output.Stderr))
         return output.Stdout;
 
-    if (stderrColorIndex == 0 || ContainsAnsiSgr(output.Stderr))
+    if (string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(output.Stderr))
         return string.Concat(output.Stdout, output.Stderr);
 
-    return string.Concat(output.Stdout, SgrOpen(stderrColorIndex), output.Stderr, SgrReset);
+    return string.Concat(output.Stdout, stderrStyle, output.Stderr, SgrReset);
 }
 
 static bool ContainsAnsiSgr(string text)
@@ -295,7 +295,7 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
         return false;
 
     var value = raw.Trim();
-    var colorIndex = (byte)7; // cyan default
+    var colorOpen = SgrNamed("cyan");
     string displayText;
 
     if (value.StartsWith('['))
@@ -305,10 +305,14 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
         {
             var colorName = value[1..close];
             displayText = value[(close + 1)..].TrimStart();
-            if (!TryColorIndex(colorName, out colorIndex))
+            if (!TryParseStyle(colorName, out var parsedStyle))
             {
                 Warn("name", cmd, $"unknown color '{colorName}'");
-                colorIndex = 7;
+                colorOpen = SgrNamed("cyan");
+            }
+            else
+            {
+                colorOpen = parsedStyle;
             }
         }
         else
@@ -327,37 +331,39 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
         return false;
     }
 
-    coloredLine = $"{SgrOpen(colorIndex)}# {displayText}{SgrReset}\r\n";
+    coloredLine = string.IsNullOrEmpty(colorOpen)
+        ? $"# {displayText}\r\n"
+        : $"{colorOpen}# {displayText}{SgrReset}\r\n";
     return true;
 }
 
-static byte GetOverrideColor(Dictionary<string, object?> extra, string key, byte fallbackColorIndex, string scope, string cmd)
+static string GetOverrideStyle(Dictionary<string, object?> extra, string key, string fallbackStyle, string scope, string cmd)
     => extra.TryGetValue(key, out var raw)
-        ? ParseColorOrFallback(raw?.ToString(), fallbackColorIndex, scope, cmd)
-        : fallbackColorIndex;
+        ? ParseStyleOrFallback(raw?.ToString(), fallbackStyle, scope, cmd)
+        : fallbackStyle;
 
-static bool TryGetStepColor(Dictionary<string, object?> extra, string key, string scope, string cmd, out byte colorIndex)
+static bool TryGetStepStyle(Dictionary<string, object?> extra, string key, string scope, string cmd, out string style)
 {
-    colorIndex = 0;
+    style = "";
     if (!extra.TryGetValue(key, out var raw))
         return false;
 
     var value = raw?.ToString();
-    if (TryColorIndex(value, out colorIndex))
+    if (TryParseStyle(value, out style))
         return true;
 
-    Warn(scope, cmd, $"unknown color '{value}'");
+    Warn(scope, cmd, $"unknown color/style '{value}'");
     return false;
 }
 
-static string SgrOpen(byte index) => index switch
+static string SgrOpen(string codes) => $"\u001b[{codes}m";
+
+static string SgrNamed(string name)
 {
-    1 => "\u001b[30m",  2 => "\u001b[31m",  3 => "\u001b[32m",  4 => "\u001b[33m",
-    5 => "\u001b[34m",  6 => "\u001b[35m",  7 => "\u001b[36m",  8 => "\u001b[37m",
-    9 => "\u001b[90m", 10 => "\u001b[91m", 11 => "\u001b[92m", 12 => "\u001b[93m",
-   13 => "\u001b[94m", 14 => "\u001b[95m", 15 => "\u001b[96m", 16 => "\u001b[97m",
-    _ => "",
-};
+    return TryNamedForegroundCode(name, out var code)
+        ? SgrOpen(code.ToString(CultureInfo.InvariantCulture))
+        : "";
+}
 
 static List<HighlightSpec>? GetHighlights(Dictionary<string, object?> extra, string cmd)
 {
@@ -368,12 +374,15 @@ static List<HighlightSpec>? GetHighlights(Dictionary<string, object?> extra, str
     foreach (var item in list)
     {
         if (item is not Dictionary<object, object?> map) continue;
-        var colorName = map.GetValueOrDefault("color")?.ToString();
-        if (!TryColorIndex(colorName, out var colorIndex))
+        var colorRaw = map.GetValueOrDefault("color")?.ToString();
+        if (!TryParseStyle(colorRaw, out var colorOpen))
         {
-            Warn("highlight", cmd, $"unknown color '{colorName}'");
+            Warn("highlight", cmd, $"unknown color/style '{colorRaw}'");
             continue;
         }
+
+        if (string.IsNullOrEmpty(colorOpen))
+            continue;
 
         if (!map.TryGetValue("at", out var atRaw) || atRaw is null)
         {
@@ -402,47 +411,250 @@ static List<HighlightSpec>? GetHighlights(Dictionary<string, object?> extra, str
             continue;
         }
 
-        specs.Add(new HighlightSpec(colorIndex, ats));
+        specs.Add(new HighlightSpec(colorOpen, ats));
     }
 
     return specs.Count > 0 ? specs : null;
 }
 
-static bool TryColorIndex(string? name, out byte index)
+static bool TryNamedForegroundCode(string? name, out int code)
 {
-    index = name?.Trim().ToLowerInvariant() switch
+    code = name?.Trim().ToLowerInvariant() switch
     {
-        "black" => 1,
-        "red" => 2,
-        "green" => 3,
-        "yellow" => 4,
-        "blue" => 5,
-        "magenta" => 6,
-        "cyan" => 7,
-        "white" => 8,
-        "bright-black" or "gray" or "grey" => 9,
-        "bright-red" => 10,
-        "bright-green" => 11,
-        "bright-yellow" => 12,
-        "bright-blue" => 13,
-        "bright-magenta" => 14,
-        "bright-cyan" => 15,
-        "bright-white" => 16,
-        _ => (byte)0,
+        "black" => 30,
+        "red" => 31,
+        "green" => 32,
+        "yellow" => 33,
+        "blue" => 34,
+        "magenta" => 35,
+        "cyan" => 36,
+        "white" => 37,
+        "bright-black" or "gray" or "grey" => 90,
+        "bright-red" => 91,
+        "bright-green" => 92,
+        "bright-yellow" => 93,
+        "bright-blue" => 94,
+        "bright-magenta" => 95,
+        "bright-cyan" => 96,
+        "bright-white" => 97,
+        _ => 0,
     };
-    return index != 0;
+
+    return code != 0;
+}
+
+static bool TryNamedBackgroundCode(string? name, out int code)
+{
+    code = 0;
+    if (!TryNamedForegroundCode(name, out var fgCode))
+        return false;
+
+    code = fgCode + 10;
+    return true;
+}
+
+static bool TryParseStyle(string? raw, out string styleOpen)
+{
+    styleOpen = "";
+    if (string.IsNullOrWhiteSpace(raw))
+        return false;
+
+    var text = raw.Trim();
+    if (text.Equals("none", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("off", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("default", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("reset", StringComparison.OrdinalIgnoreCase))
+    {
+        styleOpen = "";
+        return true;
+    }
+
+    if (TryNamedForegroundCode(text, out var namedCode))
+    {
+        styleOpen = SgrOpen(namedCode.ToString(CultureInfo.InvariantCulture));
+        return true;
+    }
+
+    if (TryParseSgrLiteral(text, out var sgrCodes))
+    {
+        styleOpen = SgrOpen(sgrCodes);
+        return true;
+    }
+
+    if (TryParseStyleWords(text, out var wordCodes))
+    {
+        styleOpen = SgrOpen(wordCodes);
+        return true;
+    }
+
+    return false;
+}
+
+static bool TryParseSgrLiteral(string raw, out string codes)
+{
+    codes = "";
+    var text = raw.Trim();
+
+    if (text.StartsWith("\\e[", StringComparison.OrdinalIgnoreCase))
+        text = text[3..];
+    else if (text.StartsWith("\\x1b[", StringComparison.OrdinalIgnoreCase))
+        text = text[5..];
+    else if (text.StartsWith("\\u001b[", StringComparison.OrdinalIgnoreCase))
+        text = text[7..];
+    else if (text.Length >= 2 && text[0] == '\u001b' && text[1] == '[')
+        text = text[2..];
+    else if (text.StartsWith("[", StringComparison.Ordinal))
+        text = text[1..];
+
+    if (text.EndsWith("m", StringComparison.OrdinalIgnoreCase))
+        text = text[..^1];
+
+    if (text.Length == 0)
+        return false;
+
+    if (text[0] == ';' || text[^1] == ';')
+        return false;
+
+    var parts = text.Split(';', StringSplitOptions.TrimEntries);
+    if (parts.Length == 0)
+        return false;
+
+    var normalized = new List<string>(parts.Length);
+    foreach (var part in parts)
+    {
+        if (!int.TryParse(part, NumberStyles.None, CultureInfo.InvariantCulture, out var value))
+            return false;
+
+        if (value is < 0 or > 107)
+            return false;
+
+        normalized.Add(value.ToString(CultureInfo.InvariantCulture));
+    }
+
+    codes = string.Join(';', normalized);
+    return true;
+}
+
+static bool TryParseStyleWords(string raw, out string codes)
+{
+    codes = "";
+    var tokens = raw
+        .Split([' ', ',', '+'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Select(static t => t.Trim().ToLowerInvariant())
+        .ToArray();
+
+    if (tokens.Length == 0)
+        return false;
+
+    var bold = false;
+    var underline = false;
+    var intensityRequested = false;
+    int fgCode = 0;
+    int bgCode = 0;
+
+    foreach (var token in tokens)
+    {
+        if (token is "bold")
+        {
+            bold = true;
+            continue;
+        }
+
+        if (token is "underline")
+        {
+            underline = true;
+            continue;
+        }
+
+        if (token is "bright" or "intensity")
+        {
+            intensityRequested = true;
+            continue;
+        }
+
+        if (TryParsePrefixedColorToken(token, out var isBackground, out var colorName))
+        {
+            if (isBackground)
+            {
+                if (!TryNamedBackgroundCode(colorName, out bgCode))
+                    return false;
+            }
+            else
+            {
+                if (!TryNamedForegroundCode(colorName, out fgCode))
+                    return false;
+            }
+
+            continue;
+        }
+
+        if (TryNamedForegroundCode(token, out var directFg))
+        {
+            fgCode = directFg;
+            continue;
+        }
+
+        return false;
+    }
+
+    if (intensityRequested)
+    {
+        if (fgCode is >= 30 and <= 37)
+            fgCode += 60;
+        else if (fgCode == 0)
+            bold = true;
+    }
+
+    var list = new List<string>(4);
+    if (bold) list.Add("1");
+    if (underline) list.Add("4");
+    if (fgCode != 0) list.Add(fgCode.ToString(CultureInfo.InvariantCulture));
+    if (bgCode != 0) list.Add(bgCode.ToString(CultureInfo.InvariantCulture));
+    if (list.Count == 0) return false;
+
+    codes = string.Join(';', list);
+    return true;
+}
+
+static bool TryParsePrefixedColorToken(string token, out bool isBackground, out string colorName)
+{
+    isBackground = false;
+    colorName = "";
+    var prefixes = new[]
+    {
+        ("fg:", false), ("fg-", false),
+        ("bg:", true), ("bg-", true),
+        ("on:", true), ("on-", true),
+        ("background:", true), ("background-", true),
+    };
+
+    foreach (var (prefix, bg) in prefixes)
+    {
+        if (!token.StartsWith(prefix, StringComparison.Ordinal))
+            continue;
+
+        var value = token[prefix.Length..].Trim();
+        if (value.Length == 0)
+            return false;
+
+        isBackground = bg;
+        colorName = value;
+        return true;
+    }
+
+    return false;
 }
 
 static string ApplyHighlights(string output, List<HighlightSpec> specs, string cmd)
 {
     var text = output.Replace("\r\n", "\n").Replace("\r", "\n");
     var lines = text.Split('\n');
-    var paint = new byte[lines.Length][];
+    var paint = new string[lines.Length][];
 
     foreach (var spec in specs)
     {
         foreach (var at in spec.At)
-            ApplyAt(lines, paint, at, spec.ColorIndex, cmd);
+            ApplyAt(lines, paint, at, spec.ColorOpen, cmd);
     }
 
     var sb = new StringBuilder(text.Length + specs.Count * 16);
@@ -454,7 +666,7 @@ static string ApplyHighlights(string output, List<HighlightSpec> specs, string c
     return sb.ToString();
 }
 
-static void ApplyAt(string[] lines, byte[][] paint, string at, byte colorIndex, string cmd)
+static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpen, string cmd)
 {
     if (!TryParseAt(at, out var lineLo, out var lineHi, out var colLo, out var colHi, out var openColEnd, out var hasCol))
     {
@@ -499,13 +711,13 @@ static void ApplyAt(string[] lines, byte[][] paint, string at, byte colorIndex, 
         }
 
         if (start >= end) continue;
-        var row = paint[li] ??= new byte[content.Length];
+        var row = paint[li] ??= new string[content.Length];
         for (var c = start; c < end; c++)
-            row[c] = colorIndex;
+            row[c] = colorOpen;
     }
 }
 
-static void AppendPaintedLine(StringBuilder sb, string line, byte[]? row)
+static void AppendPaintedLine(StringBuilder sb, string line, string[]? row)
 {
     if (row is null)
     {
@@ -513,20 +725,20 @@ static void AppendPaintedLine(StringBuilder sb, string line, byte[]? row)
         return;
     }
 
-    byte cur = 0;
+    string? cur = null;
     for (var i = 0; i < line.Length; i++)
     {
         var next = row[i];
-        if (next != cur)
+        if (!string.Equals(next, cur, StringComparison.Ordinal))
         {
-            if (cur != 0) sb.Append(SgrReset);
-            if (next != 0) sb.Append(SgrOpen(next));
+            if (!string.IsNullOrEmpty(cur)) sb.Append(SgrReset);
+            if (!string.IsNullOrEmpty(next)) sb.Append(next);
             cur = next;
         }
         sb.Append(line[i]);
     }
 
-    if (cur != 0) sb.Append(SgrReset);
+    if (!string.IsNullOrEmpty(cur)) sb.Append(SgrReset);
 }
 
 static bool TryParseAt(string at, out int lineLo, out int lineHi, out int colLo, out int colHi, out bool openColEnd, out bool hasCol)
@@ -585,16 +797,16 @@ static bool TryPosInt(ReadOnlySpan<char> span, out int value)
     return value > 0;
 }
 
-static byte ParseColorOrFallback(string? raw, byte fallbackColorIndex, string scope, string? cmd = null)
+static string ParseStyleOrFallback(string? raw, string fallbackStyle, string scope, string? cmd = null)
 {
     if (string.IsNullOrWhiteSpace(raw))
-        return fallbackColorIndex;
+        return fallbackStyle;
 
-    if (TryColorIndex(raw, out var colorIndex))
-        return colorIndex;
+    if (TryParseStyle(raw, out var style))
+        return style;
 
-    Warn(scope, cmd, $"unknown color '{raw}'");
-    return fallbackColorIndex;
+    Warn(scope, cmd, $"unknown color/style '{raw}'");
+    return fallbackStyle;
 }
 
 static void Warn(string scope, string? cmd, string detail)
@@ -885,7 +1097,7 @@ record CastEvent(double Time, string Data);
 
 readonly record struct CommandOutput(string Stdout, string Stderr);
 
-record HighlightSpec(byte ColorIndex, List<string> At);
+record HighlightSpec(string ColorOpen, List<string> At);
 
 record ShellLaunch(string FileName, string[] Arguments, string EnvValue, string DisplayName);
 

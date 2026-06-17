@@ -182,6 +182,29 @@ steps:
 | `bright-cyan` | `96` |
 | `bright-white` | `97` |
 
+### スタイル指定（bold/underline/background/intensity）
+
+`highlight.color`、`run-highlight`、`stderr-color` には、単純なカラー名に加えてスタイル文字列も指定できます。
+
+- カラー名: `red`、`bright-cyan`
+- スタイルトークン: `bold`、`underline`、`bright`（`intensity` も同義）
+- 前景/背景プレフィックス: `fg:bright-white`、`bg:blue`、`on:bright-black`
+- 生 SGR リテラル: `1;31`、`\e[1;31m`、`\x1b[1;31m`
+
+```yaml
+steps:
+  - run: git log --oneline -3
+    run-highlight: "bold bright-cyan"
+
+  - run: printf 'line1\nline2\n'
+    highlight:
+      - color: "underline fg:bright-white bg:blue"
+        at: "2"
+
+  - run: echo "plain stderr" 1>&2
+    stderr-color: "\\e[1;93m"
+```
+
 ### コマンド設定一覧
 
 | キー | 説明 | デフォルト |

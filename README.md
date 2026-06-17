@@ -182,6 +182,29 @@ steps:
 | `bright-cyan` | `96` |
 | `bright-white` | `97` |
 
+### Style Values (bold/underline/background/intensity)
+
+`highlight.color`, `run-highlight`, and `stderr-color` accept style strings in addition to simple color names.
+
+- Named color: `red`, `bright-cyan`
+- Style tokens: `bold`, `underline`, `bright` (`intensity` alias)
+- Foreground/background prefixes: `fg:bright-white`, `bg:blue`, `on:bright-black`
+- Raw SGR literal: `1;31`, `\e[1;31m`, `\x1b[1;31m`
+
+```yaml
+steps:
+  - run: git log --oneline -3
+    run-highlight: "bold bright-cyan"
+
+  - run: printf 'line1\nline2\n'
+    highlight:
+      - color: "underline fg:bright-white bg:blue"
+        at: "2"
+
+  - run: echo "plain stderr" 1>&2
+    stderr-color: "\\e[1;93m"
+```
+
 ### Command Keys
 
 | Key | Description | Default |
