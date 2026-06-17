@@ -13,6 +13,7 @@ Post-processing command output with declarative highlights lets authors color sp
 ### In scope (v1)
 
 - `highlight` on **map-form** steps that include `run:`.
+- `run-highlight` on **map-form** steps that include `run:` (colored typed command text).
 - Named **16-color** foreground palette (ANSI normal + bright).
 - Positional ranges via `at`: full lines, line spans, and column spans (including multi-line column bands).
 - Multiple highlight entries per step; multiple `at` strings per entry.
@@ -49,6 +50,8 @@ steps:
 | `at`    | yes      | A range string, or a list of range strings.      |
 
 `highlight` applies only to **command output** for that step (stdout and stderr combined, in capture order). It does not affect the simulated prompt, keystroke typing events, or [`name`](#step-name-name) comment lines.
+
+`run-highlight` applies only to the **typed command text** for that step. It does not affect the prompt, command output, or [`name`](#step-name-name) comment lines.
 
 ## Step name (`name`)
 
@@ -141,12 +144,15 @@ Renders `# destructive — review diff first` in yellow.
 ```yaml
 - name: git status
   run: git status
+  run-highlight: yellow
   highlight:
     - color: red
       at: "6-10:3-"
 ```
 
 The `name` comment is colored cyan (or as prefixed); `highlight` still applies only to `git status` output.
+
+`run-highlight` colors the recorded command text itself, so the command line stands out before execution.
 
 ## Color names
 
@@ -284,16 +290,6 @@ Line numbers depend on `git status` layout; authors should target stable output 
 - **Unified `at` grammar** (`2-5:10-20` = same columns on each line) matches common terminal output alignment better than separate line/column keys.
 - **Reverse span normalization** (`9-5` → `5-9`) costs little and avoids annoying errors when endpoints are typed in either order.
 
-## Future considerations (not v1)
-
-### Highlighting the command line, not output
-
-Use case: emphasize what was typed while leaving raw command output uncolored.
-
-- Today, typing and output are separate cast events; `highlight` only targets **post-execution output**.
-- Reserving **line `0`** (or another sentinel) for “the command line” is tempting but **ambiguous**: `run: |` multiline blocks are valid YAML and may not correspond to a single terminal row. There is no guarantee the executed command fits one line.
-- Likely needs a **separate mechanism** (e.g. `highlight-input: true` or `highlight: command`) rather than overloading output line `0`. Independent of [`name`](#step-name-name), which only adds a comment line above the command.
-
 ### stderr default red
 
 **Idea:** Always render stderr spans in red (or `bright-red`) without per-step `highlight`.
@@ -314,6 +310,7 @@ Use case: emphasize what was typed while leaving raw command output uncolored.
 
 | Date       | Change |
 |------------|--------|
+| 2026-06-17 | Added `run-highlight` for typed command text; it colors the recorded command line without affecting output. |
 | 2026-06-17 | Initial spec from scenario2cast highlight design discussion. |
 | 2026-06-17 | Implemented in `scenario2cast.cs` (v1). Per-line `byte[]` paint buffers; ANSI inserted once when rendering. |
 | 2026-06-17 | Specified `name` on map-form `run` steps: colored `# …` comment above command; default `cyan`; optional `[color]` prefix. |
