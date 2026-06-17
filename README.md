@@ -160,29 +160,6 @@ steps:
 - `stderr-color` supports both scopes: `settings.stderr-color` default + step `stderr-color` override.
 - Existing ANSI on stderr is preserved; `stderr-color` applies only when stderr has no ANSI SGR.
 
-### Color Names (ANSI SGR)
-
-`highlight`, `run-highlight`, and `stderr-color` use the same 16-color foreground palette.
-
-| Name | ANSI SGR |
-|------|----------|
-| `black` | `30` |
-| `red` | `31` |
-| `green` | `32` |
-| `yellow` | `33` |
-| `blue` | `34` |
-| `magenta` | `35` |
-| `cyan` | `36` |
-| `white` | `37` |
-| `bright-black` (`gray`, `grey`) | `90` |
-| `bright-red` | `91` |
-| `bright-green` | `92` |
-| `bright-yellow` | `93` |
-| `bright-blue` | `94` |
-| `bright-magenta` | `95` |
-| `bright-cyan` | `96` |
-| `bright-white` | `97` |
-
 ### Style Values (bold/underline/background/intensity)
 
 `highlight.color`, `run-highlight`, and `stderr-color` accept style strings in addition to simple color names.
@@ -205,6 +182,27 @@ steps:
   - run: echo "plain stderr" 1>&2
     stderr-color: "\\e[1;93m"
 ```
+
+**Color Names (ANSI SGR)**
+
+| Name | ANSI SGR |
+|------|----------|
+| `black` | `30` |
+| `red` | `31` |
+| `green` | `32` |
+| `yellow` | `33` |
+| `blue` | `34` |
+| `magenta` | `35` |
+| `cyan` | `36` |
+| `white` | `37` |
+| `bright-black` (`gray`, `grey`) | `90` |
+| `bright-red` | `91` |
+| `bright-green` | `92` |
+| `bright-yellow` | `93` |
+| `bright-blue` | `94` |
+| `bright-magenta` | `95` |
+| `bright-cyan` | `96` |
+| `bright-white` | `97` |
 
 ### Command Keys
 

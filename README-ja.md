@@ -160,29 +160,6 @@ steps:
 - `stderr-color` は両対応です（`settings.stderr-color` の既定値 + step の `stderr-color` 上書き）。
 - stderr 側に既存 ANSI がある場合はそれを保持し、`stderr-color` は ANSI がない stderr にのみ適用されます。
 
-### カラー名とANSIコード
-
-`highlight`、`run-highlight`、`stderr-color` は同じ16色の前景色パレットを使います。
-
-| 名前 | ANSI SGR |
-|------|----------|
-| `black` | `30` |
-| `red` | `31` |
-| `green` | `32` |
-| `yellow` | `33` |
-| `blue` | `34` |
-| `magenta` | `35` |
-| `cyan` | `36` |
-| `white` | `37` |
-| `bright-black` (`gray`, `grey`) | `90` |
-| `bright-red` | `91` |
-| `bright-green` | `92` |
-| `bright-yellow` | `93` |
-| `bright-blue` | `94` |
-| `bright-magenta` | `95` |
-| `bright-cyan` | `96` |
-| `bright-white` | `97` |
-
 ### スタイル指定（bold/underline/background/intensity）
 
 `highlight.color`、`run-highlight`、`stderr-color` には、単純なカラー名に加えてスタイル文字列も指定できます。
@@ -205,6 +182,27 @@ steps:
   - run: echo "plain stderr" 1>&2
     stderr-color: "\\e[1;93m"
 ```
+
+**カラー名とANSIコード**
+
+| 名前 | ANSI SGR |
+|------|----------|
+| `black` | `30` |
+| `red` | `31` |
+| `green` | `32` |
+| `yellow` | `33` |
+| `blue` | `34` |
+| `magenta` | `35` |
+| `cyan` | `36` |
+| `white` | `37` |
+| `bright-black` (`gray`, `grey`) | `90` |
+| `bright-red` | `91` |
+| `bright-green` | `92` |
+| `bright-yellow` | `93` |
+| `bright-blue` | `94` |
+| `bright-magenta` | `95` |
+| `bright-cyan` | `96` |
+| `bright-white` | `97` |
 
 ### コマンド設定一覧
 
