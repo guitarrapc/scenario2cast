@@ -61,29 +61,30 @@ Download the asset for your OS from the GitHub Releases page, place `scenario2ca
 # On macOS/Linux, add execute permission if needed.
 chmod +x ./scenario2cast
 
-# Create a minimal scenario
-scenario2cast init scenario.yaml
+# Create a starter scenario file in the current directory
+scenario2cast init
 
-# Or generate the starter file in the current directory as `scenario.yaml`.
-# scenario2cast init
-
-# Run
-scenario2cast scenario.yaml [output.cast]
-
-# If `output.cast` is omitted, output is written next to the scenario file with the `.cast` extension.
-scenario2cast samples/basic.yaml
-
-# Specify output path
-scenario2cast samples/basic.yaml basic.cast
+# Run the scenario to generate a cast file
+scenario2cast scenario.yaml
 
 # Play with asciinema
-asciinema play basic.cast
+asciinema play scenario.cast
 
 # Convert to gif with agg (Linux/macOS) - GIF default font size is 16, adjust font size if you feel too small or large
-docker run --rm -v "${PWD}:/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
+docker run --rm -v "${PWD}:/data" kayvan/agg /data/scenario.cast /data/scenario.gif --font-size 20
 
 # Convert to gif with agg (Windows PowerShell)
-docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/samples/basic.cast /data/samples/basic.gif --font-size 16
+docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/scenario.cast /data/scenario.gif --font-size 20
+```
+
+**Usage**
+
+```bash
+# Initialize a new scenario file
+scenario2cast init [scenario.yaml]
+
+# Run scenario to generate cast
+scenario2cast scenario.yaml [output.cast]
 ```
 
 **Notes**
