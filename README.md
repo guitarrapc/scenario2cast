@@ -105,6 +105,7 @@ settings:
   pre-delay: 0.8           # Pause before typing next step
   post-delay: 1.5          # Pause after prompt appears before next step typing
   execution-duration: 0.1  # Optional. Default cast wait per command
+  stderr-color: red        # default color for stderr text when stderr has no ANSI SGR sequences. (default: red)
 
 steps:
   # Writing a command as a string applies default settings from `settings`
@@ -122,27 +123,25 @@ steps:
 
   - run: sleep 2
     execution-duration: 0.4
-```
 
-### Highlight Examples
-
-```yaml
-settings:
-  stderr-color: red
-
-steps:
-  - run: git status
-    highlight:
-      - color: yellow
-        at: "4"
-      - color: red
-        at: "6-10:3-"
-
+  # run highlight
   - run: git log --oneline -3
     run-highlight: bright-cyan
 
+  # stdout highlight
+  - run: git status
+    highlight:
+      - color: yellow
+        at: "4"                   # line 4
+      - color: red
+        at: "6-10:3-"             # multi-line column band. lines 6-10, columns 3 to end of line
+
+  # stderr highlight (if stderr has no ANSI SGR color)
   - run: echo "plain stderr" 1>&2
-    # Uses settings.stderr-color when stderr has no ANSI SGR.
+
+  # Override default stderr color for this step
+  - run: echo "stderr override" 1>&2
+    stderr-color: bright-yellow
 ```
 
 - `highlight` is step-only (map-form `run` step).

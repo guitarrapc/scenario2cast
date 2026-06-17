@@ -14,7 +14,7 @@ Post-processing command output with declarative highlights lets authors color sp
 
 - `highlight` on **map-form** steps that include `run:`.
 - `run-highlight` on **map-form** steps that include `run:` (colored typed command text).
-- `stderr-color` as an **opt-in** default color for uncolored stderr output.
+- `stderr-color` default color `red` for uncolored stderr output.
 - Named **16-color** foreground palette (ANSI normal + bright).
 - Positional ranges via `at`: full lines, line spans, and column spans (including multi-line column bands).
 - Multiple highlight entries per step; multiple `at` strings per entry.
@@ -58,13 +58,13 @@ steps:
 
 Status: **Implemented**
 
-`stderr-color` is optional and controls a default foreground color for stderr text that has no ANSI SGR color.
+`stderr-color` controls a default foreground color for stderr text that has no ANSI SGR color.
 
 It can be configured globally under `settings` and overridden per map-form `run` step.
 
 ```yaml
 settings:
-  stderr-color: red
+  stderr-color: red # default color for stderr text when stderr has no ANSI SGR sequences.
 
 steps:
   - run: git status
@@ -321,10 +321,6 @@ Line numbers depend on `git status` layout; authors should target stable output 
 - **Line numbers are fragile** for commands like `git status` unless the repo state is fixed; positional highlighting trades robustness for zero dependency on tool-specific color flags. Authors accept that trade-off for demo scripts.
 - **Unified `at` grammar** (`2-5:10-20` = same columns on each line) matches common terminal output alignment better than separate line/column keys.
 - **Reverse span normalization** (`9-5` → `5-9`) costs little and avoids annoying errors when endpoints are typed in either order.
-
-### stderr default red
-
-`stderr-color` is implemented as an opt-in mechanism. It is not globally always-on by default.
 
 ## Related documents
 

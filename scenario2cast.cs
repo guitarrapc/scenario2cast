@@ -26,6 +26,7 @@ const double DefaultJitter    = 0.015;
 const double DefaultPreDelay  = 0.2;
 const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
+const byte DefaultStderrColorIndex = 2; // red
 const string AppVersion = "0.1.0";
 const string SgrReset = "\u001b[0m";
 
@@ -118,7 +119,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
     var preDelay  = settings.PreDelay ?? DefaultPreDelay;
     var postDelay = settings.PostDelay ?? DefaultPostDelay;
     var defaultExecutionDuration = settings.ExecutionDuration ?? DefaultExecutionDuration;
-    var defaultStderrColorIndex = ParseSettingsStderrColor(settings.StderrColor);
+    var defaultStderrColorIndex = ParseSettingsStderrColor(settings.StderrColor, DefaultStderrColorIndex);
     var events = new List<CastEvent>();
     var rng    = new Random(deterministicSeed);
     double t   = 0.5;
@@ -331,16 +332,16 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
 static void WarnName(string cmd, string detail)
     => Console.Error.WriteLine($"Warning: name ({cmd}): {detail}");
 
-static byte ParseSettingsStderrColor(string? raw)
+static byte ParseSettingsStderrColor(string? raw, byte fallbackColorIndex)
 {
     if (string.IsNullOrWhiteSpace(raw))
-        return 0;
+        return fallbackColorIndex;
 
     if (TryColorIndex(raw, out var colorIndex))
         return colorIndex;
 
     Console.Error.WriteLine($"Warning: settings.stderr-color: unknown color '{raw}'");
-    return 0;
+    return fallbackColorIndex;
 }
 
 static byte ResolveStderrColor(Dictionary<string, object?> extra, byte fallbackColorIndex, string cmd)
@@ -350,7 +351,7 @@ static byte ResolveStderrColor(Dictionary<string, object?> extra, byte fallbackC
 
     var value = raw?.ToString();
     if (string.IsNullOrWhiteSpace(value))
-        return 0;
+        return fallbackColorIndex;
 
     if (TryColorIndex(value, out var colorIndex))
         return colorIndex;

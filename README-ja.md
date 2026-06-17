@@ -96,7 +96,7 @@ title: "Demo Title"     # cast のタイトル（任意）
 width: 120              # ターミナル幅（デフォルト: 120）
 height: 24              # ターミナル高さ（デフォルト: 24）
 cwd: /path/to/dir       # step を実行するディレクトリ（任意）
-shell: bash             # 実行シェルを指定 (任意)
+shell: bash             # 実行シェルを指定（任意）
 
 settings:
   prompt: "$ "
@@ -105,6 +105,7 @@ settings:
   pre-delay: 0.8           # 次の step のタイピング開始前の停止時間
   post-delay: 1.5          # プロンプト表示後・次の step 入力までの停止時間
   execution-duration: 0.1  # 任意。各コマンド実行の cast 上待機時間
+  stderr-color: red        # stderr に ANSI SGR がない場合の既定色（デフォルト: red）
 
 steps:
   # コマンドをリスト形式で書くと、settings の既定値が適用
@@ -122,27 +123,25 @@ steps:
 
   - run: sleep 2
     execution-duration: 0.4
-```
 
-### ハイライト使用例
-
-```yaml
-settings:
-  stderr-color: red
-
-steps:
-  - run: git status
-    highlight:
-      - color: yellow
-        at: "4"
-      - color: red
-        at: "6-10:3-"
-
+  # run highlight
   - run: git log --oneline -3
     run-highlight: bright-cyan
 
+  # stdout highlight
+  - run: git status
+    highlight:
+      - color: yellow
+        at: "4"                   # 4行目
+      - color: red
+        at: "6-10:3-"             # 複数行カラム帯。6-10行目、3列目から行末
+
+  # stderr highlight（stderr に ANSI SGR がない場合）
   - run: echo "plain stderr" 1>&2
-    # stderr に ANSI SGR がない場合は settings.stderr-color を使用
+
+  # この step の stderr 既定色を上書き
+  - run: echo "stderr override" 1>&2
+    stderr-color: bright-yellow
 ```
 
 - `highlight` は step のみ対応です（map-form の `run` step）。
@@ -186,7 +185,7 @@ steps:
 | `run-highlight` | タイピングされるコマンド文字列に色を付ける | なし（stepのみ） |
 | `stderr-color` | stderr に ANSI SGR がない場合の既定色 | `settings.stderr-color` |
 
-### settings対応 / step対応メモ
+### settings 対応 / step 対応メモ
 
 - `highlight` はこのバージョンでは `settings` 既定値を持ちません。
 - `run-highlight` はこのバージョンでは `settings` 既定値を持ちません。
