@@ -5,13 +5,6 @@
 #:property ImplicitUsings=enable
 #:package VYaml@1.3.0
 
-// scenario2cast - Generate asciinema v2 cast files from YAML scenario files.
-//
-// Usage:
-//   dotnet run scenario2cast.cs <scenario.yaml> [output.cast]
-//
-// If output.cast is omitted, writes to <scenario>.cast in the same directory.
-
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -119,7 +112,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
     var preDelay  = settings.PreDelay ?? DefaultPreDelay;
     var postDelay = settings.PostDelay ?? DefaultPostDelay;
     var defaultExecutionDuration = settings.ExecutionDuration ?? DefaultExecutionDuration;
-    var defaultStderrColorIndex = ParseSettingsStderrColor(settings.StderrColor, DefaultStderrColorIndex);
+    var defaultStderrColorIndex = ParseColorOrFallback(settings.StderrColor, DefaultStderrColorIndex, "settings.stderr-color");
     var events = new List<CastEvent>();
     var rng    = new Random(deterministicSeed);
     double t   = 0.5;
@@ -135,8 +128,8 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         var cmdPre    = GetDouble(command.Extra, preDelay, "pre-delay");
         var cmdPost   = GetDouble(command.Extra, postDelay, "post-delay");
         var cmdExecutionDuration = GetDouble(command.Extra, defaultExecutionDuration, "execution-duration");
-        var cmdStderrColorIndex = ResolveStderrColor(command.Extra, defaultStderrColorIndex, command.Cmd);
-        var hasRunHighlight = TryGetRunHighlight(command.Extra, command.Cmd, out var runHighlightColor);
+        var cmdStderrColorIndex = GetOverrideColor(command.Extra, "stderr-color", defaultStderrColorIndex, "stderr-color", command.Cmd);
+        var hasRunHighlight = TryGetStepColor(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightColor);
 
         if (events.Count == 0)
             t += preDelay;
@@ -203,12 +196,26 @@ static CommandEntry ParseCommand(object? item)
     if (item is string s) return new CommandEntry { Cmd = s };
     if (item is Dictionary<object, object?> map)
     {
-        var extra = map.ToDictionary(kv => kv.Key.ToString() ?? "", kv => kv.Value);
-        var cmd = extra.TryGetValue("run", out var runValue) ? runValue?.ToString() ?? "" : "";
-        var name = extra.TryGetValue("name", out var nameValue) ? nameValue?.ToString() : null;
+        var extra = new Dictionary<string, object?>(map.Count);
+        var cmd = "";
+        string? name = null;
+        foreach (var (rawKey, value) in map)
+        {
+            var key = rawKey?.ToString() ?? "";
+            switch (key)
+            {
+                case "run":
+                    cmd = value?.ToString() ?? "";
+                    break;
+                case "name":
+                    name = value?.ToString();
+                    break;
+                default:
+                    extra[key] = value;
+                    break;
+            }
+        }
 
-        extra.Remove("run");
-        extra.Remove("name");
         return new CommandEntry { Cmd = cmd, Name = name, Extra = extra };
     }
     return new CommandEntry();
@@ -239,7 +246,12 @@ static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell)
 static string MergeCommandOutput(CommandOutput output, byte stderrColorIndex)
 {
     if (string.IsNullOrEmpty(output.Stdout))
-        return MaybeColorizeStderr(output.Stderr, stderrColorIndex);
+    {
+        if (string.IsNullOrEmpty(output.Stderr) || stderrColorIndex == 0 || ContainsAnsiSgr(output.Stderr))
+            return output.Stderr;
+
+        return string.Concat(SgrOpen(stderrColorIndex), output.Stderr, SgrReset);
+    }
 
     if (string.IsNullOrEmpty(output.Stderr))
         return output.Stdout;
@@ -248,14 +260,6 @@ static string MergeCommandOutput(CommandOutput output, byte stderrColorIndex)
         return string.Concat(output.Stdout, output.Stderr);
 
     return string.Concat(output.Stdout, SgrOpen(stderrColorIndex), output.Stderr, SgrReset);
-}
-
-static string MaybeColorizeStderr(string stderr, byte stderrColorIndex)
-{
-    if (string.IsNullOrEmpty(stderr) || stderrColorIndex == 0 || ContainsAnsiSgr(stderr))
-        return stderr;
-
-    return string.Concat(SgrOpen(stderrColorIndex), stderr, SgrReset);
 }
 
 static bool ContainsAnsiSgr(string text)
@@ -284,8 +288,6 @@ static bool ContainsAnsiSgr(string text)
 static string NormalizeNewlines(string s)
     => s.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
 
-// Step name comment
-
 static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine)
 {
     coloredLine = "";
@@ -305,7 +307,7 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
             displayText = value[(close + 1)..].TrimStart();
             if (!TryColorIndex(colorName, out colorIndex))
             {
-                WarnName(cmd, $"unknown color '{colorName}'");
+                Warn("name", cmd, $"unknown color '{colorName}'");
                 colorIndex = 7;
             }
         }
@@ -321,7 +323,7 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
 
     if (string.IsNullOrWhiteSpace(displayText))
     {
-        WarnName(cmd, "empty name text after color prefix");
+        Warn("name", cmd, "empty name text after color prefix");
         return false;
     }
 
@@ -329,60 +331,24 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
     return true;
 }
 
-static void WarnName(string cmd, string detail)
-    => Console.Error.WriteLine($"Warning: name ({cmd}): {detail}");
+static byte GetOverrideColor(Dictionary<string, object?> extra, string key, byte fallbackColorIndex, string scope, string cmd)
+    => extra.TryGetValue(key, out var raw)
+        ? ParseColorOrFallback(raw?.ToString(), fallbackColorIndex, scope, cmd)
+        : fallbackColorIndex;
 
-static byte ParseSettingsStderrColor(string? raw, byte fallbackColorIndex)
-{
-    if (string.IsNullOrWhiteSpace(raw))
-        return fallbackColorIndex;
-
-    if (TryColorIndex(raw, out var colorIndex))
-        return colorIndex;
-
-    Console.Error.WriteLine($"Warning: settings.stderr-color: unknown color '{raw}'");
-    return fallbackColorIndex;
-}
-
-static byte ResolveStderrColor(Dictionary<string, object?> extra, byte fallbackColorIndex, string cmd)
-{
-    if (!extra.TryGetValue("stderr-color", out var raw))
-        return fallbackColorIndex;
-
-    var value = raw?.ToString();
-    if (string.IsNullOrWhiteSpace(value))
-        return fallbackColorIndex;
-
-    if (TryColorIndex(value, out var colorIndex))
-        return colorIndex;
-
-    WarnStderrColor(cmd, $"unknown color '{value}'");
-    return fallbackColorIndex;
-}
-
-static void WarnStderrColor(string cmd, string detail)
-    => Console.Error.WriteLine($"Warning: stderr-color ({cmd}): {detail}");
-
-static bool TryGetRunHighlight(Dictionary<string, object?> extra, string cmd, out byte colorIndex)
+static bool TryGetStepColor(Dictionary<string, object?> extra, string key, string scope, string cmd, out byte colorIndex)
 {
     colorIndex = 0;
-    if (!extra.TryGetValue("run-highlight", out var raw))
+    if (!extra.TryGetValue(key, out var raw))
         return false;
 
     var value = raw?.ToString();
-    if (!TryColorIndex(value, out colorIndex))
-    {
-        WarnRunHighlight(cmd, $"unknown color '{value}'");
-        return false;
-    }
+    if (TryColorIndex(value, out colorIndex))
+        return true;
 
-    return true;
+    Warn(scope, cmd, $"unknown color '{value}'");
+    return false;
 }
-
-static void WarnRunHighlight(string cmd, string detail)
-    => Console.Error.WriteLine($"Warning: run-highlight ({cmd}): {detail}");
-
-// Highlight parsing and application
 
 static string SgrOpen(byte index) => index switch
 {
@@ -405,13 +371,13 @@ static List<HighlightSpec>? GetHighlights(Dictionary<string, object?> extra, str
         var colorName = map.GetValueOrDefault("color")?.ToString();
         if (!TryColorIndex(colorName, out var colorIndex))
         {
-            WarnHighlight(cmd, $"unknown color '{colorName}'");
+            Warn("highlight", cmd, $"unknown color '{colorName}'");
             continue;
         }
 
         if (!map.TryGetValue("at", out var atRaw) || atRaw is null)
         {
-            WarnHighlight(cmd, "missing 'at'");
+            Warn("highlight", cmd, "missing 'at'");
             continue;
         }
 
@@ -432,7 +398,7 @@ static List<HighlightSpec>? GetHighlights(Dictionary<string, object?> extra, str
 
         if (ats.Count == 0)
         {
-            WarnHighlight(cmd, "missing 'at'");
+            Warn("highlight", cmd, "missing 'at'");
             continue;
         }
 
@@ -492,20 +458,20 @@ static void ApplyAt(string[] lines, byte[][] paint, string at, byte colorIndex, 
 {
     if (!TryParseAt(at, out var lineLo, out var lineHi, out var colLo, out var colHi, out var openColEnd, out var hasCol))
     {
-        WarnHighlight(cmd, $"invalid at '{at}'");
+        Warn("highlight", cmd, $"invalid at '{at}'");
         return;
     }
 
     var lineCount = lines.Length;
     if (lineLo > lineCount)
     {
-        WarnHighlight(cmd, $"at '{at}' starts after output");
+        Warn("highlight", cmd, $"at '{at}' starts after output");
         return;
     }
 
     if (lineHi > lineCount)
     {
-        WarnHighlight(cmd, $"at '{at}': lines {lineCount + 1}-{lineHi} are missing");
+        Warn("highlight", cmd, $"at '{at}': lines {lineCount + 1}-{lineHi} are missing");
         lineHi = lineCount;
     }
 
@@ -521,7 +487,7 @@ static void ApplyAt(string[] lines, byte[][] paint, string at, byte colorIndex, 
             if (start >= content.Length)
             {
                 if (lineLo == lineHi)
-                    WarnHighlight(cmd, $"at '{at}' starts after output");
+                    Warn("highlight", cmd, $"at '{at}' starts after output");
                 continue;
             }
             if (end > content.Length) end = content.Length;
@@ -619,10 +585,25 @@ static bool TryPosInt(ReadOnlySpan<char> span, out int value)
     return value > 0;
 }
 
-static void WarnHighlight(string cmd, string detail)
-    => Console.Error.WriteLine($"Warning: highlight ({cmd}): {detail}");
+static byte ParseColorOrFallback(string? raw, byte fallbackColorIndex, string scope, string? cmd = null)
+{
+    if (string.IsNullOrWhiteSpace(raw))
+        return fallbackColorIndex;
 
-// Cast writing
+    if (TryColorIndex(raw, out var colorIndex))
+        return colorIndex;
+
+    Warn(scope, cmd, $"unknown color '{raw}'");
+    return fallbackColorIndex;
+}
+
+static void Warn(string scope, string? cmd, string detail)
+{
+    if (string.IsNullOrWhiteSpace(cmd))
+        Console.Error.WriteLine($"Warning: {scope}: {detail}");
+    else
+        Console.Error.WriteLine($"Warning: {scope} ({cmd}): {detail}");
+}
 
 static void WriteCast(Scenario scenario, List<CastEvent> events, string outputPath, ShellLaunch shell, long timestamp)
 {
@@ -702,10 +683,10 @@ static ShellLaunch ResolveWindowsShell(string? requested)
 {
     if (string.IsNullOrWhiteSpace(requested))
     {
-        if (TryResolveWindowsPowerShell("pwsh", out var pwsh))
+        if (TryResolveExecutableOnWindows("pwsh", out var pwsh))
             return new ShellLaunch(pwsh, ["-NoLogo", "-NoProfile", "-Command"], pwsh, "pwsh");
 
-        if (TryResolveWindowsPowerShell("powershell", out var powershell))
+        if (TryResolveExecutableOnWindows("powershell", out var powershell))
             return new ShellLaunch(powershell, ["-NoLogo", "-NoProfile", "-Command"], powershell, "powershell");
 
         throw new InvalidOperationException("No supported shell was found on Windows. Install pwsh or powershell, or set settings.shell to a Git Bash or MSYS bash.exe path.");
@@ -714,13 +695,13 @@ static ShellLaunch ResolveWindowsShell(string? requested)
     if (IsPowerShellName(requested))
     {
         var exeName = NormalizeWindowsShellName(requested);
-        if (TryResolveWindowsPowerShell(exeName, out var resolved))
+        if (TryResolveExecutableOnWindows(exeName, out var resolved))
             return new ShellLaunch(resolved, ["-NoLogo", "-NoProfile", "-Command"], resolved, exeName);
 
         throw new InvalidOperationException($"Shell '{requested}' was requested, but '{exeName}' could not be found on Windows.");
     }
 
-    if (IsBashName(requested))
+    if (string.Equals(NormalizeWindowsShellName(requested), "bash", StringComparison.OrdinalIgnoreCase))
     {
         if (TryResolveWindowsBash(out var resolved))
             return new ShellLaunch(resolved, ["-lc"], resolved, "bash");
@@ -748,14 +729,8 @@ static bool IsPowerShellName(string shell)
     return name is "pwsh" or "powershell";
 }
 
-static bool IsBashName(string shell)
-    => string.Equals(NormalizeWindowsShellName(shell), "bash", StringComparison.OrdinalIgnoreCase);
-
 static string NormalizeWindowsShellName(string shell)
     => Path.GetFileNameWithoutExtension(shell.Trim()).ToLowerInvariant();
-
-static bool TryResolveWindowsPowerShell(string executableName, out string resolved)
-    => TryResolveExecutableOnWindows(executableName, out resolved);
 
 static bool TryResolveWindowsBash(out string resolved)
 {
