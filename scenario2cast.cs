@@ -1,6 +1,6 @@
 ﻿#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
-#:property Version=0.1.0
+#:property Version=0.2.0
 #:property Nullable=enable
 #:property ImplicitUsings=enable
 #:package VYaml@1.3.0
@@ -27,7 +27,7 @@ const double DefaultPreDelay  = 0.2;
 const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
 const byte DefaultStderrColorIndex = 2; // red
-const string AppVersion = "0.1.0";
+const string AppVersion = "0.2.0";
 const string SgrReset = "\u001b[0m";
 
 if (args.Length < 1)
