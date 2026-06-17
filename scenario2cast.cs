@@ -1,4 +1,4 @@
-#:sdk Microsoft.NET.Sdk
+﻿#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
 #:property Version=0.1.0
 #:property Nullable=enable
@@ -23,8 +23,8 @@ using VYaml.Serialization;
 const string DefaultPrompt    = "$ ";
 const double DefaultSpeed     = 0.05;
 const double DefaultJitter    = 0.015;
-const double DefaultPreDelay  = 0.8;
-const double DefaultPostDelay = 1.5;
+const double DefaultPreDelay  = 0.2;
+const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
 const string AppVersion = "0.1.0";
 const string SgrReset = "\u001b[0m";

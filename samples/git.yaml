@@ -6,13 +6,6 @@ shell: bash
 # Working directory for all steps (optional)
 # cwd: /path/to/repo
 
-settings:
-  prompt: "$ "
-  typing-speed: 0.06
-  typing-jitter: 0.02
-  pre-delay: 0.5
-  post-delay: 1.0
-
 steps:
   - git --version
 
