@@ -55,7 +55,7 @@ All I need in the end is a cast file, scenario2cast is a cross-platform tool tha
 
 ## Quick Start
 
-Download the asset for your OS from the GitHub Releases page, place `scenario2cast` (or `scenario2cast.exe` on Windows) where you want.
+Download the asset for your OS from GitHub Releases, then place `scenario2cast` (or `scenario2cast.exe` on Windows) where you want.
 
 ```bash
 # On macOS/Linux, add execute permission if needed.
@@ -89,16 +89,14 @@ scenario2cast scenario.yaml [output.cast]
 
 **Notes**
 
-- Use top-level `shell` to choose the command shell.
+- `shell`:
+  - Linux/macOS default shell is `$SHELL`, with `bash` as fallback.
+  - Windows default shell is `pwsh`, with `powershell` as fallback. On Windows, `shell: bash` uses Git Bash / MSYS `bash` when available.
 - `settings` provides defaults for prompt and timing.
-- `init` generates a commented starter scenario so you can start by editing the YAML.
-- Avoid interactive commands such as `vim` or `htop`.
-- Be careful with commands that change files, the working tree, or external systems.
-- `execution-duration` is optional and useful for keeping long commands readable.
-- Linux/macOS default: `$SHELL`, fallback to `bash`.
-- Windows default: `pwsh`, fallback to `powershell`.
-- On Windows, `shell: bash` uses Git Bash / MSYS bash if available.
-- `Steps` are executed for real, so be careful with side effects.
+- `steps`:
+  - Steps are executed for real, so use caution with commands that modify files or affect external systems.
+  - Avoid interactive commands such as `vim` or `htop`.
+  - For long-running commands, use `execution-duration` to keep playback readable.
 
 ## Scenario Format
 
