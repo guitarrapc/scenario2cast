@@ -12,7 +12,7 @@ steps:
     run: date
   - name: run color override
     run: date
-    run-highlight: bright-magenta
+    run-highlight: "bold underline green"
   - name: stdout color override
     run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
     highlight:
@@ -21,9 +21,14 @@ steps:
       - color: green
         at: "2:7-10"
       - color: blue
-        at: "2-3"
+        at: "2"
+      - color: underline fg:bright-white bg:blue
+        at: "3"
   - name: stderr color default is red
     run: echo "plain stderr sample" 1>&2
   - name: stderr color override
     run: echo "plain stderr sample override color" 1>&2
     stderr-color: bright-yellow
+  - name: stderr style override with SGR literal
+    run: echo "stderr style literal" 1>&2
+    stderr-color: "\\e[1;93m"

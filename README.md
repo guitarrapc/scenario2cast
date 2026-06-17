@@ -144,7 +144,9 @@ steps:
       - color: yellow
         at: "4"                   # line 4
       - color: red
-        at: "6-10:3-"             # multi-line column band. lines 6-10, columns 3 to end of line
+        at: "6-7:3-"             # multi-line column band. lines 6-7, columns 3 to end of line
+      - color: bright-cyan
+        at: "8-"                  # line 8 to end of output
 
   # stderr highlight (if stderr has no ANSI SGR color)
   - run: echo "plain stderr" 1>&2
@@ -181,6 +183,29 @@ steps:
 | `bright-magenta` | `95` |
 | `bright-cyan` | `96` |
 | `bright-white` | `97` |
+
+### Style Values (bold/underline/background/intensity)
+
+`highlight.color`, `run-highlight`, and `stderr-color` accept style strings in addition to simple color names.
+
+- Named color: `red`, `bright-cyan`
+- Style tokens: `bold`, `underline`, `bright`
+- Foreground/background prefixes: `fg:bright-white`, `bg:blue`
+- Raw SGR literal: `1;31`, `\e[1;31m`, `\x1b[1;31m`
+
+```yaml
+steps:
+  - run: git log --oneline -3
+    run-highlight: "bold bright-cyan"
+
+  - run: printf 'line1\nline2\n'
+    highlight:
+      - color: "underline fg:bright-white bg:blue"
+        at: "2"
+
+  - run: echo "plain stderr" 1>&2
+    stderr-color: "\\e[1;93m"
+```
 
 ### Command Keys
 

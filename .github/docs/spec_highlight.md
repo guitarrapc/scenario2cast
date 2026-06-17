@@ -15,8 +15,10 @@ This spec defines declarative coloring controls that keep demos readable without
 - `highlight` for command output on map-form `run` steps.
 - `run-highlight` for typed command text on map-form `run` steps.
 - `stderr-color` fallback coloring for stderr text that has no ANSI SGR.
-- Colorized `name` comment lines with optional `[color]` prefix.
+- Colorized `name` comment lines with optional `[style]` prefix.
 - Shared 16-color foreground palette (normal + bright).
+- Style-capable color values: `bold`, `underline`, `background`, `bright` combinations.
+- Direct ANSI SGR literal input (for example `1;31`, `\e[1;31m`).
 - Range-based output targeting via `at`.
 - Warning-and-continue behavior for invalid values and out-of-range targets.
 
@@ -24,7 +26,7 @@ This spec defines declarative coloring controls that keep demos readable without
 
 - String-form step coloring defaults (for example `- echo "foo"`).
 - `settings` defaults for `highlight` ranges.
-- Background colors, style modifiers (bold/underline), regex selectors.
+- Regex selectors.
 - Terminal theme control (`theme` in cast header).
 - Relative indices (for example `-1` = last line).
 
@@ -37,11 +39,11 @@ Coloring is split by target type so behavior is explicit and predictable.
 | Command output | `highlight` | step | stdout/stderr combined output text for that step |
 | Typed command | `run-highlight` | step | Simulated typed command characters |
 | stderr fallback | `stderr-color` | settings + step | stderr text that has no ANSI SGR |
-| Step comment | `name` with optional `[color]` prefix | step | `# ...` comment line shown before typing |
+| Step comment | `name` with optional `[style]` prefix | step | `# ...` comment line shown before typing |
 
-## Shared Color Names
+## Shared Named Colors
 
-All coloring keys use the same foreground palette.
+All coloring keys can use the same named foreground palette.
 
 | Name | ANSI SGR |
 |---|---|
@@ -64,20 +66,47 @@ All coloring keys use the same foreground palette.
 
 Applied regions are wrapped with open SGR and `\u001b[0m` reset to avoid bleed.
 
+## Style Value Formats
+
+Color-capable keys (`highlight[].color`, `run-highlight`, `stderr-color`, `name` prefix) accept a style string.
+
+Accepted forms:
+
+- Named foreground color: `red`, `bright-cyan`
+- Token composition (space/comma/`+` separated):
+  - Style tokens: `bold`, `underline`, `bright`
+  - Foreground tokens: `<name>`, `fg:<name>`
+  - Background tokens: `bg:<name>`
+- Raw ANSI SGR literal:
+  - `1;31`
+  - `\e[1;31m`
+  - `\x1b[1;31m`
+
+Special values:
+
+- `none`, `off`, `default`, `reset`: disable style application for that key.
+
+Examples:
+
+- `bold bright-yellow`
+- `underline fg:bright-cyan bg:black`
+- `bright red bg:bright-black`
+- `\e[1;4;97;44m`
+
 ## YAML Contract
 
 ```yaml
 settings:
-  stderr-color: red
+  stderr-color: "bold red"
 
 steps:
-  - name: "[yellow] review status"
+  - name: "[underline bright-yellow] review status"
     run: git status
-    run-highlight: bright-cyan
+    run-highlight: "bold bright-cyan"
     highlight:
-      - color: yellow
+      - color: "underline yellow"
         at: "4"
-      - color: red
+      - color: "fg:bright-white bg:blue"
         at: "6-10:3-"
 ```
 
@@ -85,7 +114,7 @@ steps:
 
 | Field | Required | Description |
 |---|---|---|
-| `color` | yes | One of [Shared Color Names](#shared-color-names). |
+| `color` | yes | Style string from [Style Value Formats](#style-value-formats). |
 | `at` | yes | Range string or list of range strings. |
 
 - Applies only to command output (stdout/stderr merged in capture order).
@@ -95,6 +124,7 @@ steps:
 ### `run-highlight` (typed command)
 
 - Optional on map-form `run` steps.
+- Value format: [Style Value Formats](#style-value-formats).
 - Colors only typed command characters.
 - Does not affect prompt, command output, or `name` comment line.
 
@@ -102,6 +132,7 @@ steps:
 
 - Configurable under both `settings` and step.
 - Step value overrides settings value.
+- Value format: [Style Value Formats](#style-value-formats).
 - Current behavior defaults to `red` when not specified.
 
 Behavior:
@@ -114,9 +145,10 @@ Priority: explicit ANSI in stderr > resolved `stderr-color`.
 ### `name` color prefix
 
 - Default comment color: `cyan`.
-- Prefix form: `"[color] text"`.
+- Prefix form: `"[style] text"`.
 - One prefix at start is parsed; additional bracket text is literal display text.
-- Unknown color falls back to `cyan` with warning.
+- Prefix style format: [Style Value Formats](#style-value-formats).
+- Unknown style falls back to `cyan` with warning.
 
 ## Range Grammar (`at`)
 
@@ -126,6 +158,7 @@ Line and column numbers are 1-based.
 |---|---|
 | `L` | Entire line `L` |
 | `L1-L2` | Entire lines `L1`..`L2` |
+| `L-` | Lines `L`..end of output |
 | `L:C` | Single character |
 | `L:C1-C2` | Columns `C1`..`C2` on one line |
 | `L:C-` | Column `C` to EOL |
@@ -140,6 +173,7 @@ Informal parse:
 at        ::= line_part [ ":" col_part ]
 line_part ::= positive_integer
             | positive_integer "-" positive_integer
+            | positive_integer "-"
 col_part  ::= positive_integer
             | positive_integer "-" positive_integer
             | positive_integer "-"
@@ -149,7 +183,7 @@ col_part  ::= positive_integer
 
 Coloring errors do not fail the step; behavior is warn-and-continue.
 
-- Unknown color name: warn and skip that color application path.
+- Unknown color/style string: warn and skip that color application path.
 - Invalid `at` syntax: warn and skip that `at`.
 - Out-of-range start: warn and skip that `at`.
 - Partially out-of-range end: apply to available text; warn only when lines are missing.
@@ -172,7 +206,16 @@ Coloring errors do not fail the step; behavior is warn-and-continue.
 
 ```yaml
 - run: git log --oneline -3
-  run-highlight: bright-cyan
+  run-highlight: "bold bright-cyan"
+```
+
+### Background + underline output emphasis
+
+```yaml
+- run: printf 'line1\nline2\nline3\n'
+  highlight:
+    - color: "underline fg:bright-white bg:blue"
+      at: "2"
 ```
 
 ### stderr fallback with per-step override
@@ -192,6 +235,7 @@ steps:
 - Post-hoc coloring is a practical replacement for TTY-dependent CLI color output in reproducible demos.
 - Position-based output highlighting is useful but fragile for unstable command layouts; deterministic fixture output helps.
 - A unified color palette across output/input/comment/stderr reduces cognitive load.
+- Allowing style composition and raw SGR gives advanced users full ANSI control while preserving simple color-name defaults.
 - Treating existing stderr ANSI as authoritative avoids clobbering tool-provided intent.
 
 ## Related documents
@@ -203,6 +247,7 @@ steps:
 
 | Date | Change |
 |---|---|
+| 2026-06-17 | Extended color values to style strings (bold/underline/background/bright) and SGR literal input across `highlight`, `run-highlight`, `stderr-color`, and `name` prefix. |
 | 2026-06-17 | Reorganized document as a unified coloring spec (`highlight`, `run-highlight`, `stderr-color`, `name` color prefix). |
 | 2026-06-17 | Implemented `stderr-color` behavior with ANSI-preserving fallback semantics. |
 | 2026-06-17 | Implemented `run-highlight` for typed command text. |
