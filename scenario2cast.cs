@@ -1,4 +1,4 @@
-﻿#:sdk Microsoft.NET.Sdk
+#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
 #:property Version=0.2.0
 #:property Nullable=enable
@@ -1182,7 +1182,7 @@ static string CreateInitialScenarioYaml()
     # width: 120                 # Default: 120
     # height: 24                 # Default: 24
     # cwd: /your/path            # Optional working directory for all steps
-    shell: bash                # Optional shell override: bash, pwsh, powershell, or a path
+    # shell: bash                # Optional shell override: bash, pwsh, powershell, or a path
 
     # Default settings for all steps. Can be overridden per step by using a mapping with "run" and timing keys.
     settings:
