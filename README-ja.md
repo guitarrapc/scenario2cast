@@ -6,7 +6,7 @@
 
 YAMLシナリオファイルから [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) ファイルを生成するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行してその出力を使った cast ファイルを生成します。
 
-サンプルシナリオ`samples/basic.yaml`で生成したcastをgifに変換すると...!タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなデモが簡単に作れます。
+サンプルシナリオ`samples/basic.yaml`で生成したcastをgif/svgに変換すると...!タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなデモが簡単に作れます。
 
 ```yaml
 title: "Basic Demo"
@@ -41,7 +41,9 @@ steps:
   - echo "Done!"
 ```
 
-![](samples/basic.gif)
+| GIF | SVG |
+| --- | --- |
+| ![](samples/basic.gif) | ![](samples/basic.svg) |
 
 **動機**
 

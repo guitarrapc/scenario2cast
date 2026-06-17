@@ -6,7 +6,7 @@ English | [日本語](README-ja.md)
 
 Generate [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) files from YAML scenario files. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and emits a cast file with simulated typing plus real command output.
 
-Sample scenario `samples/basic.yaml` generates a cast that looks like this when converted to gif...! You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic demos.
+Sample scenario `samples/basic.yaml` generates a cast that looks like this when converted to gif, svg...! You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic demos.
 
 ```yaml
 title: "Basic Demo"
@@ -41,7 +41,9 @@ steps:
   - echo "Done!"
 ```
 
-![](samples/basic.gif)
+| GIF | SVG |
+| --- | --- |
+| ![](samples/basic.gif) | ![](samples/basic.svg) |
 
 **Motivation**
 
