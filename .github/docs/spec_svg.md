@@ -147,7 +147,9 @@ This matches the warn-and-continue philosophy used elsewhere in scenario2cast (s
 
 - Replay cast output events through a terminal state model.
 - Capture a frame only when the visible screen changes; merge consecutive identical frames.
-- Encode frames as SVG groups animated with CSS `@keyframes` and opacity transitions (no JavaScript required).
+- Diff each frame into row-level layers; when a row changes, hide the previous layer and show the new one at the cast timestamp.
+- Use CSS `animation-delay` with cast event times (not percentage keyframes) so short keystroke intervals remain visible in browsers.
+- Encode row layers as SVG groups with `layer-in` / `layer-out` opacity animations (no JavaScript required).
 - Timing follows cast event timestamps.
 
 ### Visual defaults
@@ -190,3 +192,8 @@ Done: demo.cast, demo.svg
 - [asciicast v2](https://docs.asciinema.org/manual/asciicast/v2/) — cast header and event format.
 - [agg usage](https://docs.asciinema.org/manual/agg/usage/) — external GIF conversion.
 - [asg](https://github.com/kingsword09/asg) — external SVG conversion (reference architecture).
+
+## Lessons learned
+
+- Full-screen frame swapping with percentage-based `@keyframes` fails for cast typing intervals (~20ms): browsers skip narrow opacity windows. Row-level layers with `animation-delay` tied to cast timestamps reproduce typing reliably.
+- Row-layer diffing must compare against an empty initial screen, not `null`, or the first frame creates spurious layers for every terminal row.

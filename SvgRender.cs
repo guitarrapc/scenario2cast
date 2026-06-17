@@ -6,6 +6,7 @@ internal static class SvgRender
     private const double LineHeightFactor = 1.25;
     private const double CharWidthFactor = 0.62;
     private const double Padding = 8.0;
+    private const double LayerFadeSeconds = 0.001;
 
     internal static void WriteSvg(
         IReadOnlyList<CastEvent> events,
@@ -22,7 +23,8 @@ internal static class SvgRender
         if (totalDuration <= 0)
             totalDuration = 0.001;
 
-        var svg = BuildSvgDocument(frames, width, height, render, totalDuration);
+        var rowLayers = BuildRowLayers(frames, width, height, render);
+        var svg = BuildSvgDocument(rowLayers, width, height, render);
         File.WriteAllText(outputPath, svg, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     }
 
@@ -50,6 +52,48 @@ internal static class SvgRender
         return frames;
     }
 
+    private static List<RowLayer> BuildRowLayers(
+        IReadOnlyList<TerminalFrame> frames,
+        int width,
+        int height,
+        ResolvedRenderSettings render)
+    {
+        var layers = new List<RowLayer>();
+        var activeByRow = new RowLayer?[height];
+        var previous = CreateEmptyScreen(width, height, render);
+
+        foreach (var frame in frames)
+        {
+            for (var row = 0; row < height; row++)
+            {
+                if (RowEquals(previous, frame.Screen, row))
+                    continue;
+
+                if (activeByRow[row] is { } active)
+                    active.HideTime = frame.Time;
+
+                var layer = new RowLayer(row, frame.Time, frame.Screen);
+                layers.Add(layer);
+                activeByRow[row] = layer;
+            }
+
+            previous = frame.Screen;
+        }
+
+        return layers;
+    }
+
+    private static bool RowEquals(TerminalScreen left, TerminalScreen right, int row)
+    {
+        for (var col = 0; col < left.Width; col++)
+        {
+            if (!left[row, col].Equals(right[row, col]))
+                return false;
+        }
+
+        return true;
+    }
+
     private static TerminalScreen CreateEmptyScreen(int width, int height, ResolvedRenderSettings render)
     {
         var terminal = new TerminalEmulator(width, height, render);
@@ -57,17 +101,17 @@ internal static class SvgRender
     }
 
     private static string BuildSvgDocument(
-        IReadOnlyList<TerminalFrame> frames,
+        IReadOnlyList<RowLayer> layers,
         int width,
         int height,
-        ResolvedRenderSettings render,
-        double totalDuration)
+        ResolvedRenderSettings render)
     {
         var fontSize = render.FontSize;
         var lineHeight = fontSize * LineHeightFactor;
         var charWidth = fontSize * CharWidthFactor;
         var svgWidth = width * charWidth + Padding * 2;
         var svgHeight = height * lineHeight + Padding * 2;
+        var fadeText = LayerFadeSeconds.ToString("0.######", CultureInfo.InvariantCulture);
 
         var sb = new StringBuilder(64 * 1024);
         sb.AppendLine(CultureInfo.InvariantCulture, $"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -77,20 +121,23 @@ internal static class SvgRender
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"text {{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace; font-size: {fontSize}px; white-space: pre; }}");
         sb.AppendLine(CultureInfo.InvariantCulture, $".bg {{ fill: {render.Theme.Bg}; }}");
+        sb.AppendLine(CultureInfo.InvariantCulture, $".layer {{ opacity: 0; animation-duration: {fadeText}s; animation-timing-function: linear; animation-fill-mode: forwards; }}");
+        sb.AppendLine("@keyframes layer-in { from { opacity: 0; } to { opacity: 1; } }");
+        sb.AppendLine("@keyframes layer-out { from { opacity: 1; } to { opacity: 0; } }");
 
-        for (var i = 0; i < frames.Count; i++)
-            AppendFrameKeyframes(sb, i, frames, totalDuration);
+        for (var i = 0; i < layers.Count; i++)
+            AppendLayerStyle(sb, i, layers[i], fadeText);
 
         sb.AppendLine("</style>");
 
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"<rect class=\"bg\" x=\"0\" y=\"0\" width=\"{svgWidth:0.##}\" height=\"{svgHeight:0.##}\"/>");
 
-        for (var i = 0; i < frames.Count; i++)
+        for (var i = 0; i < layers.Count; i++)
         {
-            sb.AppendLine(CultureInfo.InvariantCulture,
-                $"<g class=\"frame frame-{i}\" style=\"animation: frame-{i} {totalDuration.ToString("0.######", CultureInfo.InvariantCulture)}s linear forwards\">");
-            AppendFrameContent(sb, frames[i].Screen, width, height, render, charWidth, lineHeight);
+            var layer = layers[i];
+            sb.AppendLine(CultureInfo.InvariantCulture, $"<g class=\"layer layer-{i}\">");
+            AppendRow(sb, layer.Screen, layer.Row, width, charWidth, lineHeight);
             sb.AppendLine("</g>");
         }
 
@@ -98,41 +145,24 @@ internal static class SvgRender
         return sb.ToString();
     }
 
-    private static void AppendFrameKeyframes(
+    private static void AppendLayerStyle(
         StringBuilder sb,
         int index,
-        IReadOnlyList<TerminalFrame> frames,
-        double totalDuration)
+        RowLayer layer,
+        string fadeText)
     {
-        var start = frames[index].Time;
-        var end = index + 1 < frames.Count ? frames[index + 1].Time : totalDuration;
-        var startPct = (start / totalDuration * 100).ToString("0.######", CultureInfo.InvariantCulture);
-        var endPct = (end / totalDuration * 100).ToString("0.######", CultureInfo.InvariantCulture);
+        var showDelay = layer.ShowTime.ToString("0.######", CultureInfo.InvariantCulture);
 
-        sb.AppendLine(CultureInfo.InvariantCulture, $"@keyframes frame-{index} {{");
-        sb.AppendLine("  0%, 100% { opacity: 0; }");
-        if (start > 0)
-            sb.AppendLine(CultureInfo.InvariantCulture, $"  {startPct}% {{ opacity: 0; }}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"  {startPct}%, {endPct}% {{ opacity: 1; }}");
-        if (end < totalDuration)
-            sb.AppendLine(CultureInfo.InvariantCulture, $"  {endPct}%, 100% {{ opacity: 0; }}");
-        sb.AppendLine("}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $".frame-{index} {{ opacity: 0; }}");
-    }
-
-    private static void AppendFrameContent(
-        StringBuilder sb,
-        TerminalScreen screen,
-        int width,
-        int height,
-        ResolvedRenderSettings render,
-        double charWidth,
-        double lineHeight)
-    {
-        for (var row = 0; row < height; row++)
+        if (layer.HideTime is double hideTime)
         {
-            AppendRow(sb, screen, row, width, charWidth, lineHeight);
+            var hideDelay = hideTime.ToString("0.######", CultureInfo.InvariantCulture);
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $".layer-{index} {{ animation-name: layer-in, layer-out; animation-delay: {showDelay}s, {hideDelay}s; }}");
+            return;
         }
+
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $".layer-{index} {{ animation-name: layer-in; animation-delay: {showDelay}s; }}");
     }
 
     private static void AppendRow(
@@ -224,6 +254,21 @@ internal readonly record struct ResolvedRenderSettings(int FontSize, ResolvedThe
 internal readonly record struct ResolvedTheme(string Fg, string Bg, string Palette);
 
 internal readonly record struct TerminalFrame(double Time, TerminalScreen Screen);
+
+internal sealed class RowLayer
+{
+    public RowLayer(int row, double showTime, TerminalScreen screen)
+    {
+        Row = row;
+        ShowTime = showTime;
+        Screen = screen;
+    }
+
+    public int Row { get; }
+    public double ShowTime { get; }
+    public double? HideTime { get; set; }
+    public TerminalScreen Screen { get; }
+}
 
 internal sealed class TerminalScreen
 {
