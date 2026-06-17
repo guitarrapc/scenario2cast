@@ -7,6 +7,7 @@
 
 using System.Diagnostics;
 using System.Globalization;
+using System.Buffers;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -670,26 +671,100 @@ static bool TryParseFgBgToken(string token, out bool isBackground, out string co
 
 static string ApplyHighlights(string output, List<HighlightSpec> specs, string cmd)
 {
-    var text = output.Replace("\r\n", "\n").Replace("\r", "\n");
-    var lines = text.Split('\n');
-    var paint = new string[lines.Length][];
+    var text = NormalizeToLf(output);
+    var lineCount = CountLines(text.AsSpan());
+    var lineRangesArray = ArrayPool<int>.Shared.Rent(lineCount * 2);
 
-    foreach (var spec in specs)
+    try
     {
-        foreach (var at in spec.At)
-            ApplyAt(lines, paint, at, spec.ColorOpen, cmd);
+        var lineRanges = lineRangesArray.AsSpan(0, lineCount * 2);
+        FillLineRanges(text.AsSpan(), lineRanges);
+
+        var paint = new ushort[lineCount][];
+        var styleIds = new Dictionary<string, ushort>(StringComparer.Ordinal);
+        var stylesList = new List<string> { "" };
+
+        foreach (var spec in specs)
+        {
+            var styleId = GetOrAddStyleId(styleIds, stylesList, spec.ColorOpen);
+            foreach (var at in spec.At)
+                ApplyAt(lineRanges, paint, at, styleId, cmd);
+        }
+
+        var styles = CollectionsMarshal.AsSpan(stylesList);
+        var sb = new StringBuilder(text.Length + specs.Count * 16);
+        for (var i = 0; i < lineCount; i++)
+        {
+            if (i > 0) sb.Append('\n');
+            var start = lineRanges[i * 2];
+            var length = lineRanges[i * 2 + 1];
+            AppendPaintedLine(sb, text.AsSpan(start, length), paint[i], styles);
+        }
+
+        return sb.ToString();
+    }
+    finally
+    {
+        ArrayPool<int>.Shared.Return(lineRangesArray, clearArray: false);
+    }
+}
+
+static string NormalizeToLf(string text)
+{
+    if (text.IndexOf('\r') < 0)
+        return text;
+
+    var sb = new StringBuilder(text.Length);
+    var span = text.AsSpan();
+    for (var i = 0; i < span.Length; i++)
+    {
+        var ch = span[i];
+        if (ch == '\r')
+        {
+            sb.Append('\n');
+            if (i + 1 < span.Length && span[i + 1] == '\n')
+                i++;
+            continue;
+        }
+
+        sb.Append(ch);
     }
 
-    var sb = new StringBuilder(text.Length + specs.Count * 16);
-    for (var i = 0; i < lines.Length; i++)
-    {
-        if (i > 0) sb.Append('\n');
-        AppendPaintedLine(sb, lines[i], paint[i]);
-    }
     return sb.ToString();
 }
 
-static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpen, string cmd)
+static int CountLines(ReadOnlySpan<char> text)
+{
+    var count = 1;
+    for (var i = 0; i < text.Length; i++)
+    {
+        if (text[i] == '\n')
+            count++;
+    }
+
+    return count;
+}
+
+static void FillLineRanges(ReadOnlySpan<char> text, Span<int> lineRanges)
+{
+    var start = 0;
+    var line = 0;
+    for (var i = 0; i < text.Length; i++)
+    {
+        if (text[i] != '\n')
+            continue;
+
+        lineRanges[line * 2] = start;
+        lineRanges[line * 2 + 1] = i - start;
+        line++;
+        start = i + 1;
+    }
+
+    lineRanges[line * 2] = start;
+    lineRanges[line * 2 + 1] = text.Length - start;
+}
+
+static void ApplyAt(ReadOnlySpan<int> lines, ushort[][] paint, string at, ushort styleId, string cmd)
 {
     if (!TryParseAt(at, out var lineLo, out var lineHi, out var openLineEnd, out var colLo, out var colHi, out var openColEnd, out var hasCol))
     {
@@ -697,7 +772,7 @@ static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpe
         return;
     }
 
-    var lineCount = lines.Length;
+    var lineCount = lines.Length / 2;
     if (lineLo > lineCount)
     {
         Warn("highlight", cmd, $"at '{at}' starts after output");
@@ -717,34 +792,34 @@ static void ApplyAt(string[] lines, string[][] paint, string at, string colorOpe
     for (var line = lineLo; line <= lineHi; line++)
     {
         var li = line - 1;
-        var content = lines[li];
+        var contentLength = lines[li * 2 + 1];
         int start, end;
         if (hasCol)
         {
             start = colLo - 1;
-            end = openColEnd ? content.Length : colHi;
-            if (start >= content.Length)
+            end = openColEnd ? contentLength : colHi;
+            if (start >= contentLength)
             {
                 if (lineLo == lineHi)
                     Warn("highlight", cmd, $"at '{at}' starts after output");
                 continue;
             }
-            if (end > content.Length) end = content.Length;
+            if (end > contentLength) end = contentLength;
         }
         else
         {
             start = 0;
-            end = content.Length;
+            end = contentLength;
         }
 
         if (start >= end) continue;
-        var row = paint[li] ??= new string[content.Length];
+        var row = paint[li] ??= new ushort[contentLength];
         for (var c = start; c < end; c++)
-            row[c] = colorOpen;
+            row[c] = styleId;
     }
 }
 
-static void AppendPaintedLine(StringBuilder sb, string line, string[]? row)
+static void AppendPaintedLine(StringBuilder sb, ReadOnlySpan<char> line, ushort[]? row, ReadOnlySpan<string> styles)
 {
     if (row is null)
     {
@@ -752,20 +827,34 @@ static void AppendPaintedLine(StringBuilder sb, string line, string[]? row)
         return;
     }
 
-    string? cur = null;
+    ushort cur = 0;
     for (var i = 0; i < line.Length; i++)
     {
         var next = row[i];
-        if (!string.Equals(next, cur, StringComparison.Ordinal))
+        if (next != cur)
         {
-            if (!string.IsNullOrEmpty(cur)) sb.Append(SgrReset);
-            if (!string.IsNullOrEmpty(next)) sb.Append(next);
+            if (cur != 0) sb.Append(SgrReset);
+            if (next != 0) sb.Append(styles[next]);
             cur = next;
         }
         sb.Append(line[i]);
     }
 
-    if (!string.IsNullOrEmpty(cur)) sb.Append(SgrReset);
+    if (cur != 0) sb.Append(SgrReset);
+}
+
+static ushort GetOrAddStyleId(Dictionary<string, ushort> styleIds, List<string> styles, string style)
+{
+    if (styleIds.TryGetValue(style, out var id))
+        return id;
+
+    if (styles.Count >= ushort.MaxValue)
+        throw new InvalidOperationException("Too many unique highlight styles in one output.");
+
+    id = (ushort)styles.Count;
+    styles.Add(style);
+    styleIds[style] = id;
+    return id;
 }
 
 static bool TryParseAt(string at, out int lineLo, out int lineHi, out bool openLineEnd, out int colLo, out int colHi, out bool openColEnd, out bool hasCol)
