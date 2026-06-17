@@ -250,7 +250,7 @@ static string MergeCommandOutput(CommandOutput output, string stderrStyle)
         if (string.IsNullOrEmpty(output.Stderr) || string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(output.Stderr))
             return output.Stderr;
 
-        return string.Concat(stderrStyle, output.Stderr, SgrReset);
+        return WrapWithStylePreserveTrailingNewlines(output.Stderr, stderrStyle);
     }
 
     if (string.IsNullOrEmpty(output.Stderr))
@@ -259,7 +259,30 @@ static string MergeCommandOutput(CommandOutput output, string stderrStyle)
     if (string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(output.Stderr))
         return string.Concat(output.Stdout, output.Stderr);
 
-    return string.Concat(output.Stdout, stderrStyle, output.Stderr, SgrReset);
+    return string.Concat(output.Stdout, WrapWithStylePreserveTrailingNewlines(output.Stderr, stderrStyle));
+}
+
+static string WrapWithStylePreserveTrailingNewlines(string text, string styleOpen)
+{
+    if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(styleOpen))
+        return text;
+
+    var splitAt = text.Length;
+    while (splitAt > 0)
+    {
+        var ch = text[splitAt - 1];
+        if (ch is '\n' or '\r')
+            splitAt--;
+        else
+            break;
+    }
+
+    if (splitAt == text.Length)
+        return string.Concat(styleOpen, text, SgrReset);
+
+    var body = text[..splitAt];
+    var trailingNewlines = text[splitAt..];
+    return string.Concat(styleOpen, body, SgrReset, trailingNewlines);
 }
 
 static bool ContainsAnsiSgr(string text)
@@ -307,7 +330,7 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
             displayText = value[(close + 1)..].TrimStart();
             if (!TryParseStyle(colorName, out var parsedStyle))
             {
-                Warn("name", cmd, $"unknown color '{colorName}'");
+                Warn("name", cmd, $"unknown color/style '{colorName}'");
                 colorOpen = SgrNamed("cyan");
             }
             else
