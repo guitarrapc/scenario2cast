@@ -1232,7 +1232,7 @@ static string CreateInitialScenarioYaml()
       - run: pwd
         post-delay: 1.5
       - name: "[cyan]Styled command typing + output highlight"
-        run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
+        run: printf 'line1 alpha\nline2 beta gamma\nline3\nline4 delta\n'
         run-highlight: "bold fg:bright-cyan"
         highlight:
           - at: "1"
