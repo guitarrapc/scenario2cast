@@ -6,333 +6,469 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 .layer { opacity: 0; animation-duration: 0.001s; animation-timing-function: linear; animation-fill-mode: forwards; }
 @keyframes layer-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes layer-out { from { opacity: 1; } to { opacity: 0; } }
-.layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.7s, 13.994194s; }
+.layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.7s, 14.142653s; }
 .layer-1 { animation-name: layer-in, layer-out; animation-delay: 0.75s, 0.8s; }
-.layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.8s, 0.84848s; }
-.layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.84848s, 0.8873s; }
-.layer-4 { animation-name: layer-in, layer-out; animation-delay: 0.8873s, 0.941141s; }
-.layer-5 { animation-name: layer-in, layer-out; animation-delay: 0.941141s, 1.020462s; }
-.layer-6 { animation-name: layer-in, layer-out; animation-delay: 1.020462s, 1.07522s; }
-.layer-7 { animation-name: layer-in, layer-out; animation-delay: 1.07522s, 1.134929s; }
-.layer-8 { animation-name: layer-in, layer-out; animation-delay: 1.134929s, 1.173097s; }
-.layer-9 { animation-name: layer-in, layer-out; animation-delay: 1.173097s, 1.211907s; }
-.layer-10 { animation-name: layer-in, layer-out; animation-delay: 1.211907s, 13.994194s; }
-.layer-11 { animation-name: layer-in, layer-out; animation-delay: 1.468848s, 13.994194s; }
-.layer-12 { animation-name: layer-in, layer-out; animation-delay: 2.168848s, 13.994194s; }
-.layer-13 { animation-name: layer-in, layer-out; animation-delay: 2.218848s, 2.268848s; }
-.layer-14 { animation-name: layer-in, layer-out; animation-delay: 2.268848s, 2.311052s; }
-.layer-15 { animation-name: layer-in, layer-out; animation-delay: 2.311052s, 2.356183s; }
-.layer-16 { animation-name: layer-in, layer-out; animation-delay: 2.356183s, 2.419662s; }
-.layer-17 { animation-name: layer-in, layer-out; animation-delay: 2.419662s, 2.516669s; }
-.layer-18 { animation-name: layer-in, layer-out; animation-delay: 2.516669s, 2.55453s; }
-.layer-19 { animation-name: layer-in, layer-out; animation-delay: 2.55453s, 2.607013s; }
-.layer-20 { animation-name: layer-in, layer-out; animation-delay: 2.607013s, 2.651047s; }
-.layer-21 { animation-name: layer-in, layer-out; animation-delay: 2.651047s, 2.698812s; }
-.layer-22 { animation-name: layer-in, layer-out; animation-delay: 2.698812s, 13.994194s; }
-.layer-23 { animation-name: layer-in, layer-out; animation-delay: 2.951099s, 13.994194s; }
-.layer-24 { animation-name: layer-in, layer-out; animation-delay: 3.651099s, 13.994194s; }
-.layer-25 { animation-name: layer-in, layer-out; animation-delay: 3.701099s, 3.751099s; }
-.layer-26 { animation-name: layer-in, layer-out; animation-delay: 3.751099s, 3.796053s; }
-.layer-27 { animation-name: layer-in, layer-out; animation-delay: 3.796053s, 3.860756s; }
-.layer-28 { animation-name: layer-in, layer-out; animation-delay: 3.860756s, 3.902926s; }
-.layer-29 { animation-name: layer-in, layer-out; animation-delay: 3.902926s, 13.994194s; }
-.layer-30 { animation-name: layer-in, layer-out; animation-delay: 4.161922s, 13.994194s; }
-.layer-31 { animation-name: layer-in, layer-out; animation-delay: 4.861922s, 13.994194s; }
-.layer-32 { animation-name: layer-in, layer-out; animation-delay: 4.911922s, 4.961922s; }
-.layer-33 { animation-name: layer-in, layer-out; animation-delay: 4.961922s, 4.997514s; }
-.layer-34 { animation-name: layer-in, layer-out; animation-delay: 4.997514s, 5.0572s; }
-.layer-35 { animation-name: layer-in, layer-out; animation-delay: 5.0572s, 5.101848s; }
-.layer-36 { animation-name: layer-in, layer-out; animation-delay: 5.101848s, 13.994194s; }
-.layer-37 { animation-name: layer-in, layer-out; animation-delay: 5.363477s, 13.994194s; }
-.layer-38 { animation-name: layer-in, layer-out; animation-delay: 6.063477s, 13.994194s; }
-.layer-39 { animation-name: layer-in, layer-out; animation-delay: 6.113477s, 6.163477s; }
-.layer-40 { animation-name: layer-in, layer-out; animation-delay: 6.163477s, 6.226188s; }
-.layer-41 { animation-name: layer-in, layer-out; animation-delay: 6.226188s, 6.278301s; }
-.layer-42 { animation-name: layer-in, layer-out; animation-delay: 6.278301s, 6.315815s; }
-.layer-43 { animation-name: layer-in, layer-out; animation-delay: 6.315815s, 6.378843s; }
-.layer-44 { animation-name: layer-in, layer-out; animation-delay: 6.378843s, 6.428634s; }
-.layer-45 { animation-name: layer-in, layer-out; animation-delay: 6.428634s, 6.527244s; }
-.layer-46 { animation-name: layer-in, layer-out; animation-delay: 6.527244s, 6.587726s; }
-.layer-47 { animation-name: layer-in, layer-out; animation-delay: 6.587726s, 6.626032s; }
-.layer-48 { animation-name: layer-in, layer-out; animation-delay: 6.626032s, 6.678499s; }
-.layer-49 { animation-name: layer-in, layer-out; animation-delay: 6.678499s, 6.730823s; }
-.layer-50 { animation-name: layer-in, layer-out; animation-delay: 6.730823s, 6.779793s; }
-.layer-51 { animation-name: layer-in, layer-out; animation-delay: 6.779793s, 6.870566s; }
-.layer-52 { animation-name: layer-in, layer-out; animation-delay: 6.870566s, 6.910538s; }
-.layer-53 { animation-name: layer-in, layer-out; animation-delay: 6.910538s, 6.951279s; }
-.layer-54 { animation-name: layer-in, layer-out; animation-delay: 6.951279s, 6.988079s; }
-.layer-55 { animation-name: layer-in, layer-out; animation-delay: 6.988079s, 7.046145s; }
-.layer-56 { animation-name: layer-in, layer-out; animation-delay: 7.046145s, 7.093288s; }
-.layer-57 { animation-name: layer-in, layer-out; animation-delay: 7.093288s, 7.153055s; }
-.layer-58 { animation-name: layer-in, layer-out; animation-delay: 7.153055s, 7.213574s; }
-.layer-59 { animation-name: layer-in, layer-out; animation-delay: 7.213574s, 7.252433s; }
-.layer-60 { animation-name: layer-in, layer-out; animation-delay: 7.252433s, 7.312945s; }
-.layer-61 { animation-name: layer-in, layer-out; animation-delay: 7.312945s, 7.377732s; }
-.layer-62 { animation-name: layer-in, layer-out; animation-delay: 7.377732s, 7.43296s; }
-.layer-63 { animation-name: layer-in, layer-out; animation-delay: 7.43296s, 7.530749s; }
-.layer-64 { animation-name: layer-in, layer-out; animation-delay: 7.530749s, 7.579526s; }
-.layer-65 { animation-name: layer-in, layer-out; animation-delay: 7.579526s, 7.641176s; }
-.layer-66 { animation-name: layer-in, layer-out; animation-delay: 7.641176s, 7.701021s; }
-.layer-67 { animation-name: layer-in, layer-out; animation-delay: 7.701021s, 7.785065s; }
-.layer-68 { animation-name: layer-in, layer-out; animation-delay: 7.785065s, 7.830174s; }
-.layer-69 { animation-name: layer-in, layer-out; animation-delay: 7.830174s, 7.893254s; }
-.layer-70 { animation-name: layer-in, layer-out; animation-delay: 7.893254s, 7.933711s; }
-.layer-71 { animation-name: layer-in, layer-out; animation-delay: 7.933711s, 7.985408s; }
-.layer-72 { animation-name: layer-in, layer-out; animation-delay: 7.985408s, 8.039836s; }
-.layer-73 { animation-name: layer-in, layer-out; animation-delay: 8.039836s, 8.084011s; }
-.layer-74 { animation-name: layer-in, layer-out; animation-delay: 8.084011s, 8.144351s; }
-.layer-75 { animation-name: layer-in, layer-out; animation-delay: 8.144351s, 8.183952s; }
-.layer-76 { animation-name: layer-in, layer-out; animation-delay: 8.183952s, 8.240585s; }
-.layer-77 { animation-name: layer-in, layer-out; animation-delay: 8.240585s, 8.280744s; }
-.layer-78 { animation-name: layer-in, layer-out; animation-delay: 8.280744s, 8.3453s; }
-.layer-79 { animation-name: layer-in, layer-out; animation-delay: 8.3453s, 8.380316s; }
-.layer-80 { animation-name: layer-in, layer-out; animation-delay: 8.380316s, 8.437026s; }
-.layer-81 { animation-name: layer-in, layer-out; animation-delay: 8.437026s, 8.500821s; }
-.layer-82 { animation-name: layer-in, layer-out; animation-delay: 8.500821s, 13.994194s; }
-.layer-83 { animation-name: layer-in, layer-out; animation-delay: 8.752626s, 13.994194s; }
-.layer-84 { animation-name: layer-in, layer-out; animation-delay: 8.752626s, 13.994194s; }
-.layer-85 { animation-name: layer-in, layer-out; animation-delay: 8.752626s, 13.994194s; }
-.layer-86 { animation-name: layer-in, layer-out; animation-delay: 9.452626s, 13.994194s; }
-.layer-87 { animation-name: layer-in, layer-out; animation-delay: 9.502626s, 9.552626s; }
-.layer-88 { animation-name: layer-in, layer-out; animation-delay: 9.552626s, 9.607289s; }
-.layer-89 { animation-name: layer-in, layer-out; animation-delay: 9.607289s, 9.66702s; }
-.layer-90 { animation-name: layer-in, layer-out; animation-delay: 9.66702s, 9.703449s; }
-.layer-91 { animation-name: layer-in, layer-out; animation-delay: 9.703449s, 9.803171s; }
-.layer-92 { animation-name: layer-in, layer-out; animation-delay: 9.803171s, 9.850714s; }
-.layer-93 { animation-name: layer-in, layer-out; animation-delay: 9.850714s, 9.900595s; }
-.layer-94 { animation-name: layer-in, layer-out; animation-delay: 9.900595s, 9.936706s; }
-.layer-95 { animation-name: layer-in, layer-out; animation-delay: 9.936706s, 9.995557s; }
-.layer-96 { animation-name: layer-in, layer-out; animation-delay: 9.995557s, 10.089885s; }
-.layer-97 { animation-name: layer-in, layer-out; animation-delay: 10.089885s, 10.132686s; }
-.layer-98 { animation-name: layer-in, layer-out; animation-delay: 10.132686s, 10.243566s; }
-.layer-99 { animation-name: layer-in, layer-out; animation-delay: 10.243566s, 10.29952s; }
-.layer-100 { animation-name: layer-in, layer-out; animation-delay: 10.29952s, 10.363352s; }
-.layer-101 { animation-name: layer-in, layer-out; animation-delay: 10.363352s, 10.406813s; }
-.layer-102 { animation-name: layer-in, layer-out; animation-delay: 10.406813s, 10.455876s; }
-.layer-103 { animation-name: layer-in, layer-out; animation-delay: 10.455876s, 10.497561s; }
-.layer-104 { animation-name: layer-in, layer-out; animation-delay: 10.497561s, 10.573823s; }
-.layer-105 { animation-name: layer-in, layer-out; animation-delay: 10.573823s, 10.623657s; }
-.layer-106 { animation-name: layer-in, layer-out; animation-delay: 10.623657s, 10.676932s; }
-.layer-107 { animation-name: layer-in, layer-out; animation-delay: 10.676932s, 10.728246s; }
-.layer-108 { animation-name: layer-in, layer-out; animation-delay: 10.728246s, 13.994194s; }
-.layer-109 { animation-name: layer-in, layer-out; animation-delay: 10.98587s, 13.994194s; }
-.layer-110 { animation-name: layer-in, layer-out; animation-delay: 11.68587s, 13.994194s; }
-.layer-111 { animation-name: layer-in, layer-out; animation-delay: 11.73587s, 11.78587s; }
-.layer-112 { animation-name: layer-in, layer-out; animation-delay: 11.78587s, 11.848596s; }
-.layer-113 { animation-name: layer-in, layer-out; animation-delay: 11.848596s, 11.891138s; }
-.layer-114 { animation-name: layer-in, layer-out; animation-delay: 11.891138s, 11.929273s; }
-.layer-115 { animation-name: layer-in, layer-out; animation-delay: 11.929273s, 12.023935s; }
-.layer-116 { animation-name: layer-in, layer-out; animation-delay: 12.023935s, 12.084431s; }
-.layer-117 { animation-name: layer-in, layer-out; animation-delay: 12.084431s, 12.127508s; }
-.layer-118 { animation-name: layer-in, layer-out; animation-delay: 12.127508s, 12.18394s; }
-.layer-119 { animation-name: layer-in, layer-out; animation-delay: 12.18394s, 12.247858s; }
-.layer-120 { animation-name: layer-in, layer-out; animation-delay: 12.247858s, 12.359308s; }
-.layer-121 { animation-name: layer-in, layer-out; animation-delay: 12.359308s, 12.41953s; }
-.layer-122 { animation-name: layer-in, layer-out; animation-delay: 12.41953s, 12.518057s; }
-.layer-123 { animation-name: layer-in, layer-out; animation-delay: 12.518057s, 12.581153s; }
-.layer-124 { animation-name: layer-in, layer-out; animation-delay: 12.581153s, 12.641381s; }
-.layer-125 { animation-name: layer-in, layer-out; animation-delay: 12.641381s, 12.703351s; }
-.layer-126 { animation-name: layer-in, layer-out; animation-delay: 12.703351s, 12.749956s; }
-.layer-127 { animation-name: layer-in, layer-out; animation-delay: 12.749956s, 12.810052s; }
-.layer-128 { animation-name: layer-in, layer-out; animation-delay: 12.810052s, 12.898127s; }
-.layer-129 { animation-name: layer-in, layer-out; animation-delay: 12.898127s, 12.959399s; }
-.layer-130 { animation-name: layer-in, layer-out; animation-delay: 12.959399s, 13.017188s; }
-.layer-131 { animation-name: layer-in, layer-out; animation-delay: 13.017188s, 13.052866s; }
-.layer-132 { animation-name: layer-in, layer-out; animation-delay: 13.052866s, 13.994194s; }
-.layer-133 { animation-name: layer-in, layer-out; animation-delay: 13.294194s, 13.994194s; }
-.layer-134 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-135 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-136 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-137 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-138 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-139 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-140 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-141 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-142 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-143 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-144 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-145 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-146 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-147 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-148 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-149 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-150 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-151 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-152 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-153 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-154 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-155 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-156 { animation-name: layer-in, layer-out; animation-delay: 13.994194s, 15.650752s; }
-.layer-157 { animation-name: layer-in, layer-out; animation-delay: 14.044194s, 14.094194s; }
-.layer-158 { animation-name: layer-in, layer-out; animation-delay: 14.094194s, 14.150289s; }
-.layer-159 { animation-name: layer-in, layer-out; animation-delay: 14.150289s, 14.201242s; }
-.layer-160 { animation-name: layer-in, layer-out; animation-delay: 14.201242s, 14.251267s; }
-.layer-161 { animation-name: layer-in, layer-out; animation-delay: 14.251267s, 14.360605s; }
-.layer-162 { animation-name: layer-in, layer-out; animation-delay: 14.360605s, 14.400434s; }
-.layer-163 { animation-name: layer-in, layer-out; animation-delay: 14.400434s, 14.44189s; }
-.layer-164 { animation-name: layer-in, layer-out; animation-delay: 14.44189s, 14.492005s; }
-.layer-165 { animation-name: layer-in, layer-out; animation-delay: 14.492005s, 14.556577s; }
-.layer-166 { animation-name: layer-in, layer-out; animation-delay: 14.556577s, 14.601376s; }
-.layer-167 { animation-name: layer-in, layer-out; animation-delay: 14.601376s, 14.641378s; }
-.layer-168 { animation-name: layer-in, layer-out; animation-delay: 14.641378s, 14.733876s; }
-.layer-169 { animation-name: layer-in, layer-out; animation-delay: 14.733876s, 14.788424s; }
-.layer-170 { animation-name: layer-in, layer-out; animation-delay: 14.788424s, 14.849529s; }
-.layer-171 { animation-name: layer-in, layer-out; animation-delay: 14.849529s, 14.909179s; }
-.layer-172 { animation-name: layer-in, layer-out; animation-delay: 14.909179s, 14.960547s; }
-.layer-173 { animation-name: layer-in, layer-out; animation-delay: 14.960547s, 15.050106s; }
-.layer-174 { animation-name: layer-in, layer-out; animation-delay: 15.050106s, 15.087014s; }
-.layer-175 { animation-name: layer-in, layer-out; animation-delay: 15.087014s, 15.125624s; }
-.layer-176 { animation-name: layer-in, layer-out; animation-delay: 15.125624s, 15.166437s; }
-.layer-177 { animation-name: layer-in, layer-out; animation-delay: 15.166437s, 15.219621s; }
-.layer-178 { animation-name: layer-in, layer-out; animation-delay: 15.219621s, 15.263211s; }
-.layer-179 { animation-name: layer-in, layer-out; animation-delay: 15.263211s, 15.306842s; }
-.layer-180 { animation-name: layer-in, layer-out; animation-delay: 15.306842s, 15.347274s; }
-.layer-181 { animation-name: layer-in, layer-out; animation-delay: 15.347274s, 15.443682s; }
-.layer-182 { animation-name: layer-in, layer-out; animation-delay: 15.443682s, 15.508295s; }
-.layer-183 { animation-name: layer-in, layer-out; animation-delay: 15.508295s, 15.564545s; }
-.layer-184 { animation-name: layer-in, layer-out; animation-delay: 15.564545s, 15.601s; }
-.layer-185 { animation-name: layer-in, layer-out; animation-delay: 15.601s, 15.650752s; }
-.layer-186 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-187 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-188 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-189 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-190 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-191 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-192 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-193 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-194 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-195 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-196 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-197 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-198 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-199 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-200 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-201 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-202 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-203 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-204 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-205 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-206 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-207 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-208 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 15.850752s; }
-.layer-209 { animation-name: layer-in, layer-out; animation-delay: 15.650752s, 16.600752s; }
-.layer-210 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-211 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-212 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-213 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-214 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-215 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-216 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-217 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-218 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-219 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-220 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-221 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-222 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-223 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-224 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-225 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-226 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-227 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-228 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-229 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-230 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-231 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-232 { animation-name: layer-in, layer-out; animation-delay: 15.850752s, 16.550752s; }
-.layer-233 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-234 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-235 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-236 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-237 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-238 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-239 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-240 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-241 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-242 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-243 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-244 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-245 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-246 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-247 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-248 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-249 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-250 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-251 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-252 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-253 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-254 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-255 { animation-name: layer-in, layer-out; animation-delay: 16.550752s, 17.870654s; }
-.layer-256 { animation-name: layer-in, layer-out; animation-delay: 16.600752s, 16.650752s; }
-.layer-257 { animation-name: layer-in, layer-out; animation-delay: 16.650752s, 16.688208s; }
-.layer-258 { animation-name: layer-in, layer-out; animation-delay: 16.688208s, 16.737239s; }
-.layer-259 { animation-name: layer-in, layer-out; animation-delay: 16.737239s, 16.785449s; }
-.layer-260 { animation-name: layer-in, layer-out; animation-delay: 16.785449s, 16.829991s; }
-.layer-261 { animation-name: layer-in, layer-out; animation-delay: 16.829991s, 16.888043s; }
-.layer-262 { animation-name: layer-in, layer-out; animation-delay: 16.888043s, 16.999055s; }
-.layer-263 { animation-name: layer-in, layer-out; animation-delay: 16.999055s, 17.05163s; }
-.layer-264 { animation-name: layer-in, layer-out; animation-delay: 17.05163s, 17.09922s; }
-.layer-265 { animation-name: layer-in, layer-out; animation-delay: 17.09922s, 17.144327s; }
-.layer-266 { animation-name: layer-in, layer-out; animation-delay: 17.144327s, 17.182404s; }
-.layer-267 { animation-name: layer-in, layer-out; animation-delay: 17.182404s, 17.233483s; }
-.layer-268 { animation-name: layer-in, layer-out; animation-delay: 17.233483s, 17.291577s; }
-.layer-269 { animation-name: layer-in, layer-out; animation-delay: 17.291577s, 17.340058s; }
-.layer-270 { animation-name: layer-in, layer-out; animation-delay: 17.340058s, 17.448334s; }
-.layer-271 { animation-name: layer-in, layer-out; animation-delay: 17.448334s, 17.512325s; }
-.layer-272 { animation-name: layer-in, layer-out; animation-delay: 17.512325s, 17.569376s; }
-.layer-273 { animation-name: layer-in, layer-out; animation-delay: 17.569376s, 17.619382s; }
-.layer-274 { animation-name: layer-in, layer-out; animation-delay: 17.619382s, 17.680503s; }
-.layer-275 { animation-name: layer-in, layer-out; animation-delay: 17.680503s, 17.718884s; }
-.layer-276 { animation-name: layer-in, layer-out; animation-delay: 17.718884s, 17.782654s; }
-.layer-277 { animation-name: layer-in, layer-out; animation-delay: 17.782654s, 17.820372s; }
-.layer-278 { animation-name: layer-in, layer-out; animation-delay: 17.820372s, 17.870654s; }
-.layer-279 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-280 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-281 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-282 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-283 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-284 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-285 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-286 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-287 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-288 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-289 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-290 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-291 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-292 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-293 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-294 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-295 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-296 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-297 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-298 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-299 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-300 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-301 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.070654s; }
-.layer-302 { animation-name: layer-in, layer-out; animation-delay: 17.870654s, 18.770654s; }
-.layer-303 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-304 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-305 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-306 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-307 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-308 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-309 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-310 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-311 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-312 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-313 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-314 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-315 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-316 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-317 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-318 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-319 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-320 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-321 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-322 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-323 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-324 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-325 { animation-name: layer-in; animation-delay: 18.070654s; }
-.layer-326 { animation-name: layer-in; animation-delay: 18.770654s; }
+.layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.8s, 0.846565s; }
+.layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.846565s, 0.893411s; }
+.layer-4 { animation-name: layer-in, layer-out; animation-delay: 0.893411s, 0.930318s; }
+.layer-5 { animation-name: layer-in, layer-out; animation-delay: 0.930318s, 1.044078s; }
+.layer-6 { animation-name: layer-in, layer-out; animation-delay: 1.044078s, 1.086841s; }
+.layer-7 { animation-name: layer-in, layer-out; animation-delay: 1.086841s, 1.124674s; }
+.layer-8 { animation-name: layer-in, layer-out; animation-delay: 1.124674s, 1.167092s; }
+.layer-9 { animation-name: layer-in, layer-out; animation-delay: 1.167092s, 1.218186s; }
+.layer-10 { animation-name: layer-in, layer-out; animation-delay: 1.218186s, 14.142653s; }
+.layer-11 { animation-name: layer-in, layer-out; animation-delay: 1.476816s, 14.142653s; }
+.layer-12 { animation-name: layer-in, layer-out; animation-delay: 2.176816s, 14.142653s; }
+.layer-13 { animation-name: layer-in, layer-out; animation-delay: 2.226816s, 2.276816s; }
+.layer-14 { animation-name: layer-in, layer-out; animation-delay: 2.276816s, 2.324643s; }
+.layer-15 { animation-name: layer-in, layer-out; animation-delay: 2.324643s, 2.362478s; }
+.layer-16 { animation-name: layer-in, layer-out; animation-delay: 2.362478s, 2.402663s; }
+.layer-17 { animation-name: layer-in, layer-out; animation-delay: 2.402663s, 2.503228s; }
+.layer-18 { animation-name: layer-in, layer-out; animation-delay: 2.503228s, 2.552716s; }
+.layer-19 { animation-name: layer-in, layer-out; animation-delay: 2.552716s, 2.598502s; }
+.layer-20 { animation-name: layer-in, layer-out; animation-delay: 2.598502s, 2.637037s; }
+.layer-21 { animation-name: layer-in, layer-out; animation-delay: 2.637037s, 2.691824s; }
+.layer-22 { animation-name: layer-in, layer-out; animation-delay: 2.691824s, 14.142653s; }
+.layer-23 { animation-name: layer-in, layer-out; animation-delay: 2.939444s, 14.142653s; }
+.layer-24 { animation-name: layer-in, layer-out; animation-delay: 3.639444s, 14.142653s; }
+.layer-25 { animation-name: layer-in, layer-out; animation-delay: 3.689444s, 3.739444s; }
+.layer-26 { animation-name: layer-in, layer-out; animation-delay: 3.739444s, 3.79448s; }
+.layer-27 { animation-name: layer-in, layer-out; animation-delay: 3.79448s, 3.853305s; }
+.layer-28 { animation-name: layer-in, layer-out; animation-delay: 3.853305s, 3.900481s; }
+.layer-29 { animation-name: layer-in, layer-out; animation-delay: 3.900481s, 14.142653s; }
+.layer-30 { animation-name: layer-in, layer-out; animation-delay: 4.16047s, 14.142653s; }
+.layer-31 { animation-name: layer-in, layer-out; animation-delay: 4.86047s, 14.142653s; }
+.layer-32 { animation-name: layer-in, layer-out; animation-delay: 4.91047s, 4.96047s; }
+.layer-33 { animation-name: layer-in, layer-out; animation-delay: 4.96047s, 5.021995s; }
+.layer-34 { animation-name: layer-in, layer-out; animation-delay: 5.021995s, 5.084016s; }
+.layer-35 { animation-name: layer-in, layer-out; animation-delay: 5.084016s, 5.142903s; }
+.layer-36 { animation-name: layer-in, layer-out; animation-delay: 5.142903s, 14.142653s; }
+.layer-37 { animation-name: layer-in, layer-out; animation-delay: 5.407306s, 14.142653s; }
+.layer-38 { animation-name: layer-in, layer-out; animation-delay: 6.107306s, 14.142653s; }
+.layer-39 { animation-name: layer-in, layer-out; animation-delay: 6.157306s, 6.207306s; }
+.layer-40 { animation-name: layer-in, layer-out; animation-delay: 6.207306s, 6.264382s; }
+.layer-41 { animation-name: layer-in, layer-out; animation-delay: 6.264382s, 6.327172s; }
+.layer-42 { animation-name: layer-in, layer-out; animation-delay: 6.327172s, 6.366497s; }
+.layer-43 { animation-name: layer-in, layer-out; animation-delay: 6.366497s, 6.428691s; }
+.layer-44 { animation-name: layer-in, layer-out; animation-delay: 6.428691s, 6.478147s; }
+.layer-45 { animation-name: layer-in, layer-out; animation-delay: 6.478147s, 6.571388s; }
+.layer-46 { animation-name: layer-in, layer-out; animation-delay: 6.571388s, 6.606692s; }
+.layer-47 { animation-name: layer-in, layer-out; animation-delay: 6.606692s, 6.651963s; }
+.layer-48 { animation-name: layer-in, layer-out; animation-delay: 6.651963s, 6.701687s; }
+.layer-49 { animation-name: layer-in, layer-out; animation-delay: 6.701687s, 6.759462s; }
+.layer-50 { animation-name: layer-in, layer-out; animation-delay: 6.759462s, 6.796746s; }
+.layer-51 { animation-name: layer-in, layer-out; animation-delay: 6.796746s, 6.901136s; }
+.layer-52 { animation-name: layer-in, layer-out; animation-delay: 6.901136s, 6.942055s; }
+.layer-53 { animation-name: layer-in, layer-out; animation-delay: 6.942055s, 6.991834s; }
+.layer-54 { animation-name: layer-in, layer-out; animation-delay: 6.991834s, 7.030016s; }
+.layer-55 { animation-name: layer-in, layer-out; animation-delay: 7.030016s, 7.074438s; }
+.layer-56 { animation-name: layer-in, layer-out; animation-delay: 7.074438s, 7.13433s; }
+.layer-57 { animation-name: layer-in, layer-out; animation-delay: 7.13433s, 7.174991s; }
+.layer-58 { animation-name: layer-in, layer-out; animation-delay: 7.174991s, 7.222581s; }
+.layer-59 { animation-name: layer-in, layer-out; animation-delay: 7.222581s, 7.286232s; }
+.layer-60 { animation-name: layer-in, layer-out; animation-delay: 7.286232s, 7.324981s; }
+.layer-61 { animation-name: layer-in, layer-out; animation-delay: 7.324981s, 7.370063s; }
+.layer-62 { animation-name: layer-in, layer-out; animation-delay: 7.370063s, 7.417608s; }
+.layer-63 { animation-name: layer-in, layer-out; animation-delay: 7.417608s, 7.522959s; }
+.layer-64 { animation-name: layer-in, layer-out; animation-delay: 7.522959s, 7.575699s; }
+.layer-65 { animation-name: layer-in, layer-out; animation-delay: 7.575699s, 7.640369s; }
+.layer-66 { animation-name: layer-in, layer-out; animation-delay: 7.640369s, 7.682287s; }
+.layer-67 { animation-name: layer-in, layer-out; animation-delay: 7.682287s, 7.772502s; }
+.layer-68 { animation-name: layer-in, layer-out; animation-delay: 7.772502s, 7.821378s; }
+.layer-69 { animation-name: layer-in, layer-out; animation-delay: 7.821378s, 7.859808s; }
+.layer-70 { animation-name: layer-in, layer-out; animation-delay: 7.859808s, 7.910149s; }
+.layer-71 { animation-name: layer-in, layer-out; animation-delay: 7.910149s, 7.963452s; }
+.layer-72 { animation-name: layer-in, layer-out; animation-delay: 7.963452s, 8.017758s; }
+.layer-73 { animation-name: layer-in, layer-out; animation-delay: 8.017758s, 8.068391s; }
+.layer-74 { animation-name: layer-in, layer-out; animation-delay: 8.068391s, 8.121771s; }
+.layer-75 { animation-name: layer-in, layer-out; animation-delay: 8.121771s, 8.183879s; }
+.layer-76 { animation-name: layer-in, layer-out; animation-delay: 8.183879s, 8.238081s; }
+.layer-77 { animation-name: layer-in, layer-out; animation-delay: 8.238081s, 8.298975s; }
+.layer-78 { animation-name: layer-in, layer-out; animation-delay: 8.298975s, 8.338192s; }
+.layer-79 { animation-name: layer-in, layer-out; animation-delay: 8.338192s, 8.399254s; }
+.layer-80 { animation-name: layer-in, layer-out; animation-delay: 8.399254s, 8.445015s; }
+.layer-81 { animation-name: layer-in, layer-out; animation-delay: 8.445015s, 8.497517s; }
+.layer-82 { animation-name: layer-in, layer-out; animation-delay: 8.497517s, 14.142653s; }
+.layer-83 { animation-name: layer-in, layer-out; animation-delay: 8.748057s, 14.142653s; }
+.layer-84 { animation-name: layer-in, layer-out; animation-delay: 8.748057s, 14.142653s; }
+.layer-85 { animation-name: layer-in, layer-out; animation-delay: 8.748057s, 14.142653s; }
+.layer-86 { animation-name: layer-in, layer-out; animation-delay: 9.448057s, 14.142653s; }
+.layer-87 { animation-name: layer-in, layer-out; animation-delay: 9.498057s, 9.548057s; }
+.layer-88 { animation-name: layer-in, layer-out; animation-delay: 9.548057s, 9.595783s; }
+.layer-89 { animation-name: layer-in, layer-out; animation-delay: 9.595783s, 9.648689s; }
+.layer-90 { animation-name: layer-in, layer-out; animation-delay: 9.648689s, 9.711086s; }
+.layer-91 { animation-name: layer-in, layer-out; animation-delay: 9.711086s, 9.819997s; }
+.layer-92 { animation-name: layer-in, layer-out; animation-delay: 9.819997s, 9.857125s; }
+.layer-93 { animation-name: layer-in, layer-out; animation-delay: 9.857125s, 9.910351s; }
+.layer-94 { animation-name: layer-in, layer-out; animation-delay: 9.910351s, 9.962164s; }
+.layer-95 { animation-name: layer-in, layer-out; animation-delay: 9.962164s, 10.020589s; }
+.layer-96 { animation-name: layer-in, layer-out; animation-delay: 10.020589s, 10.138873s; }
+.layer-97 { animation-name: layer-in, layer-out; animation-delay: 10.138873s, 10.188523s; }
+.layer-98 { animation-name: layer-in, layer-out; animation-delay: 10.188523s, 10.305704s; }
+.layer-99 { animation-name: layer-in, layer-out; animation-delay: 10.305704s, 10.368128s; }
+.layer-100 { animation-name: layer-in, layer-out; animation-delay: 10.368128s, 10.403761s; }
+.layer-101 { animation-name: layer-in, layer-out; animation-delay: 10.403761s, 10.442115s; }
+.layer-102 { animation-name: layer-in, layer-out; animation-delay: 10.442115s, 10.502979s; }
+.layer-103 { animation-name: layer-in, layer-out; animation-delay: 10.502979s, 10.559399s; }
+.layer-104 { animation-name: layer-in, layer-out; animation-delay: 10.559399s, 10.671457s; }
+.layer-105 { animation-name: layer-in, layer-out; animation-delay: 10.671457s, 10.728426s; }
+.layer-106 { animation-name: layer-in, layer-out; animation-delay: 10.728426s, 10.781041s; }
+.layer-107 { animation-name: layer-in, layer-out; animation-delay: 10.781041s, 10.841515s; }
+.layer-108 { animation-name: layer-in, layer-out; animation-delay: 10.841515s, 14.142653s; }
+.layer-109 { animation-name: layer-in, layer-out; animation-delay: 11.094064s, 14.142653s; }
+.layer-110 { animation-name: layer-in, layer-out; animation-delay: 11.794064s, 14.142653s; }
+.layer-111 { animation-name: layer-in, layer-out; animation-delay: 11.844064s, 11.894064s; }
+.layer-112 { animation-name: layer-in, layer-out; animation-delay: 11.894064s, 11.950106s; }
+.layer-113 { animation-name: layer-in, layer-out; animation-delay: 11.950106s, 12.01289s; }
+.layer-114 { animation-name: layer-in, layer-out; animation-delay: 12.01289s, 12.064349s; }
+.layer-115 { animation-name: layer-in, layer-out; animation-delay: 12.064349s, 12.175479s; }
+.layer-116 { animation-name: layer-in, layer-out; animation-delay: 12.175479s, 12.218166s; }
+.layer-117 { animation-name: layer-in, layer-out; animation-delay: 12.218166s, 12.282488s; }
+.layer-118 { animation-name: layer-in, layer-out; animation-delay: 12.282488s, 12.34253s; }
+.layer-119 { animation-name: layer-in, layer-out; animation-delay: 12.34253s, 12.388787s; }
+.layer-120 { animation-name: layer-in, layer-out; animation-delay: 12.388787s, 12.514449s; }
+.layer-121 { animation-name: layer-in, layer-out; animation-delay: 12.514449s, 12.551723s; }
+.layer-122 { animation-name: layer-in, layer-out; animation-delay: 12.551723s, 12.638589s; }
+.layer-123 { animation-name: layer-in, layer-out; animation-delay: 12.638589s, 12.702816s; }
+.layer-124 { animation-name: layer-in, layer-out; animation-delay: 12.702816s, 12.763466s; }
+.layer-125 { animation-name: layer-in, layer-out; animation-delay: 12.763466s, 12.815083s; }
+.layer-126 { animation-name: layer-in, layer-out; animation-delay: 12.815083s, 12.872s; }
+.layer-127 { animation-name: layer-in, layer-out; animation-delay: 12.872s, 12.931261s; }
+.layer-128 { animation-name: layer-in, layer-out; animation-delay: 12.931261s, 13.027308s; }
+.layer-129 { animation-name: layer-in, layer-out; animation-delay: 13.027308s, 13.063029s; }
+.layer-130 { animation-name: layer-in, layer-out; animation-delay: 13.063029s, 13.125614s; }
+.layer-131 { animation-name: layer-in, layer-out; animation-delay: 13.125614s, 13.182392s; }
+.layer-132 { animation-name: layer-in, layer-out; animation-delay: 13.182392s, 14.142653s; }
+.layer-133 { animation-name: layer-in, layer-out; animation-delay: 13.442653s, 14.142653s; }
+.layer-134 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-135 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-136 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-137 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-138 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-139 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-140 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-141 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-142 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-143 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-144 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-145 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-146 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-147 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-148 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-149 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-150 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-151 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-152 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-153 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-154 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-155 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-156 { animation-name: layer-in, layer-out; animation-delay: 14.142653s, 15.804715s; }
+.layer-157 { animation-name: layer-in, layer-out; animation-delay: 14.192653s, 14.242653s; }
+.layer-158 { animation-name: layer-in, layer-out; animation-delay: 14.242653s, 14.278517s; }
+.layer-159 { animation-name: layer-in, layer-out; animation-delay: 14.278517s, 14.313714s; }
+.layer-160 { animation-name: layer-in, layer-out; animation-delay: 14.313714s, 14.368055s; }
+.layer-161 { animation-name: layer-in, layer-out; animation-delay: 14.368055s, 14.489039s; }
+.layer-162 { animation-name: layer-in, layer-out; animation-delay: 14.489039s, 14.544796s; }
+.layer-163 { animation-name: layer-in, layer-out; animation-delay: 14.544796s, 14.580087s; }
+.layer-164 { animation-name: layer-in, layer-out; animation-delay: 14.580087s, 14.61701s; }
+.layer-165 { animation-name: layer-in, layer-out; animation-delay: 14.61701s, 14.656269s; }
+.layer-166 { animation-name: layer-in, layer-out; animation-delay: 14.656269s, 14.71733s; }
+.layer-167 { animation-name: layer-in, layer-out; animation-delay: 14.71733s, 14.756675s; }
+.layer-168 { animation-name: layer-in, layer-out; animation-delay: 14.756675s, 14.828558s; }
+.layer-169 { animation-name: layer-in, layer-out; animation-delay: 14.828558s, 14.892549s; }
+.layer-170 { animation-name: layer-in, layer-out; animation-delay: 14.892549s, 14.943903s; }
+.layer-171 { animation-name: layer-in, layer-out; animation-delay: 14.943903s, 15.003824s; }
+.layer-172 { animation-name: layer-in, layer-out; animation-delay: 15.003824s, 15.058432s; }
+.layer-173 { animation-name: layer-in, layer-out; animation-delay: 15.058432s, 15.138528s; }
+.layer-174 { animation-name: layer-in, layer-out; animation-delay: 15.138528s, 15.201118s; }
+.layer-175 { animation-name: layer-in, layer-out; animation-delay: 15.201118s, 15.264478s; }
+.layer-176 { animation-name: layer-in, layer-out; animation-delay: 15.264478s, 15.317721s; }
+.layer-177 { animation-name: layer-in, layer-out; animation-delay: 15.317721s, 15.376829s; }
+.layer-178 { animation-name: layer-in, layer-out; animation-delay: 15.376829s, 15.434022s; }
+.layer-179 { animation-name: layer-in, layer-out; animation-delay: 15.434022s, 15.49178s; }
+.layer-180 { animation-name: layer-in, layer-out; animation-delay: 15.49178s, 15.533813s; }
+.layer-181 { animation-name: layer-in, layer-out; animation-delay: 15.533813s, 15.627219s; }
+.layer-182 { animation-name: layer-in, layer-out; animation-delay: 15.627219s, 15.66263s; }
+.layer-183 { animation-name: layer-in, layer-out; animation-delay: 15.66263s, 15.714195s; }
+.layer-184 { animation-name: layer-in, layer-out; animation-delay: 15.714195s, 15.769516s; }
+.layer-185 { animation-name: layer-in, layer-out; animation-delay: 15.769516s, 15.804715s; }
+.layer-186 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-187 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-188 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-189 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-190 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-191 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-192 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-193 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-194 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-195 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-196 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-197 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-198 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-199 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-200 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-201 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-202 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-203 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-204 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-205 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-206 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-207 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-208 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.004715s; }
+.layer-209 { animation-name: layer-in, layer-out; animation-delay: 15.804715s, 16.754715s; }
+.layer-210 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-211 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-212 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-213 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-214 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-215 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-216 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-217 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-218 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-219 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-220 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-221 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-222 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-223 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-224 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-225 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-226 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-227 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-228 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-229 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-230 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-231 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-232 { animation-name: layer-in, layer-out; animation-delay: 16.004715s, 16.704715s; }
+.layer-233 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-234 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-235 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-236 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-237 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-238 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-239 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-240 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-241 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-242 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-243 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-244 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-245 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-246 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-247 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-248 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-249 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-250 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-251 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-252 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-253 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-254 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-255 { animation-name: layer-in, layer-out; animation-delay: 16.704715s, 18.048235s; }
+.layer-256 { animation-name: layer-in, layer-out; animation-delay: 16.754715s, 16.804715s; }
+.layer-257 { animation-name: layer-in, layer-out; animation-delay: 16.804715s, 16.864396s; }
+.layer-258 { animation-name: layer-in, layer-out; animation-delay: 16.864396s, 16.920832s; }
+.layer-259 { animation-name: layer-in, layer-out; animation-delay: 16.920832s, 16.979402s; }
+.layer-260 { animation-name: layer-in, layer-out; animation-delay: 16.979402s, 17.021891s; }
+.layer-261 { animation-name: layer-in, layer-out; animation-delay: 17.021891s, 17.066872s; }
+.layer-262 { animation-name: layer-in, layer-out; animation-delay: 17.066872s, 17.182187s; }
+.layer-263 { animation-name: layer-in, layer-out; animation-delay: 17.182187s, 17.222258s; }
+.layer-264 { animation-name: layer-in, layer-out; animation-delay: 17.222258s, 17.286801s; }
+.layer-265 { animation-name: layer-in, layer-out; animation-delay: 17.286801s, 17.322152s; }
+.layer-266 { animation-name: layer-in, layer-out; animation-delay: 17.322152s, 17.368004s; }
+.layer-267 { animation-name: layer-in, layer-out; animation-delay: 17.368004s, 17.408699s; }
+.layer-268 { animation-name: layer-in, layer-out; animation-delay: 17.408699s, 17.46858s; }
+.layer-269 { animation-name: layer-in, layer-out; animation-delay: 17.46858s, 17.527464s; }
+.layer-270 { animation-name: layer-in, layer-out; animation-delay: 17.527464s, 17.63689s; }
+.layer-271 { animation-name: layer-in, layer-out; animation-delay: 17.63689s, 17.679797s; }
+.layer-272 { animation-name: layer-in, layer-out; animation-delay: 17.679797s, 17.71494s; }
+.layer-273 { animation-name: layer-in, layer-out; animation-delay: 17.71494s, 17.761315s; }
+.layer-274 { animation-name: layer-in, layer-out; animation-delay: 17.761315s, 17.820635s; }
+.layer-275 { animation-name: layer-in, layer-out; animation-delay: 17.820635s, 17.879525s; }
+.layer-276 { animation-name: layer-in, layer-out; animation-delay: 17.879525s, 17.938714s; }
+.layer-277 { animation-name: layer-in, layer-out; animation-delay: 17.938714s, 18.000614s; }
+.layer-278 { animation-name: layer-in, layer-out; animation-delay: 18.000614s, 18.048235s; }
+.layer-279 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-280 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-281 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-282 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-283 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-284 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-285 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-286 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-287 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-288 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-289 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-290 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-291 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-292 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-293 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-294 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-295 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-296 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-297 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-298 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-299 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-300 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-301 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.248235s; }
+.layer-302 { animation-name: layer-in, layer-out; animation-delay: 18.048235s, 18.998235s; }
+.layer-303 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-304 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-305 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-306 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-307 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-308 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-309 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-310 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-311 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-312 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-313 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-314 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-315 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-316 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-317 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-318 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-319 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-320 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-321 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-322 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-323 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-324 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-325 { animation-name: layer-in, layer-out; animation-delay: 18.248235s, 18.948235s; }
+.layer-326 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-327 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-328 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-329 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-330 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-331 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-332 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-333 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-334 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-335 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-336 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-337 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-338 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-339 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-340 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-341 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-342 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-343 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-344 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-345 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-346 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-347 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-348 { animation-name: layer-in, layer-out; animation-delay: 18.948235s, 22.434947s; }
+.layer-349 { animation-name: layer-in, layer-out; animation-delay: 18.998235s, 19.048235s; }
+.layer-350 { animation-name: layer-in, layer-out; animation-delay: 19.048235s, 19.089325s; }
+.layer-351 { animation-name: layer-in, layer-out; animation-delay: 19.089325s, 19.151472s; }
+.layer-352 { animation-name: layer-in, layer-out; animation-delay: 19.151472s, 19.192808s; }
+.layer-353 { animation-name: layer-in, layer-out; animation-delay: 19.192808s, 19.242665s; }
+.layer-354 { animation-name: layer-in, layer-out; animation-delay: 19.242665s, 19.29837s; }
+.layer-355 { animation-name: layer-in, layer-out; animation-delay: 19.29837s, 19.37682s; }
+.layer-356 { animation-name: layer-in, layer-out; animation-delay: 19.37682s, 19.429513s; }
+.layer-357 { animation-name: layer-in, layer-out; animation-delay: 19.429513s, 19.470253s; }
+.layer-358 { animation-name: layer-in, layer-out; animation-delay: 19.470253s, 19.509399s; }
+.layer-359 { animation-name: layer-in, layer-out; animation-delay: 19.509399s, 19.551484s; }
+.layer-360 { animation-name: layer-in, layer-out; animation-delay: 19.551484s, 19.595165s; }
+.layer-361 { animation-name: layer-in, layer-out; animation-delay: 19.595165s, 19.635586s; }
+.layer-362 { animation-name: layer-in, layer-out; animation-delay: 19.635586s, 19.679452s; }
+.layer-363 { animation-name: layer-in, layer-out; animation-delay: 19.679452s, 19.729391s; }
+.layer-364 { animation-name: layer-in, layer-out; animation-delay: 19.729391s, 19.788051s; }
+.layer-365 { animation-name: layer-in, layer-out; animation-delay: 19.788051s, 19.840086s; }
+.layer-366 { animation-name: layer-in, layer-out; animation-delay: 19.840086s, 19.903709s; }
+.layer-367 { animation-name: layer-in, layer-out; animation-delay: 19.903709s, 19.966756s; }
+.layer-368 { animation-name: layer-in, layer-out; animation-delay: 19.966756s, 20.029766s; }
+.layer-369 { animation-name: layer-in, layer-out; animation-delay: 20.029766s, 20.072156s; }
+.layer-370 { animation-name: layer-in, layer-out; animation-delay: 20.072156s, 20.125569s; }
+.layer-371 { animation-name: layer-in, layer-out; animation-delay: 20.125569s, 20.187881s; }
+.layer-372 { animation-name: layer-in, layer-out; animation-delay: 20.187881s, 20.251756s; }
+.layer-373 { animation-name: layer-in, layer-out; animation-delay: 20.251756s, 20.307288s; }
+.layer-374 { animation-name: layer-in, layer-out; animation-delay: 20.307288s, 20.349414s; }
+.layer-375 { animation-name: layer-in, layer-out; animation-delay: 20.349414s, 20.399861s; }
+.layer-376 { animation-name: layer-in, layer-out; animation-delay: 20.399861s, 20.435129s; }
+.layer-377 { animation-name: layer-in, layer-out; animation-delay: 20.435129s, 20.475319s; }
+.layer-378 { animation-name: layer-in, layer-out; animation-delay: 20.475319s, 20.536321s; }
+.layer-379 { animation-name: layer-in, layer-out; animation-delay: 20.536321s, 20.577629s; }
+.layer-380 { animation-name: layer-in, layer-out; animation-delay: 20.577629s, 20.613121s; }
+.layer-381 { animation-name: layer-in, layer-out; animation-delay: 20.613121s, 20.672657s; }
+.layer-382 { animation-name: layer-in, layer-out; animation-delay: 20.672657s, 20.718606s; }
+.layer-383 { animation-name: layer-in, layer-out; animation-delay: 20.718606s, 20.755005s; }
+.layer-384 { animation-name: layer-in, layer-out; animation-delay: 20.755005s, 20.80284s; }
+.layer-385 { animation-name: layer-in, layer-out; animation-delay: 20.80284s, 20.857451s; }
+.layer-386 { animation-name: layer-in, layer-out; animation-delay: 20.857451s, 20.896961s; }
+.layer-387 { animation-name: layer-in, layer-out; animation-delay: 20.896961s, 20.946327s; }
+.layer-388 { animation-name: layer-in, layer-out; animation-delay: 20.946327s, 21.003934s; }
+.layer-389 { animation-name: layer-in, layer-out; animation-delay: 21.003934s, 21.067771s; }
+.layer-390 { animation-name: layer-in, layer-out; animation-delay: 21.067771s, 21.12593s; }
+.layer-391 { animation-name: layer-in, layer-out; animation-delay: 21.12593s, 21.190886s; }
+.layer-392 { animation-name: layer-in, layer-out; animation-delay: 21.190886s, 21.246621s; }
+.layer-393 { animation-name: layer-in, layer-out; animation-delay: 21.246621s, 21.298419s; }
+.layer-394 { animation-name: layer-in, layer-out; animation-delay: 21.298419s, 21.341239s; }
+.layer-395 { animation-name: layer-in, layer-out; animation-delay: 21.341239s, 21.393743s; }
+.layer-396 { animation-name: layer-in, layer-out; animation-delay: 21.393743s, 21.457785s; }
+.layer-397 { animation-name: layer-in, layer-out; animation-delay: 21.457785s, 21.507988s; }
+.layer-398 { animation-name: layer-in, layer-out; animation-delay: 21.507988s, 21.560703s; }
+.layer-399 { animation-name: layer-in, layer-out; animation-delay: 21.560703s, 21.663256s; }
+.layer-400 { animation-name: layer-in, layer-out; animation-delay: 21.663256s, 21.724398s; }
+.layer-401 { animation-name: layer-in, layer-out; animation-delay: 21.724398s, 21.788287s; }
+.layer-402 { animation-name: layer-in, layer-out; animation-delay: 21.788287s, 21.828518s; }
+.layer-403 { animation-name: layer-in, layer-out; animation-delay: 21.828518s, 21.881195s; }
+.layer-404 { animation-name: layer-in, layer-out; animation-delay: 21.881195s, 21.94603s; }
+.layer-405 { animation-name: layer-in, layer-out; animation-delay: 21.94603s, 21.988491s; }
+.layer-406 { animation-name: layer-in, layer-out; animation-delay: 21.988491s, 22.047817s; }
+.layer-407 { animation-name: layer-in, layer-out; animation-delay: 22.047817s, 22.096395s; }
+.layer-408 { animation-name: layer-in, layer-out; animation-delay: 22.096395s, 22.152885s; }
+.layer-409 { animation-name: layer-in, layer-out; animation-delay: 22.152885s, 22.18913s; }
+.layer-410 { animation-name: layer-in, layer-out; animation-delay: 22.18913s, 22.236633s; }
+.layer-411 { animation-name: layer-in, layer-out; animation-delay: 22.236633s, 22.281371s; }
+.layer-412 { animation-name: layer-in, layer-out; animation-delay: 22.281371s, 22.344209s; }
+.layer-413 { animation-name: layer-in, layer-out; animation-delay: 22.344209s, 22.385802s; }
+.layer-414 { animation-name: layer-in, layer-out; animation-delay: 22.385802s, 22.434947s; }
+.layer-415 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-416 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-417 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-418 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-419 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-420 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-421 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-422 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-423 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-424 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-425 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-426 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-427 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-428 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-429 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-430 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-431 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-432 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-433 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-434 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-435 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-436 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-437 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 22.634947s; }
+.layer-438 { animation-name: layer-in, layer-out; animation-delay: 22.434947s, 23.334947s; }
+.layer-439 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-440 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-441 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-442 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-443 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-444 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-445 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-446 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-447 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-448 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-449 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-450 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-451 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-452 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-453 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-454 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-455 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-456 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-457 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-458 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-459 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-460 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-461 { animation-name: layer-in; animation-delay: 22.634947s; }
+.layer-462 { animation-name: layer-in; animation-delay: 23.334947s; }
 </style>
 <rect class="bg" x="0" y="0" width="809.6" height="496"/>
 <g class="layer layer-0">
@@ -426,7 +562,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-30">
-<text x="8" y="184" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="184" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-31">
 <text x="8" y="204" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -451,7 +587,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="224" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-37">
-<text x="8" y="244" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="244" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-38">
 <text x="8" y="264" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -767,7 +903,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-141">
-<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-142">
 <text x="8" y="184" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -777,7 +913,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="204" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-144">
-<text x="8" y="224" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="224" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-145">
 <text x="8" y="244" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -925,7 +1061,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-192">
-<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-193">
 <text x="8" y="164" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -935,7 +1071,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="184" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-195">
-<text x="8" y="204" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="204" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-196">
 <text x="8" y="224" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -998,7 +1134,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="104" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-215">
-<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-216">
 <text x="8" y="144" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -1008,7 +1144,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="164" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-218">
-<text x="8" y="184" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="184" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-219">
 <text x="8" y="204" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -1069,7 +1205,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="84" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-237">
-<text x="8" y="104" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="104" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-238">
 <text x="8" y="124" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -1079,7 +1215,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="144" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-240">
-<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-241">
 <text x="8" y="184" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -1209,7 +1345,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="64" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-282">
-<text x="8" y="84" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="84" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-283">
 <text x="8" y="104" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -1219,7 +1355,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="124" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-285">
-<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-286">
 <text x="8" y="164" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -1282,7 +1418,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="44" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
 </g>
 <g class="layer layer-305">
-<text x="8" y="64" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="64" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
 </g>
 <g class="layer layer-306">
 <text x="8" y="84" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
@@ -1292,7 +1428,7 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="27.84" y="104" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
 </g>
 <g class="layer layer-308">
-<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 18:43:42</text>
+<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
 </g>
 <g class="layer layer-309">
 <text x="8" y="144" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
@@ -1351,6 +1487,432 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 <text x="8" y="464" fill="#ff0000" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">indexed color</text>
 </g>
 <g class="layer layer-326">
+<text x="8" y="24" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ date</text>
+</g>
+<g class="layer layer-327">
+<text x="8" y="44" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
+</g>
+<g class="layer layer-328">
+<text x="8" y="64" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
+</g>
+<g class="layer layer-329">
+<text x="8" y="84" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacingAndGlyphs">$</text>
+<text x="27.84" y="84" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
+</g>
+<g class="layer layer-330">
+<text x="8" y="104" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
+</g>
+<g class="layer layer-331">
+<text x="8" y="124" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
+</g>
+<g class="layer layer-332">
+<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacingAndGlyphs">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-333">
+<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line1</text>
+<text x="67.52" y="164" fill="#ac4142" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">alpha</text>
+</g>
+<g class="layer layer-334">
+<text x="8" y="184" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line2</text>
+<text x="67.52" y="184" fill="#7e8e50" font-weight="normal" textLength="39.68" lengthAdjust="spacingAndGlyphs">beta</text>
+<text x="117.12" y="184" fill="#9f4e85" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">gamma</text>
+</g>
+<g class="layer layer-335">
+<rect x="8" y="188" width="49.6" height="20" fill="#6c99bb"/>
+<text x="8" y="204" fill="#f5f5f5" font-weight="normal" text-decoration="underline" textLength="49.6" lengthAdjust="spacingAndGlyphs">line3</text>
+</g>
+<g class="layer layer-336">
+<text x="8" y="224" fill="#7dd6cf" font-weight="normal" textLength="287.68" lengthAdjust="spacingAndGlyphs"># stderr color default is red</text>
+</g>
+<g class="layer layer-337">
+<text x="8" y="244" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-338">
+<text x="8" y="264" fill="#ac4142" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-339">
+<text x="8" y="284" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stderr color override</text>
+</g>
+<g class="layer layer-340">
+<text x="8" y="304" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-341">
+<text x="8" y="324" fill="#e5b567" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-342">
+<text x="8" y="344" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacingAndGlyphs"># stderr style override with SGR literal</text>
+</g>
+<g class="layer layer-343">
+<text x="8" y="364" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr style literal&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-344">
+<text x="8" y="384" fill="#e5b567" font-weight="bold" textLength="198.4" lengthAdjust="spacingAndGlyphs">stderr style literal</text>
+</g>
+<g class="layer layer-345">
+<text x="8" y="404" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs"># 256-color index highlight</text>
+</g>
+<g class="layer layer-346">
+<text x="8" y="424" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacingAndGlyphs">$ printf 'indexed color\n'</text>
+</g>
+<g class="layer layer-347">
+<rect x="8" y="428" width="128.96" height="20" fill="#262626"/>
+<text x="8" y="444" fill="#ff0000" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">indexed color</text>
+</g>
+<g class="layer layer-348">
+<text x="8" y="464" fill="#7dd6cf" font-weight="normal" textLength="188.48" lengthAdjust="spacingAndGlyphs"># true color output</text>
+</g>
+<g class="layer layer-349">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacingAndGlyphs">$</text>
+</g>
+<g class="layer layer-350">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacingAndGlyphs">$ p</text>
+</g>
+<g class="layer layer-351">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacingAndGlyphs">$ pr</text>
+</g>
+<g class="layer layer-352">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ pri</text>
+</g>
+<g class="layer layer-353">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacingAndGlyphs">$ prin</text>
+</g>
+<g class="layer layer-354">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacingAndGlyphs">$ print</text>
+</g>
+<g class="layer layer-355">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacingAndGlyphs">$ printf</text>
+</g>
+<g class="layer layer-356">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ printf '</text>
+</g>
+<g class="layer layer-357">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacingAndGlyphs">$ printf '\</text>
+</g>
+<g class="layer layer-358">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacingAndGlyphs">$ printf '\0</text>
+</g>
+<g class="layer layer-359">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">$ printf '\03</text>
+</g>
+<g class="layer layer-360">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacingAndGlyphs">$ printf '\033</text>
+</g>
+<g class="layer layer-361">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ printf '\033[</text>
+</g>
+<g class="layer layer-362">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacingAndGlyphs">$ printf '\033[3</text>
+</g>
+<g class="layer layer-363">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacingAndGlyphs">$ printf '\033[38</text>
+</g>
+<g class="layer layer-364">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;</text>
+</g>
+<g class="layer layer-365">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2</text>
+</g>
+<g class="layer layer-366">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;</text>
+</g>
+<g class="layer layer-367">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;2</text>
+</g>
+<g class="layer layer-368">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;25</text>
+</g>
+<g class="layer layer-369">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255</text>
+</g>
+<g class="layer layer-370">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;</text>
+</g>
+<g class="layer layer-371">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;1</text>
+</g>
+<g class="layer layer-372">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;14</text>
+</g>
+<g class="layer layer-373">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140</text>
+</g>
+<g class="layer layer-374">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="277.76" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;</text>
+</g>
+<g class="layer layer-375">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0</text>
+</g>
+<g class="layer layer-376">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m</text>
+</g>
+<g class="layer layer-377">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="307.52" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\</text>
+</g>
+<g class="layer layer-378">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="317.44" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\0</text>
+</g>
+<g class="layer layer-379">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="327.36" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\03</text>
+</g>
+<g class="layer layer-380">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033</text>
+</g>
+<g class="layer layer-381">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[</text>
+</g>
+<g class="layer layer-382">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="357.12" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[4</text>
+</g>
+<g class="layer layer-383">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="367.04" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48</text>
+</g>
+<g class="layer layer-384">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="376.96" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;</text>
+</g>
+<g class="layer layer-385">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="386.88" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2</text>
+</g>
+<g class="layer layer-386">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="396.8" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;</text>
+</g>
+<g class="layer layer-387">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="406.72" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;4</text>
+</g>
+<g class="layer layer-388">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40</text>
+</g>
+<g class="layer layer-389">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="426.56" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;</text>
+</g>
+<g class="layer layer-390">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="436.48" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;4</text>
+</g>
+<g class="layer layer-391">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="446.4" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40</text>
+</g>
+<g class="layer layer-392">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="456.32" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;</text>
+</g>
+<g class="layer layer-393">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="466.24" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;4</text>
+</g>
+<g class="layer layer-394">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="476.16" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40</text>
+</g>
+<g class="layer layer-395">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40m</text>
+</g>
+<g class="layer layer-396">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="496" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mt</text>
+</g>
+<g class="layer layer-397">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="505.92" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtr</text>
+</g>
+<g class="layer layer-398">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="515.84" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtru</text>
+</g>
+<g class="layer layer-399">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="525.76" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue</text>
+</g>
+<g class="layer layer-400">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue c</text>
+</g>
+<g class="layer layer-401">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="555.52" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue co</text>
+</g>
+<g class="layer layer-402">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="565.44" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue col</text>
+</g>
+<g class="layer layer-403">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="575.36" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue colo</text>
+</g>
+<g class="layer layer-404">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="585.28" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color</text>
+</g>
+<g class="layer layer-405">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="595.2" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\</text>
+</g>
+<g class="layer layer-406">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="605.12" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\0</text>
+</g>
+<g class="layer layer-407">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="615.04" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\03</text>
+</g>
+<g class="layer layer-408">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="624.96" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033</text>
+</g>
+<g class="layer layer-409">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="634.88" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[</text>
+</g>
+<g class="layer layer-410">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="644.8" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0</text>
+</g>
+<g class="layer layer-411">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="654.72" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m</text>
+</g>
+<g class="layer layer-412">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="664.64" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\</text>
+</g>
+<g class="layer layer-413">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="674.56" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\n</text>
+</g>
+<g class="layer layer-414">
+<text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="684.48" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\n'</text>
+</g>
+<g class="layer layer-415">
+<text x="8" y="24" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:37</text>
+</g>
+<g class="layer layer-416">
+<text x="8" y="44" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
+</g>
+<g class="layer layer-417">
+<text x="8" y="64" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacingAndGlyphs">$</text>
+<text x="27.84" y="64" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
+</g>
+<g class="layer layer-418">
+<text x="8" y="84" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
+</g>
+<g class="layer layer-419">
+<text x="8" y="104" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
+</g>
+<g class="layer layer-420">
+<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacingAndGlyphs">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-421">
+<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line1</text>
+<text x="67.52" y="144" fill="#ac4142" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">alpha</text>
+</g>
+<g class="layer layer-422">
+<text x="8" y="164" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line2</text>
+<text x="67.52" y="164" fill="#7e8e50" font-weight="normal" textLength="39.68" lengthAdjust="spacingAndGlyphs">beta</text>
+<text x="117.12" y="164" fill="#9f4e85" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">gamma</text>
+</g>
+<g class="layer layer-423">
+<rect x="8" y="168" width="49.6" height="20" fill="#6c99bb"/>
+<text x="8" y="184" fill="#f5f5f5" font-weight="normal" text-decoration="underline" textLength="49.6" lengthAdjust="spacingAndGlyphs">line3</text>
+</g>
+<g class="layer layer-424">
+<text x="8" y="204" fill="#7dd6cf" font-weight="normal" textLength="287.68" lengthAdjust="spacingAndGlyphs"># stderr color default is red</text>
+</g>
+<g class="layer layer-425">
+<text x="8" y="224" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-426">
+<text x="8" y="244" fill="#ac4142" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-427">
+<text x="8" y="264" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stderr color override</text>
+</g>
+<g class="layer layer-428">
+<text x="8" y="284" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-429">
+<text x="8" y="304" fill="#e5b567" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-430">
+<text x="8" y="324" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacingAndGlyphs"># stderr style override with SGR literal</text>
+</g>
+<g class="layer layer-431">
+<text x="8" y="344" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr style literal&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-432">
+<text x="8" y="364" fill="#e5b567" font-weight="bold" textLength="198.4" lengthAdjust="spacingAndGlyphs">stderr style literal</text>
+</g>
+<g class="layer layer-433">
+<text x="8" y="384" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs"># 256-color index highlight</text>
+</g>
+<g class="layer layer-434">
+<text x="8" y="404" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacingAndGlyphs">$ printf 'indexed color\n'</text>
+</g>
+<g class="layer layer-435">
+<rect x="8" y="408" width="128.96" height="20" fill="#262626"/>
+<text x="8" y="424" fill="#ff0000" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">indexed color</text>
+</g>
+<g class="layer layer-436">
+<text x="8" y="444" fill="#7dd6cf" font-weight="normal" textLength="188.48" lengthAdjust="spacingAndGlyphs"># true color output</text>
+</g>
+<g class="layer layer-437">
+<text x="8" y="464" fill="#d0d0d0" font-weight="normal" textLength="684.48" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\n'</text>
+</g>
+<g class="layer layer-438">
+</g>
+<g class="layer layer-439">
+<text x="8" y="24" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs"># run color override</text>
+</g>
+<g class="layer layer-440">
+<text x="8" y="44" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacingAndGlyphs">$</text>
+<text x="27.84" y="44" fill="#7e8e50" font-weight="bold" text-decoration="underline" textLength="39.68" lengthAdjust="spacingAndGlyphs">date</text>
+</g>
+<g class="layer layer-441">
+<text x="8" y="64" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">18 Jun 2026 21:06:38</text>
+</g>
+<g class="layer layer-442">
+<text x="8" y="84" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stdout color override</text>
+</g>
+<g class="layer layer-443">
+<text x="8" y="104" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacingAndGlyphs">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-444">
+<text x="8" y="124" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line1</text>
+<text x="67.52" y="124" fill="#ac4142" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">alpha</text>
+</g>
+<g class="layer layer-445">
+<text x="8" y="144" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">line2</text>
+<text x="67.52" y="144" fill="#7e8e50" font-weight="normal" textLength="39.68" lengthAdjust="spacingAndGlyphs">beta</text>
+<text x="117.12" y="144" fill="#9f4e85" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">gamma</text>
+</g>
+<g class="layer layer-446">
+<rect x="8" y="148" width="49.6" height="20" fill="#6c99bb"/>
+<text x="8" y="164" fill="#f5f5f5" font-weight="normal" text-decoration="underline" textLength="49.6" lengthAdjust="spacingAndGlyphs">line3</text>
+</g>
+<g class="layer layer-447">
+<text x="8" y="184" fill="#7dd6cf" font-weight="normal" textLength="287.68" lengthAdjust="spacingAndGlyphs"># stderr color default is red</text>
+</g>
+<g class="layer layer-448">
+<text x="8" y="204" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-449">
+<text x="8" y="224" fill="#ac4142" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-450">
+<text x="8" y="244" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacingAndGlyphs"># stderr color override</text>
+</g>
+<g class="layer layer-451">
+<text x="8" y="264" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs">$ echo &quot;this is error&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-452">
+<text x="8" y="284" fill="#e5b567" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">this is error</text>
+</g>
+<g class="layer layer-453">
+<text x="8" y="304" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacingAndGlyphs"># stderr style override with SGR literal</text>
+</g>
+<g class="layer layer-454">
+<text x="8" y="324" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr style literal&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-455">
+<text x="8" y="344" fill="#e5b567" font-weight="bold" textLength="198.4" lengthAdjust="spacingAndGlyphs">stderr style literal</text>
+</g>
+<g class="layer layer-456">
+<text x="8" y="364" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacingAndGlyphs"># 256-color index highlight</text>
+</g>
+<g class="layer layer-457">
+<text x="8" y="384" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacingAndGlyphs">$ printf 'indexed color\n'</text>
+</g>
+<g class="layer layer-458">
+<rect x="8" y="388" width="128.96" height="20" fill="#262626"/>
+<text x="8" y="404" fill="#ff0000" font-weight="normal" textLength="128.96" lengthAdjust="spacingAndGlyphs">indexed color</text>
+</g>
+<g class="layer layer-459">
+<text x="8" y="424" fill="#7dd6cf" font-weight="normal" textLength="188.48" lengthAdjust="spacingAndGlyphs"># true color output</text>
+</g>
+<g class="layer layer-460">
+<text x="8" y="444" fill="#d0d0d0" font-weight="normal" textLength="684.48" lengthAdjust="spacingAndGlyphs">$ printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\n'</text>
+</g>
+<g class="layer layer-461">
+<rect x="8" y="448" width="99.2" height="20" fill="#282828"/>
+<text x="8" y="464" fill="#ff8c00" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">true color</text>
+</g>
+<g class="layer layer-462">
 <text x="8" y="484" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 </svg>

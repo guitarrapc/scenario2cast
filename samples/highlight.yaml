@@ -37,3 +37,5 @@ steps:
     highlight:
       - color: "fg:196 bg:235"
         at: "1"
+  - name: true color output
+    run: printf '\033[38;2;255;140;0m\033[48;2;40;40;40mtrue color\033[0m\n'
