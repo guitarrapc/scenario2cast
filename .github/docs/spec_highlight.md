@@ -17,6 +17,8 @@ This spec defines declarative coloring controls that keep demos readable without
 - `stderr-color` fallback coloring for stderr text that has no ANSI SGR.
 - Colorized `name` comment lines with optional `[style]` prefix.
 - Shared 16-color foreground palette (normal + bright).
+- ANSI 256-color palette indices via `fg:<0-255>`, `bg:<0-255>`, and `38;5;n` / `48;5;n` SGR literals.
+- True-color RGB via `fg:#rrggbb`, `bg:#rrggbb`, `fg:#rgb`, `bg:#rgb`, `fg:r,g,b`, `bg:r,g,b`, and `38;2;r;g;b` / `48;2;r;g;b` SGR literals.
 - Style-capable color values: `bold`, `underline`, `background`, `bright` combinations.
 - Direct ANSI SGR literal input (for example `1;31`, `\e[1;31m`).
 - Range-based output targeting via `at`.
@@ -75,11 +77,12 @@ Accepted forms:
 - Named foreground color: `red`, `bright-cyan` (within the 16-color palette)
 - Token composition (space/comma/`+` separated):
   - Style tokens: `bold`, `underline`, `bright`
-  - Foreground tokens: `<name>`, `fg:<name>`, `fg:<0-255>`
-  - Background tokens: `bg:<name>`, `bg:<0-255>`
+  - Foreground tokens: `<name>`, `fg:<name>`, `fg:<0-255>`, `fg:#rrggbb`, `fg:#rgb`, `fg:r,g,b`
+  - Background tokens: `bg:<name>`, `bg:<0-255>`, `bg:#rrggbb`, `bg:#rgb`, `bg:r,g,b`
 - Raw ANSI SGR literal:
   - `1;31`
   - `38;5;196`, `48;5;235` (ANSI 256-color palette)
+  - `38;2;255;140;0`, `48;2;40;40;40` (ANSI true color)
   - `\e[1;31m`
   - `\x1b[1;31m`
 
@@ -92,11 +95,16 @@ Examples:
 - `bold bright-yellow`
 - `underline fg:bright-cyan bg:black`
 - `fg:196 bg:235` (ANSI 256-color palette)
+- `fg:#ff8c00 bg:#282828` (ANSI true color)
+- `fg:255,140,0 bg:40,40,40` (ANSI true color, decimal RGB)
 - `bright red bg:bright-black`
 - `38;5;208` (ANSI 256-color palette)
+- `38;2;255;140;0` (ANSI true color)
 - `\e[1;4;97;44m`
 
 256-color index values use ANSI SGR `38;5;n` for foreground and `48;5;n` for background, where `n` is 0..255.
+
+True-color values use ANSI SGR `38;2;r;g;b` for foreground and `48;2;r;g;b` for background, where `r`, `g`, and `b` are 0..255. Hex forms accept `#rrggbb` or `#rgb` (shorthand expands each digit to a pair, for example `#f80` → `#ff8800`). Decimal forms accept comma-separated `r,g,b`. SVG rendering behavior is defined in [spec_svg.md](spec_svg.md).
 
 ## YAML Contract
 
@@ -223,6 +231,15 @@ Coloring errors do not fail the step; behavior is warn-and-continue.
       at: "2"
 ```
 
+### True-color output emphasis
+
+```yaml
+- run: printf 'true color\n'
+  highlight:
+    - color: "fg:#ff8c00 bg:#282828"
+      at: "1"
+```
+
 ### stderr fallback with per-step override
 
 ```yaml
@@ -252,6 +269,7 @@ steps:
 
 | Date | Change |
 |---|---|
+| 2026-06-18 | Added true-color RGB support via `fg:#rrggbb`, `bg:#rrggbb`, `fg:#rgb`, `bg:#rgb`, `fg:r,g,b`, `bg:r,g,b`, `38;2;r;g;b`, and `48;2;r;g;b`. |
 | 2026-06-17 | Added 256-color index support via `fg:<0-255>`, `bg:<0-255>`, `38;5;n`, and `48;5;n`. |
 | 2026-06-17 | Extended color values to style strings (bold/underline/background/bright) and SGR literal input across `highlight`, `run-highlight`, `stderr-color`, and `name` prefix. |
 | 2026-06-17 | Reorganized document as a unified coloring spec (`highlight`, `run-highlight`, `stderr-color`, `name` color prefix). |

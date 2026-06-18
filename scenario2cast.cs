@@ -878,6 +878,30 @@ static bool TryParseSgrLiteral(string raw, out string codes)
             continue;
         }
 
+        if (value is 38 or 48 && i + 1 < parts.Length && parts[i + 1] == "2")
+        {
+            if (i + 4 >= parts.Length)
+                return false;
+
+            if (!int.TryParse(parts[i + 2], NumberStyles.None, CultureInfo.InvariantCulture, out var r) ||
+                !int.TryParse(parts[i + 3], NumberStyles.None, CultureInfo.InvariantCulture, out var g) ||
+                !int.TryParse(parts[i + 4], NumberStyles.None, CultureInfo.InvariantCulture, out var b))
+            {
+                return false;
+            }
+
+            if (r is < 0 or > 255 || g is < 0 or > 255 || b is < 0 or > 255)
+                return false;
+
+            normalized.Add(value.ToString(CultureInfo.InvariantCulture));
+            normalized.Add("2");
+            normalized.Add(r.ToString(CultureInfo.InvariantCulture));
+            normalized.Add(g.ToString(CultureInfo.InvariantCulture));
+            normalized.Add(b.ToString(CultureInfo.InvariantCulture));
+            i += 4;
+            continue;
+        }
+
         if (value is < 0 or > 107)
             return false;
 
@@ -983,6 +1007,14 @@ static bool TryParseStyleColor(string raw, bool isBackground, out string codes, 
         return true;
     }
 
+    if (TryParseTrueColorValue(raw, out var r, out var g, out var b))
+    {
+        codes = isBackground
+            ? string.Create(CultureInfo.InvariantCulture, $"48;2;{r};{g};{b}")
+            : string.Create(CultureInfo.InvariantCulture, $"38;2;{r};{g};{b}");
+        return true;
+    }
+
     if (!int.TryParse(raw, NumberStyles.None, CultureInfo.InvariantCulture, out var colorIndex))
         return false;
 
@@ -993,6 +1025,94 @@ static bool TryParseStyleColor(string raw, bool isBackground, out string codes, 
         ? $"48;5;{colorIndex.ToString(CultureInfo.InvariantCulture)}"
         : $"38;5;{colorIndex.ToString(CultureInfo.InvariantCulture)}";
     return true;
+}
+
+static bool TryParseTrueColorValue(string raw, out int r, out int g, out int b)
+{
+    r = g = b = 0;
+    var text = raw.Trim();
+    if (text.Length == 0)
+        return false;
+
+    if (text[0] == '#')
+    {
+        var hex = text[1..];
+        if (hex.Length == 3)
+        {
+            if (!TryParseHexComponent(hex[0], out var rNibble) ||
+                !TryParseHexComponent(hex[1], out var gNibble) ||
+                !TryParseHexComponent(hex[2], out var bNibble))
+            {
+                return false;
+            }
+
+            r = rNibble * 17;
+            g = gNibble * 17;
+            b = bNibble * 17;
+            return true;
+        }
+
+        if (hex.Length != 6)
+            return false;
+
+        if (!TryParseHexPair(hex[0], hex[1], out r) ||
+            !TryParseHexPair(hex[2], hex[3], out g) ||
+            !TryParseHexPair(hex[4], hex[5], out b))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    var parts = text.Split(',', StringSplitOptions.TrimEntries);
+    if (parts.Length != 3)
+        return false;
+
+    if (!int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out r) ||
+        !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out g) ||
+        !int.TryParse(parts[2], NumberStyles.None, CultureInfo.InvariantCulture, out b))
+    {
+        return false;
+    }
+
+    return r is >= 0 and <= 255 &&
+           g is >= 0 and <= 255 &&
+           b is >= 0 and <= 255;
+}
+
+static bool TryParseHexPair(char hi, char lo, out int value)
+{
+    value = 0;
+    if (!TryParseHexComponent(hi, out var high) || !TryParseHexComponent(lo, out var low))
+        return false;
+
+    value = high * 16 + low;
+    return true;
+}
+
+static bool TryParseHexComponent(char c, out int value)
+{
+    if (c is >= '0' and <= '9')
+    {
+        value = c - '0';
+        return true;
+    }
+
+    if (c is >= 'a' and <= 'f')
+    {
+        value = c - 'a' + 10;
+        return true;
+    }
+
+    if (c is >= 'A' and <= 'F')
+    {
+        value = c - 'A' + 10;
+        return true;
+    }
+
+    value = 0;
+    return false;
 }
 
 static bool TryParseFgBgToken(string token, out bool isBackground, out string colorName)
