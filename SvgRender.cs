@@ -611,7 +611,7 @@ internal sealed class TerminalEmulator
                 _style = _style with
                 {
                     Foreground = hex,
-                    ForegroundIsBright = false,
+                    ForegroundIsBright = true,
                 };
             }
 
