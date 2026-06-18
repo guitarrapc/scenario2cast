@@ -208,30 +208,36 @@ internal static class SvgRender
             }
 
             var runLen = col - runStart;
-            if (text.ToString().TrimEnd(' ').Length == 0 && runBg is null)
+            var runText = text.ToString();
+            var visible = runText.TrimEnd(' ');
+            var visibleLen = visible.Length;
+
+            if (visibleLen == 0 && runBg is null)
                 continue;
 
+            var drawLen = visibleLen > 0 ? visibleLen : runLen;
+            var drawWidth = drawLen * charWidth;
             var x = Padding + runStart * charWidth;
             if (runBg is not null)
             {
                 sb.AppendLine(CultureInfo.InvariantCulture,
-                    $"<rect x=\"{x:0.##}\" y=\"{Padding + row * lineHeight:0.##}\" width=\"{runLen * charWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
+                    $"<rect x=\"{x:0.##}\" y=\"{Padding + row * lineHeight:0.##}\" width=\"{drawWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
             }
 
-            var visible = text.ToString().TrimEnd(' ');
-            if (visible.Length == 0)
+            if (visibleLen == 0)
                 continue;
 
             var weight = runBold ? "bold" : "normal";
+            var textLength = string.Create(CultureInfo.InvariantCulture, $" textLength=\"{drawWidth:0.##}\" lengthAdjust=\"spacingAndGlyphs\"");
             if (runUnderline)
             {
                 sb.AppendLine(CultureInfo.InvariantCulture,
-                    $"<text x=\"{x:0.##}\" y=\"{y:0.##}\" fill=\"{runFg}\" font-weight=\"{weight}\" text-decoration=\"underline\">{EscapeXml(visible)}</text>");
+                    $"<text x=\"{x:0.##}\" y=\"{y:0.##}\" fill=\"{runFg}\" font-weight=\"{weight}\" text-decoration=\"underline\"{textLength}>{EscapeXml(visible)}</text>");
             }
             else
             {
                 sb.AppendLine(CultureInfo.InvariantCulture,
-                    $"<text x=\"{x:0.##}\" y=\"{y:0.##}\" fill=\"{runFg}\" font-weight=\"{weight}\">{EscapeXml(visible)}</text>");
+                    $"<text x=\"{x:0.##}\" y=\"{y:0.##}\" fill=\"{runFg}\" font-weight=\"{weight}\"{textLength}>{EscapeXml(visible)}</text>");
             }
         }
     }
