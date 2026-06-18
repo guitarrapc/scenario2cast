@@ -194,7 +194,7 @@ col_part  ::= positive_integer
 
 ## Validation and Warnings
 
-Coloring errors do not fail the step; behavior is warn-and-continue.
+Coloring errors do not fail the step; behavior is warn-and-continue. Warnings are printed to stderr per [spec_cli.md](spec_cli.md).
 
 - Unknown color/style string: warn and skip that color application path.
 - Invalid `at` syntax: warn and skip that `at`.
@@ -262,6 +262,8 @@ steps:
 
 ## Related documents
 
+- [spec_cli.md](spec_cli.md) — CLI logging and warning delivery.
+- [spec_svg.md](spec_svg.md) — terminal theme and SVG rendering.
 - [asciicast v2](https://docs.asciinema.org/manual/asciicast/v2/) — cast event format.
 - [agg usage](https://docs.asciinema.org/manual/agg/usage/) — rendering and theme options.
 

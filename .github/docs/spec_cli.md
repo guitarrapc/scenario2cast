@@ -1,0 +1,86 @@
+# CLI Specification
+
+Status: **Implemented**
+
+## Motivation
+
+scenario2cast exposes a small command-line surface: record scenarios to cast (and optionally SVG), convert existing casts to SVG, and scaffold starter YAML. Centralizing CLI behavior here keeps feature specs focused on YAML contracts and runtime semantics.
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `scenario2cast <scenario.yaml> [output]` | Run a scenario; write `.cast` (default) or `.cast` + `.svg` |
+| `scenario2cast svg <input.cast> [output]` | Convert an existing cast to SVG |
+| `scenario2cast init [scenario.yaml]` | Create a commented starter scenario file |
+| `scenario2cast --help` | Print usage |
+| `scenario2cast --version` | Print version |
+
+```bash
+scenario2cast [--verbose] [--format cast|svg] [--font-size N] [--theme dark|light] <scenario.yaml> [output]
+scenario2cast svg [--font-size N] [--theme dark|light] <input.cast> [output]
+scenario2cast init [scenario.yaml]
+```
+
+Subcommands accept `-h` / `--help` for subcommand-specific usage.
+
+## Parsing
+
+- Options may appear in any order before positional arguments on the scenario and `svg` paths.
+- Unknown `-` / `--` options are explicit errors (avoids typos becoming path-not-found errors).
+- `--format`, `--font-size`, and `--theme` accept `--name=value` or `--name value`.
+- Duplicate `--font-size` or `--theme` is an error.
+
+## Options
+
+| Option | Commands | Behavior |
+|---|---|---|
+| `--verbose` | scenario path only | Show successful `pre`/`post` labels and phase markers. See [spec_pre_post.md](spec_pre_post.md). |
+| `--format cast\|svg` | scenario path only | Default `cast`. `svg` also writes `.svg`. See [spec_svg.md](spec_svg.md). |
+| `--font-size N` | scenario, `svg` | `1`–`128`. Scenario path: overrides `render.font-size` in the written cast header and SVG. `svg`: render-only override (CLI > cast header > default `16`). |
+| `--theme dark\|light` | scenario, `svg` | Scenario path: overrides `render.theme.preset`; YAML `fg` / `bg` / `palette` still merge; cast header stores resolved hex. `svg`: render-only override (CLI > cast header > default `dark`). |
+
+`init` accepts only an optional output path positional; no other flags.
+
+## Output Paths
+
+**Scenario path.** `[output]` sets a shared stem; extensions differ (`.cast`, and `.svg` when `--format svg`). With no `[output]`, stem matches the scenario path without extension. Passing `out.cast` or `out.svg` yields the same stem.
+
+**`svg` subcommand.** With no `[output]`, writes alongside the input as `<stem>.svg`. With `[output]`, uses that path's stem and directory (extension optional).
+
+## Logging
+
+Progress and status go to stderr (`Loading:`, `Written:`, `Done:`). Step `running:` lines are always shown on the scenario path.
+
+**`pre` / `post`.** stdout and stderr are forwarded after each command exits (live streaming not required in v1). Failure prints phase, full command text, and exit code unconditionally. See [spec_pre_post.md](spec_pre_post.md).
+
+**Warnings.** Non-fatal issues print `Warning: …` to stderr and execution continues. Feature-specific warn-and-continue rules: [spec_highlight.md](spec_highlight.md), [spec_svg.md](spec_svg.md).
+
+**Errors.** Fatal issues print `Error: …` to stderr and exit non-zero.
+
+## Exit Codes
+
+| Outcome | Code |
+|---|---|
+| Success | `0` |
+| Parse / validation error, missing file, cast/SVG write failure | `1` (or command-specific for `pre`/`post`) |
+| Failed `pre` or `post` command | Failed command's exit code |
+
+Recorded step exit codes do not affect the process exit code. See [spec_pre_post.md](spec_pre_post.md).
+
+## Init
+
+- Default output path: `scenario.yaml` in the current directory.
+- Fails if the target file already exists.
+- Generated template includes commented examples for optional features. See [spec_pre_post.md](spec_pre_post.md) for `pre`/`post` placement.
+
+## Cross-Document Notes
+
+- [spec_svg.md](spec_svg.md) — `render:` YAML, cast header, SVG renderer, `svg` subcommand input/event semantics.
+- [spec_pre_post.md](spec_pre_post.md) — `pre`/`post` execution and failure behavior.
+- [spec_highlight.md](spec_highlight.md) — coloring validation warnings.
+
+## Lessons Learned
+
+- Unknown options should fail explicitly; otherwise mistyped flags are misread as file paths.
+- Default logs should stay focused on cast content; `--verbose` is the right place for successful `pre`/`post` labels.

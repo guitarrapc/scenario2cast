@@ -16,13 +16,14 @@ Failed recorded steps can still be legitimate demo content; setup and teardown f
 - Same resolved `shell` and `cwd` as `steps`.
 - stdout/stderr visible in the CLI; command text and output never written to the cast.
 - Fail-fast for `pre` and `post`.
-- `--verbose` for optional `pre`/`post` execution labels and phase markers.
 
 ### Out of scope
 
 - Step-level `pre` or `post`; map/object entries.
 - Coloring, timing, or display metadata on `pre`/`post` commands.
 - Recording, retrying, or continuing past a failed `pre`/`post` command.
+
+CLI logging for `pre`/`post` (including `--verbose`): [spec_cli.md](spec_cli.md).
 
 ## YAML Contract
 
@@ -60,12 +61,6 @@ Each item is one shell command string (same as `steps[].run`). Block scalars are
 
 If no `pre` or `post` command fails, scenario2cast exits `0` regardless of individual step exit codes.
 
-## CLI
-
-`--verbose` may appear in any argument position on the scenario path. It enables successful `pre`/`post` command labels and phase markers; `steps` `running:` logs are always visible. Failure details (phase, full command text, exit code) are always printed. Output is emitted after each command exits (live streaming not required in v1).
-
-Unknown `-` / `--` options are explicit errors. `init` does not accept `--verbose`.
-
 ## Init Template
 
 `scenario2cast init` should include commented `pre` and `post` examples so users discover the feature without enabling it by default.
@@ -77,4 +72,3 @@ Deterministic seed and timestamp are derived from the whole YAML file. Adding or
 ## Lessons Learned
 
 - Cleanup belongs after cast write so users keep the recording when teardown fails.
-- Default logs should stay focused on cast content; verbose mode is the right place for successful `pre`/`post` labels.
