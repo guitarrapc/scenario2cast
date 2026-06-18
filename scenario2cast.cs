@@ -71,7 +71,7 @@ if (args[0] is "svg")
         return 0;
     }
 
-    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgError))
+    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgFontSize, out var svgError))
     {
         Console.Error.WriteLine($"Error: {svgError}");
         PrintSvgUsage();
@@ -91,7 +91,10 @@ if (args[0] is "svg")
     try
     {
         var recording = CastReader.Read(castPath);
-        SvgRender.WriteSvg(recording.Events, recording.Width, recording.Height, recording.RenderSettings, svgOutputPath);
+        var svgRenderSettings = svgFontSize is int svgFontSizeValue
+            ? recording.RenderSettings with { FontSize = svgFontSizeValue }
+            : recording.RenderSettings;
+        SvgRender.WriteSvg(recording.Events, recording.Width, recording.Height, svgRenderSettings, svgOutputPath);
         var svgDuration = recording.Events.Count > 0 ? recording.Events[^1].Time : 0.0;
         Console.Error.WriteLine($"Written: {svgOutputPath}  ({recording.Events.Count} events, {svgDuration:F1}s)");
         Console.Error.WriteLine($"Done: {svgOutputPath}");
@@ -125,7 +128,7 @@ if (args[0] is "-h" or "--help")
     return 0;
 }
 
-if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runError))
+if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runFontSize, out var runError))
 {
     Console.Error.WriteLine($"Error: {runError}");
     PrintUsage();
@@ -152,6 +155,8 @@ ScenarioRender.__RegisterVYamlFormatter();
 ScenarioTheme.__RegisterVYamlFormatter();
 var scenario = ParseScenario(yaml);
 var renderSettings = RenderSettingsResolver.Resolve(scenario);
+if (runFontSize is int runFontSizeValue)
+    renderSettings = renderSettings with { FontSize = runFontSizeValue };
 var deterministicSeed = ComputeDeterministicSeed(yaml);
 var deterministicTimestamp = ComputeDeterministicTimestamp(deterministicSeed);
 
@@ -230,15 +235,28 @@ static bool TryParseInitArgs(string[] args, out string? path, out string error)
     return true;
 }
 
-static bool TryParseSvgArgs(string[] args, out string castPath, out string? outputPath, out string error)
+static bool TryParseSvgArgs(
+    string[] args,
+    out string castPath,
+    out string? outputPath,
+    out int? fontSizeOverride,
+    out string error)
 {
     castPath = "";
     outputPath = null;
+    fontSizeOverride = null;
     error = "";
 
     for (var i = 1; i < args.Length; i++)
     {
         var arg = args[i];
+        if (TryConsumeFontSizeArg(args, ref i, ref fontSizeOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
+            continue;
+        }
+
         if (arg.StartsWith('-'))
         {
             error = $"unknown option: {arg}";
@@ -274,12 +292,14 @@ static bool TryParseRunArgs(
     out string? outputPath,
     out OutputFormat outputFormat,
     out bool verbose,
+    out int? fontSizeOverride,
     out string error)
 {
     scenarioPath = "";
     outputPath = null;
     outputFormat = OutputFormat.Cast;
     verbose = false;
+    fontSizeOverride = null;
     error = "";
 
     for (var i = 0; i < args.Length; i++)
@@ -288,6 +308,13 @@ static bool TryParseRunArgs(
         if (arg == "--verbose")
         {
             verbose = true;
+            continue;
+        }
+
+        if (TryConsumeFontSizeArg(args, ref i, ref fontSizeOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
             continue;
         }
 
@@ -340,6 +367,49 @@ static bool TryParseRunArgs(
 
     error = "scenario path is required";
     return false;
+}
+
+static bool TryConsumeFontSizeArg(string[] args, ref int i, ref int? fontSizeOverride, out string error)
+{
+    error = "";
+    var arg = args[i];
+    string? value;
+
+    if (arg == "--font-size")
+    {
+        if (i + 1 >= args.Length)
+        {
+            error = "--font-size requires a value";
+            return true;
+        }
+
+        value = args[++i];
+    }
+    else if (arg.StartsWith("--font-size=", StringComparison.Ordinal))
+    {
+        value = arg["--font-size=".Length..];
+        if (value.Length == 0)
+        {
+            error = "--font-size requires a value";
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if (fontSizeOverride.HasValue)
+    {
+        error = "duplicate option: --font-size";
+        return true;
+    }
+
+    if (!RenderSettingsResolver.TryParseFontSize(value, out var parsed, out error))
+        return true;
+
+    fontSizeOverride = parsed;
+    return true;
 }
 
 static bool TryParseOutputFormat(string value, out OutputFormat format, out string error)
@@ -1720,8 +1790,8 @@ static string CreateInitialScenarioYaml()
 
 static void PrintUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] <scenario.yaml> [output]");
-    Console.Error.WriteLine("       scenario2cast svg <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] [--font-size N] <scenario.yaml> [output]");
+    Console.Error.WriteLine("       scenario2cast svg [--font-size N] <input.cast> [output.svg]");
     Console.Error.WriteLine("       scenario2cast init [scenario.yaml]");
     Console.Error.WriteLine("       scenario2cast --help");
 }
@@ -1734,7 +1804,7 @@ static void PrintInitUsage()
 
 static void PrintSvgUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast svg <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] <input.cast> [output.svg]");
     Console.Error.WriteLine("Converts an existing asciinema v2 cast file to animated SVG.");
 }
 

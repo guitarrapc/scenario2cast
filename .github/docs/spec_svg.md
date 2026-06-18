@@ -24,6 +24,7 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - Animated SVG via CSS `animation-delay` row-layer opacity switching.
 - Fixed dark terminal theme when `render.theme` is omitted.
 - Default `font-size` of 16.
+- CLI `--font-size` override for scenario runs and the `svg` subcommand (`1`–`128`).
 - No cursor rendering in v1.
 - Warning-and-continue for malformed extended color SGR (invalid true-color RGB, invalid 256 index, unknown modes) during SVG rendering.
 - Failure behavior aligned with `pre`/`post`: cast is retained, incomplete SVG is removed, `post` still runs.
@@ -31,26 +32,28 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 
 ### Out of scope (v1)
 
-- CLI `--font-size` override (use `render.font-size` in YAML or cast header).
 - Cursor display and blink animation.
 - Colon-form true-color SGR (`38:2:r:g:b`).
 - Light theme presets beyond user-defined `render.theme`.
 - Resize cast events (`"r"`) during `svg` conversion.
-- CLI `--font-size` override for `scenario2cast svg` (useful for casts without `scenario2cast` header extensions).
 - Cursor rendering.
 
 ## CLI Contract
 
 ```bash
-scenario2cast [--verbose] [--format cast|svg] <scenario.yaml> [output]
+scenario2cast [--verbose] [--format cast|svg] [--font-size N] <scenario.yaml> [output]
 ```
 
 | Invocation | Output |
 |---|---|
 | `scenario2cast demo.yaml` | `demo.cast` |
 | `scenario2cast --format svg demo.yaml` | `demo.cast` + `demo.svg` |
+| `scenario2cast --font-size 20 demo.yaml` | `demo.cast` (header `font-size: 20`) |
+| `scenario2cast --format svg --font-size 20 demo.yaml` | `demo.cast` + `demo.svg` (both use `20`) |
 | `scenario2cast --format svg demo.yaml out.svg` | `out.cast` + `out.svg` |
 | `scenario2cast --format svg demo.yaml out.cast` | `out.cast` + `out.svg` |
+
+`--font-size` accepts `1`–`128`. On the scenario path it overrides `render.font-size` for the written cast header and any SVG rendered in the same run. Duplicate `--font-size` is an error.
 
 When `[output]` is given, the stem is shared; only the extension differs (`.cast` / `.svg`).
 
@@ -61,16 +64,19 @@ When `[output]` is given, the stem is shared; only the extension differs (`.cast
 Convert an existing cast file without running a scenario:
 
 ```bash
-scenario2cast svg <input.cast> [output.svg]
+scenario2cast svg [--font-size N] <input.cast> [output.svg]
 ```
 
 | Invocation | Output |
 |---|---|
 | `scenario2cast svg demo.cast` | `demo.svg` |
+| `scenario2cast svg --font-size 20 demo.cast` | `demo.svg` (render-only override) |
 | `scenario2cast svg demo.cast out.svg` | `out.svg` |
 | `scenario2cast svg demo.cast out` | `out.svg` |
 
 The input cast file is read-only. Only `.svg` is written.
+
+`--font-size` overrides the cast header for SVG rendering only; the cast file is not modified. Precedence: CLI > `scenario2cast.font-size` in the cast header > default `16`.
 
 #### Input casts
 

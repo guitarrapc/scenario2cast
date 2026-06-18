@@ -787,17 +787,38 @@ internal static class Ansi256
 
 internal static class RenderSettingsResolver
 {
+    internal const int MinFontSize = 1;
+    internal const int MaxFontSize = 128;
     internal const int DefaultFontSize = 16;
     internal const string DefaultFg = "#d0d0d0";
     internal const string DefaultBg = "#282c34";
     internal const string DefaultPalette =
         "#151515:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#d0d0d0:#505050:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#f5f5f5";
 
+    internal static bool TryParseFontSize(string text, out int fontSize, out string error)
+    {
+        fontSize = 0;
+        error = "";
+        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out fontSize))
+        {
+            error = $"invalid --font-size value: {text}";
+            return false;
+        }
+
+        if (fontSize is < MinFontSize or > MaxFontSize)
+        {
+            error = $"--font-size must be between {MinFontSize} and {MaxFontSize}: {fontSize}";
+            return false;
+        }
+
+        return true;
+    }
+
     internal static ResolvedRenderSettings Resolve(Scenario scenario)
     {
         var render = scenario.Render;
         var fontSize = render?.FontSize ?? DefaultFontSize;
-        if (fontSize <= 0)
+        if (fontSize is < MinFontSize or > MaxFontSize)
             fontSize = DefaultFontSize;
 
         var theme = render?.Theme;
