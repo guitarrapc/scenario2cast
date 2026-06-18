@@ -1184,7 +1184,7 @@ internal static class RenderSettingsResolver
     internal const string FontSizeTagPrefix = "s2c:font-size=";
     internal const string FontFamilyTagPrefix = "s2c:font-family=";
     internal const string DefaultFontFamily =
-        "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", \"JetBrains Mono\", SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace";
+        "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", \"JetBrains Mono\", \"Noto Sans Mono\", SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace";
     internal static string DefaultFg => ThemePresets.Dark.Fg;
     internal static string DefaultBg => ThemePresets.Dark.Bg;
     internal static string DefaultPalette => ThemePresets.Dark.Palette;
