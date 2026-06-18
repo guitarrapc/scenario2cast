@@ -34,7 +34,7 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - Full 256-color ANSI palette support in the SVG renderer.
 - Light theme presets beyond user-defined `render.theme`.
 - SVG output without also writing the cast file.
-- Re-reading the cast file from disk for SVG generation (events are passed in memory).
+- Generate SVG from an existing cast file.
 
 ### Planned for v2+
 
