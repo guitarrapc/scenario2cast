@@ -14,7 +14,7 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - Built-in C# SVG renderer (no bundled external binary).
 - ANSI SGR: 16-color, 256-color (xterm palette; indices 0–15 from `theme.palette`), true color (`38;2` / `48;2` and colon forms); `bold`, `underline`, `bright`.
 - Animated SVG driven by cast event timestamps; no JavaScript required.
-- Theme presets `dark` (default) and `light`; default `font-size` of `16`; default `font-family` stack tuned for programming (`ui-monospace`, `Cascadia Mono`, `Cascadia Code`, `JetBrains Mono`, system monospaces, `monospace`).
+- Theme presets `dark` (default) and `light`; default `font-size` of `16`; default `font-family` stack tuned for programming (`ui-monospace`, `Cascadia Mono`, `Cascadia Code`, `JetBrains Mono`, `Noto Sans Mono`, system monospaces, `monospace`).
 - Block cursor (`theme.fg` at 50% opacity, no blink); DECTCEM visibility (`\e[?25h`, `\e[?25l`).
 - Warn-and-continue for malformed extended color SGR and unsupported cast event codes.
 - Resize cast events (`"r"`) during `svg` conversion.
