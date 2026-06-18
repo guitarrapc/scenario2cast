@@ -349,1005 +349,1005 @@ text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Libe
 </style>
 <rect class="bg" x="0" y="0" width="1008" height="616"/>
 <g class="layer layer-0">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-1">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ e</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ e</text>
 </g>
 <g class="layer layer-2">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ ec</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ ec</text>
 </g>
 <g class="layer layer-3">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ ech</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ ech</text>
 </g>
 <g class="layer layer-4">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ echo</text>
 </g>
 <g class="layer layer-5">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;</text>
 </g>
 <g class="layer layer-6">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;H</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;H</text>
 </g>
 <g class="layer layer-7">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;He</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="124" lengthAdjust="spacingAndGlyphs">$ echo &quot;He</text>
 </g>
 <g class="layer layer-8">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hel</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hel</text>
 </g>
 <g class="layer layer-9">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hell</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hell</text>
 </g>
 <g class="layer layer-10">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello</text>
 </g>
 <g class="layer layer-11">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello,</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello,</text>
 </g>
 <g class="layer layer-12">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, W</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, W</text>
 </g>
 <g class="layer layer-13">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, Wo</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, Wo</text>
 </g>
 <g class="layer layer-14">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, Wor</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, Wor</text>
 </g>
 <g class="layer layer-15">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, Worl</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, Worl</text>
 </g>
 <g class="layer layer-16">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, World</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, World</text>
 </g>
 <g class="layer layer-17">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, World!</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, World!</text>
 </g>
 <g class="layer layer-18">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ echo &quot;Hello, World!&quot;</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="272.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Hello, World!&quot;</text>
 </g>
 <g class="layer layer-19">
-<text x="8" y="53" fill="#d0d0d0" font-weight="normal">Hello, World!</text>
+<text x="8" y="53" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">Hello, World!</text>
 </g>
 <g class="layer layer-20">
-<text x="8" y="78" fill="#7dd6cf" font-weight="normal"># Name of the step</text>
+<text x="8" y="78" fill="#7dd6cf" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs"># Name of the step</text>
 </g>
 <g class="layer layer-21">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-22">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ e</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ e</text>
 </g>
 <g class="layer layer-23">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ ec</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ ec</text>
 </g>
 <g class="layer layer-24">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ ech</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ ech</text>
 </g>
 <g class="layer layer-25">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ echo</text>
 </g>
 <g class="layer layer-26">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;</text>
 </g>
 <g class="layer layer-27">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;C</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;C</text>
 </g>
 <g class="layer layer-28">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Cu</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="124" lengthAdjust="spacingAndGlyphs">$ echo &quot;Cu</text>
 </g>
 <g class="layer layer-29">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Cur</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Cur</text>
 </g>
 <g class="layer layer-30">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Curr</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Curr</text>
 </g>
 <g class="layer layer-31">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Curre</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Curre</text>
 </g>
 <g class="layer layer-32">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Curren</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Curren</text>
 </g>
 <g class="layer layer-33">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="186" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current</text>
 </g>
 <g class="layer layer-34">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current d</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current d</text>
 </g>
 <g class="layer layer-35">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current di</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current di</text>
 </g>
 <g class="layer layer-36">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current dir</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current dir</text>
 </g>
 <g class="layer layer-37">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current dire</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current dire</text>
 </g>
 <g class="layer layer-38">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current direc</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current direc</text>
 </g>
 <g class="layer layer-39">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current direct</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="272.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current direct</text>
 </g>
 <g class="layer layer-40">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current directo</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="285.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current directo</text>
 </g>
 <g class="layer layer-41">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current director</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current director</text>
 </g>
 <g class="layer layer-42">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current directory</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="310" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current directory</text>
 </g>
 <g class="layer layer-43">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current directory:</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="322.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current directory:</text>
 </g>
 <g class="layer layer-44">
-<text x="8" y="103" fill="#d0d0d0" font-weight="normal">$ echo &quot;Current directory:&quot;</text>
+<text x="8" y="103" fill="#d0d0d0" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Current directory:&quot;</text>
 </g>
 <g class="layer layer-45">
-<text x="8" y="128" fill="#d0d0d0" font-weight="normal">Current directory:</text>
+<text x="8" y="128" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">Current directory:</text>
 </g>
 <g class="layer layer-46">
-<text x="8" y="153" fill="#7dd6cf" font-weight="normal"># Coloring stdout</text>
+<text x="8" y="153" fill="#7dd6cf" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs"># Coloring stdout</text>
 </g>
 <g class="layer layer-47">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-48">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ c</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ c</text>
 </g>
 <g class="layer layer-49">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ cu</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ cu</text>
 </g>
 <g class="layer layer-50">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ cur</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ cur</text>
 </g>
 <g class="layer layer-51">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ curl</text>
 </g>
 <g class="layer layer-52">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ curl -</text>
 </g>
 <g class="layer layer-53">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ curl -I</text>
 </g>
 <g class="layer layer-54">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I h</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ curl -I h</text>
 </g>
 <g class="layer layer-55">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I ht</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ curl -I ht</text>
 </g>
 <g class="layer layer-56">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I htt</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">$ curl -I htt</text>
 </g>
 <g class="layer layer-57">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I http</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ curl -I http</text>
 </g>
 <g class="layer layer-58">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="186" lengthAdjust="spacingAndGlyphs">$ curl -I https</text>
 </g>
 <g class="layer layer-59">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https:</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">$ curl -I https:</text>
 </g>
 <g class="layer layer-60">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https:/</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs">$ curl -I https:/</text>
 </g>
 <g class="layer layer-61">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">$ curl -I https://</text>
 </g>
 <g class="layer layer-62">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://g</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">$ curl -I https://g</text>
 </g>
 <g class="layer layer-63">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://go</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ curl -I https://go</text>
 </g>
 <g class="layer layer-64">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://goo</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">$ curl -I https://goo</text>
 </g>
 <g class="layer layer-65">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://goog</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="272.8" lengthAdjust="spacingAndGlyphs">$ curl -I https://goog</text>
 </g>
 <g class="layer layer-66">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://googl</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="285.2" lengthAdjust="spacingAndGlyphs">$ curl -I https://googl</text>
 </g>
 <g class="layer layer-67">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://google</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacingAndGlyphs">$ curl -I https://google</text>
 </g>
 <g class="layer layer-68">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="310" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.</text>
 </g>
 <g class="layer layer-69">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.c</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="322.4" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.c</text>
 </g>
 <g class="layer layer-70">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.co</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.co</text>
 </g>
 <g class="layer layer-71">
-<text x="8" y="178" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.com</text>
+<text x="8" y="178" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.com</text>
 </g>
 <g class="layer layer-72">
-<text x="8" y="28" fill="#7dd6cf" font-weight="normal"># Coloring stdout</text>
+<text x="8" y="28" fill="#7dd6cf" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs"># Coloring stdout</text>
 </g>
 <g class="layer layer-73">
-<text x="8" y="53" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.com</text>
+<text x="8" y="53" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.com</text>
 </g>
 <g class="layer layer-74">
-<text x="8" y="78" fill="#7e8e50" font-weight="normal">HTTP/1.1 301 Moved Permanently</text>
+<text x="8" y="78" fill="#7e8e50" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">HTTP/1.1 301 Moved Permanently</text>
 </g>
 <g class="layer layer-75">
-<text x="8" y="103" fill="#505050" font-weight="normal">Location: https://www.google.com/</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="409.2" lengthAdjust="spacingAndGlyphs">Location: https://www.google.com/</text>
 </g>
 <g class="layer layer-76">
-<text x="8" y="128" fill="#505050" font-weight="normal">Content-Type: text/html; charset=UTF-8</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Content-Type: text/html; charset=UTF-8</text>
 </g>
 <g class="layer layer-77">
-<text x="8" y="153" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-78">
-<text x="8" y="178" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-79">
-<text x="8" y="203" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-80">
-<text x="8" y="228" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-81">
-<text x="8" y="253" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-82">
-<text x="8" y="278" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-83">
-<text x="8" y="303" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-84">
-<text x="8" y="328" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="328" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-85">
-<text x="8" y="353" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="353" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-86">
-<text x="8" y="378" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="378" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-87">
-<text x="8" y="403" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="403" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-88">
-<text x="8" y="428" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="428" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-89">
-<text x="32.8" y="478" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="478" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-90">
-<text x="417.2" y="503" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="503" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-91">
-<text x="32.8" y="553" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="553" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-92">
-<text x="32.8" y="578" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="578" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-93">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-94">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ e</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ e</text>
 </g>
 <g class="layer layer-95">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ec</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ ec</text>
 </g>
 <g class="layer layer-96">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ech</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ ech</text>
 </g>
 <g class="layer layer-97">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ echo</text>
 </g>
 <g class="layer layer-98">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;</text>
 </g>
 <g class="layer layer-99">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;W</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;W</text>
 </g>
 <g class="layer layer-100">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wa</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="124" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wa</text>
 </g>
 <g class="layer layer-101">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wai</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wai</text>
 </g>
 <g class="layer layer-102">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait</text>
 </g>
 <g class="layer layer-103">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait f</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait f</text>
 </g>
 <g class="layer layer-104">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait fo</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="186" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait fo</text>
 </g>
 <g class="layer layer-105">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for</text>
 </g>
 <g class="layer layer-106">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2</text>
 </g>
 <g class="layer layer-107">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 s</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 s</text>
 </g>
 <g class="layer layer-108">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 se</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 se</text>
 </g>
 <g class="layer layer-109">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 sec</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="272.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 sec</text>
 </g>
 <g class="layer layer-110">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seco</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="285.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seco</text>
 </g>
 <g class="layer layer-111">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 secon</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 secon</text>
 </g>
 <g class="layer layer-112">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 second</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="310" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 second</text>
 </g>
 <g class="layer layer-113">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="322.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds</text>
 </g>
 <g class="layer layer-114">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds.</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds.</text>
 </g>
 <g class="layer layer-115">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds..</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds..</text>
 </g>
 <g class="layer layer-116">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="359.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-117">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-118">
-<text x="8" y="28" fill="#d0d0d0" font-weight="normal">$ curl -I https://google.com</text>
+<text x="8" y="28" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ curl -I https://google.com</text>
 </g>
 <g class="layer layer-119">
-<text x="8" y="53" fill="#7e8e50" font-weight="normal">HTTP/1.1 301 Moved Permanently</text>
+<text x="8" y="53" fill="#7e8e50" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">HTTP/1.1 301 Moved Permanently</text>
 </g>
 <g class="layer layer-120">
-<text x="8" y="78" fill="#505050" font-weight="normal">Location: https://www.google.com/</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="409.2" lengthAdjust="spacingAndGlyphs">Location: https://www.google.com/</text>
 </g>
 <g class="layer layer-121">
-<text x="8" y="103" fill="#505050" font-weight="normal">Content-Type: text/html; charset=UTF-8</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Content-Type: text/html; charset=UTF-8</text>
 </g>
 <g class="layer layer-122">
-<text x="8" y="128" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-123">
-<text x="8" y="153" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-124">
-<text x="8" y="178" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-125">
-<text x="8" y="203" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-126">
-<text x="8" y="228" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-127">
-<text x="8" y="253" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-128">
-<text x="8" y="278" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-129">
-<text x="8" y="303" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-130">
-<text x="8" y="328" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="328" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-131">
-<text x="8" y="353" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="353" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-132">
-<text x="8" y="378" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="378" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-133">
-<text x="8" y="403" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="403" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-134">
 </g>
 <g class="layer layer-135">
-<text x="32.8" y="453" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="453" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-136">
-<text x="417.2" y="478" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="478" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-137">
 </g>
 <g class="layer layer-138">
-<text x="32.8" y="528" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="528" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-139">
-<text x="32.8" y="553" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="553" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-140">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-141">
 </g>
 <g class="layer layer-142">
-<text x="8" y="28" fill="#7e8e50" font-weight="normal">HTTP/1.1 301 Moved Permanently</text>
+<text x="8" y="28" fill="#7e8e50" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">HTTP/1.1 301 Moved Permanently</text>
 </g>
 <g class="layer layer-143">
-<text x="8" y="53" fill="#505050" font-weight="normal">Location: https://www.google.com/</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="409.2" lengthAdjust="spacingAndGlyphs">Location: https://www.google.com/</text>
 </g>
 <g class="layer layer-144">
-<text x="8" y="78" fill="#505050" font-weight="normal">Content-Type: text/html; charset=UTF-8</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Content-Type: text/html; charset=UTF-8</text>
 </g>
 <g class="layer layer-145">
-<text x="8" y="103" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-146">
-<text x="8" y="128" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-147">
-<text x="8" y="153" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-148">
-<text x="8" y="178" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-149">
-<text x="8" y="203" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-150">
-<text x="8" y="228" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-151">
-<text x="8" y="253" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-152">
-<text x="8" y="278" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-153">
-<text x="8" y="303" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-154">
-<text x="8" y="328" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="328" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-155">
-<text x="8" y="353" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="353" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-156">
-<text x="8" y="378" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="378" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-157">
 </g>
 <g class="layer layer-158">
-<text x="32.8" y="428" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="428" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-159">
-<text x="417.2" y="453" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="453" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-160">
 </g>
 <g class="layer layer-161">
-<text x="32.8" y="503" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="503" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-162">
-<text x="32.8" y="528" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="528" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-163">
-<text x="8" y="553" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="553" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-164">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-165">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-166">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ s</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ s</text>
 </g>
 <g class="layer layer-167">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ sl</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ sl</text>
 </g>
 <g class="layer layer-168">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ sle</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ sle</text>
 </g>
 <g class="layer layer-169">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ slee</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ slee</text>
 </g>
 <g class="layer layer-170">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ sleep</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="86.8" lengthAdjust="spacingAndGlyphs">$ sleep</text>
 </g>
 <g class="layer layer-171">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-172">
-<text x="8" y="28" fill="#505050" font-weight="normal">Location: https://www.google.com/</text>
+<text x="8" y="28" fill="#505050" font-weight="normal" textLength="409.2" lengthAdjust="spacingAndGlyphs">Location: https://www.google.com/</text>
 </g>
 <g class="layer layer-173">
-<text x="8" y="53" fill="#505050" font-weight="normal">Content-Type: text/html; charset=UTF-8</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Content-Type: text/html; charset=UTF-8</text>
 </g>
 <g class="layer layer-174">
-<text x="8" y="78" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-175">
-<text x="8" y="103" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-176">
-<text x="8" y="128" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-177">
-<text x="8" y="153" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-178">
-<text x="8" y="178" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-179">
-<text x="8" y="203" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-180">
-<text x="8" y="228" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-181">
-<text x="8" y="253" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-182">
-<text x="8" y="278" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-183">
-<text x="8" y="303" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-184">
-<text x="8" y="328" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="328" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-185">
-<text x="8" y="353" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="353" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-186">
 </g>
 <g class="layer layer-187">
-<text x="32.8" y="403" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="403" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-188">
-<text x="417.2" y="428" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="428" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-189">
 </g>
 <g class="layer layer-190">
-<text x="32.8" y="478" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="478" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-191">
-<text x="32.8" y="503" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="503" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-192">
-<text x="8" y="528" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="528" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-193">
-<text x="8" y="553" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="553" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-194">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-195">
 </g>
 <g class="layer layer-196">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-197">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ e</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ e</text>
 </g>
 <g class="layer layer-198">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ec</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ ec</text>
 </g>
 <g class="layer layer-199">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ech</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ ech</text>
 </g>
 <g class="layer layer-200">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ echo</text>
 </g>
 <g class="layer layer-201">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;</text>
 </g>
 <g class="layer layer-202">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;s</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;s</text>
 </g>
 <g class="layer layer-203">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;st</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="124" lengthAdjust="spacingAndGlyphs">$ echo &quot;st</text>
 </g>
 <g class="layer layer-204">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;std</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;std</text>
 </g>
 <g class="layer layer-205">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stde</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;stde</text>
 </g>
 <g class="layer layer-206">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stder</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stder</text>
 </g>
 <g class="layer layer-207">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr</text>
 </g>
 <g class="layer layer-208">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr o</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr o</text>
 </g>
 <g class="layer layer-209">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr ou</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="210.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr ou</text>
 </g>
 <g class="layer layer-210">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr out</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="223.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr out</text>
 </g>
 <g class="layer layer-211">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr outp</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr outp</text>
 </g>
 <g class="layer layer-212">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr outpu</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr outpu</text>
 </g>
 <g class="layer layer-213">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output</text>
 </g>
 <g class="layer layer-214">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output i</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="285.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output i</text>
 </g>
 <g class="layer layer-215">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is</text>
 </g>
 <g class="layer layer-216">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is r</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="322.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is r</text>
 </g>
 <g class="layer layer-217">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is re</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is re</text>
 </g>
 <g class="layer layer-218">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red</text>
 </g>
 <g class="layer layer-219">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red b</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red b</text>
 </g>
 <g class="layer layer-220">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="384.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by</text>
 </g>
 <g class="layer layer-221">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by d</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="409.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by d</text>
 </g>
 <g class="layer layer-222">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by de</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="421.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by de</text>
 </g>
 <g class="layer layer-223">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by def</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by def</text>
 </g>
 <g class="layer layer-224">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by defa</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="446.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by defa</text>
 </g>
 <g class="layer layer-225">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by defau</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="458.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by defau</text>
 </g>
 <g class="layer layer-226">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by defaul</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by defaul</text>
 </g>
 <g class="layer layer-227">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="483.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default</text>
 </g>
 <g class="layer layer-228">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="496" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot;</text>
 </g>
 <g class="layer layer-229">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="520.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1</text>
 </g>
 <g class="layer layer-230">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="533.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;</text>
 </g>
 <g class="layer layer-231">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;</text>
 </g>
 <g class="layer layer-232">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="558" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
 </g>
 <g class="layer layer-233">
-<text x="8" y="28" fill="#505050" font-weight="normal">Content-Type: text/html; charset=UTF-8</text>
+<text x="8" y="28" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Content-Type: text/html; charset=UTF-8</text>
 </g>
 <g class="layer layer-234">
-<text x="8" y="53" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-235">
-<text x="8" y="78" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-236">
-<text x="8" y="103" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-237">
-<text x="8" y="128" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-238">
-<text x="8" y="153" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-239">
-<text x="8" y="178" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-240">
-<text x="8" y="203" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-241">
-<text x="8" y="228" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-242">
-<text x="8" y="253" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-243">
-<text x="8" y="278" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-244">
-<text x="8" y="303" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-245">
-<text x="8" y="328" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="328" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-246">
 </g>
 <g class="layer layer-247">
-<text x="32.8" y="378" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="378" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-248">
-<text x="417.2" y="403" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="403" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-249">
 </g>
 <g class="layer layer-250">
-<text x="32.8" y="453" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="453" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-251">
-<text x="32.8" y="478" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="478" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-252">
-<text x="8" y="503" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="503" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-253">
-<text x="8" y="528" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="528" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-254">
-<text x="8" y="553" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="553" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-255">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="558" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
 </g>
 <g class="layer layer-256">
 </g>
 <g class="layer layer-257">
-<text x="8" y="28" fill="#505050" font-weight="normal">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
+<text x="8" y="28" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-sr</text>
 </g>
 <g class="layer layer-258">
-<text x="8" y="53" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-259">
-<text x="8" y="78" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-260">
-<text x="8" y="103" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-261">
-<text x="8" y="128" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-262">
-<text x="8" y="153" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-263">
-<text x="8" y="178" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-264">
-<text x="8" y="203" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-265">
-<text x="8" y="228" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-266">
-<text x="8" y="253" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-267">
-<text x="8" y="278" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-268">
-<text x="8" y="303" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="303" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-269">
 </g>
 <g class="layer layer-270">
-<text x="32.8" y="353" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="353" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-271">
-<text x="417.2" y="378" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="378" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-272">
 </g>
 <g class="layer layer-273">
-<text x="32.8" y="428" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="428" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-274">
-<text x="32.8" y="453" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="453" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-275">
-<text x="8" y="478" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="478" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-276">
-<text x="8" y="503" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="503" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-277">
-<text x="8" y="528" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="528" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-278">
-<text x="8" y="553" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
+<text x="8" y="553" fill="#d0d0d0" font-weight="normal" textLength="558" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
 </g>
 <g class="layer layer-279">
-<text x="8" y="578" fill="#ac4142" font-weight="normal">stderr output is red by default</text>
+<text x="8" y="578" fill="#ac4142" font-weight="normal" textLength="384.4" lengthAdjust="spacingAndGlyphs">stderr output is red by default</text>
 </g>
 <g class="layer layer-280">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 <g class="layer layer-281">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ e</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">$ e</text>
 </g>
 <g class="layer layer-282">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ec</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacingAndGlyphs">$ ec</text>
 </g>
 <g class="layer layer-283">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ ech</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">$ ech</text>
 </g>
 <g class="layer layer-284">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="74.4" lengthAdjust="spacingAndGlyphs">$ echo</text>
 </g>
 <g class="layer layer-285">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;</text>
 </g>
 <g class="layer layer-286">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;D</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;D</text>
 </g>
 <g class="layer layer-287">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Do</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="124" lengthAdjust="spacingAndGlyphs">$ echo &quot;Do</text>
 </g>
 <g class="layer layer-288">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Don</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">$ echo &quot;Don</text>
 </g>
 <g class="layer layer-289">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Done</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacingAndGlyphs">$ echo &quot;Done</text>
 </g>
 <g class="layer layer-290">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Done!</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="161.2" lengthAdjust="spacingAndGlyphs">$ echo &quot;Done!</text>
 </g>
 <g class="layer layer-291">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$ echo &quot;Done!&quot;</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Done!&quot;</text>
 </g>
 <g class="layer layer-292">
-<text x="8" y="28" fill="#505050" font-weight="normal">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
+<text x="8" y="28" fill="#505050" font-weight="normal" textLength="979.6" lengthAdjust="spacingAndGlyphs">c 'nonce-0UoT_NKcB71BNGmf2Zdo_w' 'strict-dynamic' 'report-sample' 'unsafe-eval'</text>
 </g>
 <g class="layer layer-293">
-<text x="8" y="53" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-294">
-<text x="8" y="78" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-295">
-<text x="8" y="103" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-296">
-<text x="8" y="128" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-297">
-<text x="8" y="153" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-298">
-<text x="8" y="178" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-299">
-<text x="8" y="203" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-300">
-<text x="8" y="228" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-301">
-<text x="8" y="253" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-302">
-<text x="8" y="278" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="278" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-303">
 </g>
 <g class="layer layer-304">
-<text x="32.8" y="328" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="328" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-305">
-<text x="417.2" y="353" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="353" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-306">
 </g>
 <g class="layer layer-307">
-<text x="32.8" y="403" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="403" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-308">
-<text x="32.8" y="428" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="428" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-309">
-<text x="8" y="453" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="453" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-310">
-<text x="8" y="478" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="478" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-311">
-<text x="8" y="503" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="503" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-312">
-<text x="8" y="528" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
+<text x="8" y="528" fill="#d0d0d0" font-weight="normal" textLength="558" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
 </g>
 <g class="layer layer-313">
-<text x="8" y="553" fill="#ac4142" font-weight="normal">stderr output is red by default</text>
+<text x="8" y="553" fill="#ac4142" font-weight="normal" textLength="384.4" lengthAdjust="spacingAndGlyphs">stderr output is red by default</text>
 </g>
 <g class="layer layer-314">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">$ echo &quot;Done!&quot;</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Done!&quot;</text>
 </g>
 <g class="layer layer-315">
 </g>
 <g class="layer layer-316">
-<text x="8" y="28" fill="#505050" font-weight="normal">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
+<text x="8" y="28" fill="#505050" font-weight="normal" textLength="992" lengthAdjust="spacingAndGlyphs">'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other</text>
 </g>
 <g class="layer layer-317">
-<text x="8" y="53" fill="#505050" font-weight="normal">-hp</text>
+<text x="8" y="53" fill="#505050" font-weight="normal" textLength="37.2" lengthAdjust="spacingAndGlyphs">-hp</text>
 </g>
 <g class="layer layer-318">
-<text x="8" y="78" fill="#505050" font-weight="normal">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
+<text x="8" y="78" fill="#505050" font-weight="normal" textLength="434" lengthAdjust="spacingAndGlyphs">Date: Thu, 18 Jun 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-319">
-<text x="8" y="103" fill="#505050" font-weight="normal">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
+<text x="8" y="103" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Expires: Sat, 18 Jul 2026 09:29:15 GMT</text>
 </g>
 <g class="layer layer-320">
-<text x="8" y="128" fill="#505050" font-weight="normal">Cache-Control: public, max-age=2592000</text>
+<text x="8" y="128" fill="#505050" font-weight="normal" textLength="471.2" lengthAdjust="spacingAndGlyphs">Cache-Control: public, max-age=2592000</text>
 </g>
 <g class="layer layer-321">
-<text x="8" y="153" fill="#505050" font-weight="normal">Server: gws</text>
+<text x="8" y="153" fill="#505050" font-weight="normal" textLength="136.4" lengthAdjust="spacingAndGlyphs">Server: gws</text>
 </g>
 <g class="layer layer-322">
-<text x="8" y="178" fill="#505050" font-weight="normal">Content-Length: 220</text>
+<text x="8" y="178" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">Content-Length: 220</text>
 </g>
 <g class="layer layer-323">
-<text x="8" y="203" fill="#505050" font-weight="normal">X-XSS-Protection: 0</text>
+<text x="8" y="203" fill="#505050" font-weight="normal" textLength="235.6" lengthAdjust="spacingAndGlyphs">X-XSS-Protection: 0</text>
 </g>
 <g class="layer layer-324">
-<text x="8" y="228" fill="#505050" font-weight="normal">X-Frame-Options: SAMEORIGIN</text>
+<text x="8" y="228" fill="#505050" font-weight="normal" textLength="334.8" lengthAdjust="spacingAndGlyphs">X-Frame-Options: SAMEORIGIN</text>
 </g>
 <g class="layer layer-325">
-<text x="8" y="253" fill="#505050" font-weight="normal">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
+<text x="8" y="253" fill="#505050" font-weight="normal" textLength="682" lengthAdjust="spacingAndGlyphs">Alt-Svc: h3=&quot;:443&quot;; ma=2592000,h3-29=&quot;:443&quot;; ma=2592000</text>
 </g>
 <g class="layer layer-326">
 </g>
 <g class="layer layer-327">
-<text x="32.8" y="303" fill="#ac4142" font-weight="normal">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
+<text x="32.8" y="303" fill="#ac4142" font-weight="normal" textLength="954.8" lengthAdjust="spacingAndGlyphs">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</text>
 </g>
 <g class="layer layer-328">
-<text x="417.2" y="328" fill="#ac4142" font-weight="normal">Dload  Upload   Total   Spent    Left  Speed</text>
+<text x="417.2" y="328" fill="#ac4142" font-weight="normal" textLength="545.6" lengthAdjust="spacingAndGlyphs">Dload  Upload   Total   Spent    Left  Speed</text>
 </g>
 <g class="layer layer-329">
 </g>
 <g class="layer layer-330">
-<text x="32.8" y="378" fill="#ac4142" font-weight="normal">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="378" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-331">
-<text x="32.8" y="403" fill="#ac4142" font-weight="normal">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
+<text x="32.8" y="403" fill="#ac4142" font-weight="normal" textLength="942.4" lengthAdjust="spacingAndGlyphs">0   220    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</text>
 </g>
 <g class="layer layer-332">
-<text x="8" y="428" fill="#d0d0d0" font-weight="normal">$ echo &quot;Wait for 2 seconds...&quot;</text>
+<text x="8" y="428" fill="#d0d0d0" font-weight="normal" textLength="372" lengthAdjust="spacingAndGlyphs">$ echo &quot;Wait for 2 seconds...&quot;</text>
 </g>
 <g class="layer layer-333">
-<text x="8" y="453" fill="#d0d0d0" font-weight="normal">Wait for 2 seconds...</text>
+<text x="8" y="453" fill="#d0d0d0" font-weight="normal" textLength="260.4" lengthAdjust="spacingAndGlyphs">Wait for 2 seconds...</text>
 </g>
 <g class="layer layer-334">
-<text x="8" y="478" fill="#d0d0d0" font-weight="normal">$ sleep 2</text>
+<text x="8" y="478" fill="#d0d0d0" font-weight="normal" textLength="111.6" lengthAdjust="spacingAndGlyphs">$ sleep 2</text>
 </g>
 <g class="layer layer-335">
-<text x="8" y="503" fill="#d0d0d0" font-weight="normal">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
+<text x="8" y="503" fill="#d0d0d0" font-weight="normal" textLength="558" lengthAdjust="spacingAndGlyphs">$ echo &quot;stderr output is red by default&quot; 1&gt;&amp;2</text>
 </g>
 <g class="layer layer-336">
-<text x="8" y="528" fill="#ac4142" font-weight="normal">stderr output is red by default</text>
+<text x="8" y="528" fill="#ac4142" font-weight="normal" textLength="384.4" lengthAdjust="spacingAndGlyphs">stderr output is red by default</text>
 </g>
 <g class="layer layer-337">
-<text x="8" y="553" fill="#d0d0d0" font-weight="normal">$ echo &quot;Done!&quot;</text>
+<text x="8" y="553" fill="#d0d0d0" font-weight="normal" textLength="173.6" lengthAdjust="spacingAndGlyphs">$ echo &quot;Done!&quot;</text>
 </g>
 <g class="layer layer-338">
-<text x="8" y="578" fill="#d0d0d0" font-weight="normal">Done!</text>
+<text x="8" y="578" fill="#d0d0d0" font-weight="normal" textLength="62" lengthAdjust="spacingAndGlyphs">Done!</text>
 </g>
 <g class="layer layer-339">
-<text x="8" y="603" fill="#d0d0d0" font-weight="normal">$</text>
+<text x="8" y="603" fill="#d0d0d0" font-weight="normal" textLength="12.4" lengthAdjust="spacingAndGlyphs">$</text>
 </g>
 </svg>
