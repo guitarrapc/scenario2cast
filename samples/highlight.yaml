@@ -37,3 +37,8 @@ steps:
     highlight:
       - color: "fg:196 bg:235"
         at: "1"
+  - name: true color highlight
+    run: printf 'true color\n'
+    highlight:
+      - color: "fg:#ff8c00 bg:#282828"
+        at: "1"

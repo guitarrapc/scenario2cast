@@ -580,11 +580,42 @@ internal sealed class TerminalEmulator
 
         if (mode == 2)
         {
-            index += Math.Min(4, codes.Count - index - 1);
-            WarnOnce(
-                "true-color",
-                "Warning: svg: true-color SGR (38;2/48;2) is not supported; using default colors");
-            return false;
+            if (index + 4 >= codes.Count)
+            {
+                index += Math.Min(4, codes.Count - index - 1);
+                WarnOnce(
+                    "invalid-true-color",
+                    "Warning: svg: true-color SGR is missing RGB components; using default colors");
+                return false;
+            }
+
+            var r = codes[index + 2];
+            var g = codes[index + 3];
+            var b = codes[index + 4];
+            index += 4;
+            if (r is < 0 or > 255 || g is < 0 or > 255 || b is < 0 or > 255)
+            {
+                WarnOnce(
+                    "invalid-true-color",
+                    "Warning: svg: true-color RGB value is out of range; using default colors");
+                return false;
+            }
+
+            var hex = AnsiTrueColor.ToHex(r, g, b);
+            if (isBackground)
+            {
+                _style = _style with { Background = hex };
+            }
+            else
+            {
+                _style = _style with
+                {
+                    Foreground = hex,
+                    ForegroundIsBright = true,
+                };
+            }
+
+            return true;
         }
 
         index += 1;
@@ -715,6 +746,12 @@ internal sealed class TerminalEmulator
 internal readonly record struct AnsiStyle(string Foreground, string? Background, bool Bold, bool Underline, bool ForegroundIsBright)
 {
     public static AnsiStyle Default(string fg) => new(fg, null, false, false, false);
+}
+
+internal static class AnsiTrueColor
+{
+    internal static string ToHex(int r, int g, int b) =>
+        string.Create(CultureInfo.InvariantCulture, $"#{r:x2}{g:x2}{b:x2}");
 }
 
 internal static class Ansi256
