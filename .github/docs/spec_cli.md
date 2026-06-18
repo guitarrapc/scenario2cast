@@ -37,7 +37,7 @@ Subcommands accept `-h` / `--help` for subcommand-specific usage.
 |---|---|---|
 | `--verbose` | scenario path only | Show successful `pre`/`post` labels and phase markers. See [spec_pre_post.md](spec_pre_post.md). |
 | `--format cast\|svg` | scenario path only | Default `cast`. `svg` also writes `.svg`. See [spec_svg.md](spec_svg.md). |
-| `--font-size N` | scenario, `svg` | `1`–`128`. Scenario path: overrides `render.font-size` in the written cast header and SVG. `svg`: render-only override (CLI > cast header > default `16`). |
+| `--font-size N` | scenario, `svg` | `1`–`128`. Scenario path: overrides `render.font-size` in the written cast header (`s2c:font-size` tag) and SVG. `svg`: render-only override (CLI > cast header > default `16`). |
 | `--theme dark\|light` | scenario, `svg` | Scenario path: overrides `render.theme.preset`; YAML `fg` / `bg` / `palette` still merge; cast header stores resolved hex. `svg`: render-only override (CLI > cast header > default `dark`). |
 
 `init` accepts only an optional output path positional; no other flags.

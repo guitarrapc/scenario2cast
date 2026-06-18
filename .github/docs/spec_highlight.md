@@ -4,7 +4,7 @@ Status: **Implemented**
 
 ## Motivation
 
-scenario2cast executes commands and writes asciinema v2 cast output. In non-TTY execution, many CLI tools stop emitting ANSI colors, so demos can look flat even when rendered by [agg](https://docs.asciinema.org/manual/agg/).
+scenario2cast executes commands and writes asciinema v3 cast output. In non-TTY execution, many CLI tools stop emitting ANSI colors, so demos can look flat even when rendered by [agg](https://docs.asciinema.org/manual/agg/).
 
 This spec defines declarative coloring controls that keep demos readable without depending on each tool's TTY/color options.
 
@@ -29,7 +29,7 @@ This spec defines declarative coloring controls that keep demos readable without
 - String-form step coloring defaults (for example `- echo "foo"`).
 - `settings` defaults for `highlight` ranges.
 - Regex selectors.
-- Terminal theme control (`theme` in cast header). See [spec_scenario.md](spec_scenario.md) `render.theme` and [spec_svg.md](spec_svg.md).
+- Terminal theme control (`term.theme` in cast header). See [spec_scenario.md](spec_scenario.md) `render.theme` and [spec_svg.md](spec_svg.md).
 - Relative indices (for example `-1` = last line).
 
 ## Coloring Targets
@@ -252,7 +252,7 @@ steps:
 - [spec_scenario.md](spec_scenario.md) — YAML key placement and defaults.
 - [spec_cli.md](spec_cli.md) — CLI logging and warning delivery.
 - [spec_svg.md](spec_svg.md) — terminal theme and SVG rendering.
-- [asciicast v2](https://docs.asciinema.org/manual/asciicast/v2/) — cast event format.
+- [asciicast v3](https://docs.asciinema.org/manual/asciicast/v3/) — cast event format.
 - [agg usage](https://docs.asciinema.org/manual/agg/usage/) — rendering and theme options.
 
 ## Changelog

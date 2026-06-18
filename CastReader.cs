@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 internal sealed class CastReadException : Exception
 {
@@ -15,6 +16,10 @@ internal readonly record struct CastRecording(
 
 internal static class CastReader
 {
+    private static readonly Regex FontSizeTagRegex = new(
+        "^s2c:font-size=(\\d+)$",
+        RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
     internal static CastRecording Read(string castPath)
     {
         var lines = File.ReadAllLines(castPath, Encoding.UTF8);
@@ -25,29 +30,31 @@ internal static class CastReader
         if (headerLine.Length == 0)
             throw new CastReadException("cast header is missing");
 
+        if (headerLine.StartsWith('#'))
+            throw new CastReadException("cast header is missing");
+
         using var headerDoc = ParseJsonOrThrow(headerLine, 1);
         var header = headerDoc.RootElement;
 
         if (!header.TryGetProperty("version", out var versionElement) ||
             !versionElement.TryGetInt32(out var version) ||
-            version != 2)
+            version is not (2 or 3))
         {
-            throw new CastReadException("cast version must be 2");
+            throw new CastReadException("cast version must be 2 or 3");
         }
 
-        if (!TryReadPositiveInt(header, "width", out var width))
-            throw new CastReadException("cast header is missing width");
-
-        if (!TryReadPositiveInt(header, "height", out var height))
-            throw new CastReadException("cast header is missing height");
+        if (!TryReadTerminalSize(header, version, out var width, out var height))
+            throw new CastReadException("cast header is missing terminal size");
 
         if (!RenderSettingsResolver.IsValidTerminalSize(width, height))
             throw new CastReadException(
-                $"cast header width and height must be {RenderSettingsResolver.MinTerminalCols}–{RenderSettingsResolver.MaxTerminalCols}");
+                $"cast terminal size must be {RenderSettingsResolver.MinTerminalCols}–{RenderSettingsResolver.MaxTerminalCols}");
 
-        var renderSettings = CastReader.ResolveFromCastHeader(header);
+        var renderSettings = ResolveFromCastHeader(header, version);
         var events = new List<CastEvent>();
         var warnedCodes = new HashSet<string>(StringComparer.Ordinal);
+        var usesRelativeTime = version == 3;
+        var absoluteTime = 0.0;
 
         for (var i = 1; i < lines.Length; i++)
         {
@@ -55,57 +62,125 @@ internal static class CastReader
             if (line.Length == 0)
                 continue;
 
+            if (line.StartsWith('#'))
+                continue;
+
             if (!TryParseEventLine(line, i + 1, warnedCodes, out var ev))
                 throw new CastReadException($"invalid cast event at line {i + 1}");
 
-            if (ev.HasValue)
-                events.Add(ev.Value);
+            if (!ev.HasValue)
+                continue;
+
+            var parsed = ev.Value;
+            if (usesRelativeTime)
+            {
+                absoluteTime += parsed.Time;
+                parsed = parsed with { Time = absoluteTime };
+            }
+
+            events.Add(parsed);
         }
 
         return new CastRecording(width, height, renderSettings, events);
     }
 
-    internal static ResolvedRenderSettings ResolveFromCastHeader(JsonElement header)
+    internal static ResolvedRenderSettings ResolveFromCastHeader(JsonElement header, int version)
     {
         var fontSize = RenderSettingsResolver.DefaultFontSize;
-        if (header.TryGetProperty("scenario2cast", out var extension) &&
-            extension.ValueKind == JsonValueKind.Object &&
-            extension.TryGetProperty("font-size", out var fontSizeElement) &&
-            fontSizeElement.TryGetInt32(out var parsed) &&
-            parsed is >= RenderSettingsResolver.MinFontSize and <= RenderSettingsResolver.MaxFontSize)
+        if (version == 3)
+            fontSize = TryParseFontSizeFromTags(header) ?? fontSize;
+
+        var themeElement = version == 3
+            ? header.TryGetProperty("term", out var term) &&
+              term.ValueKind == JsonValueKind.Object &&
+              term.TryGetProperty("theme", out var termTheme)
+                ? termTheme
+                : default
+            : header.TryGetProperty("theme", out var topTheme)
+                ? topTheme
+                : default;
+
+        var (fg, bg, palette) = TryParseTheme(themeElement);
+        return new ResolvedRenderSettings(fontSize, new ResolvedTheme(fg, bg, palette));
+    }
+
+    private static bool TryReadTerminalSize(JsonElement header, int version, out int width, out int height)
+    {
+        width = 0;
+        height = 0;
+
+        if (version == 3)
         {
-            fontSize = parsed;
+            if (!header.TryGetProperty("term", out var term) || term.ValueKind != JsonValueKind.Object)
+                return false;
+
+            return TryReadPositiveInt(term, "cols", out width) &&
+                   TryReadPositiveInt(term, "rows", out height);
         }
 
+        return TryReadPositiveInt(header, "width", out width) &&
+               TryReadPositiveInt(header, "height", out height);
+    }
+
+    private static int? TryParseFontSizeFromTags(JsonElement header)
+    {
+        if (!header.TryGetProperty("tags", out var tags) || tags.ValueKind != JsonValueKind.Array)
+            return null;
+
+        foreach (var tag in tags.EnumerateArray())
+        {
+            if (tag.ValueKind != JsonValueKind.String)
+                continue;
+
+            var value = tag.GetString();
+            if (value is null)
+                continue;
+
+            var match = FontSizeTagRegex.Match(value);
+            if (!match.Success)
+                continue;
+
+            if (!int.TryParse(match.Groups[1].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+                continue;
+
+            if (parsed is >= RenderSettingsResolver.MinFontSize and <= RenderSettingsResolver.MaxFontSize)
+                return parsed;
+        }
+
+        return null;
+    }
+
+    private static (string fg, string bg, string palette) TryParseTheme(JsonElement theme)
+    {
         string fg = RenderSettingsResolver.DefaultFg;
         string bg = RenderSettingsResolver.DefaultBg;
         string palette = RenderSettingsResolver.DefaultPalette;
 
-        if (header.TryGetProperty("theme", out var theme) && theme.ValueKind == JsonValueKind.Object)
+        if (theme.ValueKind != JsonValueKind.Object)
+            return (fg, bg, palette);
+
+        if (theme.TryGetProperty("fg", out var fgElement) &&
+            fgElement.ValueKind == JsonValueKind.String &&
+            TryParseHexColor(fgElement.GetString(), out var parsedFg))
         {
-            if (theme.TryGetProperty("fg", out var fgElement) &&
-                fgElement.ValueKind == JsonValueKind.String &&
-                TryParseHexColor(fgElement.GetString(), out var parsedFg))
-            {
-                fg = parsedFg;
-            }
-
-            if (theme.TryGetProperty("bg", out var bgElement) &&
-                bgElement.ValueKind == JsonValueKind.String &&
-                TryParseHexColor(bgElement.GetString(), out var parsedBg))
-            {
-                bg = parsedBg;
-            }
-
-            if (theme.TryGetProperty("palette", out var paletteElement) &&
-                paletteElement.ValueKind == JsonValueKind.String &&
-                TryParsePalette(paletteElement.GetString(), out var parsedPalette))
-            {
-                palette = parsedPalette;
-            }
+            fg = parsedFg;
         }
 
-        return new ResolvedRenderSettings(fontSize, new ResolvedTheme(fg, bg, palette));
+        if (theme.TryGetProperty("bg", out var bgElement) &&
+            bgElement.ValueKind == JsonValueKind.String &&
+            TryParseHexColor(bgElement.GetString(), out var parsedBg))
+        {
+            bg = parsedBg;
+        }
+
+        if (theme.TryGetProperty("palette", out var paletteElement) &&
+            paletteElement.ValueKind == JsonValueKind.String &&
+            TryParsePalette(paletteElement.GetString(), out var parsedPalette))
+        {
+            palette = parsedPalette;
+        }
+
+        return (fg, bg, palette);
     }
 
     private static bool TryReadPositiveInt(JsonElement header, string name, out int value)
@@ -216,6 +291,13 @@ internal static class CastReader
             }
 
             ev = CastEvent.Resize(time, resizeWidth, resizeHeight);
+            return true;
+        }
+
+        if (string.Equals(code, "m", StringComparison.Ordinal) ||
+            string.Equals(code, "x", StringComparison.Ordinal) ||
+            string.Equals(code, "i", StringComparison.Ordinal))
+        {
             return true;
         }
 

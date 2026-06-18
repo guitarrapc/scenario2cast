@@ -129,7 +129,7 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 
 - [spec_pre_post.md](spec_pre_post.md) — `pre`/`post` recording exclusion and failure behavior.
 - [spec_highlight.md](spec_highlight.md) — coloring semantics and style strings.
-- [spec_svg.md](spec_svg.md) — cast header `theme`, SVG renderer.
+- [spec_svg.md](spec_svg.md) — cast header `term.theme` / `tags`, SVG renderer.
 - [spec_cli.md](spec_cli.md) — CLI overrides and `init` command.
 
 ## Lessons Learned

@@ -1,10 +1,11 @@
 ﻿#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
-#:property Version=0.2.0
+#:property Version=0.3.0
 #:property Nullable=enable
 #:property ImplicitUsings=enable
 #:package VYaml@1.3.0
 #:include SvgRender.cs
+#:include CastFormat.cs
 #:include CastReader.cs
 
 using System.Diagnostics;
@@ -23,7 +24,7 @@ const double DefaultPreDelay  = 0.2;
 const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
 const string DefaultStderrColorSpec = "red";
-const string AppVersion = "0.2.0";
+const string AppVersion = "0.3.0";
 const string SgrReset = "\u001b[0m";
 
 if (args.Length < 1)
@@ -542,9 +543,10 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         if (events.Count == 0)
             t += preDelay;
 
-        if (TryFormatNameComment(command.Name, command.Cmd, out var nameLine))
+        if (TryFormatNameComment(command.Name, command.Cmd, out var nameLine, out var nameDisplayText))
         {
             var prefix = NameCommentPrefix(events.Count > 0 ? events[^1].Data : null);
+            events.Add(CastEvent.Marker(Math.Round(t, 6), nameDisplayText));
             events.Add(CastEvent.Output(Math.Round(t, 6), prefix + nameLine));
             t += 0.05;
         }
@@ -777,16 +779,14 @@ static bool ContainsAnsiSgr(string text)
 static string NormalizeNewlines(string s)
     => s.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
 
-static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine)
+static bool TryParseStepName(string? raw, string cmd, out string displayText, out string colorOpen)
 {
-    coloredLine = "";
+    displayText = "";
+    colorOpen = SgrNamed("cyan");
     if (string.IsNullOrWhiteSpace(raw))
         return false;
 
     var value = raw.Trim();
-    var colorOpen = SgrNamed("cyan");
-    string displayText;
-
     if (value.StartsWith('['))
     {
         var close = value.IndexOf(']');
@@ -819,6 +819,16 @@ static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine
         Warn("name", cmd, "empty name text after color prefix");
         return false;
     }
+
+    return true;
+}
+
+static bool TryFormatNameComment(string? raw, string cmd, out string coloredLine, out string displayText)
+{
+    coloredLine = "";
+    displayText = "";
+    if (!TryParseStepName(raw, cmd, out displayText, out var colorOpen))
+        return false;
 
     coloredLine = string.IsNullOrEmpty(colorOpen)
         ? $"# {displayText}\r\n"
@@ -1578,24 +1588,43 @@ static void WriteCast(
     var width = scenario.Width ?? 120;
     var height = scenario.Height ?? 24;
     var title = scenario.Title ?? "";
+    var fontSize = renderSettings.FontSize.ToString(CultureInfo.InvariantCulture);
     writer.WriteLine(
-        $"{{\"version\":2,\"width\":{width},\"height\":{height}" +
+        $"{{\"version\":3,\"term\":{{\"cols\":{width},\"rows\":{height}" +
+        $",\"type\":\"xterm-256color\"" +
+        $",\"theme\":{{\"fg\":{JsonString(renderSettings.Theme.Fg)},\"bg\":{JsonString(renderSettings.Theme.Bg)},\"palette\":{JsonString(renderSettings.Theme.Palette)}}}}}" +
         $",\"timestamp\":{timestamp},\"title\":{JsonString(title)}" +
-        $",\"env\":{{\"SHELL\":{JsonString(shell.EnvValue)},\"TERM\":\"xterm-256color\"}}" +
-        $",\"theme\":{{\"fg\":{JsonString(renderSettings.Theme.Fg)},\"bg\":{JsonString(renderSettings.Theme.Bg)},\"palette\":{JsonString(renderSettings.Theme.Palette)}}}" +
-        $",\"scenario2cast\":{{\"font-size\":{renderSettings.FontSize.ToString(CultureInfo.InvariantCulture)}}}}}");
+        $",\"env\":{{\"SHELL\":{JsonString(shell.EnvValue)}}}" +
+        $",\"tags\":[\"s2c:font-size={fontSize}\"]}}");
 
+    var absoluteTimes = new List<double>(events.Count + 1);
     foreach (var ev in events)
+        absoluteTimes.Add(ev.Time);
+
+    var lastTime = absoluteTimes.Count > 0 ? absoluteTimes[^1] : 0.0;
+    absoluteTimes.Add(lastTime + CastFormat.ExitEventGapSeconds);
+
+    var intervals = CastFormat.ToRelativeIntervals(absoluteTimes);
+    for (var i = 0; i < events.Count; i++)
+        WriteCastEventLine(writer, events[i], intervals[i]);
+
+    writer.WriteLine($"[{CastFormat.FormatInterval(intervals[^1])},\"x\",\"0\"]");
+}
+
+static void WriteCastEventLine(StreamWriter writer, CastEvent ev, double interval)
+{
+    var formattedInterval = CastFormat.FormatInterval(interval);
+    switch (ev.Kind)
     {
-        switch (ev.Kind)
-        {
-            case CastEventKind.Output:
-                writer.WriteLine($"[{ev.Time.ToString("0.######", CultureInfo.InvariantCulture)},\"o\",{JsonString(ev.Data)}]");
-                break;
-            case CastEventKind.Resize:
-                writer.WriteLine($"[{ev.Time.ToString("0.######", CultureInfo.InvariantCulture)},\"r\",{JsonString(ev.Data)}]");
-                break;
-        }
+        case CastEventKind.Output:
+            writer.WriteLine($"[{formattedInterval},\"o\",{JsonString(ev.Data)}]");
+            break;
+        case CastEventKind.Resize:
+            writer.WriteLine($"[{formattedInterval},\"r\",{JsonString(ev.Data)}]");
+            break;
+        case CastEventKind.Marker:
+            writer.WriteLine($"[{formattedInterval},\"m\",{JsonString(ev.Data)}]");
+            break;
     }
 }
 
@@ -1822,7 +1851,7 @@ static string CreateInitialScenarioYaml()
     # cwd: /your/path            # Optional working directory for all steps
     # shell: bash                # Optional shell override: bash, pwsh, powershell, or a path
 
-    # Optional SVG rendering metadata. Written to the cast header and used by --format svg.
+    # Optional SVG rendering metadata. Written to the cast header (v3 tags / term.theme) and used by --format svg.
     # render:
     #   font-size: 16
     #   theme:
@@ -1891,7 +1920,7 @@ static void PrintInitUsage()
 static void PrintSvgUsage()
 {
     Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] [--theme dark|light] <input.cast> [output.svg]");
-    Console.Error.WriteLine("Converts an existing asciinema v2 cast file to animated SVG.");
+    Console.Error.WriteLine("Converts an existing asciinema v2/v3 cast file to animated SVG.");
 }
 
 static void PrintVersion()
@@ -1903,6 +1932,7 @@ enum CastEventKind
 {
     Output,
     Resize,
+    Marker,
 }
 
 readonly record struct CastEvent(
@@ -1916,6 +1946,8 @@ readonly record struct CastEvent(
 
     public static CastEvent Resize(double time, int width, int height) =>
         new(time, CastEventKind.Resize, $"{width}x{height}", width, height);
+
+    public static CastEvent Marker(double time, string label) => new(time, CastEventKind.Marker, label);
 }
 
 enum OutputFormat
