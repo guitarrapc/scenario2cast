@@ -221,7 +221,7 @@ internal static class SvgRender
             if (runBg is not null)
             {
                 sb.AppendLine(CultureInfo.InvariantCulture,
-                    $"<rect x=\"{x:0.##}\" y=\"{Padding + row * lineHeight:0.##}\" width=\"{drawWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
+                    $"<rect x=\"{x:0.##}\" y=\"{Padding + row * lineHeight:0.##}\" width=\"{runLen * charWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
             }
 
             if (visibleLen == 0)
@@ -544,6 +544,7 @@ internal sealed class TerminalEmulator
         {
             if (index + 2 >= codes.Count)
             {
+                index += 1;
                 WarnOnce(
                     "invalid-256-index",
                     "Warning: svg: 256-color SGR is missing an index; using default colors");
@@ -586,6 +587,7 @@ internal sealed class TerminalEmulator
             return false;
         }
 
+        index += 1;
         WarnOnce(
             "unsupported-extended-color",
             $"Warning: svg: unsupported extended color mode {mode}; using default colors");
