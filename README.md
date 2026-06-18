@@ -275,3 +275,9 @@ dotnet run scenario2cast.cs -- svg <scenario.cast> [output.svg]
 # build
 dotnet publish scenario2cast.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None
 ```
+
+regenerate samples cast/svg files:
+
+```bash
+dotnet run samples/regenerate.cs
+```
