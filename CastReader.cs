@@ -41,6 +41,10 @@ internal static class CastReader
         if (!TryReadPositiveInt(header, "height", out var height))
             throw new CastReadException("cast header is missing height");
 
+        if (!RenderSettingsResolver.IsValidTerminalSize(width, height))
+            throw new CastReadException(
+                $"cast header width and height must be {RenderSettingsResolver.MinTerminalCols}–{RenderSettingsResolver.MaxTerminalCols}");
+
         var renderSettings = CastReader.ResolveFromCastHeader(header);
         var events = new List<CastEvent>();
         var warnedCodes = new HashSet<string>(StringComparer.Ordinal);
@@ -235,7 +239,6 @@ internal static class CastReader
         if (!int.TryParse(data.AsSpan(separator + 1), NumberStyles.Integer, CultureInfo.InvariantCulture, out height))
             return false;
 
-        return width is >= RenderSettingsResolver.MinTerminalCols and <= RenderSettingsResolver.MaxTerminalCols &&
-               height is >= RenderSettingsResolver.MinTerminalRows and <= RenderSettingsResolver.MaxTerminalRows;
+        return RenderSettingsResolver.IsValidTerminalSize(width, height);
     }
 }

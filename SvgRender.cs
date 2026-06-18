@@ -259,20 +259,21 @@ internal static class SvgRender
         sb.AppendLine("</style>");
 
         sb.AppendLine("<defs>");
-        sb.AppendLine("<clipPath id=\"viewport-clip\">");
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $"<mask id=\"viewport-mask\" x=\"0\" y=\"0\" width=\"{svgWidth:0.##}\" height=\"{svgHeight:0.##}\" maskUnits=\"userSpaceOnUse\">");
         for (var i = 0; i < viewportLayers.Count; i++)
         {
             var viewport = viewportLayers[i];
             var viewportWidth = ViewportPixelWidth(viewport.Width, charWidth);
             var viewportHeight = ViewportPixelHeight(viewport.Height, lineHeight);
             sb.AppendLine(CultureInfo.InvariantCulture,
-                $"<rect class=\"layer viewport-clip-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\"/>");
+                $"<rect class=\"layer viewport-mask-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"white\"/>");
         }
 
-        sb.AppendLine("</clipPath>");
+        sb.AppendLine("</mask>");
         sb.AppendLine("</defs>");
 
-        sb.AppendLine("<g clip-path=\"url(#viewport-clip)\">");
+        sb.AppendLine("<g mask=\"url(#viewport-mask)\">");
         for (var i = 0; i < viewportLayers.Count; i++)
         {
             var viewport = viewportLayers[i];
@@ -315,7 +316,7 @@ internal static class SvgRender
         string fadeText)
     {
         var showDelay = layer.ShowTime.ToString("0.######", CultureInfo.InvariantCulture);
-        var selector = $".viewport-clip-{index}, .viewport-bg-{index}";
+        var selector = $".viewport-mask-{index}, .viewport-bg-{index}";
 
         if (layer.HideTime is double hideTime)
         {
@@ -1151,6 +1152,11 @@ internal static class RenderSettingsResolver
     internal const int MaxTerminalCols = 512;
     internal const int MinTerminalRows = 1;
     internal const int MaxTerminalRows = 512;
+
+    internal static bool IsValidTerminalSize(int cols, int rows) =>
+        cols is >= MinTerminalCols and <= MaxTerminalCols &&
+        rows is >= MinTerminalRows and <= MaxTerminalRows;
+
     internal const int DefaultFontSize = 16;
     internal static string DefaultFg => ThemePresets.Dark.Fg;
     internal static string DefaultBg => ThemePresets.Dark.Bg;

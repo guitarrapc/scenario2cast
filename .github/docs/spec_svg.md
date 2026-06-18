@@ -79,7 +79,7 @@ The input cast file is read-only. Only `.svg` is written.
 #### Input casts
 
 - Any [asciicast v2](https://docs.asciinema.org/manual/asciicast/v2/) file with `version: 2`.
-- `width` and `height` are required in the cast header.
+- `width` and `height` are required in the cast header (`1`–`512` each).
 - Render metadata comes from the cast header only:
   - `theme` (official header field) when present.
   - `scenario2cast.font-size` when present.
@@ -93,7 +93,7 @@ The input cast file is read-only. Only `.svg` is written.
 
 SVG canvas size is the maximum terminal width and height seen across the cast header and all valid `"r"` events. On shrink, cell content outside the new bounds is discarded.
 
-The SVG `viewBox` uses this maximum size. During playback, an animated viewport clip and matching background rectangle switch to the current terminal size at each resize timestamp, so the visible terminal window grows or shrinks within the fixed coordinate system. Embed with a fixed HTML `width`/`height` and `preserveAspectRatio` (already set on the root `<svg>`) to keep page layout stable.
+The SVG `viewBox` uses this maximum size. During playback, an animated viewport mask and matching background rectangle switch to the current terminal size at each resize timestamp, so the visible terminal window grows or shrinks within the fixed coordinate system. Embed with a fixed HTML `width`/`height` and `preserveAspectRatio` (already set on the root `<svg>`) to keep page layout stable.
 
 #### Failure behavior
 
@@ -102,6 +102,7 @@ The SVG `viewBox` uses this maximum size. During playback, an animated viewport 
 | Cast file not found | Exit non-zero |
 | Invalid header JSON / `version` ≠ 2 | Exit non-zero; no SVG written |
 | Missing `width` or `height` | Exit non-zero; no SVG written |
+| `width` or `height` out of range (`1`–`512`) | Exit non-zero; no SVG written |
 | Invalid event line JSON | Exit non-zero; no SVG written |
 | SVG render failure | Exit non-zero; partial `.svg` deleted |
 | Unsupported event codes | Warning only; continue |

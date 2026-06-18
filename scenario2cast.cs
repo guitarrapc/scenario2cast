@@ -1587,10 +1587,15 @@ static void WriteCast(
 
     foreach (var ev in events)
     {
-        if (ev.Kind != CastEventKind.Output)
-            continue;
-
-        writer.WriteLine($"[{ev.Time.ToString("0.######", CultureInfo.InvariantCulture)},\"o\",{JsonString(ev.Data)}]");
+        switch (ev.Kind)
+        {
+            case CastEventKind.Output:
+                writer.WriteLine($"[{ev.Time.ToString("0.######", CultureInfo.InvariantCulture)},\"o\",{JsonString(ev.Data)}]");
+                break;
+            case CastEventKind.Resize:
+                writer.WriteLine($"[{ev.Time.ToString("0.######", CultureInfo.InvariantCulture)},\"r\",{JsonString(ev.Data)}]");
+                break;
+        }
     }
 }
 
