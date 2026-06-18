@@ -67,7 +67,7 @@ internal static class CastReader
             extension.ValueKind == JsonValueKind.Object &&
             extension.TryGetProperty("font-size", out var fontSizeElement) &&
             fontSizeElement.TryGetInt32(out var parsed) &&
-            parsed > 0)
+            parsed is >= RenderSettingsResolver.MinFontSize and <= RenderSettingsResolver.MaxFontSize)
         {
             fontSize = parsed;
         }
