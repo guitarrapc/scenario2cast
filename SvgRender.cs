@@ -934,6 +934,7 @@ internal static class ThemePresets
 {
     internal const string DarkName = "dark";
     internal const string LightName = "light";
+    internal static string ExpectedPresetNames => $"{DarkName}|{LightName}";
 
     private static readonly ResolvedTheme DarkTheme = new(
         "#d0d0d0",
@@ -975,7 +976,7 @@ internal static class ThemePresets
 
         if (!TryGet(presetName, out _))
         {
-            error = $"unknown theme preset: {presetName}";
+            error = $"unknown theme preset: {presetName} (expected: {ExpectedPresetNames})";
             return false;
         }
 
@@ -1047,7 +1048,7 @@ internal static class RenderSettingsResolver
 
         if (!ThemePresets.TryGet(presetName, out var baseTheme))
         {
-            error = $"unknown theme preset: {presetName}";
+            error = $"unknown theme preset: {presetName} (expected: {ThemePresets.ExpectedPresetNames})";
             return false;
         }
 
@@ -1066,7 +1067,7 @@ internal static class RenderSettingsResolver
         {
             if (!ThemePresets.TryGet(themePresetOverride, out var theme))
             {
-                error = $"unknown theme preset: {themePresetOverride}";
+                error = $"unknown theme preset: {themePresetOverride} (expected: {ThemePresets.ExpectedPresetNames})";
                 return settings;
             }
 

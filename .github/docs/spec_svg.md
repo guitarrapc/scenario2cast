@@ -23,7 +23,7 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - True-color ANSI SGR (`38;2;r;g;b`, `48;2;r;g;b`) with RGB components 0–255 (semicolon and colon forms).
 - Colon-form extended color SGR (`38:5:n`, `48:5:n`, `38:2:r:g:b`, `48:2:r:g:b`); mixed `;` / `:` delimiters in one SGR are normalized for `m` commands.
 - Animated SVG via CSS `animation-delay` row-layer opacity switching.
-- Fixed dark terminal theme when `render.theme` is omitted.
+- Default `dark` theme preset when `render.theme` is omitted.
 - Default `font-size` of 16.
 - CLI `--font-size` override for scenario runs and the `svg` subcommand (`1`–`128`).
 - Block cursor rendering driven by cursor position changes (`theme.fg` at 50% opacity; no blink).
@@ -88,7 +88,7 @@ The input cast file is read-only. Only `.svg` is written.
 - Render metadata comes from the cast header only:
   - `theme` (official header field) when present.
   - `scenario2cast.font-size` when present.
-  - Defaults when absent (`font-size: 16`, fixed dark theme).
+  - Defaults when absent (`font-size: 16`, `dark` preset).
 
 #### Event handling
 
