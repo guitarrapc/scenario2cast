@@ -930,15 +930,68 @@ internal static class Ansi256
         string.Create(CultureInfo.InvariantCulture, $"#{r:x2}{g:x2}{b:x2}");
 }
 
+internal static class ThemePresets
+{
+    internal const string DarkName = "dark";
+    internal const string LightName = "light";
+
+    private static readonly ResolvedTheme DarkTheme = new(
+        "#d0d0d0",
+        "#282c34",
+        "#151515:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#d0d0d0:#505050:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#f5f5f5");
+
+    private static readonly ResolvedTheme LightTheme = new(
+        "#383838",
+        "#fafafa",
+        "#383838:#c82828:#548b2e:#a88800:#2871aa:#9a4a96:#008787:#585858:#686868:#e74c3c:#69a845:#d4a017:#3498db:#c678dd:#20b2aa:#fafafa");
+
+    internal static ResolvedTheme Dark => DarkTheme;
+    internal static ResolvedTheme Light => LightTheme;
+
+    internal static bool TryGet(string name, out ResolvedTheme theme)
+    {
+        switch (name.Trim().ToLowerInvariant())
+        {
+            case DarkName:
+                theme = DarkTheme;
+                return true;
+            case LightName:
+                theme = LightTheme;
+                return true;
+            default:
+                theme = default;
+                return false;
+        }
+    }
+
+    internal static bool TryParse(string text, out string presetName, out string error)
+    {
+        presetName = text.Trim();
+        if (presetName.Length == 0)
+        {
+            error = "--theme requires a value";
+            return false;
+        }
+
+        if (!TryGet(presetName, out _))
+        {
+            error = $"unknown theme preset: {presetName}";
+            return false;
+        }
+
+        error = "";
+        return true;
+    }
+}
+
 internal static class RenderSettingsResolver
 {
     internal const int MinFontSize = 1;
     internal const int MaxFontSize = 128;
     internal const int DefaultFontSize = 16;
-    internal const string DefaultFg = "#d0d0d0";
-    internal const string DefaultBg = "#282c34";
-    internal const string DefaultPalette =
-        "#151515:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#d0d0d0:#505050:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#f5f5f5";
+    internal static string DefaultFg => ThemePresets.Dark.Fg;
+    internal static string DefaultBg => ThemePresets.Dark.Bg;
+    internal static string DefaultPalette => ThemePresets.Dark.Palette;
 
     internal static bool TryParseFontSize(string text, out int fontSize, out string error)
     {
@@ -959,20 +1012,90 @@ internal static class RenderSettingsResolver
         return true;
     }
 
-    internal static ResolvedRenderSettings Resolve(Scenario scenario)
+    internal static bool TryResolve(
+        Scenario scenario,
+        string? cliThemePreset,
+        out ResolvedRenderSettings settings,
+        out string error)
     {
+        settings = default;
+        error = "";
         var render = scenario.Render;
         var fontSize = render?.FontSize ?? DefaultFontSize;
         if (fontSize is < MinFontSize or > MaxFontSize)
             fontSize = DefaultFontSize;
 
-        var theme = render?.Theme;
-        return new ResolvedRenderSettings(
-            fontSize,
-            new ResolvedTheme(
-                string.IsNullOrWhiteSpace(theme?.Fg) ? DefaultFg : theme!.Fg!,
-                string.IsNullOrWhiteSpace(theme?.Bg) ? DefaultBg : theme!.Bg!,
-                string.IsNullOrWhiteSpace(theme?.Palette) ? DefaultPalette : theme!.Palette!));
+        if (!TryResolveTheme(render?.Theme, cliThemePreset, out var theme, out error))
+            return false;
+
+        settings = new ResolvedRenderSettings(fontSize, theme);
+        return true;
+    }
+
+    internal static bool TryResolveTheme(
+        ScenarioTheme? theme,
+        string? cliThemePreset,
+        out ResolvedTheme resolved,
+        out string error)
+    {
+        resolved = default;
+        error = "";
+
+        var presetName = cliThemePreset ?? theme?.Preset;
+        if (string.IsNullOrWhiteSpace(presetName))
+            presetName = ThemePresets.DarkName;
+
+        if (!ThemePresets.TryGet(presetName, out var baseTheme))
+        {
+            error = $"unknown theme preset: {presetName}";
+            return false;
+        }
+
+        resolved = MergeTheme(baseTheme, theme);
+        return true;
+    }
+
+    internal static ResolvedRenderSettings ApplySvgOverrides(
+        ResolvedRenderSettings settings,
+        int? fontSizeOverride,
+        string? themePresetOverride,
+        out string error)
+    {
+        error = "";
+        if (themePresetOverride is not null)
+        {
+            if (!ThemePresets.TryGet(themePresetOverride, out var theme))
+            {
+                error = $"unknown theme preset: {themePresetOverride}";
+                return settings;
+            }
+
+            settings = settings with { Theme = theme };
+        }
+
+        if (fontSizeOverride is int fontSize)
+            settings = settings with { FontSize = fontSize };
+
+        return settings;
+    }
+
+    private static ResolvedTheme MergeTheme(ResolvedTheme baseTheme, ScenarioTheme? overrides)
+    {
+        if (overrides is null)
+            return baseTheme;
+
+        return new ResolvedTheme(
+            string.IsNullOrWhiteSpace(overrides.Fg) ? baseTheme.Fg : overrides.Fg!,
+            string.IsNullOrWhiteSpace(overrides.Bg) ? baseTheme.Bg : overrides.Bg!,
+            string.IsNullOrWhiteSpace(overrides.Palette) ? baseTheme.Palette : overrides.Palette!);
+    }
+
+    internal static ResolvedRenderSettings Resolve(Scenario scenario)
+    {
+        if (!TryResolve(scenario, cliThemePreset: null, out var settings, out var error))
+            throw new InvalidOperationException(error);
+
+        return settings;
     }
 
     internal static string ResolveCastSvgOutputPath(string castPath, string? outputArg)
