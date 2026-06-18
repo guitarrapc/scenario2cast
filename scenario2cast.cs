@@ -71,7 +71,7 @@ if (args[0] is "svg")
         return 0;
     }
 
-    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgFontSize, out var svgError))
+    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgFontSize, out var svgThemePreset, out var svgError))
     {
         Console.Error.WriteLine($"Error: {svgError}");
         PrintSvgUsage();
@@ -91,9 +91,17 @@ if (args[0] is "svg")
     try
     {
         var recording = CastReader.Read(castPath);
-        var svgRenderSettings = svgFontSize is int svgFontSizeValue
-            ? recording.RenderSettings with { FontSize = svgFontSizeValue }
-            : recording.RenderSettings;
+        var svgRenderSettings = RenderSettingsResolver.ApplySvgOverrides(
+            recording.RenderSettings,
+            svgFontSize,
+            svgThemePreset,
+            out var svgOverrideError);
+        if (svgOverrideError.Length != 0)
+        {
+            Console.Error.WriteLine($"Error: {svgOverrideError}");
+            return 1;
+        }
+
         SvgRender.WriteSvg(recording.Events, recording.Width, recording.Height, svgRenderSettings, svgOutputPath);
         var svgDuration = recording.Events.Count > 0 ? recording.Events[^1].Time : 0.0;
         Console.Error.WriteLine($"Written: {svgOutputPath}  ({recording.Events.Count} events, {svgDuration:F1}s)");
@@ -128,7 +136,7 @@ if (args[0] is "-h" or "--help")
     return 0;
 }
 
-if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runFontSize, out var runError))
+if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runFontSize, out var runThemePreset, out var runError))
 {
     Console.Error.WriteLine($"Error: {runError}");
     PrintUsage();
@@ -154,7 +162,13 @@ ScenarioSettings.__RegisterVYamlFormatter();
 ScenarioRender.__RegisterVYamlFormatter();
 ScenarioTheme.__RegisterVYamlFormatter();
 var scenario = ParseScenario(yaml);
-var renderSettings = RenderSettingsResolver.Resolve(scenario);
+if (!RenderSettingsResolver.TryResolve(scenario, runThemePreset, out var renderSettings, out var themeError))
+{
+    Console.Error.WriteLine($"Error: {themeError}");
+    PrintUsage();
+    return 1;
+}
+
 if (runFontSize is int runFontSizeValue)
     renderSettings = renderSettings with { FontSize = runFontSizeValue };
 var deterministicSeed = ComputeDeterministicSeed(yaml);
@@ -240,17 +254,26 @@ static bool TryParseSvgArgs(
     out string castPath,
     out string? outputPath,
     out int? fontSizeOverride,
+    out string? themePresetOverride,
     out string error)
 {
     castPath = "";
     outputPath = null;
     fontSizeOverride = null;
+    themePresetOverride = null;
     error = "";
 
     for (var i = 1; i < args.Length; i++)
     {
         var arg = args[i];
         if (TryConsumeFontSizeArg(args, ref i, ref fontSizeOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
+            continue;
+        }
+
+        if (TryConsumeThemeArg(args, ref i, ref themePresetOverride, out error))
         {
             if (error.Length != 0)
                 return false;
@@ -293,6 +316,7 @@ static bool TryParseRunArgs(
     out OutputFormat outputFormat,
     out bool verbose,
     out int? fontSizeOverride,
+    out string? themePresetOverride,
     out string error)
 {
     scenarioPath = "";
@@ -300,6 +324,7 @@ static bool TryParseRunArgs(
     outputFormat = OutputFormat.Cast;
     verbose = false;
     fontSizeOverride = null;
+    themePresetOverride = null;
     error = "";
 
     for (var i = 0; i < args.Length; i++)
@@ -312,6 +337,13 @@ static bool TryParseRunArgs(
         }
 
         if (TryConsumeFontSizeArg(args, ref i, ref fontSizeOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
+            continue;
+        }
+
+        if (TryConsumeThemeArg(args, ref i, ref themePresetOverride, out error))
         {
             if (error.Length != 0)
                 return false;
@@ -409,6 +441,49 @@ static bool TryConsumeFontSizeArg(string[] args, ref int i, ref int? fontSizeOve
         return true;
 
     fontSizeOverride = parsed;
+    return true;
+}
+
+static bool TryConsumeThemeArg(string[] args, ref int i, ref string? themePresetOverride, out string error)
+{
+    error = "";
+    var arg = args[i];
+    string? value;
+
+    if (arg == "--theme")
+    {
+        if (i + 1 >= args.Length)
+        {
+            error = "--theme requires a value";
+            return true;
+        }
+
+        value = args[++i];
+    }
+    else if (arg.StartsWith("--theme=", StringComparison.Ordinal))
+    {
+        value = arg["--theme=".Length..];
+        if (value.Length == 0)
+        {
+            error = "--theme requires a value";
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if (themePresetOverride is not null)
+    {
+        error = "duplicate option: --theme";
+        return true;
+    }
+
+    if (!ThemePresets.TryParse(value, out var parsed, out error))
+        return true;
+
+    themePresetOverride = parsed;
     return true;
 }
 
@@ -1741,6 +1816,7 @@ static string CreateInitialScenarioYaml()
     # render:
     #   font-size: 16
     #   theme:
+    #     preset: dark
     #     fg: "#d0d0d0"
     #     bg: "#282c34"
 
@@ -1790,8 +1866,8 @@ static string CreateInitialScenarioYaml()
 
 static void PrintUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] [--font-size N] <scenario.yaml> [output]");
-    Console.Error.WriteLine("       scenario2cast svg [--font-size N] <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] [--font-size N] [--theme dark|light] <scenario.yaml> [output]");
+    Console.Error.WriteLine("       scenario2cast svg [--font-size N] [--theme dark|light] <input.cast> [output.svg]");
     Console.Error.WriteLine("       scenario2cast init [scenario.yaml]");
     Console.Error.WriteLine("       scenario2cast --help");
 }
@@ -1804,7 +1880,7 @@ static void PrintInitUsage()
 
 static void PrintSvgUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] [--theme dark|light] <input.cast> [output.svg]");
     Console.Error.WriteLine("Converts an existing asciinema v2 cast file to animated SVG.");
 }
 
@@ -1864,6 +1940,7 @@ public partial class ScenarioRender
 [YamlObject(NamingConvention.KebabCase)]
 public partial class ScenarioTheme
 {
+    public string? Preset { get; set; }
     public string? Fg { get; set; }
     public string? Bg { get; set; }
     public string? Palette { get; set; }

@@ -23,24 +23,24 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - True-color ANSI SGR (`38;2;r;g;b`, `48;2;r;g;b`) with RGB components 0–255 (semicolon and colon forms).
 - Colon-form extended color SGR (`38:5:n`, `48:5:n`, `38:2:r:g:b`, `48:2:r:g:b`); mixed `;` / `:` delimiters in one SGR are normalized for `m` commands.
 - Animated SVG via CSS `animation-delay` row-layer opacity switching.
-- Fixed dark terminal theme when `render.theme` is omitted.
+- Default `dark` theme preset when `render.theme` is omitted.
 - Default `font-size` of 16.
 - CLI `--font-size` override for scenario runs and the `svg` subcommand (`1`–`128`).
 - Block cursor rendering driven by cursor position changes (`theme.fg` at 50% opacity; no blink).
 - DECTCEM cursor visibility (`\e[?25h`, `\e[?25l`).
+- Theme presets `dark` and `light` via `render.theme.preset` or CLI `--theme`.
 - Warning-and-continue for malformed extended color SGR (invalid true-color RGB, invalid 256 index, unknown modes) during SVG rendering.
 - Failure behavior aligned with `pre`/`post`: cast is retained, incomplete SVG is removed, `post` still runs.
 - `svg` subcommand that converts an existing asciinema v2 cast file to SVG.
 
 ### Out of scope (v1)
 
-- Light theme presets beyond user-defined `render.theme`.
 - Resize cast events (`"r"`) during `svg` conversion.
 
 ## CLI Contract
 
 ```bash
-scenario2cast [--verbose] [--format cast|svg] [--font-size N] <scenario.yaml> [output]
+scenario2cast [--verbose] [--format cast|svg] [--font-size N] [--theme dark|light] <scenario.yaml> [output]
 ```
 
 | Invocation | Output |
@@ -54,6 +54,8 @@ scenario2cast [--verbose] [--format cast|svg] [--font-size N] <scenario.yaml> [o
 
 `--font-size` accepts `1`–`128`. On the scenario path it overrides `render.font-size` for the written cast header and any SVG rendered in the same run. Duplicate `--font-size` is an error.
 
+`--theme` selects a built-in preset (`dark` or `light`). On the scenario path it overrides `render.theme.preset`; individual `fg` / `bg` / `palette` keys in YAML still merge on top. The cast header stores resolved hex colors only. Duplicate `--theme` is an error.
+
 When `[output]` is given, the stem is shared; only the extension differs (`.cast` / `.svg`).
 
 `--format cast` is the default and matches existing behavior.
@@ -63,7 +65,7 @@ When `[output]` is given, the stem is shared; only the extension differs (`.cast
 Convert an existing cast file without running a scenario:
 
 ```bash
-scenario2cast svg [--font-size N] <input.cast> [output.svg]
+scenario2cast svg [--font-size N] [--theme dark|light] <input.cast> [output.svg]
 ```
 
 | Invocation | Output |
@@ -77,6 +79,8 @@ The input cast file is read-only. Only `.svg` is written.
 
 `--font-size` overrides the cast header for SVG rendering only; the cast file is not modified. Precedence: CLI > `scenario2cast.font-size` in the cast header > default `16`.
 
+`--theme` overrides the cast header `theme` for SVG rendering only; the cast file is not modified. Precedence: CLI preset > cast header `theme` > default `dark`.
+
 #### Input casts
 
 - Any [asciicast v2](https://docs.asciinema.org/manual/asciicast/v2/) file with `version: 2`.
@@ -84,7 +88,7 @@ The input cast file is read-only. Only `.svg` is written.
 - Render metadata comes from the cast header only:
   - `theme` (official header field) when present.
   - `scenario2cast.font-size` when present.
-  - Defaults when absent (`font-size: 16`, fixed dark theme).
+  - Defaults when absent (`font-size: 16`, `dark` preset).
 
 #### Event handling
 
@@ -134,10 +138,13 @@ height: 24
 render:
   font-size: 16
   theme:
+    preset: dark
     fg: "#d0d0d0"
     bg: "#282c34"
     palette: "#151515:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#d0d0d0:#505050:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#f5f5f5"
 ```
+
+Presets: `dark` (default) and `light`. Set `preset:` to choose a base theme; optional `fg`, `bg`, and `palette` override individual keys.
 
 ### Defaults
 
@@ -146,7 +153,7 @@ When `render` is omitted or partially specified:
 | Key | Default |
 |---|---|
 | `font-size` | `16` |
-| `theme` | Fixed dark theme (`fg`, `bg`, `palette` chosen by scenario2cast) |
+| `theme` | `dark` preset (`fg`, `bg`, `palette`) |
 
 ### Rationale
 
