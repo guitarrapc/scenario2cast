@@ -343,7 +343,7 @@ internal sealed class TerminalEmulator
     private int _cursorY;
     private AnsiStyle _style;
     private AnsiStyle _defaultStyle;
-    private bool _warned256Color;
+    private readonly HashSet<string> _warnedKeys = new(StringComparer.Ordinal);
 
     public TerminalEmulator(int width, int height, ResolvedRenderSettings render)
     {
@@ -509,16 +509,13 @@ internal sealed class TerminalEmulator
                     break;
                 case 38:
                 case 48:
-                    if (TryConsume256Color(codes, ref i, code == 48, out var applied))
+                    if (!TryApplyExtendedColor(codes, ref i, code == 48))
                     {
-                        if (applied)
-                            break;
+                        if (code == 38)
+                            _style = _style with { Foreground = _defaultStyle.Foreground };
+                        else
+                            _style = _style with { Background = null };
                     }
-                    Warn256Color();
-                    if (code == 38)
-                        _style = _style with { Foreground = _defaultStyle.Foreground };
-                    else
-                        _style = _style with { Background = null };
                     break;
                 default:
                     break;
@@ -526,30 +523,75 @@ internal sealed class TerminalEmulator
         }
     }
 
-    private static bool TryConsume256Color(List<int> codes, ref int index, bool isBackground, out bool applied)
+    private bool TryApplyExtendedColor(List<int> codes, ref int index, bool isBackground)
     {
-        applied = false;
         if (index + 1 >= codes.Count)
-            return true;
+        {
+            WarnOnce(
+                "invalid-extended-color",
+                "Warning: svg: extended color SGR is missing a mode; using default colors");
+            return false;
+        }
 
-        if (codes[index + 1] != 5)
-            return true;
+        var mode = codes[index + 1];
+        if (mode == 5)
+        {
+            if (index + 2 >= codes.Count)
+            {
+                WarnOnce(
+                    "invalid-256-index",
+                    "Warning: svg: 256-color SGR is missing an index; using default colors");
+                return false;
+            }
 
-        if (index + 2 >= codes.Count)
-            return true;
+            var colorIndex = codes[index + 2];
+            index += 2;
+            if (colorIndex is < 0 or > 255)
+            {
+                WarnOnce(
+                    "invalid-256-index",
+                    "Warning: svg: 256-color index is out of range; using default colors");
+                return false;
+            }
 
-        index += 2;
-        applied = false;
-        return true;
+            var hex = Ansi256.ToHex(_palette, colorIndex);
+            if (isBackground)
+            {
+                _style = _style with { Background = hex };
+            }
+            else
+            {
+                _style = _style with
+                {
+                    Foreground = hex,
+                    ForegroundIsBright = colorIndex is >= 8 and <= 15,
+                };
+            }
+
+            return true;
+        }
+
+        if (mode == 2)
+        {
+            index += Math.Min(4, codes.Count - index - 1);
+            WarnOnce(
+                "true-color",
+                "Warning: svg: true-color SGR (38;2/48;2) is not supported; using default colors");
+            return false;
+        }
+
+        WarnOnce(
+            "unsupported-extended-color",
+            $"Warning: svg: unsupported extended color mode {mode}; using default colors");
+        return false;
     }
 
-    private void Warn256Color()
+    private void WarnOnce(string key, string message)
     {
-        if (_warned256Color)
+        if (!_warnedKeys.Add(key))
             return;
 
-        _warned256Color = true;
-        Console.Error.WriteLine("Warning: svg: 256-color SGR is not supported in v1; using default colors");
+        Console.Error.WriteLine(message);
     }
 
     private string PaletteColor(int index, bool bright)
@@ -665,6 +707,37 @@ internal sealed class TerminalEmulator
 internal readonly record struct AnsiStyle(string Foreground, string? Background, bool Bold, bool Underline, bool ForegroundIsBright)
 {
     public static AnsiStyle Default(string fg) => new(fg, null, false, false, false);
+}
+
+internal static class Ansi256
+{
+    internal static string ToHex(string[] palette16, int index)
+    {
+        if (index is >= 0 and <= 15)
+        {
+            if ((uint)index < palette16.Length)
+                return palette16[index];
+            return RenderSettingsResolver.DefaultFg;
+        }
+
+        if (index is >= 16 and <= 231)
+        {
+            var n = index - 16;
+            var r = (n / 36) % 6 * 40;
+            var g = (n / 6) % 6 * 40;
+            var b = (n % 6) * 40;
+            if (r > 0) r += 55;
+            if (g > 0) g += 55;
+            if (b > 0) b += 55;
+            return ToHex(r, g, b);
+        }
+
+        var gray = 8 + 10 * (index - 232);
+        return ToHex(gray, gray, gray);
+    }
+
+    private static string ToHex(int r, int g, int b) =>
+        string.Create(CultureInfo.InvariantCulture, $"#{r:x2}{g:x2}{b:x2}");
 }
 
 internal static class RenderSettingsResolver

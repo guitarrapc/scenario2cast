@@ -32,3 +32,8 @@ steps:
   - name: stderr style override with SGR literal
     run: echo "stderr style literal" 1>&2
     stderr-color: "\\e[1;93m"
+  - name: 256-color index highlight
+    run: printf 'indexed color\n'
+    highlight:
+      - color: "fg:196 bg:235"
+        at: "1"

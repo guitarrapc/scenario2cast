@@ -71,3 +71,7 @@ jobs:
           "$binary_path" svg "$output_stem.cast" "$artifact_dir/smoke-from-cast.svg"
 
           test -f "$artifact_dir/smoke-from-cast.svg"
+
+          "$binary_path" svg samples/highlight.cast "$artifact_dir/highlight.svg"
+
+          test -f "$artifact_dir/highlight.svg"

@@ -19,11 +19,12 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - Render metadata is written to the cast header on every run, regardless of `--format`.
 - C# SVG renderer inside scenario2cast (no bundled external binary).
 - 16-color foreground/background ANSI SGR, plus `bold`, `underline`, and `bright`.
+- 256-color ANSI SGR (`38;5;n`, `48;5;n`) using the xterm palette: indices 0–15 from `theme.palette`, 16–231 cube, 232–255 grayscale (same formula as [agg `theme.rs`](https://github.com/asciinema/agg/blob/main/src/theme.rs)).
 - Animated SVG via CSS `animation-delay` row-layer opacity switching.
 - Fixed dark terminal theme when `render.theme` is omitted.
 - Default `font-size` of 16.
 - No cursor rendering in v1.
-- Warning-and-continue for unsupported 256-color SGR (`38;5;n`, `48;5;n`) during SVG rendering.
+- Warning-and-continue for unsupported extended color SGR (`38;2`, `48;2` true color, invalid indices, unknown modes) during SVG rendering.
 - Failure behavior aligned with `pre`/`post`: cast is retained, incomplete SVG is removed, `post` still runs.
 - `svg` subcommand that converts an existing asciinema v2 cast file to SVG.
 
@@ -32,16 +33,19 @@ External tools such as [agg](https://docs.asciinema.org/manual/agg/) (GIF) and [
 - `--format gif` or agg integration.
 - CLI `--font-size` override (use `render.font-size` in YAML or cast header).
 - Cursor display and blink animation.
-- Full 256-color ANSI palette support in the SVG renderer.
+- True-color ANSI SGR (`38;2;r;g;b`, `48;2;r;g;b`).
 - Light theme presets beyond user-defined `render.theme`.
 - SVG output without also writing the cast file (`--format svg` scenario path only; the `svg` subcommand writes SVG only).
 - Resize cast events (`"r"`) during `svg` conversion.
 
 ### Planned for v2+
 
-- 256-color ANSI support in the SVG renderer.
 - CLI `--font-size` override for `scenario2cast svg` (useful for casts without `scenario2cast` header extensions).
 - Cursor rendering.
+
+### Planned for v3+
+
+- True-color ANSI SGR (`38;2`, `48;2`).
 
 ## CLI Contract
 
@@ -189,7 +193,9 @@ Terminal coloring in cast events (`highlight`, `run-highlight`, etc.) is defined
 | 16-color foreground (`30`–`37`, `90`–`97`) | Yes |
 | 16-color background (`40`–`47`, `100`–`107`) | Yes |
 | `bold`, `underline`, `bright` | Yes |
-| 256-color (`38;5;n`, `48;5;n`) | No — render as default `theme.fg` / no background, emit stderr warning |
+| 256-color (`38;5;n`, `48;5;n`) | Yes — palette 0–15 from `theme.palette`; 16–231 xterm cube; 232–255 grayscale |
+| True color (`38;2;r;g;b`, `48;2;r;g;b`) | No — warn once per type; render as default `theme.fg` / no background |
+| Invalid 256 index or malformed extended color | Warn once per type; render as default `theme.fg` / no background |
 
 This matches the warn-and-continue philosophy used elsewhere in scenario2cast (see [spec_highlight.md](spec_highlight.md)).
 
