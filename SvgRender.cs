@@ -6,10 +6,10 @@ internal static class SvgRender
     private const double LineHeightFactor = 1.25;
     private const double CharWidthFactor = 0.62;
     private const double Padding = 8.0;
-    private const double InnerPaddingHorizontalMin = 2.0;
-    private const double InnerPaddingHorizontalMax = 5.0;
-    private const double InnerPaddingVerticalMin = 1.0;
-    private const double InnerPaddingVerticalMax = 2.0;
+    private const double InnerPaddingHorizontalMin = 4.0;
+    private const double InnerPaddingHorizontalMax = 16.0;
+    private const double InnerPaddingVerticalMin = 2.0;
+    private const double InnerPaddingVerticalMax = 8.0;
     private const double LayerFadeSeconds = 0.001;
     private const double CursorBlockOpacity = 0.5;
 
@@ -317,8 +317,8 @@ internal static class SvgRender
 
     private static (double horizontal, double vertical) ResolveInnerPadding(int fontSize)
     {
-        var horizontal = Math.Clamp(fontSize * 5.0 / 16.0, InnerPaddingHorizontalMin, InnerPaddingHorizontalMax);
-        var vertical = Math.Clamp(fontSize * 2.0 / 16.0, InnerPaddingVerticalMin, InnerPaddingVerticalMax);
+        var horizontal = Math.Clamp(fontSize * 10.0 / 16.0, InnerPaddingHorizontalMin, InnerPaddingHorizontalMax);
+        var vertical = Math.Clamp(fontSize * 4.0 / 16.0, InnerPaddingVerticalMin, InnerPaddingVerticalMax);
         return (horizontal, vertical);
     }
 
