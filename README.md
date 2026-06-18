@@ -265,8 +265,6 @@ Use `dotnet` for local development, debugging, or publishing.
 
 ### Requirements
 
-- .NET 10 SDK (for C# file-based apps)
-
 ```bash
 # Local run
 dotnet run scenario2cast.cs -- <scenario.yaml> [output.cast]
@@ -274,4 +272,13 @@ dotnet run scenario2cast.cs -- svg <scenario.cast> [output.svg]
 
 # build
 dotnet publish scenario2cast.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None
+```
+
+Regenerate samples cast/svg files:
+
+```bash
+dotnet run samples/regenerate.cs
+foreach ($file in Get-ChildItem samples/*.cast) {
+  docker run --rm -v "$($PWD.Path):/data" ghcr.io/asciinema/agg /data/samples/$($file.BaseName).cast /data/samples/$($file.BaseName).gif --font-size 20
+}
 ```

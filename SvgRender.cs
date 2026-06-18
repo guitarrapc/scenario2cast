@@ -6,6 +6,10 @@ internal static class SvgRender
     private const double LineHeightFactor = 1.25;
     private const double CharWidthFactor = 0.62;
     private const double Padding = 8.0;
+    private const double InnerPaddingHorizontalMin = 4.0;
+    private const double InnerPaddingHorizontalMax = 16.0;
+    private const double InnerPaddingVerticalMin = 2.0;
+    private const double InnerPaddingVerticalMax = 8.0;
     private const double LayerFadeSeconds = 0.001;
     private const double CursorBlockOpacity = 0.5;
 
@@ -228,8 +232,11 @@ internal static class SvgRender
         var fontSize = render.FontSize;
         var lineHeight = fontSize * LineHeightFactor;
         var charWidth = fontSize * CharWidthFactor;
-        var svgWidth = width * charWidth + Padding * 2;
-        var svgHeight = height * lineHeight + Padding * 2;
+        var (innerPaddingH, innerPaddingV) = ResolveInnerPadding(fontSize);
+        var contentOriginX = Padding + innerPaddingH;
+        var contentOriginY = Padding + innerPaddingV;
+        var svgWidth = ViewportPixelWidth(width, charWidth, innerPaddingH) + Padding * 2;
+        var svgHeight = ViewportPixelHeight(height, lineHeight, innerPaddingV) + Padding * 2;
         var fadeText = LayerFadeSeconds.ToString("0.######", CultureInfo.InvariantCulture);
         var cursorOpacityText = CursorBlockOpacity.ToString("0.######", CultureInfo.InvariantCulture);
 
@@ -267,8 +274,8 @@ internal static class SvgRender
         for (var i = 0; i < viewportLayers.Count; i++)
         {
             var viewport = viewportLayers[i];
-            var viewportWidth = ViewportPixelWidth(viewport.Width, charWidth);
-            var viewportHeight = ViewportPixelHeight(viewport.Height, lineHeight);
+            var viewportWidth = ViewportPixelWidth(viewport.Width, charWidth, innerPaddingH);
+            var viewportHeight = ViewportPixelHeight(viewport.Height, lineHeight, innerPaddingV);
             sb.AppendLine(CultureInfo.InvariantCulture,
                 $"<rect class=\"layer viewport-mask-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"white\"/>");
         }
@@ -280,8 +287,8 @@ internal static class SvgRender
         for (var i = 0; i < viewportLayers.Count; i++)
         {
             var viewport = viewportLayers[i];
-            var viewportWidth = ViewportPixelWidth(viewport.Width, charWidth);
-            var viewportHeight = ViewportPixelHeight(viewport.Height, lineHeight);
+            var viewportWidth = ViewportPixelWidth(viewport.Width, charWidth, innerPaddingH);
+            var viewportHeight = ViewportPixelHeight(viewport.Height, lineHeight, innerPaddingV);
             sb.AppendLine(CultureInfo.InvariantCulture,
                 $"<rect class=\"bg layer viewport-bg-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\"/>");
         }
@@ -290,7 +297,7 @@ internal static class SvgRender
         {
             var layer = layers[i];
             sb.AppendLine(CultureInfo.InvariantCulture, $"<g class=\"layer layer-{i}\">");
-            AppendRow(sb, layer.Screen, layer.Row, width, charWidth, lineHeight);
+            AppendRow(sb, layer.Screen, layer.Row, width, charWidth, lineHeight, contentOriginX, contentOriginY);
             sb.AppendLine("</g>");
         }
 
@@ -299,7 +306,7 @@ internal static class SvgRender
             var layer = cursorLayers[i];
             sb.AppendLine(CultureInfo.InvariantCulture, $"<g class=\"layer cursor-layer-{i}\">");
             sb.AppendLine(CultureInfo.InvariantCulture,
-                $"<rect class=\"cursor-block\" x=\"{Padding + layer.Col * charWidth:0.##}\" y=\"{Padding + layer.Row * lineHeight:0.##}\" width=\"{charWidth:0.##}\" height=\"{lineHeight:0.##}\"/>");
+                $"<rect class=\"cursor-block\" x=\"{contentOriginX + layer.Col * charWidth:0.##}\" y=\"{contentOriginY + layer.Row * lineHeight:0.##}\" width=\"{charWidth:0.##}\" height=\"{lineHeight:0.##}\"/>");
             sb.AppendLine("</g>");
         }
 
@@ -308,9 +315,18 @@ internal static class SvgRender
         return sb.ToString();
     }
 
-    private static double ViewportPixelWidth(int cols, double charWidth) => cols * charWidth;
+    private static (double horizontal, double vertical) ResolveInnerPadding(int fontSize)
+    {
+        var horizontal = Math.Clamp(fontSize * 10.0 / 16.0, InnerPaddingHorizontalMin, InnerPaddingHorizontalMax);
+        var vertical = Math.Clamp(fontSize * 4.0 / 16.0, InnerPaddingVerticalMin, InnerPaddingVerticalMax);
+        return (horizontal, vertical);
+    }
 
-    private static double ViewportPixelHeight(int rows, double lineHeight) => rows * lineHeight;
+    private static double ViewportPixelWidth(int cols, double charWidth, double innerPaddingH) =>
+        cols * charWidth + innerPaddingH * 2;
+
+    private static double ViewportPixelHeight(int rows, double lineHeight, double innerPaddingV) =>
+        rows * lineHeight + innerPaddingV * 2;
 
     private static void AppendViewportLayerStyle(
         StringBuilder sb,
@@ -379,9 +395,11 @@ internal static class SvgRender
         int row,
         int width,
         double charWidth,
-        double lineHeight)
+        double lineHeight,
+        double contentOriginX,
+        double contentOriginY)
     {
-        var y = Padding + (row + 1) * lineHeight - lineHeight * 0.2;
+        var y = contentOriginY + (row + 1) * lineHeight - lineHeight * 0.2;
         var col = 0;
 
         while (col < width)
@@ -425,11 +443,11 @@ internal static class SvgRender
 
             var drawLen = visibleLen > 0 ? visibleLen : runLen;
             var drawWidth = drawLen * charWidth;
-            var x = Padding + runStart * charWidth;
+            var x = contentOriginX + runStart * charWidth;
             if (runBg is not null)
             {
                 sb.AppendLine(CultureInfo.InvariantCulture,
-                    $"<rect x=\"{x:0.##}\" y=\"{Padding + row * lineHeight:0.##}\" width=\"{runLen * charWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
+                    $"<rect x=\"{x:0.##}\" y=\"{contentOriginY + row * lineHeight:0.##}\" width=\"{runLen * charWidth:0.##}\" height=\"{lineHeight:0.##}\" fill=\"{runBg}\"/>");
             }
 
             if (visibleLen == 0)
