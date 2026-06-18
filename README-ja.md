@@ -268,6 +268,7 @@ ANSI 256色パレットを使う場合は、`fg:<0-255>` / `bg:<0-255>`、また
 ```bash
 # ローカル実行
 dotnet run scenario2cast.cs -- <scenario.yaml> [output.cast]
+dotnet run scenario2cast.cs -- svg <scenario.cast> [output.svg]
 
 # ビルド
 dotnet publish scenario2cast.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None
