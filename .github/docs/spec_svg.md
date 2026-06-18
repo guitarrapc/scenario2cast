@@ -48,6 +48,9 @@ Warn-and-continue matches [spec_highlight.md](spec_highlight.md).
 - Replay follows cast event timestamps; short keystroke intervals must remain visible in browsers.
 - Output is self-contained animated SVG (CSS only, no JavaScript).
 - Background from `theme.bg`; monospace font at resolved `font-size`.
+- Layout padding:
+  - **Outer:** 8px transparent margin between the SVG canvas edge and the terminal background (unchanged when `font-size` changes).
+  - **Inner:** inset between the terminal background and text/cursor, scaled from iTerm2 defaults (`5pt` horizontal, `2pt` vertical at `font-size` 16): horizontal `font-size × 5/16`, vertical `font-size × 2/16`, each clamped (horizontal 2–5px, vertical 1–2px). The terminal background grows with this inset so content is not clipped.
 - Block cursor at the emulator position when visible; hidden by `\e[?25l`.
 
 ## Failure Behavior
