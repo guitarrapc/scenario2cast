@@ -6,7 +6,7 @@
 
 YAMLシナリオファイルから [asciinema v2 cast](https://docs.asciinema.org/manual/asciicast/v2/) ファイルを生成するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行してその出力を使った cast ファイルを生成します。
 
-サンプルシナリオ`samples/basic.yaml`で生成したcastをgifに変換すると...!タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなデモが簡単に作れます。
+サンプルシナリオ`samples/basic.yaml`で生成したcastをgif/svgに変換すると...!タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなデモが簡単に作れます。
 
 ```yaml
 title: "Basic Demo"
@@ -41,7 +41,9 @@ steps:
   - echo "Done!"
 ```
 
-![](samples/basic.gif)
+| GIF | SVG |
+| --- | --- |
+| ![](samples/basic.gif) | ![](samples/basic.svg) |
 
 **動機**
 
@@ -67,6 +69,9 @@ scenario2cast init
 # シナリオを実行して cast ファイルを生成
 scenario2cast scenario.yaml
 
+# cast とアニメーション SVG を一度に生成
+scenario2cast --format svg scenario.yaml
+
 # cast 生成時に正常な pre/post 実行ログも表示
 scenario2cast --verbose scenario.yaml
 
@@ -87,7 +92,7 @@ docker run --rm -v "$($PWD.Path):/data" kayvan/agg /data/scenario.cast /data/sce
 scenario2cast init [scenario.yaml]
 
 # シナリオを実行して cast を生成
-scenario2cast [--verbose] scenario.yaml [output.cast]
+scenario2cast [--verbose] [--format cast|svg] scenario.yaml [output]
 ```
 
 **Notes**
@@ -96,6 +101,7 @@ scenario2cast [--verbose] scenario.yaml [output.cast]
   - Linux/macOS の既定シェルは `$SHELL`、なければ `bash`
   - Windows の既定シェルは `pwsh`、なければ `powershell`、Windows で `shell: bash` を指定した場合は Git Bash / MSYS の `bash` を使います
 - `settings` でpromptとtiming の既定値を設定できます
+- `render` は SVG 出力と cast ヘッダーの表示メタデータ（`font-size`、`theme`）を制御します。詳細は [.github/docs/spec_svg.md](.github/docs/spec_svg.md)
 - `pre` / `post` は録画フロー外で setup / teardown コマンドを実行します。stdout/stderr は CLI に表示されますが、cast ファイルには一切書き込まれません。
 - `steps`:
   - 実際に実行されるため、ファイル変更や外部システムを操作するような副作用のあるコマンドは慎重に使ってください
