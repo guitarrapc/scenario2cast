@@ -110,7 +110,7 @@ internal static class CastReader
             if (!ev.HasValue)
                 continue;
 
-            events.Add(ev.Value with { Time = absoluteTime });
+            events.Add(usesRelativeTime ? ev.Value with { Time = absoluteTime } : ev.Value);
         }
 
         return new CastRecording(width, height, renderSettings, events);

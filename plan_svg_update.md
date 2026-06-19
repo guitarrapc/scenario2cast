@@ -34,12 +34,9 @@ CastEvent[] ──► TerminalReplay ──► ReplayFrame[] (ScreenBuffer snaps
 
 | File | Responsibility |
 |------|----------------|
-| `Terminal/TerminalTheme.cs` | Map `ResolvedTheme` → palette + default colors |
-| `Terminal/ScreenBuffer.cs` | Cell grid, scroll region, alt screen, scrollback, wide chars |
-| `Terminal/AnsiParser.cs` | CSI / ESC / Unicode (console2svg feature set) |
-| `Terminal/TerminalReplay.cs` | Replay cast events → timed frame list |
-| `Svg/SvgFrameRenderer.cs` | Full-frame SVG, CSS keyframes, defs dedup |
-| `SvgRender.cs` | `WriteSvg`, theme presets, render settings resolver |
+| `Terminal.cs` | VT emulator + replay (`TerminalTheme`, `ScreenBuffer`, `AnsiParser`, `TerminalReplay`) |
+| `CastReader.cs` | Cast parsing (v2/v3) + render metadata extraction |
+| `Svg.cs` | SVG renderer + render settings resolver (`SvgRender`, `SvgFrameRenderer`, `RenderSettingsResolver`) |
 
 ### VT emulator scope (v1)
 

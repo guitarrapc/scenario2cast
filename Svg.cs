@@ -346,7 +346,7 @@ internal static class SvgFrameRenderer
             {
                 if (viewportActive is not null)
                     viewportActive.Hide = time;
-                viewportActive = new AnimLayer(time, frame.ViewportWidth, frame.ViewportHeight);
+                viewportActive = new AnimLayer(viewports.Count == 0 ? 0 : time, frame.ViewportWidth, frame.ViewportHeight);
                 viewports.Add(viewportActive);
             }
 
@@ -574,8 +574,12 @@ internal static class SvgFrameRenderer
 
             if (cell.Text == Space)
             {
-                col++;
-                continue;
+                var cellBg = ResolveBackground(cell, theme);
+                if (cellBg is null)
+                {
+                    col++;
+                    continue;
+                }
             }
 
             var runStart = col;

@@ -83,3 +83,4 @@ jobs:
           done
 
           dotnet run tests/terminal_tests.cs
+          dotnet run tests/svg_render_test.cs

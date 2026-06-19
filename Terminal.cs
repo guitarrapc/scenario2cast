@@ -1403,7 +1403,7 @@ internal static class TerminalReplay
         if (lastNonBlank < 0 || lastNonBlank == frames.Count - 1)
             return frames;
 
-        if (!HasTrailingBlankIndicators(events, lastNonBlank + 1))
+        if (!HasTrailingBlankIndicators(events, FindEventIndexAtOrAfter(events, frames[lastNonBlank + 1].Time)))
             return frames;
 
         return frames.Take(lastNonBlank + 1).ToList();
@@ -1425,6 +1425,15 @@ internal static class TerminalReplay
         }
 
         return true;
+    }
+
+    private static int FindEventIndexAtOrAfter(IReadOnlyList<CastEvent> events, double time)
+    {
+        var index = 0;
+        while (index < events.Count && events[index].Time < time)
+            index++;
+
+        return index;
     }
 
     private static bool HasTrailingBlankIndicators(IReadOnlyList<CastEvent> events, int startIndex)
