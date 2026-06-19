@@ -120,8 +120,12 @@ scenetake svg <input.cast> [output.svg]
 - `pre` / `post` run setup and teardown commands outside the recording flow. Their stdout/stderr are printed to the CLI, but are never written to the cast file.
 - `steps`:
   - Steps are executed for real, so use caution with commands that modify files or affect external systems.
-  - Avoid interactive commands such as `vim` or `htop`.
+  - Interactive commands are not supported. See [Limitations (scenario recording)](#limitations-scenario-recording).
   - For long-running commands, use `execution-duration` to keep playback readable.
+
+## Limitations (scenario recording)
+
+Scenario recording runs commands without a PTY and captures each command's output in one batch after it finishes. It does not support interactive programs, real-time terminal animations, or full-screen TUIs (for example `vim`, `htop`, `sl`, or `copilot --banner`). For those, record with [asciinema](https://asciinema.org/) and convert with `scenetake svg` — the SVG renderer supports rich TUI output from external casts.
 
 ## Scenario Format
 
