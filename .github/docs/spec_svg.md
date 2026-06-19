@@ -66,7 +66,7 @@ Implementation: `Terminal.cs` (AnsiParser, ScreenBuffer, TerminalReplay). Tests:
 
 When `render.window` is `macos` or `windows` (or overridden via CLI / cast tag):
 
-- Outer 8px padding is replaced by a title bar, border, rounded corners, and light drop shadow.
+- Outer 8px padding is replaced by a title bar, border, rounded corners, and light drop shadow (12px outer margin for shadow extent).
 - Title bar shows window controls only (no title text). macOS: traffic lights on the left; Windows: three buttons on the right.
 - Chrome colors follow `theme.preset` (`dark` / `light`); `theme.fg` / `theme.bg` overrides affect terminal content only.
 - Title bar height, buttons, padding, corner radius, and shadow are **fixed px** (designed at `font-size` 16); they do not scale with terminal `font-size`.

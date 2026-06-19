@@ -34,7 +34,7 @@ Reference behavior is documented from `.references/console2svg` (read-only; **no
 | Priority | **CLI > cast header > default `none`** |
 | Cast header | v3 `tags`: `s2c:window=macos` (omit when `none`) |
 | v2 cast header | **No scenario2cast-specific fields** — ignore legacy `scenario2cast` block on read; v2 uses `width` / `height` / `theme` only |
-| Resize | Chrome resizes with viewport; title bar height fixed (scale with `font-size`) |
+| Resize | Chrome resizes with viewport; title bar height fixed px (does not scale with `font-size`) |
 | Resize animation | Chrome rects tied to existing `viewport-*` layer show/hide timing |
 | Decoration | Rounded corners + light drop shadow (`macos` larger radius; `windows` smaller) |
 | Layout | Chrome **replaces** outer 8px padding; inner terminal padding unchanged; shadow margin in metrics |
@@ -99,7 +99,7 @@ render:
     preset: dark    # drives chrome palette (dark / light)
 ```
 
-CLI: `--window macos|windows|none` on both scenario (`--format svg`) and `svg` subcommand.
+CLI: `--window macos|windows|none` on the scenario path (cast header always; SVG when `--format svg`) and on the `svg` subcommand.
 
 Cast write (v3 only): append `s2c:window=macos` to `tags` when not `none`.
 
@@ -117,7 +117,7 @@ Cast write (v3 only): append `s2c:window=macos` to `tags` when not `none`.
 ```
 
 - `WindowChromeTheme.For(window, preset)` — four built-in palettes (`macos`×2 + `windows`×2).
-- `SvgMetrics` gains chrome offsets: title bar height ≈ `fontSize * 1.75`, shadow margin, corner radius per preset.
+- `SvgMetrics` gains chrome offsets: fixed title bar height (34px), outer shadow margin (12px), corner radius per preset.
 - `window: none` path unchanged (current `Padding = 8` behavior).
 - Chrome `<rect>` / button `<circle>` elements use the same `viewport-*` animation classes as terminal background.
 

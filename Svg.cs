@@ -360,7 +360,7 @@ internal static class SvgFrameRenderer
     private const double ChromeTitleBarHeight = 34.0;
     private const double ChromeSidePadding = 14.0;
     private const double ChromeTopPadding = 9.0;
-    private const double ChromeOuterMargin = 6.0;
+    private const double ChromeOuterMargin = 12.0;
     private const double ChromeMacCornerRadius = 8.0;
     private const double ChromeWindowsCornerRadius = 4.0;
     private const double MacButtonDiameter = 16.0;
