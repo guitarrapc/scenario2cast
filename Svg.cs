@@ -741,11 +741,11 @@ internal static class SvgFrameRenderer
         SvgMetrics metrics,
         WindowChromePalette chrome)
     {
-        var diameter = metrics.FontSize * 0.5;
+        var diameter = metrics.TitleBarHeight * 0.5;
         var radius = diameter / 2d;
-        var gap = metrics.FontSize * 0.35;
+        var gap = diameter * 0.6;
         var centerY = frameY + metrics.TitleBarHeight / 2d;
-        var centerX = frameX + metrics.FontSize * 0.625;
+        var centerX = frameX + metrics.TitleBarHeight * 0.45;
         var colors = new[] { chrome.MacClose, chrome.MacMinimize, chrome.MacMaximize };
         for (var i = 0; i < colors.Length; i++)
         {
@@ -764,9 +764,9 @@ internal static class SvgFrameRenderer
         SvgMetrics metrics,
         WindowChromePalette chrome)
     {
-        var size = metrics.FontSize * 0.6875;
-        var gap = metrics.FontSize * 0.375;
-        var inset = metrics.FontSize * 0.5;
+        var size = metrics.TitleBarHeight * 0.52;
+        var gap = size * 0.33;
+        var inset = metrics.TitleBarHeight * 0.4;
         var top = frameY + (metrics.TitleBarHeight - size) / 2d;
         var left = frameX + frameWidth - inset - (size * 3) - (gap * 2);
         for (var i = 0; i < 3; i++)
