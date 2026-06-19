@@ -15,7 +15,7 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 | [theme](#theme) | light テーマ・16 / 256 色 | [theme.yaml](theme.yaml) | [cast](theme.cast) · [gif](theme.gif) · [svg](theme.svg) |
 | [theme-macos](#theme-macos) | macOS ウィンドウ chrome | [theme-macos.yaml](theme-macos.yaml) | [cast](theme-macos.cast) · [gif](theme-macos.gif) · [svg](theme-macos.svg) |
 | [theme-windows](#theme-windows) | Windows ウィンドウ chrome | [theme-windows.yaml](theme-windows.yaml) | [cast](theme-windows.cast) · [gif](theme-windows.gif) · [svg](theme-windows.svg) |
-| [matrix](#matrix) | Matrix rain 向け contextual tint | [matrix.yaml](matrix.yaml) | [cast](matrix.cast) · [gif](matrix.gif) · [svg](matrix.svg) |
+| [matrix](#matrix) | Matrix rain 向け contextual tint | [matrix-gen.cs](matrix-gen.cs) → [cast](matrix.cast) | [gif](matrix.gif) · [svg](matrix.svg) |
 | [resize](#resize) | ターミナル resize イベント（cast のみ） | [resize.cast](resize.cast) | [gif](resize.gif) · [svg](resize.svg) |
 
 ## 再生成
@@ -26,7 +26,10 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 # すべての *.yaml から .cast と .svg を再生成
 dotnet run samples/regenerate.cs
 
-# GIF は agg が必要（Docker 例）
+# matrix.cast は別途生成（regenerate.cs にも含まれる）
+dotnet run samples/matrix-gen.cs
+
+# GIF は agg が必要（Docker 例。v3 cast は ghcr.io/asciinema/agg を使用）
 docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
   /data/samples/basic.cast /data/samples/basic.gif --last-frame-duration 0
 ```
@@ -152,22 +155,26 @@ scenetake --format svg samples/theme-windows.yaml
 
 **目的:** SVG の **Matrix rain contextual tint**（緑の隣の白ハイライトを明るい緑で描画）の確認。
 
-- pipe 録画向けに [matrix-frame.sh](matrix-frame.sh) で擬似 Matrix フレームを 12 枚出力
-- macOS ウィンドウ chrome 付き
+- [matrix-gen.cs](matrix-gen.cs) が 12 fps・72 フレームの cast を生成（alternate screen、画面クリア、フレーム間にコマンド入力なし）
+- ASCII 文字（英数字・記号）の落ちる列、白い先頭＋緑の尾（agg でも描画しやすい）
+- cast ヘッダーに macOS ウィンドウ chrome
 
 | GIF | SVG |
 |-----|-----|
 | ![](matrix.gif) | ![](matrix.svg) |
 
 ```bash
-scenetake --format svg samples/matrix.yaml
+dotnet run samples/matrix-gen.cs
+scenetake svg samples/matrix.cast
+docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
+  /data/samples/matrix.cast /data/samples/matrix.gif --last-frame-duration 0
 ```
 
 本物の `cmatrix` は PTY が必要です。外部録画する場合:
 
 ```bash
-asciinema rec samples/matrix.cast -- cmatrix -ab
-scenetake svg samples/matrix.cast --window macos
+asciinema rec samples/matrix-live.cast -- cmatrix -ab
+scenetake svg samples/matrix-live.cast --window macos
 ```
 
 ---

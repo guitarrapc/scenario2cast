@@ -15,7 +15,7 @@ Sample scenarios for scenetake. Use this page to quickly see each scenario’s *
 | [theme](#theme) | Light theme, 16 / 256 colors | [theme.yaml](theme.yaml) | [cast](theme.cast) · [gif](theme.gif) · [svg](theme.svg) |
 | [theme-macos](#theme-macos) | macOS window chrome | [theme-macos.yaml](theme-macos.yaml) | [cast](theme-macos.cast) · [gif](theme-macos.gif) · [svg](theme-macos.svg) |
 | [theme-windows](#theme-windows) | Windows window chrome | [theme-windows.yaml](theme-windows.yaml) | [cast](theme-windows.cast) · [gif](theme-windows.gif) · [svg](theme-windows.svg) |
-| [matrix](#matrix) | Matrix rain contextual tint | [matrix.yaml](matrix.yaml) | [cast](matrix.cast) · [gif](matrix.gif) · [svg](matrix.svg) |
+| [matrix](#matrix) | Matrix rain contextual tint | [matrix-gen.cs](matrix-gen.cs) → [cast](matrix.cast) | [gif](matrix.gif) · [svg](matrix.svg) |
 | [resize](#resize) | Terminal resize events (cast only) | [resize.cast](resize.cast) | [gif](resize.gif) · [svg](resize.svg) |
 
 ## Regenerate
@@ -26,7 +26,10 @@ Run from the repository root:
 # Regenerate .cast and .svg from every *.yaml
 dotnet run samples/regenerate.cs
 
-# GIFs require agg (Docker example)
+# matrix.cast is generated separately (included in regenerate.cs)
+dotnet run samples/matrix-gen.cs
+
+# GIFs require agg (Docker example; use ghcr.io/asciinema/agg for v3 casts)
 docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
   /data/samples/basic.cast /data/samples/basic.gif --last-frame-duration 0
 ```
@@ -152,22 +155,26 @@ scenetake --format svg samples/theme-windows.yaml
 
 **Purpose:** Verify SVG **Matrix rain contextual tint** (white highlights beside green render as bright green).
 
-- [matrix-frame.sh](matrix-frame.sh) prints 12 simulated Matrix frames for pipe recording
-- macOS window chrome
+- [matrix-gen.cs](matrix-gen.cs) writes a 72-frame cast at 12 fps (alternate screen, full-screen clears, no command typing between frames)
+- ASCII letter/digit/symbol columns with falling trails and white heads (agg-friendly)
+- macOS window chrome in the cast header
 
 | GIF | SVG |
 |-----|-----|
 | ![](matrix.gif) | ![](matrix.svg) |
 
 ```bash
-scenetake --format svg samples/matrix.yaml
+dotnet run samples/matrix-gen.cs
+scenetake svg samples/matrix.cast
+docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
+  /data/samples/matrix.cast /data/samples/matrix.gif --last-frame-duration 0
 ```
 
 Real `cmatrix` needs a PTY. To record externally:
 
 ```bash
-asciinema rec samples/matrix.cast -- cmatrix -ab
-scenetake svg samples/matrix.cast --window macos
+asciinema rec samples/matrix-live.cast -- cmatrix -ab
+scenetake svg samples/matrix-live.cast --window macos
 ```
 
 ---
