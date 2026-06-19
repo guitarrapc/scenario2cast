@@ -4,9 +4,9 @@
 
 English | [日本語](README-ja.md)
 
-Run a YAML **scenario** and record a terminal scene take — [asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/), animated `.svg`, and more. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and emits a cast file with simulated typing plus real command output.
+Run a YAML **scenario** and record a terminal scene take — [asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/), animated `.svg`. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and records the output as `.cast` (and optionally `.svg`) with simulated typing plus real command output.
 
-Sample scenario `samples/basic.yaml` generates a cast that looks like this when converted to gif, svg...! You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic demos.
+Sample scenario `samples/basic.yaml` generates `.cast` and `.svg` output like below. You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic terminal recordings.
 
 ```yaml
 title: "Basic Demo"
@@ -49,7 +49,7 @@ steps:
 
 I want terminal demos without the hassle of typing commands into asciinema. That is the motivation behind scenetake. There are various tools in the asciinema ecosystem, but none quite fit: some lean heavily on shell scripts, some require asciinema itself as a dependency, some leak execution paths into the cast output, and some only fake the output rather than running real commands. What I want is something where I can write a scenario plainly, have the listed commands actually executed, and get a cast file generated directly from the real output.
 
-scenetake is a cross-platform tool that records those scenarios as asciinema-compatible casts (and optional SVG), without going through asciinema at all.
+scenetake is a cross-platform tool that records those scenarios as `.cast` files, optionally with `.svg`, without going through asciinema at all.
 
 1. Write the commands to run in the scenario.
 2. Generate cast events as if the commands were typed at a steady pace.
