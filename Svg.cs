@@ -750,7 +750,7 @@ internal static class SvgFrameRenderer
         if (loopDuration <= 0)
             return "0";
 
-        return (time / loopDuration * 100.0).ToString("0.###", CultureInfo.InvariantCulture);
+        return (time / loopDuration * 100.0).ToString("0.######", CultureInfo.InvariantCulture);
     }
 
     private static ChromePalette ResolveChromePalette(WindowStyle window, string terminalBg)
