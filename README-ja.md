@@ -45,11 +45,25 @@ steps:
 | --- | --- |
 | ![](samples/basic.gif) | ![](samples/basic.svg) |
 
-svgはフォントやテーマを指定して出力できます。
+SVG 出力ではフォント、ライト/ダークテーマ、ウィンドウ枠（`macos` / `windows`）を指定できます。
 
 | macOS | Windows |
 | --- | --- |
 | ![](samples/theme-macos.svg) | ![](samples/theme-windows.svg) |
+
+## できること
+
+| やりたいこと | 方法 |
+|---|---|
+| コマンド一覧からターミナルデモを録画する（手入力なし） | YAML シナリオを書いて `scenetake scenario.yaml` |
+| README やドキュメント用のアニメーション SVG を作る | `scenetake --format svg scenario.yaml` |
+| 既存の asciinema `.cast` を SVG に変換する | `scenetake svg recording.cast` |
+| フォント・テーマ・ウィンドウ枠を調整する | YAML の `render`、または `--font-size` / `--font-family` / `--theme` / `--window` |
+| 非 TTY 実行で CLI が色を出さない出力を着色する | step の `highlight` / `run-highlight` / `stderr-color` — [samples/highlight.yaml](samples/highlight.yaml) を参照 |
+| 対話型 TUI（`vim`、`htop`、フルスクリーンアプリ）を録画する | [asciinema](https://asciinema.org/) で録画し、`scenetake svg recording.cast` |
+| スターターシナリオを作る | `scenetake init` |
+| サンプルとプレビューを見る | [samples/README-ja.md](samples/README-ja.md) |
+| 仕様の詳細を読む | [.github/docs/spec_index.md](.github/docs/spec_index.md) |
 
 **動機**
 
@@ -78,11 +92,14 @@ scenetake scenario.yaml
 # cast とアニメーション SVG を一度に生成
 scenetake --format svg scenario.yaml
 
-# SVG 出力のスタイルを細かく指定
-scenetake --format svg scenario.yaml --font-size 20 --font-family "'Noto Sans Mono', ui-monospace"
+# SVG のスタイル: フォント、テーマ、ウィンドウ枠、フレーム上限
+scenetake --format svg scenario.yaml --font-size 20 --font-family "'Noto Sans Mono', ui-monospace" --theme light --window macos
 
-# 既存の cast ファイルを SVG に変換
+# 既存の cast ファイルを SVG に変換（v2 / v3 対応）
 scenetake svg scenario.cast
+
+# svg サブコマンドでも同じスタイルフラグが使える
+scenetake svg scenario.cast --theme light --window windows --max-fps 30
 
 # cast 生成時に正常な pre/post 実行ログも表示
 scenetake --verbose scenario.yaml
@@ -90,11 +107,11 @@ scenetake --verbose scenario.yaml
 # asciinemaで再生
 asciinema play scenario.cast
 
-# agg で gif に変換 (Linux/macOS) — v3 cast には agg 1.6.0 以降が必要。フォントサイズは --font-size で調整
-docker run --rm -v "${PWD}:/data" ghcr.io/asciinema/agg /data/scenario.cast /data/scenario.gif --font-size 20
+# agg で gif に変換 (Linux/macOS) — v3 cast には agg 1.6.0 以降が必要
+docker run --rm -v "${PWD}:/data" ghcr.io/asciinema/agg /data/scenario.cast /data/scenario.gif --font-size 20 --last-frame-duration 0
 
 # agg で gif に変換 (Windows PowerShell)
-docker run --rm -v "$($PWD.Path):/data" ghcr.io/asciinema/agg /data/scenario.cast /data/scenario.gif --font-size 20
+docker run --rm -v "$($PWD.Path):/data" ghcr.io/asciinema/agg /data/scenario.cast /data/scenario.gif --font-size 20 --last-frame-duration 0
 ```
 
 **Usage**
@@ -103,12 +120,19 @@ docker run --rm -v "$($PWD.Path):/data" ghcr.io/asciinema/agg /data/scenario.cas
 # 新しいシナリオファイルを初期化
 scenetake init [scenario.yaml]
 
-# シナリオを実行して cast を生成
-scenetake [--verbose] [--format cast|svg] scenario.yaml [output]
+# シナリオを実行して cast（既定）または cast + SVG を生成
+scenetake [--verbose] [--format cast|svg]
+  [--font-size N] [--font-family FAMILIES] [--theme dark|light]
+  [--window none|macos|windows] [--max-fps N]
+  scenario.yaml [output]
 
 # 既存の cast ファイルを SVG に変換
-scenetake svg <input.cast> [output.svg]
+scenetake svg [--font-size N] [--font-family FAMILIES] [--theme dark|light]
+  [--window none|macos|windows] [--max-fps N]
+  <input.cast> [output.svg]
 ```
+
+`--max-fps` は SVG アニメーションのフレームレート上限です（`0` = オフ、cast のタイミングをそのまま使用）。`--format svg` 時と `svg` サブコマンドで有効です。
 
 **Notes**
 
@@ -135,6 +159,13 @@ width: 120              # ターミナル幅（デフォルト: 120）
 height: 24              # ターミナル高さ（デフォルト: 24）
 cwd: /path/to/dir       # step を実行するディレクトリ（任意）
 shell: bash             # 実行シェルを指定（任意）
+
+render:                  # cast ヘッダーと SVG 用の表示メタデータ（任意）
+  font-size: 16
+  font-family: ui-monospace, monospace
+  theme:
+    preset: dark        # dark | light。fg / bg / palette の上書きも可
+  window: macos         # none | macos | windows
 
 settings:
   prompt: "$ "
@@ -213,8 +244,11 @@ post:
 
 - カラー名: `red`、`bright-cyan`
 - スタイルトークン: `bold`、`underline`、`bright`
-- 前景/背景プレフィックス: `fg:bright-white`、`bg:blue`、`fg:196`、`bg:235`
-- 生 SGR リテラル: `1;31`、`38;5;196`、`48;5;235`、`\e[1;31m`、`\x1b[1;31m`
+- 前景/背景プレフィックス:
+  - 16色名: `fg:bright-white`、`bg:blue`
+  - 256色インデックス: `fg:196`、`bg:235`
+  - トゥルーカラー RGB: `fg:#ff8c00`、`bg:#282828`、`fg:#f80`、`fg:255,140,0`
+- 生 SGR リテラル: `1;31`、`38;5;196`、`48;5;235`、`38;2;255;140;0`、`48;2;40;40;40`、`\e[1;31m`、`\x1b[1;31m`
 
 ```yaml
 steps:
@@ -225,6 +259,11 @@ steps:
     highlight:
       - color: "underline fg:196 bg:235"
         at: "2"
+
+  - run: printf 'true color\n'
+    highlight:
+      - color: "fg:#ff8c00 bg:#282828"
+        at: "1"
 
   - run: echo "plain stderr" 1>&2
     stderr-color: "\\e[1;93m"
@@ -252,6 +291,8 @@ steps:
 | `bright-white` | `97` |
 
 ANSI 256色パレットを使う場合は、`fg:<0-255>` / `bg:<0-255>`、または生SGRの `38;5;n` / `48;5;n` を指定します。
+
+トゥルーカラー RGB は `fg:#rrggbb` / `bg:#rrggbb`、短縮形 `fg:#rgb`、10進 `fg:r,g,b`、または生 SGR `38;2;r;g;b` / `48;2;r;g;b`（各成分 `0`–`255`）で指定します。
 
 ### コマンド設定一覧
 

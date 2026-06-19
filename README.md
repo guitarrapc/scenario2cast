@@ -45,11 +45,25 @@ steps:
 | --- | --- |
 | ![](samples/basic.gif) | ![](samples/basic.svg) |
 
-svg also supports custom font and theme.
+SVG output supports custom font, light/dark theme, and optional window chrome (`macos` / `windows`).
 
 | macOS | Windows |
 | --- | --- |
 | ![](samples/theme-macos.svg) | ![](samples/theme-windows.svg) |
+
+## What you can do
+
+| I want to… | How |
+|---|---|
+| Record a terminal demo from a list of commands (no live typing) | Write a YAML scenario, then `scenetake scenario.yaml` |
+| Get an animated SVG for a README or docs | `scenetake --format svg scenario.yaml` |
+| Convert an existing asciinema `.cast` to SVG | `scenetake svg recording.cast` |
+| Tune font, theme, or window chrome | Set `render` in YAML, or pass `--font-size`, `--font-family`, `--theme`, `--window` |
+| Color output when CLI tools stay plain without a TTY | Use `highlight`, `run-highlight`, or `stderr-color` on steps — see [samples/highlight.yaml](samples/highlight.yaml) |
+| Record interactive TUIs (`vim`, `htop`, full-screen apps) | Record with [asciinema](https://asciinema.org/), then `scenetake svg recording.cast` |
+| Scaffold a starter scenario | `scenetake init` |
+| Browse examples and previews | [samples/README.md](samples/README.md) |
+| Read full behavior specs | [.github/docs/spec_index.md](.github/docs/spec_index.md) |
 
 **Motivation**
 
@@ -78,11 +92,14 @@ scenetake scenario.yaml
 # Generate cast and animated SVG in one command
 scenetake --format svg scenario.yaml
 
-# For more granular SVG styling control
-scenetake --format svg scenario.yaml --font-size 20 --font-family "'Noto Sans Mono', ui-monospace"
+# SVG styling: font, theme, window chrome, frame cap
+scenetake --format svg scenario.yaml --font-size 20 --font-family "'Noto Sans Mono', ui-monospace" --theme light --window macos
 
-# Convert an existing cast file to SVG
+# Convert an existing cast file to SVG (v2 or v3)
 scenetake svg scenario.cast
+
+# Same styling flags work on the svg subcommand
+scenetake svg scenario.cast --theme light --window windows --max-fps 30
 
 # Show normal pre/post execution logs while generating a cast file
 scenetake --verbose scenario.yaml
@@ -103,12 +120,19 @@ docker run --rm -v "$($PWD.Path):/data" ghcr.io/asciinema/agg /data/scenario.cas
 # Initialize a new scenario file
 scenetake init [scenario.yaml]
 
-# Run scenario to generate cast
-scenetake [--verbose] [--format cast|svg] scenario.yaml [output]
+# Run scenario to generate cast (default) or cast + SVG
+scenetake [--verbose] [--format cast|svg]
+  [--font-size N] [--font-family FAMILIES] [--theme dark|light]
+  [--window none|macos|windows] [--max-fps N]
+  scenario.yaml [output]
 
 # Convert an existing cast file to SVG
-scenetake svg <input.cast> [output.svg]
+scenetake svg [--font-size N] [--font-family FAMILIES] [--theme dark|light]
+  [--window none|macos|windows] [--max-fps N]
+  <input.cast> [output.svg]
 ```
+
+`--max-fps` caps SVG animation frame rate (`0` = off, use full cast timing). It applies when `--format svg` is set or on the `svg` subcommand.
 
 **Notes**
 
@@ -135,6 +159,13 @@ width: 120              # Terminal width (default: 120)
 height: 24              # Terminal height (default: 24)
 cwd: /path/to/dir       # Optional working directory for all steps
 shell: bash             # Optional command shell override
+
+render:                  # Optional display metadata for cast header and SVG
+  font-size: 16
+  font-family: ui-monospace, monospace
+  theme:
+    preset: dark        # dark | light; optional fg / bg / palette overrides
+  window: macos         # none | macos | windows
 
 settings:
   prompt: "$ "
@@ -213,8 +244,11 @@ Use `--verbose` to show successful `pre`/`post` command labels and phase markers
 
 - Named color: `red`, `bright-cyan`
 - Style tokens: `bold`, `underline`, `bright`
-- Foreground/background prefixes: `fg:bright-white`, `bg:blue`, `fg:196`, `bg:235`
-- Raw SGR literal: `1;31`, `38;5;196`, `48;5;235`, `\e[1;31m`, `\x1b[1;31m`
+- Foreground/background prefixes:
+  - 16-color names: `fg:bright-white`, `bg:blue`
+  - 256-color indices: `fg:196`, `bg:235`
+  - True-color RGB: `fg:#ff8c00`, `bg:#282828`, `fg:#f80`, `fg:255,140,0`
+- Raw SGR literal: `1;31`, `38;5;196`, `48;5;235`, `38;2;255;140;0`, `48;2;40;40;40`, `\e[1;31m`, `\x1b[1;31m`
 
 ```yaml
 steps:
@@ -225,6 +259,11 @@ steps:
     highlight:
       - color: "underline fg:196 bg:235"
         at: "2"
+
+  - run: printf 'true color\n'
+    highlight:
+      - color: "fg:#ff8c00 bg:#282828"
+        at: "1"
 
   - run: echo "plain stderr" 1>&2
     stderr-color: "\\e[1;93m"
@@ -253,6 +292,8 @@ steps:
 
 For the ANSI 256-color palette, use `fg:<0-255>` or `bg:<0-255>`, or raw SGR `38;5;n` / `48;5;n`.
 
+For true-color RGB, use `fg:#rrggbb` / `bg:#rrggbb`, shorthand `fg:#rgb`, decimal `fg:r,g,b`, or raw SGR `38;2;r;g;b` / `48;2;r;g;b` (each component `0`–`255`).
+
 ### Command Keys
 
 | Key | Description | Default |
@@ -277,6 +318,8 @@ For the ANSI 256-color palette, use `fg:<0-255>` or `bg:<0-255>`, or raw SGR `38
 Use `dotnet` for local development, debugging, or publishing.
 
 ### Requirements
+
+- .NET 10 SDK (file-based C# app)
 
 ```bash
 # Local run
