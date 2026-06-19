@@ -45,6 +45,12 @@ steps:
 | --- | --- |
 | ![](samples/basic.gif) | ![](samples/basic.svg) |
 
+svg also supports custom font and theme.
+
+| macOS | Windows |
+| --- | --- |
+| ![](samples/theme-macos.svg) | ![](samples/theme-windows.svg) |
+
 **Motivation**
 
 I want terminal demos without the hassle of typing commands into asciinema. That is the motivation behind scenetake. There are various tools in the asciinema ecosystem, but none quite fit: some lean heavily on shell scripts, some require asciinema itself as a dependency, some leak execution paths into the cast output, and some only fake the output rather than running real commands. What I want is something where I can write a scenario plainly, have the listed commands actually executed, and get a cast file generated directly from the real output.
