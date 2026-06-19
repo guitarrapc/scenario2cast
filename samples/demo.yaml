@@ -1,5 +1,5 @@
 title: "README Workflow Demo"
-width: 120
+width: 80
 height: 24
 shell: bash
 
@@ -10,8 +10,17 @@ settings:
   pre-delay: 0.5 # pause before typing starts
   post-delay: 1.2 # pause after output before next step
 
+render:
+  theme:
+    preset: dark
+  window: macos
+
 steps:
-  - run: cat samples/basic.yaml
-  - run: scenetake samples/basic.yaml samples/basic.cast
-  - run: docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg /data/samples/basic.cast /data/samples/basic.gif
+  - run: scenetake init
+  - run: cat scenario.yaml
+  - run: scenetake scenario.yaml --format svg
+  - run: MSYS_NO_PATHCONV=1 docker run --rm -v "//${PWD}:/data" ghcr.io/asciinema/agg /data/scenario.cast /data/scenario.gif
     execution-duration: 1.0
+
+Post:
+  - rm -f scenario.*
