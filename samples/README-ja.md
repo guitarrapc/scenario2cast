@@ -26,7 +26,7 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 # すべての *.yaml から .cast と .svg を再生成
 dotnet run samples/regenerate.cs
 
-# matrix.cast は別途生成（regenerate.cs にも含まれる）
+# matrix.cast は samples/matrix-gen.cs で生成（regenerate.cs からも実行されます）
 dotnet run samples/matrix-gen.cs
 
 # GIF は agg が必要（Docker 例。v3 cast は ghcr.io/asciinema/agg を使用）

@@ -27,12 +27,12 @@ var rng = new Random(42);
 var events = new List<(double Time, string Data)>(FrameCount + 1);
 
 var t = 0.0;
-events.Add((t, "\u001b[?1049h" + BuildFrame(columns, rng, first: true)));
+events.Add((t, "\u001b[?1049h" + BuildFrame(columns, rng)));
 
 for (var frame = 1; frame < FrameCount; frame++)
 {
     t += FrameSeconds;
-    events.Add((t, BuildFrame(columns, rng, first: false)));
+    events.Add((t, BuildFrame(columns, rng)));
 }
 
 WriteCast(outputPath, events);
@@ -57,13 +57,10 @@ static ColumnState[] CreateColumns(int width, int seed)
     return columns;
 }
 
-static string BuildFrame(ColumnState[] columns, Random rng, bool first)
+static string BuildFrame(ColumnState[] columns, Random rng)
 {
     var sb = new StringBuilder(Width * Height * 8);
-    if (!first)
-        sb.Append("\u001b[2J\u001b[H");
-    else
-        sb.Append("\u001b[2J\u001b[H");
+    sb.Append("\u001b[2J\u001b[H");
 
     var grid = new char[Height, Width];
     var tone = new byte[Height, Width];
