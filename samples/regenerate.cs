@@ -20,6 +20,9 @@ if (!File.Exists(toolPath))
     return 1;
 }
 
+if (RunReadmeSync(repoRoot) != 0)
+    return 1;
+
 var scenarios = Directory
     .EnumerateFiles(samplesDir, "*.yaml", SearchOption.TopDirectoryOnly)
     .OrderBy(Path.GetFileName, StringComparer.Ordinal)
@@ -60,6 +63,28 @@ if (failures > 0)
 Console.Error.WriteLine();
 Console.Error.WriteLine($"Done: {total} sample(s)");
 return 0;
+
+static int RunReadmeSync(string repoRoot)
+{
+    var psi = new ProcessStartInfo
+    {
+        FileName = "dotnet",
+        WorkingDirectory = repoRoot,
+        UseShellExecute = false,
+    };
+    psi.ArgumentList.Add("run");
+    psi.ArgumentList.Add("tests/readme_sync_test.cs");
+
+    using var process = Process.Start(psi);
+    if (process is null)
+    {
+        Console.Error.WriteLine("Error: failed to start readme sync test");
+        return 1;
+    }
+
+    process.WaitForExit();
+    return process.ExitCode;
+}
 
 static int RunScenario(string repoRoot, string toolPath, string scenarioPath)
 {

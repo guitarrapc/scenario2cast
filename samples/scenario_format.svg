@@ -1,0 +1,2679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="837.6" height="546" viewBox="0 0 837.6 546" preserveAspectRatio="xMidYMid meet" role="img" aria-label="scenetake output">
+<style>
+text { font-family: ui-monospace, monospace; font-size: 16px; white-space: pre; }
+text { dominant-baseline: alphabetic; }
+.bg { shape-rendering: crispEdges; }
+.layer { opacity: 0; }
+.cursor-block { fill: #d0d0d0; fill-opacity: 0.5; }
+@keyframes k0 { 0%,3.162544%{opacity:0;} 3.164126%,3.322333%{opacity:1;} 3.325497%,100%{opacity:0;} }
+@keyframes k1 { 0%,3.320751%{opacity:0;} 3.322333%,3.456871%{opacity:1;} 3.460036%,100%{opacity:0;} }
+@keyframes k2 { 0%,3.455289%{opacity:0;} 3.456871%,3.606342%{opacity:1;} 3.609506%,100%{opacity:0;} }
+@keyframes k3 { 0%,3.604759%{opacity:0;} 3.606342%,3.729549%{opacity:1;} 3.732714%,100%{opacity:0;} }
+@keyframes k4 { 0%,3.727967%{opacity:0;} 3.729549%,3.992903%{opacity:1;} 3.996067%,100%{opacity:0;} }
+@keyframes k5 { 0%,3.991321%{opacity:0;} 3.992903%,4.136187%{opacity:1;} 4.139351%,100%{opacity:0;} }
+@keyframes k6 { 0%,4.134605%{opacity:0;} 4.136187%,4.260192%{opacity:1;} 4.263357%,100%{opacity:0;} }
+@keyframes k7 { 0%,4.25861%{opacity:0;} 4.260192%,4.369048%{opacity:1;} 4.372212%,100%{opacity:0;} }
+@keyframes k8 { 0%,4.367466%{opacity:0;} 4.369048%,4.498723%{opacity:1;} 4.501887%,100%{opacity:0;} }
+@keyframes k9 { 0%,4.497141%{opacity:0;} 4.498723%,4.650199%{opacity:1;} 4.653364%,100%{opacity:0;} }
+@keyframes k10 { 0%,4.648617%{opacity:0;} 4.650199%,4.766817%{opacity:1;} 4.769981%,100%{opacity:0;} }
+@keyframes k11 { 0%,4.765234%{opacity:0;} 4.766817%,5.020893%{opacity:1;} 5.024057%,100%{opacity:0;} }
+@keyframes k12 { 0%,5.019311%{opacity:0;} 5.020893%,5.142272%{opacity:1;} 5.145436%,100%{opacity:0;} }
+@keyframes k13 { 0%,5.14069%{opacity:0;} 5.142272%,5.28655%{opacity:1;} 5.289714%,100%{opacity:0;} }
+@keyframes k14 { 0%,5.284968%{opacity:0;} 5.28655%,5.42243%{opacity:1;} 5.425594%,100%{opacity:0;} }
+@keyframes k15 { 0%,5.420848%{opacity:0;} 5.42243%,5.547916%{opacity:1;} 5.55108%,100%{opacity:0;} }
+@keyframes k16 { 0%,5.546334%{opacity:0;} 5.547916%,5.665163%{opacity:1;} 5.668327%,100%{opacity:0;} }
+@keyframes k17 { 0%,5.663581%{opacity:0;} 5.665163%,5.817737%{opacity:1;} 5.820901%,100%{opacity:0;} }
+@keyframes k18 { 0%,5.816155%{opacity:0;} 5.817737%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k19 { 0%,6.728695%{opacity:0;} 6.730277%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k20 { 0%,11.474885%{opacity:0;} 11.476467%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k21 { 0%,11.633091%{opacity:0;} 11.634673%,11.792879%{opacity:1;} 11.796044%,100%{opacity:0;} }
+@keyframes k22 { 0%,11.791297%{opacity:0;} 11.792879%,11.938436%{opacity:1;} 11.9416%,100%{opacity:0;} }
+@keyframes k23 { 0%,11.936854%{opacity:0;} 11.938436%,12.080568%{opacity:1;} 12.083732%,100%{opacity:0;} }
+@keyframes k24 { 0%,12.078986%{opacity:0;} 12.080568%,12.210123%{opacity:1;} 12.213287%,100%{opacity:0;} }
+@keyframes k25 { 0%,12.208541%{opacity:0;} 12.210123%,12.336578%{opacity:1;} 12.339742%,100%{opacity:0;} }
+@keyframes k26 { 0%,12.334996%{opacity:0;} 12.336578%,12.439329%{opacity:1;} 12.442494%,100%{opacity:0;} }
+@keyframes k27 { 0%,12.437747%{opacity:0;} 12.439329%,12.695772%{opacity:1;} 12.698937%,100%{opacity:0;} }
+@keyframes k28 { 0%,12.69419%{opacity:0;} 12.695772%,12.833849%{opacity:1;} 12.837013%,100%{opacity:0;} }
+@keyframes k29 { 0%,12.832266%{opacity:0;} 12.833849%,12.930816%{opacity:1;} 12.933981%,100%{opacity:0;} }
+@keyframes k30 { 0%,12.929234%{opacity:0;} 12.930816%,13.068747%{opacity:1;} 13.071911%,100%{opacity:0;} }
+@keyframes k31 { 0%,13.067165%{opacity:0;} 13.068747%,13.216822%{opacity:1;} 13.219986%,100%{opacity:0;} }
+@keyframes k32 { 0%,13.21524%{opacity:0;} 13.216822%,13.342627%{opacity:1;} 13.345792%,100%{opacity:0;} }
+@keyframes k33 { 0%,13.341045%{opacity:0;} 13.342627%,13.454508%{opacity:1;} 13.457672%,100%{opacity:0;} }
+@keyframes k34 { 0%,13.452926%{opacity:0;} 13.454508%,13.563385%{opacity:1;} 13.566549%,100%{opacity:0;} }
+@keyframes k35 { 0%,13.561803%{opacity:0;} 13.563385%,13.676977%{opacity:1;} 13.680142%,100%{opacity:0;} }
+@keyframes k36 { 0%,13.675395%{opacity:0;} 13.676977%,13.831074%{opacity:1;} 13.834238%,100%{opacity:0;} }
+@keyframes k37 { 0%,13.829492%{opacity:0;} 13.831074%,13.938834%{opacity:1;} 13.941998%,100%{opacity:0;} }
+@keyframes k38 { 0%,13.937252%{opacity:0;} 13.938834%,14.033885%{opacity:1;} 14.037049%,100%{opacity:0;} }
+@keyframes k39 { 0%,14.032303%{opacity:0;} 14.033885%,14.187019%{opacity:1;} 14.190183%,100%{opacity:0;} }
+@keyframes k40 { 0%,14.185437%{opacity:0;} 14.187019%,14.305519%{opacity:1;} 14.308683%,100%{opacity:0;} }
+@keyframes k41 { 0%,14.303936%{opacity:0;} 14.305519%,14.421487%{opacity:1;} 14.424651%,100%{opacity:0;} }
+@keyframes k42 { 0%,14.419905%{opacity:0;} 14.421487%,14.521847%{opacity:1;} 14.525011%,100%{opacity:0;} }
+@keyframes k43 { 0%,14.520265%{opacity:0;} 14.521847%,14.630914%{opacity:1;} 14.634078%,100%{opacity:0;} }
+@keyframes k44 { 0%,14.629332%{opacity:0;} 14.630914%,14.751059%{opacity:1;} 14.754223%,100%{opacity:0;} }
+@keyframes k45 { 0%,14.749477%{opacity:0;} 14.751059%,14.868989%{opacity:1;} 14.872153%,100%{opacity:0;} }
+@keyframes k46 { 0%,14.867407%{opacity:0;} 14.868989%,15.015973%{opacity:1;} 15.019137%,100%{opacity:0;} }
+@keyframes k47 { 0%,15.01439%{opacity:0;} 15.015973%,15.16985%{opacity:1;} 15.173014%,100%{opacity:0;} }
+@keyframes k48 { 0%,15.168268%{opacity:0;} 15.16985%,15.304028%{opacity:1;} 15.307192%,100%{opacity:0;} }
+@keyframes k49 { 0%,15.302446%{opacity:0;} 15.304028%,15.452344%{opacity:1;} 15.455508%,100%{opacity:0;} }
+@keyframes k50 { 0%,15.450761%{opacity:0;} 15.452344%,15.549954%{opacity:1;} 15.553118%,100%{opacity:0;} }
+@keyframes k51 { 0%,15.548372%{opacity:0;} 15.549954%,15.695333%{opacity:1;} 15.698497%,100%{opacity:0;} }
+@keyframes k52 { 0%,15.693751%{opacity:0;} 15.695333%,15.819449%{opacity:1;} 15.822613%,100%{opacity:0;} }
+@keyframes k53 { 0%,15.817867%{opacity:0;} 15.819449%,15.920096%{opacity:1;} 15.92326%,100%{opacity:0;} }
+@keyframes k54 { 0%,15.918514%{opacity:0;} 15.920096%,16.036065%{opacity:1;} 16.039229%,100%{opacity:0;} }
+@keyframes k55 { 0%,16.034483%{opacity:0;} 16.036065%,16.191069%{opacity:1;} 16.194233%,100%{opacity:0;} }
+@keyframes k56 { 0%,16.189487%{opacity:0;} 16.191069%,16.341681%{opacity:1;} 16.344845%,100%{opacity:0;} }
+@keyframes k57 { 0%,16.340099%{opacity:0;} 16.341681%,16.456523%{opacity:1;} 16.459687%,100%{opacity:0;} }
+@keyframes k58 { 0%,16.454941%{opacity:0;} 16.456523%,16.61148%{opacity:1;} 16.614644%,100%{opacity:0;} }
+@keyframes k59 { 0%,16.609898%{opacity:0;} 16.61148%,16.734726%{opacity:1;} 16.73789%,100%{opacity:0;} }
+@keyframes k60 { 0%,16.733144%{opacity:0;} 16.734726%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k61 { 0%,17.624178%{opacity:0;} 17.62576%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k62 { 0%,23.952431%{opacity:0;} 23.954013%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k63 { 0%,24.110637%{opacity:0;} 24.112219%,24.270425%{opacity:1;} 24.273589%,100%{opacity:0;} }
+@keyframes k64 { 0%,24.268843%{opacity:0;} 24.270425%,24.632522%{opacity:1;} 24.635686%,100%{opacity:0;} }
+@keyframes k65 { 0%,24.630939%{opacity:0;} 24.632522%,25.02979%{opacity:1;} 25.032954%,100%{opacity:0;} }
+@keyframes k66 { 0%,25.028208%{opacity:0;} 25.02979%,25.389729%{opacity:1;} 25.392893%,100%{opacity:0;} }
+@keyframes k67 { 0%,25.388147%{opacity:0;} 25.389729%,25.792813%{opacity:1;} 25.795977%,100%{opacity:0;} }
+@keyframes k68 { 0%,25.791231%{opacity:0;} 25.792813%,26.144265%{opacity:1;} 26.147429%,100%{opacity:0;} }
+@keyframes k69 { 0%,26.142683%{opacity:0;} 26.144265%,26.957493%{opacity:1;} 26.960657%,100%{opacity:0;} }
+@keyframes k70 { 0%,26.955911%{opacity:0;} 26.957493%,27.339122%{opacity:1;} 27.342286%,100%{opacity:0;} }
+@keyframes k71 { 0%,27.33754%{opacity:0;} 27.339122%,27.694966%{opacity:1;} 27.69813%,100%{opacity:0;} }
+@keyframes k72 { 0%,27.693383%{opacity:0;} 27.694966%,28.096481%{opacity:1;} 28.099645%,100%{opacity:0;} }
+@keyframes k73 { 0%,28.094898%{opacity:0;} 28.096481%,28.472657%{opacity:1;} 28.475821%,100%{opacity:0;} }
+@keyframes k74 { 0%,28.471075%{opacity:0;} 28.472657%,28.851147%{opacity:1;} 28.854311%,100%{opacity:0;} }
+@keyframes k75 { 0%,28.849565%{opacity:0;} 28.851147%,29.226596%{opacity:1;} 29.22976%,100%{opacity:0;} }
+@keyframes k76 { 0%,29.225014%{opacity:0;} 29.226596%,29.962318%{opacity:1;} 29.965483%,100%{opacity:0;} }
+@keyframes k77 { 0%,29.960736%{opacity:0;} 29.962318%,30.355569%{opacity:1;} 30.358733%,100%{opacity:0;} }
+@keyframes k78 { 0%,30.353987%{opacity:0;} 30.355569%,30.736688%{opacity:1;} 30.739852%,100%{opacity:0;} }
+@keyframes k79 { 0%,30.735106%{opacity:0;} 30.736688%,31.094152%{opacity:1;} 31.097316%,100%{opacity:0;} }
+@keyframes k80 { 0%,31.09257%{opacity:0;} 31.094152%,31.45073%{opacity:1;} 31.453894%,100%{opacity:0;} }
+@keyframes k81 { 0%,31.449148%{opacity:0;} 31.45073%,31.817835%{opacity:1;} 31.820999%,100%{opacity:0;} }
+@keyframes k82 { 0%,31.816253%{opacity:0;} 31.817835%,32.202495%{opacity:1;} 32.205659%,100%{opacity:0;} }
+@keyframes k83 { 0%,32.200913%{opacity:0;} 32.202495%,32.608892%{opacity:1;} 32.612056%,100%{opacity:0;} }
+@keyframes k84 { 0%,32.60731%{opacity:0;} 32.608892%,33.009992%{opacity:1;} 33.013156%,100%{opacity:0;} }
+@keyframes k85 { 0%,33.00841%{opacity:0;} 33.009992%,33.420683%{opacity:1;} 33.423847%,100%{opacity:0;} }
+@keyframes k86 { 0%,33.419101%{opacity:0;} 33.420683%,33.824575%{opacity:1;} 33.827739%,100%{opacity:0;} }
+@keyframes k87 { 0%,33.822992%{opacity:0;} 33.824575%,34.196584%{opacity:1;} 34.199748%,100%{opacity:0;} }
+@keyframes k88 { 0%,34.195002%{opacity:0;} 34.196584%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k89 { 0%,35.359249%{opacity:0;} 35.360831%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k90 { 0%,41.687501%{opacity:0;} 41.689083%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k91 { 0%,41.845708%{opacity:0;} 41.84729%,42.005496%{opacity:1;} 42.00866%,100%{opacity:0;} }
+@keyframes k92 { 0%,42.003914%{opacity:0;} 42.005496%,42.159614%{opacity:1;} 42.162778%,100%{opacity:0;} }
+@keyframes k93 { 0%,42.158032%{opacity:0;} 42.159614%,42.271694%{opacity:1;} 42.274858%,100%{opacity:0;} }
+@keyframes k94 { 0%,42.270112%{opacity:0;} 42.271694%,42.39288%{opacity:1;} 42.396044%,100%{opacity:0;} }
+@keyframes k95 { 0%,42.391298%{opacity:0;} 42.39288%,42.527058%{opacity:1;} 42.530222%,100%{opacity:0;} }
+@keyframes k96 { 0%,42.525476%{opacity:0;} 42.527058%,42.768079%{opacity:1;} 42.771243%,100%{opacity:0;} }
+@keyframes k97 { 0%,42.766497%{opacity:0;} 42.768079%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k98 { 0%,49.717425%{opacity:0;} 49.719007%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k99 { 0%,49.875631%{opacity:0;} 49.877213%,50.035419%{opacity:1;} 50.038583%,100%{opacity:0;} }
+@keyframes k100 { 0%,50.033837%{opacity:0;} 50.035419%,50.139873%{opacity:1;} 50.143037%,100%{opacity:0;} }
+@keyframes k101 { 0%,50.138291%{opacity:0;} 50.139873%,50.269913%{opacity:1;} 50.273077%,100%{opacity:0;} }
+@keyframes k102 { 0%,50.268331%{opacity:0;} 50.269913%,50.42167%{opacity:1;} 50.424835%,100%{opacity:0;} }
+@keyframes k103 { 0%,50.420088%{opacity:0;} 50.42167%,50.538987%{opacity:1;} 50.542151%,100%{opacity:0;} }
+@keyframes k104 { 0%,50.537405%{opacity:0;} 50.538987%,50.655734%{opacity:1;} 50.658898%,100%{opacity:0;} }
+@keyframes k105 { 0%,50.654151%{opacity:0;} 50.655734%,50.782852%{opacity:1;} 50.786016%,100%{opacity:0;} }
+@keyframes k106 { 0%,50.78127%{opacity:0;} 50.782852%,50.930092%{opacity:1;} 50.933256%,100%{opacity:0;} }
+@keyframes k107 { 0%,50.92851%{opacity:0;} 50.930092%,51.050398%{opacity:1;} 51.053562%,100%{opacity:0;} }
+@keyframes k108 { 0%,51.048816%{opacity:0;} 51.050398%,51.176786%{opacity:1;} 51.17995%,100%{opacity:0;} }
+@keyframes k109 { 0%,51.175204%{opacity:0;} 51.176786%,51.334923%{opacity:1;} 51.338087%,100%{opacity:0;} }
+@keyframes k110 { 0%,51.333341%{opacity:0;} 51.334923%,51.467693%{opacity:1;} 51.470857%,100%{opacity:0;} }
+@keyframes k111 { 0%,51.466111%{opacity:0;} 51.467693%,51.582636%{opacity:1;} 51.5858%,100%{opacity:0;} }
+@keyframes k112 { 0%,51.581054%{opacity:0;} 51.582636%,51.679357%{opacity:1;} 51.682521%,100%{opacity:0;} }
+@keyframes k113 { 0%,51.677775%{opacity:0;} 51.679357%,51.80921%{opacity:1;} 51.812374%,100%{opacity:0;} }
+@keyframes k114 { 0%,51.807627%{opacity:0;} 51.80921%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k115 { 0%,52.70909%{opacity:0;} 52.710672%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k116 { 0%,57.45528%{opacity:0;} 57.456862%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k117 { 0%,57.613486%{opacity:0;} 57.615068%,57.773275%{opacity:1;} 57.776439%,100%{opacity:0;} }
+@keyframes k118 { 0%,57.771692%{opacity:0;} 57.773275%,57.883082%{opacity:1;} 57.886246%,100%{opacity:0;} }
+@keyframes k119 { 0%,57.8815%{opacity:0;} 57.883082%,58.00063%{opacity:1;} 58.003794%,100%{opacity:0;} }
+@keyframes k120 { 0%,57.999048%{opacity:0;} 58.00063%,58.106062%{opacity:1;} 58.109226%,100%{opacity:0;} }
+@keyframes k121 { 0%,58.104479%{opacity:0;} 58.106062%,58.252491%{opacity:1;} 58.255655%,100%{opacity:0;} }
+@keyframes k122 { 0%,58.250909%{opacity:0;} 58.252491%,58.356686%{opacity:1;} 58.35985%,100%{opacity:0;} }
+@keyframes k123 { 0%,58.355104%{opacity:0;} 58.356686%,58.59727%{opacity:1;} 58.600434%,100%{opacity:0;} }
+@keyframes k124 { 0%,58.595688%{opacity:0;} 58.59727%,58.751648%{opacity:1;} 58.754812%,100%{opacity:0;} }
+@keyframes k125 { 0%,58.750066%{opacity:0;} 58.751648%,58.859098%{opacity:1;} 58.862262%,100%{opacity:0;} }
+@keyframes k126 { 0%,58.857516%{opacity:0;} 58.859098%,59.016501%{opacity:1;} 59.019665%,100%{opacity:0;} }
+@keyframes k127 { 0%,59.014919%{opacity:0;} 59.016501%,59.15415%{opacity:1;} 59.157314%,100%{opacity:0;} }
+@keyframes k128 { 0%,59.152568%{opacity:0;} 59.15415%,59.278006%{opacity:1;} 59.281171%,100%{opacity:0;} }
+@keyframes k129 { 0%,59.276424%{opacity:0;} 59.278006%,59.488104%{opacity:1;} 59.491269%,100%{opacity:0;} }
+@keyframes k130 { 0%,59.486522%{opacity:0;} 59.488104%,59.627839%{opacity:1;} 59.631003%,100%{opacity:0;} }
+@keyframes k131 { 0%,59.626257%{opacity:0;} 59.627839%,59.736969%{opacity:1;} 59.740133%,100%{opacity:0;} }
+@keyframes k132 { 0%,59.735387%{opacity:0;} 59.736969%,59.843933%{opacity:1;} 59.847097%,100%{opacity:0;} }
+@keyframes k133 { 0%,59.842351%{opacity:0;} 59.843933%,59.997485%{opacity:1;} 60.000649%,100%{opacity:0;} }
+@keyframes k134 { 0%,59.995902%{opacity:0;} 59.997485%,60.129954%{opacity:1;} 60.133118%,100%{opacity:0;} }
+@keyframes k135 { 0%,60.128372%{opacity:0;} 60.129954%,60.249422%{opacity:1;} 60.252586%,100%{opacity:0;} }
+@keyframes k136 { 0%,60.24784%{opacity:0;} 60.249422%,60.378053%{opacity:1;} 60.381217%,100%{opacity:0;} }
+@keyframes k137 { 0%,60.376471%{opacity:0;} 60.378053%,60.524622%{opacity:1;} 60.527786%,100%{opacity:0;} }
+@keyframes k138 { 0%,60.52304%{opacity:0;} 60.524622%,60.630215%{opacity:1;} 60.633379%,100%{opacity:0;} }
+@keyframes k139 { 0%,60.628633%{opacity:0;} 60.630215%,60.776011%{opacity:1;} 60.779176%,100%{opacity:0;} }
+@keyframes k140 { 0%,60.774429%{opacity:0;} 60.776011%,60.910547%{opacity:1;} 60.913711%,100%{opacity:0;} }
+@keyframes k141 { 0%,60.908965%{opacity:0;} 60.910547%,61.141636%{opacity:1;} 61.1448%,100%{opacity:0;} }
+@keyframes k142 { 0%,61.140054%{opacity:0;} 61.141636%,61.263439%{opacity:1;} 61.266603%,100%{opacity:0;} }
+@keyframes k143 { 0%,61.261857%{opacity:0;} 61.263439%,61.411476%{opacity:1;} 61.41464%,100%{opacity:0;} }
+@keyframes k144 { 0%,61.409894%{opacity:0;} 61.411476%,61.531194%{opacity:1;} 61.534358%,100%{opacity:0;} }
+@keyframes k145 { 0%,61.529611%{opacity:0;} 61.531194%,61.779017%{opacity:1;} 61.782182%,100%{opacity:0;} }
+@keyframes k146 { 0%,61.777435%{opacity:0;} 61.779017%,61.927456%{opacity:1;} 61.93062%,100%{opacity:0;} }
+@keyframes k147 { 0%,61.925874%{opacity:0;} 61.927456%,62.066064%{opacity:1;} 62.069228%,100%{opacity:0;} }
+@keyframes k148 { 0%,62.064482%{opacity:0;} 62.066064%,62.163259%{opacity:1;} 62.166424%,100%{opacity:0;} }
+@keyframes k149 { 0%,62.161677%{opacity:0;} 62.163259%,62.261825%{opacity:1;} 62.264989%,100%{opacity:0;} }
+@keyframes k150 { 0%,62.260243%{opacity:0;} 62.261825%,62.385495%{opacity:1;} 62.388659%,100%{opacity:0;} }
+@keyframes k151 { 0%,62.383913%{opacity:0;} 62.385495%,62.508279%{opacity:1;} 62.511443%,100%{opacity:0;} }
+@keyframes k152 { 0%,62.506697%{opacity:0;} 62.508279%,62.629019%{opacity:1;} 62.632183%,100%{opacity:0;} }
+@keyframes k153 { 0%,62.627437%{opacity:0;} 62.629019%,62.745319%{opacity:1;} 62.748484%,100%{opacity:0;} }
+@keyframes k154 { 0%,62.743737%{opacity:0;} 62.745319%,62.894075%{opacity:1;} 62.897239%,100%{opacity:0;} }
+@keyframes k155 { 0%,62.892492%{opacity:0;} 62.894075%,63.027946%{opacity:1;} 63.03111%,100%{opacity:0;} }
+@keyframes k156 { 0%,63.026364%{opacity:0;} 63.027946%,63.167173%{opacity:1;} 63.170338%,100%{opacity:0;} }
+@keyframes k157 { 0%,63.165591%{opacity:0;} 63.167173%,63.285297%{opacity:1;} 63.288461%,100%{opacity:0;} }
+@keyframes k158 { 0%,63.283715%{opacity:0;} 63.285297%,63.422601%{opacity:1;} 63.425765%,100%{opacity:0;} }
+@keyframes k159 { 0%,63.421019%{opacity:0;} 63.422601%,63.520787%{opacity:1;} 63.523951%,100%{opacity:0;} }
+@keyframes k160 { 0%,63.519205%{opacity:0;} 63.520787%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k161 { 0%,64.453641%{opacity:0;} 64.455223%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k162 { 0%,69.19983%{opacity:0;} 69.201412%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k163 { 0%,69.358037%{opacity:0;} 69.359619%,69.517825%{opacity:1;} 69.520989%,100%{opacity:0;} }
+@keyframes k164 { 0%,69.516243%{opacity:0;} 69.517825%,69.621713%{opacity:1;} 69.624877%,100%{opacity:0;} }
+@keyframes k165 { 0%,69.620131%{opacity:0;} 69.621713%,69.766576%{opacity:1;} 69.76974%,100%{opacity:0;} }
+@keyframes k166 { 0%,69.764994%{opacity:0;} 69.766576%,69.910506%{opacity:1;} 69.91367%,100%{opacity:0;} }
+@keyframes k167 { 0%,69.908924%{opacity:0;} 69.910506%,70.150834%{opacity:1;} 70.153998%,100%{opacity:0;} }
+@keyframes k168 { 0%,70.149252%{opacity:0;} 70.150834%,70.273292%{opacity:1;} 70.276456%,100%{opacity:0;} }
+@keyframes k169 { 0%,70.27171%{opacity:0;} 70.273292%,70.3786%{opacity:1;} 70.381765%,100%{opacity:0;} }
+@keyframes k170 { 0%,70.377018%{opacity:0;} 70.3786%,70.518607%{opacity:1;} 70.521771%,100%{opacity:0;} }
+@keyframes k171 { 0%,70.517025%{opacity:0;} 70.518607%,70.640052%{opacity:1;} 70.643216%,100%{opacity:0;} }
+@keyframes k172 { 0%,70.63847%{opacity:0;} 70.640052%,70.746927%{opacity:1;} 70.750091%,100%{opacity:0;} }
+@keyframes k173 { 0%,70.745345%{opacity:0;} 70.746927%,70.971589%{opacity:1;} 70.974753%,100%{opacity:0;} }
+@keyframes k174 { 0%,70.970007%{opacity:0;} 70.971589%,71.109048%{opacity:1;} 71.112213%,100%{opacity:0;} }
+@keyframes k175 { 0%,71.107466%{opacity:0;} 71.109048%,71.224507%{opacity:1;} 71.227672%,100%{opacity:0;} }
+@keyframes k176 { 0%,71.222925%{opacity:0;} 71.224507%,71.374813%{opacity:1;} 71.377977%,100%{opacity:0;} }
+@keyframes k177 { 0%,71.373231%{opacity:0;} 71.374813%,71.476074%{opacity:1;} 71.479239%,100%{opacity:0;} }
+@keyframes k178 { 0%,71.474492%{opacity:0;} 71.476074%,71.622017%{opacity:1;} 71.625181%,100%{opacity:0;} }
+@keyframes k179 { 0%,71.620435%{opacity:0;} 71.622017%,71.743601%{opacity:1;} 71.746765%,100%{opacity:0;} }
+@keyframes k180 { 0%,71.742019%{opacity:0;} 71.743601%,71.992716%{opacity:1;} 71.99588%,100%{opacity:0;} }
+@keyframes k181 { 0%,71.991134%{opacity:0;} 71.992716%,72.11107%{opacity:1;} 72.114234%,100%{opacity:0;} }
+@keyframes k182 { 0%,72.109488%{opacity:0;} 72.11107%,72.220141%{opacity:1;} 72.223305%,100%{opacity:0;} }
+@keyframes k183 { 0%,72.218559%{opacity:0;} 72.220141%,72.356233%{opacity:1;} 72.359397%,100%{opacity:0;} }
+@keyframes k184 { 0%,72.354651%{opacity:0;} 72.356233%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k185 { 0%,73.289347%{opacity:0;} 73.290929%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k186 { 0%,78.035536%{opacity:0;} 78.037118%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k187 { 0%,78.193743%{opacity:0;} 78.195325%,78.353531%{opacity:1;} 78.356695%,100%{opacity:0;} }
+@keyframes k188 { 0%,78.351949%{opacity:0;} 78.353531%,78.49592%{opacity:1;} 78.499084%,100%{opacity:0;} }
+@keyframes k189 { 0%,78.494338%{opacity:0;} 78.49592%,78.623652%{opacity:1;} 78.626817%,100%{opacity:0;} }
+@keyframes k190 { 0%,78.62207%{opacity:0;} 78.623652%,78.734748%{opacity:1;} 78.737912%,100%{opacity:0;} }
+@keyframes k191 { 0%,78.733166%{opacity:0;} 78.734748%,79.016634%{opacity:1;} 79.019798%,100%{opacity:0;} }
+@keyframes k192 { 0%,79.015052%{opacity:0;} 79.016634%,79.118895%{opacity:1;} 79.122059%,100%{opacity:0;} }
+@keyframes k193 { 0%,79.117313%{opacity:0;} 79.118895%,79.264575%{opacity:1;} 79.267739%,100%{opacity:0;} }
+@keyframes k194 { 0%,79.262993%{opacity:0;} 79.264575%,79.367991%{opacity:1;} 79.371155%,100%{opacity:0;} }
+@keyframes k195 { 0%,79.366409%{opacity:0;} 79.367991%,79.499264%{opacity:1;} 79.502428%,100%{opacity:0;} }
+@keyframes k196 { 0%,79.497682%{opacity:0;} 79.499264%,79.639008%{opacity:1;} 79.642172%,100%{opacity:0;} }
+@keyframes k197 { 0%,79.637426%{opacity:0;} 79.639008%,79.736191%{opacity:1;} 79.739355%,100%{opacity:0;} }
+@keyframes k198 { 0%,79.734609%{opacity:0;} 79.736191%,79.970368%{opacity:1;} 79.973532%,100%{opacity:0;} }
+@keyframes k199 { 0%,79.968786%{opacity:0;} 79.970368%,80.127562%{opacity:1;} 80.130726%,100%{opacity:0;} }
+@keyframes k200 { 0%,80.12598%{opacity:0;} 80.127562%,80.23363%{opacity:1;} 80.236794%,100%{opacity:0;} }
+@keyframes k201 { 0%,80.232048%{opacity:0;} 80.23363%,80.38646%{opacity:1;} 80.389624%,100%{opacity:0;} }
+@keyframes k202 { 0%,80.384878%{opacity:0;} 80.38646%,80.524511%{opacity:1;} 80.527675%,100%{opacity:0;} }
+@keyframes k203 { 0%,80.522929%{opacity:0;} 80.524511%,80.681325%{opacity:1;} 80.684489%,100%{opacity:0;} }
+@keyframes k204 { 0%,80.679743%{opacity:0;} 80.681325%,80.965172%{opacity:1;} 80.968337%,100%{opacity:0;} }
+@keyframes k205 { 0%,80.96359%{opacity:0;} 80.965172%,81.065925%{opacity:1;} 81.069089%,100%{opacity:0;} }
+@keyframes k206 { 0%,81.064343%{opacity:0;} 81.065925%,81.176815%{opacity:1;} 81.179979%,100%{opacity:0;} }
+@keyframes k207 { 0%,81.175232%{opacity:0;} 81.176815%,81.318302%{opacity:1;} 81.321466%,100%{opacity:0;} }
+@keyframes k208 { 0%,81.31672%{opacity:0;} 81.318302%,81.414067%{opacity:1;} 81.417231%,100%{opacity:0;} }
+@keyframes k209 { 0%,81.412485%{opacity:0;} 81.414067%,81.570723%{opacity:1;} 81.573887%,100%{opacity:0;} }
+@keyframes k210 { 0%,81.569141%{opacity:0;} 81.570723%,81.698256%{opacity:1;} 81.70142%,100%{opacity:0;} }
+@keyframes k211 { 0%,81.696674%{opacity:0;} 81.698256%,82.004493%{opacity:1;} 82.007657%,100%{opacity:0;} }
+@keyframes k212 { 0%,82.002911%{opacity:0;} 82.004493%,82.12123%{opacity:1;} 82.124394%,100%{opacity:0;} }
+@keyframes k213 { 0%,82.119648%{opacity:0;} 82.12123%,82.243995%{opacity:1;} 82.247159%,100%{opacity:0;} }
+@keyframes k214 { 0%,82.242413%{opacity:0;} 82.243995%,82.363973%{opacity:1;} 82.367137%,100%{opacity:0;} }
+@keyframes k215 { 0%,82.362391%{opacity:0;} 82.363973%,82.516996%{opacity:1;} 82.52016%,100%{opacity:0;} }
+@keyframes k216 { 0%,82.515414%{opacity:0;} 82.516996%,83.308028%{opacity:1;} 83.311192%,100%{opacity:0;} }
+@keyframes k217 { 0%,83.306446%{opacity:0;} 83.308028%,89.716589%{opacity:1;} 89.719753%,100%{opacity:0;} }
+@keyframes k218 { 0%,88.052635%{opacity:0;} 88.054217%,88.212424%{opacity:1;} 88.215588%,100%{opacity:0;} }
+@keyframes k219 { 0%,88.210842%{opacity:0;} 88.212424%,88.316118%{opacity:1;} 88.319283%,100%{opacity:0;} }
+@keyframes k220 { 0%,88.314536%{opacity:0;} 88.316118%,88.411305%{opacity:1;} 88.414469%,100%{opacity:0;} }
+@keyframes k221 { 0%,88.409723%{opacity:0;} 88.411305%,88.547856%{opacity:1;} 88.55102%,100%{opacity:0;} }
+@keyframes k222 { 0%,88.546274%{opacity:0;} 88.547856%,88.804213%{opacity:1;} 88.807377%,100%{opacity:0;} }
+@keyframes k223 { 0%,88.802631%{opacity:0;} 88.804213%,88.938812%{opacity:1;} 88.941976%,100%{opacity:0;} }
+@keyframes k224 { 0%,88.93723%{opacity:0;} 88.938812%,89.084055%{opacity:1;} 89.087219%,100%{opacity:0;} }
+@keyframes k225 { 0%,89.082473%{opacity:0;} 89.084055%,89.198163%{opacity:1;} 89.201327%,100%{opacity:0;} }
+@keyframes k226 { 0%,89.196581%{opacity:0;} 89.198163%,89.317564%{opacity:1;} 89.320729%,100%{opacity:0;} }
+@keyframes k227 { 0%,89.315982%{opacity:0;} 89.317564%,89.426917%{opacity:1;} 89.430081%,100%{opacity:0;} }
+@keyframes k228 { 0%,89.425335%{opacity:0;} 89.426917%,89.560664%{opacity:1;} 89.563828%,100%{opacity:0;} }
+@keyframes k229 { 0%,89.559082%{opacity:0;} 89.560664%,89.716589%{opacity:1;} 89.719753%,100%{opacity:0;} }
+@keyframes k230 { 0%,89.715007%{opacity:0;} 89.716589%,90.507621%{opacity:1;} 90.510785%,100%{opacity:0;} }
+@keyframes k231 { 0%,90.506039%{opacity:0;} 90.507621%,100%{opacity:1;} }
+@keyframes k232 { 0%,95.252228%{opacity:0;} 95.25381%,100%{opacity:1;} }
+@keyframes k233 { 0%,3.727967%{opacity:0;} 3.729549%,3.860623%{opacity:1;} 3.863788%,100%{opacity:0;} }
+@keyframes k234 { 0%,3.859041%{opacity:0;} 3.860623%,3.992903%{opacity:1;} 3.996067%,100%{opacity:0;} }
+@keyframes k235 { 0%,4.765234%{opacity:0;} 4.766817%,4.878441%{opacity:1;} 4.881605%,100%{opacity:0;} }
+@keyframes k236 { 0%,4.876859%{opacity:0;} 4.878441%,5.020893%{opacity:1;} 5.024057%,100%{opacity:0;} }
+@keyframes k237 { 0%,5.816155%{opacity:0;} 5.817737%,5.939246%{opacity:1;} 5.94241%,100%{opacity:0;} }
+@keyframes k238 { 0%,5.937664%{opacity:0;} 5.939246%,6.730277%{opacity:1;} 6.733441%,100%{opacity:0;} }
+@keyframes k239 { 0%,6.728695%{opacity:0;} 6.730277%,11.476467%{opacity:1;} 11.479631%,100%{opacity:0;} }
+@keyframes k240 { 0%,11.474885%{opacity:0;} 11.476467%,11.634673%{opacity:1;} 11.637837%,100%{opacity:0;} }
+@keyframes k241 { 0%,12.437747%{opacity:0;} 12.439329%,12.566531%{opacity:1;} 12.569695%,100%{opacity:0;} }
+@keyframes k242 { 0%,12.564948%{opacity:0;} 12.566531%,12.695772%{opacity:1;} 12.698937%,100%{opacity:0;} }
+@keyframes k243 { 0%,16.733144%{opacity:0;} 16.734726%,16.834728%{opacity:1;} 16.837892%,100%{opacity:0;} }
+@keyframes k244 { 0%,16.833146%{opacity:0;} 16.834728%,17.62576%{opacity:1;} 17.628924%,100%{opacity:0;} }
+@keyframes k245 { 0%,17.624178%{opacity:0;} 17.62576%,23.954013%{opacity:1;} 23.957177%,100%{opacity:0;} }
+@keyframes k246 { 0%,23.952431%{opacity:0;} 23.954013%,24.112219%{opacity:1;} 24.115383%,100%{opacity:0;} }
+@keyframes k247 { 0%,26.142683%{opacity:0;} 26.144265%,26.546413%{opacity:1;} 26.549577%,100%{opacity:0;} }
+@keyframes k248 { 0%,26.544831%{opacity:0;} 26.546413%,26.957493%{opacity:1;} 26.960657%,100%{opacity:0;} }
+@keyframes k249 { 0%,29.225014%{opacity:0;} 29.226596%,29.608724%{opacity:1;} 29.611888%,100%{opacity:0;} }
+@keyframes k250 { 0%,29.607142%{opacity:0;} 29.608724%,29.962318%{opacity:1;} 29.965483%,100%{opacity:0;} }
+@keyframes k251 { 0%,34.195002%{opacity:0;} 34.196584%,34.569799%{opacity:1;} 34.572963%,100%{opacity:0;} }
+@keyframes k252 { 0%,34.568217%{opacity:0;} 34.569799%,35.360831%{opacity:1;} 35.363995%,100%{opacity:0;} }
+@keyframes k253 { 0%,35.359249%{opacity:0;} 35.360831%,41.689083%{opacity:1;} 41.692248%,100%{opacity:0;} }
+@keyframes k254 { 0%,41.687501%{opacity:0;} 41.689083%,41.84729%{opacity:1;} 41.850454%,100%{opacity:0;} }
+@keyframes k255 { 0%,42.525476%{opacity:0;} 42.527058%,42.638065%{opacity:1;} 42.641229%,100%{opacity:0;} }
+@keyframes k256 { 0%,42.636483%{opacity:0;} 42.638065%,42.768079%{opacity:1;} 42.771243%,100%{opacity:0;} }
+@keyframes k257 { 0%,42.766497%{opacity:0;} 42.768079%,42.916135%{opacity:1;} 42.919299%,100%{opacity:0;} }
+@keyframes k258 { 0%,42.914553%{opacity:0;} 42.916135%,49.719007%{opacity:1;} 49.722171%,100%{opacity:0;} }
+@keyframes k259 { 0%,49.717425%{opacity:0;} 49.719007%,49.877213%{opacity:1;} 49.880377%,100%{opacity:0;} }
+@keyframes k260 { 0%,51.807627%{opacity:0;} 51.80921%,51.919641%{opacity:1;} 51.922805%,100%{opacity:0;} }
+@keyframes k261 { 0%,51.918059%{opacity:0;} 51.919641%,52.710672%{opacity:1;} 52.713836%,100%{opacity:0;} }
+@keyframes k262 { 0%,52.70909%{opacity:0;} 52.710672%,57.456862%{opacity:1;} 57.460026%,100%{opacity:0;} }
+@keyframes k263 { 0%,57.45528%{opacity:0;} 57.456862%,57.615068%{opacity:1;} 57.618232%,100%{opacity:0;} }
+@keyframes k264 { 0%,58.355104%{opacity:0;} 58.356686%,58.483368%{opacity:1;} 58.486532%,100%{opacity:0;} }
+@keyframes k265 { 0%,58.481786%{opacity:0;} 58.483368%,58.59727%{opacity:1;} 58.600434%,100%{opacity:0;} }
+@keyframes k266 { 0%,59.276424%{opacity:0;} 59.278006%,59.376765%{opacity:1;} 59.379929%,100%{opacity:0;} }
+@keyframes k267 { 0%,59.375183%{opacity:0;} 59.376765%,59.488104%{opacity:1;} 59.491269%,100%{opacity:0;} }
+@keyframes k268 { 0%,60.908965%{opacity:0;} 60.910547%,61.035489%{opacity:1;} 61.038653%,100%{opacity:0;} }
+@keyframes k269 { 0%,61.033907%{opacity:0;} 61.035489%,61.141636%{opacity:1;} 61.1448%,100%{opacity:0;} }
+@keyframes k270 { 0%,61.529611%{opacity:0;} 61.531194%,61.661935%{opacity:1;} 61.665099%,100%{opacity:0;} }
+@keyframes k271 { 0%,61.660353%{opacity:0;} 61.661935%,61.779017%{opacity:1;} 61.782182%,100%{opacity:0;} }
+@keyframes k272 { 0%,63.519205%{opacity:0;} 63.520787%,63.664191%{opacity:1;} 63.667355%,100%{opacity:0;} }
+@keyframes k273 { 0%,63.662609%{opacity:0;} 63.664191%,64.455223%{opacity:1;} 64.458387%,100%{opacity:0;} }
+@keyframes k274 { 0%,64.453641%{opacity:0;} 64.455223%,69.201412%{opacity:1;} 69.204577%,100%{opacity:0;} }
+@keyframes k275 { 0%,69.19983%{opacity:0;} 69.201412%,69.359619%{opacity:1;} 69.362783%,100%{opacity:0;} }
+@keyframes k276 { 0%,69.908924%{opacity:0;} 69.910506%,70.031236%{opacity:1;} 70.0344%,100%{opacity:0;} }
+@keyframes k277 { 0%,70.029654%{opacity:0;} 70.031236%,70.150834%{opacity:1;} 70.153998%,100%{opacity:0;} }
+@keyframes k278 { 0%,70.745345%{opacity:0;} 70.746927%,70.864772%{opacity:1;} 70.867936%,100%{opacity:0;} }
+@keyframes k279 { 0%,70.86319%{opacity:0;} 70.864772%,70.971589%{opacity:1;} 70.974753%,100%{opacity:0;} }
+@keyframes k280 { 0%,71.742019%{opacity:0;} 71.743601%,71.859089%{opacity:1;} 71.862253%,100%{opacity:0;} }
+@keyframes k281 { 0%,71.857507%{opacity:0;} 71.859089%,71.992716%{opacity:1;} 71.99588%,100%{opacity:0;} }
+@keyframes k282 { 0%,72.354651%{opacity:0;} 72.356233%,72.499897%{opacity:1;} 72.503061%,100%{opacity:0;} }
+@keyframes k283 { 0%,72.498315%{opacity:0;} 72.499897%,73.290929%{opacity:1;} 73.294093%,100%{opacity:0;} }
+@keyframes k284 { 0%,73.289347%{opacity:0;} 73.290929%,78.037118%{opacity:1;} 78.040282%,100%{opacity:0;} }
+@keyframes k285 { 0%,78.035536%{opacity:0;} 78.037118%,78.195325%{opacity:1;} 78.198489%,100%{opacity:0;} }
+@keyframes k286 { 0%,78.733166%{opacity:0;} 78.734748%,78.863664%{opacity:1;} 78.866828%,100%{opacity:0;} }
+@keyframes k287 { 0%,78.862082%{opacity:0;} 78.863664%,79.016634%{opacity:1;} 79.019798%,100%{opacity:0;} }
+@keyframes k288 { 0%,79.734609%{opacity:0;} 79.736191%,79.871337%{opacity:1;} 79.874501%,100%{opacity:0;} }
+@keyframes k289 { 0%,79.869755%{opacity:0;} 79.871337%,79.970368%{opacity:1;} 79.973532%,100%{opacity:0;} }
+@keyframes k290 { 0%,80.679743%{opacity:0;} 80.681325%,80.815278%{opacity:1;} 80.818442%,100%{opacity:0;} }
+@keyframes k291 { 0%,80.813696%{opacity:0;} 80.815278%,80.965172%{opacity:1;} 80.968337%,100%{opacity:0;} }
+@keyframes k292 { 0%,81.696674%{opacity:0;} 81.698256%,81.849748%{opacity:1;} 81.852912%,100%{opacity:0;} }
+@keyframes k293 { 0%,81.848166%{opacity:0;} 81.849748%,82.004493%{opacity:1;} 82.007657%,100%{opacity:0;} }
+@keyframes k294 { 0%,82.515414%{opacity:0;} 82.516996%,88.054217%{opacity:1;} 88.057381%,100%{opacity:0;} }
+@keyframes k295 { 0%,88.546274%{opacity:0;} 88.547856%,88.697924%{opacity:1;} 88.701088%,100%{opacity:0;} }
+@keyframes k296 { 0%,88.696342%{opacity:0;} 88.697924%,88.804213%{opacity:1;} 88.807377%,100%{opacity:0;} }
+@keyframes k297 { 0%,89.715007%{opacity:0;} 89.716589%,95.25381%{opacity:1;} 95.256975%,100%{opacity:0;} }
+@keyframes k298 { 0%,100%{opacity:1;} }
+.layer-0 { animation:k0 31.6043s linear infinite; }
+.layer-1 { animation:k1 31.6043s linear infinite; }
+.layer-2 { animation:k2 31.6043s linear infinite; }
+.layer-3 { animation:k3 31.6043s linear infinite; }
+.layer-4 { animation:k4 31.6043s linear infinite; }
+.layer-5 { animation:k5 31.6043s linear infinite; }
+.layer-6 { animation:k6 31.6043s linear infinite; }
+.layer-7 { animation:k7 31.6043s linear infinite; }
+.layer-8 { animation:k8 31.6043s linear infinite; }
+.layer-9 { animation:k9 31.6043s linear infinite; }
+.layer-10 { animation:k10 31.6043s linear infinite; }
+.layer-11 { animation:k11 31.6043s linear infinite; }
+.layer-12 { animation:k12 31.6043s linear infinite; }
+.layer-13 { animation:k13 31.6043s linear infinite; }
+.layer-14 { animation:k14 31.6043s linear infinite; }
+.layer-15 { animation:k15 31.6043s linear infinite; }
+.layer-16 { animation:k16 31.6043s linear infinite; }
+.layer-17 { animation:k17 31.6043s linear infinite; }
+.layer-18 { animation:k18 31.6043s linear infinite; }
+.layer-19 { animation:k19 31.6043s linear infinite; }
+.layer-20 { animation:k20 31.6043s linear infinite; }
+.layer-21 { animation:k21 31.6043s linear infinite; }
+.layer-22 { animation:k22 31.6043s linear infinite; }
+.layer-23 { animation:k23 31.6043s linear infinite; }
+.layer-24 { animation:k24 31.6043s linear infinite; }
+.layer-25 { animation:k25 31.6043s linear infinite; }
+.layer-26 { animation:k26 31.6043s linear infinite; }
+.layer-27 { animation:k27 31.6043s linear infinite; }
+.layer-28 { animation:k28 31.6043s linear infinite; }
+.layer-29 { animation:k29 31.6043s linear infinite; }
+.layer-30 { animation:k30 31.6043s linear infinite; }
+.layer-31 { animation:k31 31.6043s linear infinite; }
+.layer-32 { animation:k32 31.6043s linear infinite; }
+.layer-33 { animation:k33 31.6043s linear infinite; }
+.layer-34 { animation:k34 31.6043s linear infinite; }
+.layer-35 { animation:k35 31.6043s linear infinite; }
+.layer-36 { animation:k36 31.6043s linear infinite; }
+.layer-37 { animation:k37 31.6043s linear infinite; }
+.layer-38 { animation:k38 31.6043s linear infinite; }
+.layer-39 { animation:k39 31.6043s linear infinite; }
+.layer-40 { animation:k40 31.6043s linear infinite; }
+.layer-41 { animation:k41 31.6043s linear infinite; }
+.layer-42 { animation:k42 31.6043s linear infinite; }
+.layer-43 { animation:k43 31.6043s linear infinite; }
+.layer-44 { animation:k44 31.6043s linear infinite; }
+.layer-45 { animation:k45 31.6043s linear infinite; }
+.layer-46 { animation:k46 31.6043s linear infinite; }
+.layer-47 { animation:k47 31.6043s linear infinite; }
+.layer-48 { animation:k48 31.6043s linear infinite; }
+.layer-49 { animation:k49 31.6043s linear infinite; }
+.layer-50 { animation:k50 31.6043s linear infinite; }
+.layer-51 { animation:k51 31.6043s linear infinite; }
+.layer-52 { animation:k52 31.6043s linear infinite; }
+.layer-53 { animation:k53 31.6043s linear infinite; }
+.layer-54 { animation:k54 31.6043s linear infinite; }
+.layer-55 { animation:k55 31.6043s linear infinite; }
+.layer-56 { animation:k56 31.6043s linear infinite; }
+.layer-57 { animation:k57 31.6043s linear infinite; }
+.layer-58 { animation:k58 31.6043s linear infinite; }
+.layer-59 { animation:k59 31.6043s linear infinite; }
+.layer-60 { animation:k60 31.6043s linear infinite; }
+.layer-61 { animation:k61 31.6043s linear infinite; }
+.layer-62 { animation:k61 31.6043s linear infinite; }
+.layer-63 { animation:k62 31.6043s linear infinite; }
+.layer-64 { animation:k63 31.6043s linear infinite; }
+.layer-65 { animation:k64 31.6043s linear infinite; }
+.layer-66 { animation:k65 31.6043s linear infinite; }
+.layer-67 { animation:k66 31.6043s linear infinite; }
+.layer-68 { animation:k67 31.6043s linear infinite; }
+.layer-69 { animation:k68 31.6043s linear infinite; }
+.layer-70 { animation:k69 31.6043s linear infinite; }
+.layer-71 { animation:k70 31.6043s linear infinite; }
+.layer-72 { animation:k71 31.6043s linear infinite; }
+.layer-73 { animation:k72 31.6043s linear infinite; }
+.layer-74 { animation:k73 31.6043s linear infinite; }
+.layer-75 { animation:k74 31.6043s linear infinite; }
+.layer-76 { animation:k75 31.6043s linear infinite; }
+.layer-77 { animation:k76 31.6043s linear infinite; }
+.layer-78 { animation:k77 31.6043s linear infinite; }
+.layer-79 { animation:k78 31.6043s linear infinite; }
+.layer-80 { animation:k79 31.6043s linear infinite; }
+.layer-81 { animation:k80 31.6043s linear infinite; }
+.layer-82 { animation:k81 31.6043s linear infinite; }
+.layer-83 { animation:k82 31.6043s linear infinite; }
+.layer-84 { animation:k83 31.6043s linear infinite; }
+.layer-85 { animation:k84 31.6043s linear infinite; }
+.layer-86 { animation:k85 31.6043s linear infinite; }
+.layer-87 { animation:k86 31.6043s linear infinite; }
+.layer-88 { animation:k87 31.6043s linear infinite; }
+.layer-89 { animation:k88 31.6043s linear infinite; }
+.layer-90 { animation:k89 31.6043s linear infinite; }
+.layer-91 { animation:k90 31.6043s linear infinite; }
+.layer-92 { animation:k91 31.6043s linear infinite; }
+.layer-93 { animation:k92 31.6043s linear infinite; }
+.layer-94 { animation:k93 31.6043s linear infinite; }
+.layer-95 { animation:k94 31.6043s linear infinite; }
+.layer-96 { animation:k95 31.6043s linear infinite; }
+.layer-97 { animation:k96 31.6043s linear infinite; }
+.layer-98 { animation:k97 31.6043s linear infinite; }
+.layer-99 { animation:k98 31.6043s linear infinite; }
+.layer-100 { animation:k99 31.6043s linear infinite; }
+.layer-101 { animation:k100 31.6043s linear infinite; }
+.layer-102 { animation:k101 31.6043s linear infinite; }
+.layer-103 { animation:k102 31.6043s linear infinite; }
+.layer-104 { animation:k103 31.6043s linear infinite; }
+.layer-105 { animation:k104 31.6043s linear infinite; }
+.layer-106 { animation:k105 31.6043s linear infinite; }
+.layer-107 { animation:k106 31.6043s linear infinite; }
+.layer-108 { animation:k107 31.6043s linear infinite; }
+.layer-109 { animation:k108 31.6043s linear infinite; }
+.layer-110 { animation:k109 31.6043s linear infinite; }
+.layer-111 { animation:k110 31.6043s linear infinite; }
+.layer-112 { animation:k111 31.6043s linear infinite; }
+.layer-113 { animation:k112 31.6043s linear infinite; }
+.layer-114 { animation:k113 31.6043s linear infinite; }
+.layer-115 { animation:k114 31.6043s linear infinite; }
+.layer-116 { animation:k115 31.6043s linear infinite; }
+.layer-117 { animation:k116 31.6043s linear infinite; }
+.layer-118 { animation:k117 31.6043s linear infinite; }
+.layer-119 { animation:k118 31.6043s linear infinite; }
+.layer-120 { animation:k119 31.6043s linear infinite; }
+.layer-121 { animation:k120 31.6043s linear infinite; }
+.layer-122 { animation:k121 31.6043s linear infinite; }
+.layer-123 { animation:k122 31.6043s linear infinite; }
+.layer-124 { animation:k123 31.6043s linear infinite; }
+.layer-125 { animation:k124 31.6043s linear infinite; }
+.layer-126 { animation:k125 31.6043s linear infinite; }
+.layer-127 { animation:k126 31.6043s linear infinite; }
+.layer-128 { animation:k127 31.6043s linear infinite; }
+.layer-129 { animation:k128 31.6043s linear infinite; }
+.layer-130 { animation:k129 31.6043s linear infinite; }
+.layer-131 { animation:k130 31.6043s linear infinite; }
+.layer-132 { animation:k131 31.6043s linear infinite; }
+.layer-133 { animation:k132 31.6043s linear infinite; }
+.layer-134 { animation:k133 31.6043s linear infinite; }
+.layer-135 { animation:k134 31.6043s linear infinite; }
+.layer-136 { animation:k135 31.6043s linear infinite; }
+.layer-137 { animation:k136 31.6043s linear infinite; }
+.layer-138 { animation:k137 31.6043s linear infinite; }
+.layer-139 { animation:k138 31.6043s linear infinite; }
+.layer-140 { animation:k139 31.6043s linear infinite; }
+.layer-141 { animation:k140 31.6043s linear infinite; }
+.layer-142 { animation:k141 31.6043s linear infinite; }
+.layer-143 { animation:k142 31.6043s linear infinite; }
+.layer-144 { animation:k143 31.6043s linear infinite; }
+.layer-145 { animation:k144 31.6043s linear infinite; }
+.layer-146 { animation:k145 31.6043s linear infinite; }
+.layer-147 { animation:k146 31.6043s linear infinite; }
+.layer-148 { animation:k147 31.6043s linear infinite; }
+.layer-149 { animation:k148 31.6043s linear infinite; }
+.layer-150 { animation:k149 31.6043s linear infinite; }
+.layer-151 { animation:k150 31.6043s linear infinite; }
+.layer-152 { animation:k151 31.6043s linear infinite; }
+.layer-153 { animation:k152 31.6043s linear infinite; }
+.layer-154 { animation:k153 31.6043s linear infinite; }
+.layer-155 { animation:k154 31.6043s linear infinite; }
+.layer-156 { animation:k155 31.6043s linear infinite; }
+.layer-157 { animation:k156 31.6043s linear infinite; }
+.layer-158 { animation:k157 31.6043s linear infinite; }
+.layer-159 { animation:k158 31.6043s linear infinite; }
+.layer-160 { animation:k159 31.6043s linear infinite; }
+.layer-161 { animation:k160 31.6043s linear infinite; }
+.layer-162 { animation:k161 31.6043s linear infinite; }
+.layer-163 { animation:k161 31.6043s linear infinite; }
+.layer-164 { animation:k161 31.6043s linear infinite; }
+.layer-165 { animation:k162 31.6043s linear infinite; }
+.layer-166 { animation:k163 31.6043s linear infinite; }
+.layer-167 { animation:k164 31.6043s linear infinite; }
+.layer-168 { animation:k165 31.6043s linear infinite; }
+.layer-169 { animation:k166 31.6043s linear infinite; }
+.layer-170 { animation:k167 31.6043s linear infinite; }
+.layer-171 { animation:k168 31.6043s linear infinite; }
+.layer-172 { animation:k169 31.6043s linear infinite; }
+.layer-173 { animation:k170 31.6043s linear infinite; }
+.layer-174 { animation:k171 31.6043s linear infinite; }
+.layer-175 { animation:k172 31.6043s linear infinite; }
+.layer-176 { animation:k173 31.6043s linear infinite; }
+.layer-177 { animation:k174 31.6043s linear infinite; }
+.layer-178 { animation:k175 31.6043s linear infinite; }
+.layer-179 { animation:k176 31.6043s linear infinite; }
+.layer-180 { animation:k177 31.6043s linear infinite; }
+.layer-181 { animation:k178 31.6043s linear infinite; }
+.layer-182 { animation:k179 31.6043s linear infinite; }
+.layer-183 { animation:k180 31.6043s linear infinite; }
+.layer-184 { animation:k181 31.6043s linear infinite; }
+.layer-185 { animation:k182 31.6043s linear infinite; }
+.layer-186 { animation:k183 31.6043s linear infinite; }
+.layer-187 { animation:k184 31.6043s linear infinite; }
+.layer-188 { animation:k185 31.6043s linear infinite; }
+.layer-189 { animation:k186 31.6043s linear infinite; }
+.layer-190 { animation:k187 31.6043s linear infinite; }
+.layer-191 { animation:k188 31.6043s linear infinite; }
+.layer-192 { animation:k189 31.6043s linear infinite; }
+.layer-193 { animation:k190 31.6043s linear infinite; }
+.layer-194 { animation:k191 31.6043s linear infinite; }
+.layer-195 { animation:k192 31.6043s linear infinite; }
+.layer-196 { animation:k193 31.6043s linear infinite; }
+.layer-197 { animation:k194 31.6043s linear infinite; }
+.layer-198 { animation:k195 31.6043s linear infinite; }
+.layer-199 { animation:k196 31.6043s linear infinite; }
+.layer-200 { animation:k197 31.6043s linear infinite; }
+.layer-201 { animation:k198 31.6043s linear infinite; }
+.layer-202 { animation:k199 31.6043s linear infinite; }
+.layer-203 { animation:k200 31.6043s linear infinite; }
+.layer-204 { animation:k201 31.6043s linear infinite; }
+.layer-205 { animation:k202 31.6043s linear infinite; }
+.layer-206 { animation:k203 31.6043s linear infinite; }
+.layer-207 { animation:k204 31.6043s linear infinite; }
+.layer-208 { animation:k205 31.6043s linear infinite; }
+.layer-209 { animation:k206 31.6043s linear infinite; }
+.layer-210 { animation:k207 31.6043s linear infinite; }
+.layer-211 { animation:k208 31.6043s linear infinite; }
+.layer-212 { animation:k209 31.6043s linear infinite; }
+.layer-213 { animation:k210 31.6043s linear infinite; }
+.layer-214 { animation:k211 31.6043s linear infinite; }
+.layer-215 { animation:k212 31.6043s linear infinite; }
+.layer-216 { animation:k213 31.6043s linear infinite; }
+.layer-217 { animation:k214 31.6043s linear infinite; }
+.layer-218 { animation:k215 31.6043s linear infinite; }
+.layer-219 { animation:k216 31.6043s linear infinite; }
+.layer-220 { animation:k216 31.6043s linear infinite; }
+.layer-221 { animation:k216 31.6043s linear infinite; }
+.layer-222 { animation:k216 31.6043s linear infinite; }
+.layer-223 { animation:k216 31.6043s linear infinite; }
+.layer-224 { animation:k216 31.6043s linear infinite; }
+.layer-225 { animation:k216 31.6043s linear infinite; }
+.layer-226 { animation:k216 31.6043s linear infinite; }
+.layer-227 { animation:k216 31.6043s linear infinite; }
+.layer-228 { animation:k216 31.6043s linear infinite; }
+.layer-229 { animation:k216 31.6043s linear infinite; }
+.layer-230 { animation:k216 31.6043s linear infinite; }
+.layer-231 { animation:k216 31.6043s linear infinite; }
+.layer-232 { animation:k216 31.6043s linear infinite; }
+.layer-233 { animation:k216 31.6043s linear infinite; }
+.layer-234 { animation:k216 31.6043s linear infinite; }
+.layer-235 { animation:k216 31.6043s linear infinite; }
+.layer-236 { animation:k216 31.6043s linear infinite; }
+.layer-237 { animation:k216 31.6043s linear infinite; }
+.layer-238 { animation:k216 31.6043s linear infinite; }
+.layer-239 { animation:k216 31.6043s linear infinite; }
+.layer-240 { animation:k216 31.6043s linear infinite; }
+.layer-241 { animation:k216 31.6043s linear infinite; }
+.layer-242 { animation:k217 31.6043s linear infinite; }
+.layer-243 { animation:k217 31.6043s linear infinite; }
+.layer-244 { animation:k217 31.6043s linear infinite; }
+.layer-245 { animation:k217 31.6043s linear infinite; }
+.layer-246 { animation:k217 31.6043s linear infinite; }
+.layer-247 { animation:k217 31.6043s linear infinite; }
+.layer-248 { animation:k217 31.6043s linear infinite; }
+.layer-249 { animation:k217 31.6043s linear infinite; }
+.layer-250 { animation:k217 31.6043s linear infinite; }
+.layer-251 { animation:k217 31.6043s linear infinite; }
+.layer-252 { animation:k217 31.6043s linear infinite; }
+.layer-253 { animation:k217 31.6043s linear infinite; }
+.layer-254 { animation:k217 31.6043s linear infinite; }
+.layer-255 { animation:k217 31.6043s linear infinite; }
+.layer-256 { animation:k217 31.6043s linear infinite; }
+.layer-257 { animation:k217 31.6043s linear infinite; }
+.layer-258 { animation:k217 31.6043s linear infinite; }
+.layer-259 { animation:k217 31.6043s linear infinite; }
+.layer-260 { animation:k217 31.6043s linear infinite; }
+.layer-261 { animation:k217 31.6043s linear infinite; }
+.layer-262 { animation:k217 31.6043s linear infinite; }
+.layer-263 { animation:k217 31.6043s linear infinite; }
+.layer-264 { animation:k217 31.6043s linear infinite; }
+.layer-265 { animation:k218 31.6043s linear infinite; }
+.layer-266 { animation:k219 31.6043s linear infinite; }
+.layer-267 { animation:k220 31.6043s linear infinite; }
+.layer-268 { animation:k221 31.6043s linear infinite; }
+.layer-269 { animation:k222 31.6043s linear infinite; }
+.layer-270 { animation:k223 31.6043s linear infinite; }
+.layer-271 { animation:k224 31.6043s linear infinite; }
+.layer-272 { animation:k225 31.6043s linear infinite; }
+.layer-273 { animation:k226 31.6043s linear infinite; }
+.layer-274 { animation:k227 31.6043s linear infinite; }
+.layer-275 { animation:k228 31.6043s linear infinite; }
+.layer-276 { animation:k229 31.6043s linear infinite; }
+.layer-277 { animation:k230 31.6043s linear infinite; }
+.layer-278 { animation:k230 31.6043s linear infinite; }
+.layer-279 { animation:k230 31.6043s linear infinite; }
+.layer-280 { animation:k230 31.6043s linear infinite; }
+.layer-281 { animation:k230 31.6043s linear infinite; }
+.layer-282 { animation:k230 31.6043s linear infinite; }
+.layer-283 { animation:k230 31.6043s linear infinite; }
+.layer-284 { animation:k230 31.6043s linear infinite; }
+.layer-285 { animation:k230 31.6043s linear infinite; }
+.layer-286 { animation:k230 31.6043s linear infinite; }
+.layer-287 { animation:k230 31.6043s linear infinite; }
+.layer-288 { animation:k230 31.6043s linear infinite; }
+.layer-289 { animation:k230 31.6043s linear infinite; }
+.layer-290 { animation:k230 31.6043s linear infinite; }
+.layer-291 { animation:k230 31.6043s linear infinite; }
+.layer-292 { animation:k230 31.6043s linear infinite; }
+.layer-293 { animation:k230 31.6043s linear infinite; }
+.layer-294 { animation:k230 31.6043s linear infinite; }
+.layer-295 { animation:k230 31.6043s linear infinite; }
+.layer-296 { animation:k230 31.6043s linear infinite; }
+.layer-297 { animation:k230 31.6043s linear infinite; }
+.layer-298 { animation:k230 31.6043s linear infinite; }
+.layer-299 { animation:k230 31.6043s linear infinite; }
+.layer-300 { animation:k231 31.6043s linear infinite; }
+.layer-301 { animation:k231 31.6043s linear infinite; }
+.layer-302 { animation:k231 31.6043s linear infinite; }
+.layer-303 { animation:k231 31.6043s linear infinite; }
+.layer-304 { animation:k231 31.6043s linear infinite; }
+.layer-305 { animation:k231 31.6043s linear infinite; }
+.layer-306 { animation:k231 31.6043s linear infinite; }
+.layer-307 { animation:k231 31.6043s linear infinite; }
+.layer-308 { animation:k231 31.6043s linear infinite; }
+.layer-309 { animation:k231 31.6043s linear infinite; }
+.layer-310 { animation:k231 31.6043s linear infinite; }
+.layer-311 { animation:k231 31.6043s linear infinite; }
+.layer-312 { animation:k231 31.6043s linear infinite; }
+.layer-313 { animation:k231 31.6043s linear infinite; }
+.layer-314 { animation:k231 31.6043s linear infinite; }
+.layer-315 { animation:k231 31.6043s linear infinite; }
+.layer-316 { animation:k231 31.6043s linear infinite; }
+.layer-317 { animation:k231 31.6043s linear infinite; }
+.layer-318 { animation:k231 31.6043s linear infinite; }
+.layer-319 { animation:k231 31.6043s linear infinite; }
+.layer-320 { animation:k231 31.6043s linear infinite; }
+.layer-321 { animation:k231 31.6043s linear infinite; }
+.layer-322 { animation:k231 31.6043s linear infinite; }
+.layer-323 { animation:k232 31.6043s linear infinite; }
+.cursor-layer-0 { animation:k0 31.6043s linear infinite; }
+.cursor-layer-1 { animation:k1 31.6043s linear infinite; }
+.cursor-layer-2 { animation:k2 31.6043s linear infinite; }
+.cursor-layer-3 { animation:k3 31.6043s linear infinite; }
+.cursor-layer-4 { animation:k233 31.6043s linear infinite; }
+.cursor-layer-5 { animation:k234 31.6043s linear infinite; }
+.cursor-layer-6 { animation:k5 31.6043s linear infinite; }
+.cursor-layer-7 { animation:k6 31.6043s linear infinite; }
+.cursor-layer-8 { animation:k7 31.6043s linear infinite; }
+.cursor-layer-9 { animation:k8 31.6043s linear infinite; }
+.cursor-layer-10 { animation:k9 31.6043s linear infinite; }
+.cursor-layer-11 { animation:k10 31.6043s linear infinite; }
+.cursor-layer-12 { animation:k235 31.6043s linear infinite; }
+.cursor-layer-13 { animation:k236 31.6043s linear infinite; }
+.cursor-layer-14 { animation:k12 31.6043s linear infinite; }
+.cursor-layer-15 { animation:k13 31.6043s linear infinite; }
+.cursor-layer-16 { animation:k14 31.6043s linear infinite; }
+.cursor-layer-17 { animation:k15 31.6043s linear infinite; }
+.cursor-layer-18 { animation:k16 31.6043s linear infinite; }
+.cursor-layer-19 { animation:k17 31.6043s linear infinite; }
+.cursor-layer-20 { animation:k237 31.6043s linear infinite; }
+.cursor-layer-21 { animation:k238 31.6043s linear infinite; }
+.cursor-layer-22 { animation:k239 31.6043s linear infinite; }
+.cursor-layer-23 { animation:k240 31.6043s linear infinite; }
+.cursor-layer-24 { animation:k21 31.6043s linear infinite; }
+.cursor-layer-25 { animation:k22 31.6043s linear infinite; }
+.cursor-layer-26 { animation:k23 31.6043s linear infinite; }
+.cursor-layer-27 { animation:k24 31.6043s linear infinite; }
+.cursor-layer-28 { animation:k25 31.6043s linear infinite; }
+.cursor-layer-29 { animation:k26 31.6043s linear infinite; }
+.cursor-layer-30 { animation:k241 31.6043s linear infinite; }
+.cursor-layer-31 { animation:k242 31.6043s linear infinite; }
+.cursor-layer-32 { animation:k28 31.6043s linear infinite; }
+.cursor-layer-33 { animation:k29 31.6043s linear infinite; }
+.cursor-layer-34 { animation:k30 31.6043s linear infinite; }
+.cursor-layer-35 { animation:k31 31.6043s linear infinite; }
+.cursor-layer-36 { animation:k32 31.6043s linear infinite; }
+.cursor-layer-37 { animation:k33 31.6043s linear infinite; }
+.cursor-layer-38 { animation:k34 31.6043s linear infinite; }
+.cursor-layer-39 { animation:k35 31.6043s linear infinite; }
+.cursor-layer-40 { animation:k36 31.6043s linear infinite; }
+.cursor-layer-41 { animation:k37 31.6043s linear infinite; }
+.cursor-layer-42 { animation:k38 31.6043s linear infinite; }
+.cursor-layer-43 { animation:k39 31.6043s linear infinite; }
+.cursor-layer-44 { animation:k40 31.6043s linear infinite; }
+.cursor-layer-45 { animation:k41 31.6043s linear infinite; }
+.cursor-layer-46 { animation:k42 31.6043s linear infinite; }
+.cursor-layer-47 { animation:k43 31.6043s linear infinite; }
+.cursor-layer-48 { animation:k44 31.6043s linear infinite; }
+.cursor-layer-49 { animation:k45 31.6043s linear infinite; }
+.cursor-layer-50 { animation:k46 31.6043s linear infinite; }
+.cursor-layer-51 { animation:k47 31.6043s linear infinite; }
+.cursor-layer-52 { animation:k48 31.6043s linear infinite; }
+.cursor-layer-53 { animation:k49 31.6043s linear infinite; }
+.cursor-layer-54 { animation:k50 31.6043s linear infinite; }
+.cursor-layer-55 { animation:k51 31.6043s linear infinite; }
+.cursor-layer-56 { animation:k52 31.6043s linear infinite; }
+.cursor-layer-57 { animation:k53 31.6043s linear infinite; }
+.cursor-layer-58 { animation:k54 31.6043s linear infinite; }
+.cursor-layer-59 { animation:k55 31.6043s linear infinite; }
+.cursor-layer-60 { animation:k56 31.6043s linear infinite; }
+.cursor-layer-61 { animation:k57 31.6043s linear infinite; }
+.cursor-layer-62 { animation:k58 31.6043s linear infinite; }
+.cursor-layer-63 { animation:k59 31.6043s linear infinite; }
+.cursor-layer-64 { animation:k243 31.6043s linear infinite; }
+.cursor-layer-65 { animation:k244 31.6043s linear infinite; }
+.cursor-layer-66 { animation:k245 31.6043s linear infinite; }
+.cursor-layer-67 { animation:k246 31.6043s linear infinite; }
+.cursor-layer-68 { animation:k63 31.6043s linear infinite; }
+.cursor-layer-69 { animation:k64 31.6043s linear infinite; }
+.cursor-layer-70 { animation:k65 31.6043s linear infinite; }
+.cursor-layer-71 { animation:k66 31.6043s linear infinite; }
+.cursor-layer-72 { animation:k67 31.6043s linear infinite; }
+.cursor-layer-73 { animation:k68 31.6043s linear infinite; }
+.cursor-layer-74 { animation:k247 31.6043s linear infinite; }
+.cursor-layer-75 { animation:k248 31.6043s linear infinite; }
+.cursor-layer-76 { animation:k70 31.6043s linear infinite; }
+.cursor-layer-77 { animation:k71 31.6043s linear infinite; }
+.cursor-layer-78 { animation:k72 31.6043s linear infinite; }
+.cursor-layer-79 { animation:k73 31.6043s linear infinite; }
+.cursor-layer-80 { animation:k74 31.6043s linear infinite; }
+.cursor-layer-81 { animation:k75 31.6043s linear infinite; }
+.cursor-layer-82 { animation:k249 31.6043s linear infinite; }
+.cursor-layer-83 { animation:k250 31.6043s linear infinite; }
+.cursor-layer-84 { animation:k77 31.6043s linear infinite; }
+.cursor-layer-85 { animation:k78 31.6043s linear infinite; }
+.cursor-layer-86 { animation:k79 31.6043s linear infinite; }
+.cursor-layer-87 { animation:k80 31.6043s linear infinite; }
+.cursor-layer-88 { animation:k81 31.6043s linear infinite; }
+.cursor-layer-89 { animation:k82 31.6043s linear infinite; }
+.cursor-layer-90 { animation:k83 31.6043s linear infinite; }
+.cursor-layer-91 { animation:k84 31.6043s linear infinite; }
+.cursor-layer-92 { animation:k85 31.6043s linear infinite; }
+.cursor-layer-93 { animation:k86 31.6043s linear infinite; }
+.cursor-layer-94 { animation:k87 31.6043s linear infinite; }
+.cursor-layer-95 { animation:k251 31.6043s linear infinite; }
+.cursor-layer-96 { animation:k252 31.6043s linear infinite; }
+.cursor-layer-97 { animation:k253 31.6043s linear infinite; }
+.cursor-layer-98 { animation:k254 31.6043s linear infinite; }
+.cursor-layer-99 { animation:k91 31.6043s linear infinite; }
+.cursor-layer-100 { animation:k92 31.6043s linear infinite; }
+.cursor-layer-101 { animation:k93 31.6043s linear infinite; }
+.cursor-layer-102 { animation:k94 31.6043s linear infinite; }
+.cursor-layer-103 { animation:k95 31.6043s linear infinite; }
+.cursor-layer-104 { animation:k255 31.6043s linear infinite; }
+.cursor-layer-105 { animation:k256 31.6043s linear infinite; }
+.cursor-layer-106 { animation:k257 31.6043s linear infinite; }
+.cursor-layer-107 { animation:k258 31.6043s linear infinite; }
+.cursor-layer-108 { animation:k259 31.6043s linear infinite; }
+.cursor-layer-109 { animation:k99 31.6043s linear infinite; }
+.cursor-layer-110 { animation:k100 31.6043s linear infinite; }
+.cursor-layer-111 { animation:k101 31.6043s linear infinite; }
+.cursor-layer-112 { animation:k102 31.6043s linear infinite; }
+.cursor-layer-113 { animation:k103 31.6043s linear infinite; }
+.cursor-layer-114 { animation:k104 31.6043s linear infinite; }
+.cursor-layer-115 { animation:k105 31.6043s linear infinite; }
+.cursor-layer-116 { animation:k106 31.6043s linear infinite; }
+.cursor-layer-117 { animation:k107 31.6043s linear infinite; }
+.cursor-layer-118 { animation:k108 31.6043s linear infinite; }
+.cursor-layer-119 { animation:k109 31.6043s linear infinite; }
+.cursor-layer-120 { animation:k110 31.6043s linear infinite; }
+.cursor-layer-121 { animation:k111 31.6043s linear infinite; }
+.cursor-layer-122 { animation:k112 31.6043s linear infinite; }
+.cursor-layer-123 { animation:k113 31.6043s linear infinite; }
+.cursor-layer-124 { animation:k260 31.6043s linear infinite; }
+.cursor-layer-125 { animation:k261 31.6043s linear infinite; }
+.cursor-layer-126 { animation:k262 31.6043s linear infinite; }
+.cursor-layer-127 { animation:k263 31.6043s linear infinite; }
+.cursor-layer-128 { animation:k117 31.6043s linear infinite; }
+.cursor-layer-129 { animation:k118 31.6043s linear infinite; }
+.cursor-layer-130 { animation:k119 31.6043s linear infinite; }
+.cursor-layer-131 { animation:k120 31.6043s linear infinite; }
+.cursor-layer-132 { animation:k121 31.6043s linear infinite; }
+.cursor-layer-133 { animation:k122 31.6043s linear infinite; }
+.cursor-layer-134 { animation:k264 31.6043s linear infinite; }
+.cursor-layer-135 { animation:k265 31.6043s linear infinite; }
+.cursor-layer-136 { animation:k124 31.6043s linear infinite; }
+.cursor-layer-137 { animation:k125 31.6043s linear infinite; }
+.cursor-layer-138 { animation:k126 31.6043s linear infinite; }
+.cursor-layer-139 { animation:k127 31.6043s linear infinite; }
+.cursor-layer-140 { animation:k128 31.6043s linear infinite; }
+.cursor-layer-141 { animation:k266 31.6043s linear infinite; }
+.cursor-layer-142 { animation:k267 31.6043s linear infinite; }
+.cursor-layer-143 { animation:k130 31.6043s linear infinite; }
+.cursor-layer-144 { animation:k131 31.6043s linear infinite; }
+.cursor-layer-145 { animation:k132 31.6043s linear infinite; }
+.cursor-layer-146 { animation:k133 31.6043s linear infinite; }
+.cursor-layer-147 { animation:k134 31.6043s linear infinite; }
+.cursor-layer-148 { animation:k135 31.6043s linear infinite; }
+.cursor-layer-149 { animation:k136 31.6043s linear infinite; }
+.cursor-layer-150 { animation:k137 31.6043s linear infinite; }
+.cursor-layer-151 { animation:k138 31.6043s linear infinite; }
+.cursor-layer-152 { animation:k139 31.6043s linear infinite; }
+.cursor-layer-153 { animation:k140 31.6043s linear infinite; }
+.cursor-layer-154 { animation:k268 31.6043s linear infinite; }
+.cursor-layer-155 { animation:k269 31.6043s linear infinite; }
+.cursor-layer-156 { animation:k142 31.6043s linear infinite; }
+.cursor-layer-157 { animation:k143 31.6043s linear infinite; }
+.cursor-layer-158 { animation:k144 31.6043s linear infinite; }
+.cursor-layer-159 { animation:k270 31.6043s linear infinite; }
+.cursor-layer-160 { animation:k271 31.6043s linear infinite; }
+.cursor-layer-161 { animation:k146 31.6043s linear infinite; }
+.cursor-layer-162 { animation:k147 31.6043s linear infinite; }
+.cursor-layer-163 { animation:k148 31.6043s linear infinite; }
+.cursor-layer-164 { animation:k149 31.6043s linear infinite; }
+.cursor-layer-165 { animation:k150 31.6043s linear infinite; }
+.cursor-layer-166 { animation:k151 31.6043s linear infinite; }
+.cursor-layer-167 { animation:k152 31.6043s linear infinite; }
+.cursor-layer-168 { animation:k153 31.6043s linear infinite; }
+.cursor-layer-169 { animation:k154 31.6043s linear infinite; }
+.cursor-layer-170 { animation:k155 31.6043s linear infinite; }
+.cursor-layer-171 { animation:k156 31.6043s linear infinite; }
+.cursor-layer-172 { animation:k157 31.6043s linear infinite; }
+.cursor-layer-173 { animation:k158 31.6043s linear infinite; }
+.cursor-layer-174 { animation:k159 31.6043s linear infinite; }
+.cursor-layer-175 { animation:k272 31.6043s linear infinite; }
+.cursor-layer-176 { animation:k273 31.6043s linear infinite; }
+.cursor-layer-177 { animation:k274 31.6043s linear infinite; }
+.cursor-layer-178 { animation:k275 31.6043s linear infinite; }
+.cursor-layer-179 { animation:k163 31.6043s linear infinite; }
+.cursor-layer-180 { animation:k164 31.6043s linear infinite; }
+.cursor-layer-181 { animation:k165 31.6043s linear infinite; }
+.cursor-layer-182 { animation:k166 31.6043s linear infinite; }
+.cursor-layer-183 { animation:k276 31.6043s linear infinite; }
+.cursor-layer-184 { animation:k277 31.6043s linear infinite; }
+.cursor-layer-185 { animation:k168 31.6043s linear infinite; }
+.cursor-layer-186 { animation:k169 31.6043s linear infinite; }
+.cursor-layer-187 { animation:k170 31.6043s linear infinite; }
+.cursor-layer-188 { animation:k171 31.6043s linear infinite; }
+.cursor-layer-189 { animation:k172 31.6043s linear infinite; }
+.cursor-layer-190 { animation:k278 31.6043s linear infinite; }
+.cursor-layer-191 { animation:k279 31.6043s linear infinite; }
+.cursor-layer-192 { animation:k174 31.6043s linear infinite; }
+.cursor-layer-193 { animation:k175 31.6043s linear infinite; }
+.cursor-layer-194 { animation:k176 31.6043s linear infinite; }
+.cursor-layer-195 { animation:k177 31.6043s linear infinite; }
+.cursor-layer-196 { animation:k178 31.6043s linear infinite; }
+.cursor-layer-197 { animation:k179 31.6043s linear infinite; }
+.cursor-layer-198 { animation:k280 31.6043s linear infinite; }
+.cursor-layer-199 { animation:k281 31.6043s linear infinite; }
+.cursor-layer-200 { animation:k181 31.6043s linear infinite; }
+.cursor-layer-201 { animation:k182 31.6043s linear infinite; }
+.cursor-layer-202 { animation:k183 31.6043s linear infinite; }
+.cursor-layer-203 { animation:k282 31.6043s linear infinite; }
+.cursor-layer-204 { animation:k283 31.6043s linear infinite; }
+.cursor-layer-205 { animation:k284 31.6043s linear infinite; }
+.cursor-layer-206 { animation:k285 31.6043s linear infinite; }
+.cursor-layer-207 { animation:k187 31.6043s linear infinite; }
+.cursor-layer-208 { animation:k188 31.6043s linear infinite; }
+.cursor-layer-209 { animation:k189 31.6043s linear infinite; }
+.cursor-layer-210 { animation:k190 31.6043s linear infinite; }
+.cursor-layer-211 { animation:k286 31.6043s linear infinite; }
+.cursor-layer-212 { animation:k287 31.6043s linear infinite; }
+.cursor-layer-213 { animation:k192 31.6043s linear infinite; }
+.cursor-layer-214 { animation:k193 31.6043s linear infinite; }
+.cursor-layer-215 { animation:k194 31.6043s linear infinite; }
+.cursor-layer-216 { animation:k195 31.6043s linear infinite; }
+.cursor-layer-217 { animation:k196 31.6043s linear infinite; }
+.cursor-layer-218 { animation:k197 31.6043s linear infinite; }
+.cursor-layer-219 { animation:k288 31.6043s linear infinite; }
+.cursor-layer-220 { animation:k289 31.6043s linear infinite; }
+.cursor-layer-221 { animation:k199 31.6043s linear infinite; }
+.cursor-layer-222 { animation:k200 31.6043s linear infinite; }
+.cursor-layer-223 { animation:k201 31.6043s linear infinite; }
+.cursor-layer-224 { animation:k202 31.6043s linear infinite; }
+.cursor-layer-225 { animation:k203 31.6043s linear infinite; }
+.cursor-layer-226 { animation:k290 31.6043s linear infinite; }
+.cursor-layer-227 { animation:k291 31.6043s linear infinite; }
+.cursor-layer-228 { animation:k205 31.6043s linear infinite; }
+.cursor-layer-229 { animation:k206 31.6043s linear infinite; }
+.cursor-layer-230 { animation:k207 31.6043s linear infinite; }
+.cursor-layer-231 { animation:k208 31.6043s linear infinite; }
+.cursor-layer-232 { animation:k209 31.6043s linear infinite; }
+.cursor-layer-233 { animation:k210 31.6043s linear infinite; }
+.cursor-layer-234 { animation:k292 31.6043s linear infinite; }
+.cursor-layer-235 { animation:k293 31.6043s linear infinite; }
+.cursor-layer-236 { animation:k212 31.6043s linear infinite; }
+.cursor-layer-237 { animation:k213 31.6043s linear infinite; }
+.cursor-layer-238 { animation:k214 31.6043s linear infinite; }
+.cursor-layer-239 { animation:k215 31.6043s linear infinite; }
+.cursor-layer-240 { animation:k294 31.6043s linear infinite; }
+.cursor-layer-241 { animation:k218 31.6043s linear infinite; }
+.cursor-layer-242 { animation:k219 31.6043s linear infinite; }
+.cursor-layer-243 { animation:k220 31.6043s linear infinite; }
+.cursor-layer-244 { animation:k221 31.6043s linear infinite; }
+.cursor-layer-245 { animation:k295 31.6043s linear infinite; }
+.cursor-layer-246 { animation:k296 31.6043s linear infinite; }
+.cursor-layer-247 { animation:k223 31.6043s linear infinite; }
+.cursor-layer-248 { animation:k224 31.6043s linear infinite; }
+.cursor-layer-249 { animation:k225 31.6043s linear infinite; }
+.cursor-layer-250 { animation:k226 31.6043s linear infinite; }
+.cursor-layer-251 { animation:k227 31.6043s linear infinite; }
+.cursor-layer-252 { animation:k228 31.6043s linear infinite; }
+.cursor-layer-253 { animation:k229 31.6043s linear infinite; }
+.cursor-layer-254 { animation:k297 31.6043s linear infinite; }
+.cursor-layer-255 { animation:k232 31.6043s linear infinite; }
+.viewport-mask-0,.viewport-bg-0,.viewport-chrome-0 { animation:k298 31.6043s linear infinite; }
+</style>
+<defs>
+<filter id="window-shadow" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.22"/></filter>
+<mask id="viewport-mask" x="0" y="0" width="837.6" height="546" maskUnits="userSpaceOnUse">
+<rect class="layer viewport-mask-0" x="12" y="46" width="813.6" height="488" fill="white"/>
+</mask>
+</defs>
+<rect class="layer viewport-chrome-0" x="12" y="12" width="813.6" height="522" rx="8" ry="8" fill="none" stroke="#1a1a1a" stroke-width="1" filter="url(#window-shadow)"/>
+<path class="layer viewport-chrome-0" d="M 20,12 H 817.6 Q 825.6,12 825.6,20 V 46 H 12 V 20 Q 12,12 20,12 Z" fill="#323232"/>
+<line class="layer viewport-chrome-0" x1="12" y1="46" x2="825.6" y2="46" stroke="#1a1a1a" stroke-width="1"/>
+<circle class="layer viewport-chrome-0" cx="34" cy="29" r="8" fill="#ff5f57"/>
+<circle class="layer viewport-chrome-0" cx="60" cy="29" r="8" fill="#febc2e"/>
+<circle class="layer viewport-chrome-0" cx="86" cy="29" r="8" fill="#28c840"/>
+<g mask="url(#viewport-mask)">
+<rect class="bg layer viewport-bg-0" x="12" y="46" width="813.6" height="488" fill="#282c34"/>
+<g class="layer layer-0">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-1">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-2">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-3">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-4">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-5">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-6">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;H</text>
+</g>
+<g class="layer layer-7">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;He</text>
+</g>
+<g class="layer layer-8">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Hel</text>
+</g>
+<g class="layer layer-9">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Hell</text>
+</g>
+<g class="layer layer-10">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Hello</text>
+</g>
+<g class="layer layer-11">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Hello,</text>
+</g>
+<g class="layer layer-12">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ echo &quot;Hello, W</text>
+</g>
+<g class="layer layer-13">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ echo &quot;Hello, Wo</text>
+</g>
+<g class="layer layer-14">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ echo &quot;Hello, Wor</text>
+</g>
+<g class="layer layer-15">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ echo &quot;Hello, Worl</text>
+</g>
+<g class="layer layer-16">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ echo &quot;Hello, World</text>
+</g>
+<g class="layer layer-17">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ echo &quot;Hello, World!</text>
+</g>
+<g class="layer layer-18">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ echo &quot;Hello, World!&quot;</text>
+</g>
+<g class="layer layer-19">
+<text x="22" y="82.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">Hello, World!</text>
+</g>
+<g class="layer layer-20">
+<text x="22" y="102.8" fill="#7dd6cf" font-weight="normal" textLength="158.72" lengthAdjust="spacing"># Project status</text>
+</g>
+<g class="layer layer-21">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-22">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ p</text>
+</g>
+<g class="layer layer-23">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ pr</text>
+</g>
+<g class="layer layer-24">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ pri</text>
+</g>
+<g class="layer layer-25">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ prin</text>
+</g>
+<g class="layer layer-26">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ print</text>
+</g>
+<g class="layer layer-27">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ printf</text>
+</g>
+<g class="layer layer-28">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ printf '</text>
+</g>
+<g class="layer layer-29">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ printf 'n</text>
+</g>
+<g class="layer layer-30">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ printf 'na</text>
+</g>
+<g class="layer layer-31">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ printf 'nam</text>
+</g>
+<g class="layer layer-32">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ printf 'name</text>
+</g>
+<g class="layer layer-33">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ printf 'name\</text>
+</g>
+<g class="layer layer-34">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ printf 'name\t</text>
+</g>
+<g class="layer layer-35">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ printf 'name\tv</text>
+</g>
+<g class="layer layer-36">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ printf 'name\tve</text>
+</g>
+<g class="layer layer-37">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ printf 'name\tver</text>
+</g>
+<g class="layer layer-38">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ printf 'name\tvers</text>
+</g>
+<g class="layer layer-39">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ printf 'name\tversi</text>
+</g>
+<g class="layer layer-40">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ printf 'name\tversio</text>
+</g>
+<g class="layer layer-41">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ printf 'name\tversion</text>
+</g>
+<g class="layer layer-42">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ printf 'name\tversion\</text>
+</g>
+<g class="layer layer-43">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ printf 'name\tversion\n</text>
+</g>
+<g class="layer layer-44">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ printf 'name\tversion\ns</text>
+</g>
+<g class="layer layer-45">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ printf 'name\tversion\nsc</text>
+</g>
+<g class="layer layer-46">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="277.76" lengthAdjust="spacing">$ printf 'name\tversion\nsce</text>
+</g>
+<g class="layer layer-47">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'name\tversion\nscen</text>
+</g>
+<g class="layer layer-48">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacing">$ printf 'name\tversion\nscene</text>
+</g>
+<g class="layer layer-49">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="307.52" lengthAdjust="spacing">$ printf 'name\tversion\nscenet</text>
+</g>
+<g class="layer layer-50">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="317.44" lengthAdjust="spacing">$ printf 'name\tversion\nsceneta</text>
+</g>
+<g class="layer layer-51">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="327.36" lengthAdjust="spacing">$ printf 'name\tversion\nscenetak</text>
+</g>
+<g class="layer layer-52">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake</text>
+</g>
+<g class="layer layer-53">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\</text>
+</g>
+<g class="layer layer-54">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="357.12" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t</text>
+</g>
+<g class="layer layer-55">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="367.04" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1</text>
+</g>
+<g class="layer layer-56">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="376.96" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.</text>
+</g>
+<g class="layer layer-57">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="386.88" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0</text>
+</g>
+<g class="layer layer-58">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="396.8" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\</text>
+</g>
+<g class="layer layer-59">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="406.72" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\n</text>
+</g>
+<g class="layer layer-60">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\n'</text>
+</g>
+<g class="layer layer-61">
+<text x="22" y="142.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">name    version</text>
+</g>
+<g class="layer layer-62">
+<text x="22" y="162.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">scenetake       1.0</text>
+</g>
+<g class="layer layer-63">
+<text x="22" y="182.8" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacing"># Per-step timing overrides</text>
+</g>
+<g class="layer layer-64">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-65">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ p</text>
+</g>
+<g class="layer layer-66">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ pr</text>
+</g>
+<g class="layer layer-67">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ pri</text>
+</g>
+<g class="layer layer-68">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ prin</text>
+</g>
+<g class="layer layer-69">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ print</text>
+</g>
+<g class="layer layer-70">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ printf</text>
+</g>
+<g class="layer layer-71">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ printf '</text>
+</g>
+<g class="layer layer-72">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ printf 't</text>
+</g>
+<g class="layer layer-73">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ printf 'ty</text>
+</g>
+<g class="layer layer-74">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ printf 'typ</text>
+</g>
+<g class="layer layer-75">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ printf 'typi</text>
+</g>
+<g class="layer layer-76">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ printf 'typin</text>
+</g>
+<g class="layer layer-77">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ printf 'typing</text>
+</g>
+<g class="layer layer-78">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ printf 'typing s</text>
+</g>
+<g class="layer layer-79">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ printf 'typing sl</text>
+</g>
+<g class="layer layer-80">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ printf 'typing slo</text>
+</g>
+<g class="layer layer-81">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ printf 'typing slow</text>
+</g>
+<g class="layer layer-82">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ printf 'typing slowl</text>
+</g>
+<g class="layer layer-83">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ printf 'typing slowly</text>
+</g>
+<g class="layer layer-84">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ printf 'typing slowly.</text>
+</g>
+<g class="layer layer-85">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ printf 'typing slowly..</text>
+</g>
+<g class="layer layer-86">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ printf 'typing slowly...</text>
+</g>
+<g class="layer layer-87">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ printf 'typing slowly...\</text>
+</g>
+<g class="layer layer-88">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="277.76" lengthAdjust="spacing">$ printf 'typing slowly...\n</text>
+</g>
+<g class="layer layer-89">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'typing slowly...\n'</text>
+</g>
+<g class="layer layer-90">
+<text x="22" y="222.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">typing slowly...</text>
+</g>
+<g class="layer layer-91">
+<text x="22" y="242.8" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacing"># execution-duration</text>
+</g>
+<g class="layer layer-92">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-93">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ s</text>
+</g>
+<g class="layer layer-94">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ sl</text>
+</g>
+<g class="layer layer-95">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ sle</text>
+</g>
+<g class="layer layer-96">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ slee</text>
+</g>
+<g class="layer layer-97">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ sleep</text>
+</g>
+<g class="layer layer-98">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ sleep 1</text>
+</g>
+<g class="layer layer-99">
+<text x="22" y="282.8" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacing"># run-highlight colors the typed command</text>
+</g>
+<g class="layer layer-100">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-101">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="9.92" lengthAdjust="spacing">p</text>
+</g>
+<g class="layer layer-102">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="19.84" lengthAdjust="spacing">pr</text>
+</g>
+<g class="layer layer-103">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="29.76" lengthAdjust="spacing">pri</text>
+</g>
+<g class="layer layer-104">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="39.68" lengthAdjust="spacing">prin</text>
+</g>
+<g class="layer layer-105">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">print</text>
+</g>
+<g class="layer layer-106">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="59.52" lengthAdjust="spacing">printf</text>
+</g>
+<g class="layer layer-107">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="59.52" lengthAdjust="spacing">printf</text>
+</g>
+<g class="layer layer-108">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="79.36" lengthAdjust="spacing">printf '</text>
+</g>
+<g class="layer layer-109">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="89.28" lengthAdjust="spacing">printf 'd</text>
+</g>
+<g class="layer layer-110">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="99.2" lengthAdjust="spacing">printf 'do</text>
+</g>
+<g class="layer layer-111">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="109.12" lengthAdjust="spacing">printf 'don</text>
+</g>
+<g class="layer layer-112">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="119.04" lengthAdjust="spacing">printf 'done</text>
+</g>
+<g class="layer layer-113">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="128.96" lengthAdjust="spacing">printf 'done\</text>
+</g>
+<g class="layer layer-114">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="138.88" lengthAdjust="spacing">printf 'done\n</text>
+</g>
+<g class="layer layer-115">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="148.8" lengthAdjust="spacing">printf 'done\n'</text>
+</g>
+<g class="layer layer-116">
+<text x="22" y="322.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">done</text>
+</g>
+<g class="layer layer-117">
+<text x="22" y="342.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># stdout highlight</text>
+</g>
+<g class="layer layer-118">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-119">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ p</text>
+</g>
+<g class="layer layer-120">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ pr</text>
+</g>
+<g class="layer layer-121">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ pri</text>
+</g>
+<g class="layer layer-122">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ prin</text>
+</g>
+<g class="layer layer-123">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ print</text>
+</g>
+<g class="layer layer-124">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ printf</text>
+</g>
+<g class="layer layer-125">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ printf '</text>
+</g>
+<g class="layer layer-126">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ printf 'l</text>
+</g>
+<g class="layer layer-127">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ printf 'li</text>
+</g>
+<g class="layer layer-128">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ printf 'lin</text>
+</g>
+<g class="layer layer-129">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ printf 'line</text>
+</g>
+<g class="layer layer-130">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ printf 'line1</text>
+</g>
+<g class="layer layer-131">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ printf 'line1 a</text>
+</g>
+<g class="layer layer-132">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ printf 'line1 al</text>
+</g>
+<g class="layer layer-133">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ printf 'line1 alp</text>
+</g>
+<g class="layer layer-134">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ printf 'line1 alph</text>
+</g>
+<g class="layer layer-135">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ printf 'line1 alpha</text>
+</g>
+<g class="layer layer-136">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ printf 'line1 alpha\</text>
+</g>
+<g class="layer layer-137">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ printf 'line1 alpha\n</text>
+</g>
+<g class="layer layer-138">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ printf 'line1 alpha\nl</text>
+</g>
+<g class="layer layer-139">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ printf 'line1 alpha\nli</text>
+</g>
+<g class="layer layer-140">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ printf 'line1 alpha\nlin</text>
+</g>
+<g class="layer layer-141">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ printf 'line1 alpha\nline</text>
+</g>
+<g class="layer layer-142">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="277.76" lengthAdjust="spacing">$ printf 'line1 alpha\nline2</text>
+</g>
+<g class="layer layer-143">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="297.6" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 b</text>
+</g>
+<g class="layer layer-144">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="307.52" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 be</text>
+</g>
+<g class="layer layer-145">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="317.44" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 bet</text>
+</g>
+<g class="layer layer-146">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="327.36" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta</text>
+</g>
+<g class="layer layer-147">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="347.2" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta g</text>
+</g>
+<g class="layer layer-148">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="357.12" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta ga</text>
+</g>
+<g class="layer layer-149">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="367.04" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gam</text>
+</g>
+<g class="layer layer-150">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="376.96" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamm</text>
+</g>
+<g class="layer layer-151">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="386.88" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma</text>
+</g>
+<g class="layer layer-152">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="396.8" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\</text>
+</g>
+<g class="layer layer-153">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="406.72" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\n</text>
+</g>
+<g class="layer layer-154">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nl</text>
+</g>
+<g class="layer layer-155">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="426.56" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nli</text>
+</g>
+<g class="layer layer-156">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="436.48" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nlin</text>
+</g>
+<g class="layer layer-157">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="446.4" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline</text>
+</g>
+<g class="layer layer-158">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="456.32" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3</text>
+</g>
+<g class="layer layer-159">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="466.24" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\</text>
+</g>
+<g class="layer layer-160">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="476.16" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n</text>
+</g>
+<g class="layer layer-161">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-162">
+<text x="22" y="382.8" fill="#e5b567" font-weight="normal" textLength="109.12" lengthAdjust="spacing">line1 alpha</text>
+</g>
+<g class="layer layer-163">
+<text x="22" y="402.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">line2</text>
+<text x="81.52" y="402.8" fill="#ac4142" font-weight="normal" textLength="39.68" lengthAdjust="spacing">beta</text>
+<text x="131.12" y="402.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">gamma</text>
+</g>
+<g class="layer layer-164">
+<rect class="bg" x="22" y="410" width="49.6" height="20" fill="#6c99bb"/>
+<text x="22" y="422.8" fill="#f5f5f5" font-weight="normal" textLength="49.6" lengthAdjust="spacing" style="text-decoration:underline;">line3</text>
+</g>
+<g class="layer layer-165">
+<text x="22" y="442.8" fill="#7dd6cf" font-weight="normal" textLength="218.24" lengthAdjust="spacing"># stderr (default red)</text>
+</g>
+<g class="layer layer-166">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-167">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-168">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-169">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-170">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-171">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-172">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;p</text>
+</g>
+<g class="layer layer-173">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;pl</text>
+</g>
+<g class="layer layer-174">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;pla</text>
+</g>
+<g class="layer layer-175">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;plai</text>
+</g>
+<g class="layer layer-176">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;plain</text>
+</g>
+<g class="layer layer-177">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ echo &quot;plain s</text>
+</g>
+<g class="layer layer-178">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ echo &quot;plain st</text>
+</g>
+<g class="layer layer-179">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ echo &quot;plain std</text>
+</g>
+<g class="layer layer-180">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ echo &quot;plain stde</text>
+</g>
+<g class="layer layer-181">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ echo &quot;plain stder</text>
+</g>
+<g class="layer layer-182">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ echo &quot;plain stderr</text>
+</g>
+<g class="layer layer-183">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ echo &quot;plain stderr&quot;</text>
+</g>
+<g class="layer layer-184">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1</text>
+</g>
+<g class="layer layer-185">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;</text>
+</g>
+<g class="layer layer-186">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;</text>
+</g>
+<g class="layer layer-187">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-188">
+<text x="22" y="482.8" fill="#ac4142" font-weight="normal" textLength="119.04" lengthAdjust="spacing">plain stderr</text>
+</g>
+<g class="layer layer-189">
+<text x="22" y="502.8" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacing"># stderr-color override</text>
+</g>
+<g class="layer layer-190">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-191">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-192">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-193">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-194">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-195">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-196">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;b</text>
+</g>
+<g class="layer layer-197">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;br</text>
+</g>
+<g class="layer layer-198">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;bri</text>
+</g>
+<g class="layer layer-199">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;brig</text>
+</g>
+<g class="layer layer-200">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;brigh</text>
+</g>
+<g class="layer layer-201">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;bright</text>
+</g>
+<g class="layer layer-202">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ echo &quot;bright y</text>
+</g>
+<g class="layer layer-203">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ echo &quot;bright ye</text>
+</g>
+<g class="layer layer-204">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ echo &quot;bright yel</text>
+</g>
+<g class="layer layer-205">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ echo &quot;bright yell</text>
+</g>
+<g class="layer layer-206">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ echo &quot;bright yello</text>
+</g>
+<g class="layer layer-207">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ echo &quot;bright yellow</text>
+</g>
+<g class="layer layer-208">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ echo &quot;bright yellow s</text>
+</g>
+<g class="layer layer-209">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ echo &quot;bright yellow st</text>
+</g>
+<g class="layer layer-210">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ echo &quot;bright yellow std</text>
+</g>
+<g class="layer layer-211">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;bright yellow stde</text>
+</g>
+<g class="layer layer-212">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ echo &quot;bright yellow stder</text>
+</g>
+<g class="layer layer-213">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="277.76" lengthAdjust="spacing">$ echo &quot;bright yellow stderr</text>
+</g>
+<g class="layer layer-214">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot;</text>
+</g>
+<g class="layer layer-215">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="307.52" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1</text>
+</g>
+<g class="layer layer-216">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="317.44" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;</text>
+</g>
+<g class="layer layer-217">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="327.36" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;</text>
+</g>
+<g class="layer layer-218">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-219">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">Hello, World!</text>
+</g>
+<g class="layer layer-220">
+<text x="22" y="82.8" fill="#7dd6cf" font-weight="normal" textLength="158.72" lengthAdjust="spacing"># Project status</text>
+</g>
+<g class="layer layer-221">
+<text x="22" y="102.8" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\n'</text>
+</g>
+<g class="layer layer-222">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">name    version</text>
+</g>
+<g class="layer layer-223">
+<text x="22" y="142.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">scenetake       1.0</text>
+</g>
+<g class="layer layer-224">
+<text x="22" y="162.8" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacing"># Per-step timing overrides</text>
+</g>
+<g class="layer layer-225">
+<text x="22" y="182.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'typing slowly...\n'</text>
+</g>
+<g class="layer layer-226">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">typing slowly...</text>
+</g>
+<g class="layer layer-227">
+<text x="22" y="222.8" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacing"># execution-duration</text>
+</g>
+<g class="layer layer-228">
+<text x="22" y="242.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ sleep 1</text>
+</g>
+<g class="layer layer-229">
+<text x="22" y="262.8" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacing"># run-highlight colors the typed command</text>
+</g>
+<g class="layer layer-230">
+<text x="22" y="282.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="282.8" fill="#7dd6cf" font-weight="normal" textLength="148.8" lengthAdjust="spacing">printf 'done\n'</text>
+</g>
+<g class="layer layer-231">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">done</text>
+</g>
+<g class="layer layer-232">
+<text x="22" y="322.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># stdout highlight</text>
+</g>
+<g class="layer layer-233">
+<text x="22" y="342.8" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-234">
+<text x="22" y="362.8" fill="#e5b567" font-weight="normal" textLength="109.12" lengthAdjust="spacing">line1 alpha</text>
+</g>
+<g class="layer layer-235">
+<text x="22" y="382.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">line2</text>
+<text x="81.52" y="382.8" fill="#ac4142" font-weight="normal" textLength="39.68" lengthAdjust="spacing">beta</text>
+<text x="131.12" y="382.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">gamma</text>
+</g>
+<g class="layer layer-236">
+<rect class="bg" x="22" y="390" width="49.6" height="20" fill="#6c99bb"/>
+<text x="22" y="402.8" fill="#f5f5f5" font-weight="normal" textLength="49.6" lengthAdjust="spacing" style="text-decoration:underline;">line3</text>
+</g>
+<g class="layer layer-237">
+<text x="22" y="422.8" fill="#7dd6cf" font-weight="normal" textLength="218.24" lengthAdjust="spacing"># stderr (default red)</text>
+</g>
+<g class="layer layer-238">
+<text x="22" y="442.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-239">
+<text x="22" y="462.8" fill="#ac4142" font-weight="normal" textLength="119.04" lengthAdjust="spacing">plain stderr</text>
+</g>
+<g class="layer layer-240">
+<text x="22" y="482.8" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacing"># stderr-color override</text>
+</g>
+<g class="layer layer-241">
+<text x="22" y="502.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-242">
+<text x="22" y="62.8" fill="#7dd6cf" font-weight="normal" textLength="158.72" lengthAdjust="spacing"># Project status</text>
+</g>
+<g class="layer layer-243">
+<text x="22" y="82.8" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\n'</text>
+</g>
+<g class="layer layer-244">
+<text x="22" y="102.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">name    version</text>
+</g>
+<g class="layer layer-245">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">scenetake       1.0</text>
+</g>
+<g class="layer layer-246">
+<text x="22" y="142.8" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacing"># Per-step timing overrides</text>
+</g>
+<g class="layer layer-247">
+<text x="22" y="162.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'typing slowly...\n'</text>
+</g>
+<g class="layer layer-248">
+<text x="22" y="182.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">typing slowly...</text>
+</g>
+<g class="layer layer-249">
+<text x="22" y="202.8" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacing"># execution-duration</text>
+</g>
+<g class="layer layer-250">
+<text x="22" y="222.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ sleep 1</text>
+</g>
+<g class="layer layer-251">
+<text x="22" y="242.8" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacing"># run-highlight colors the typed command</text>
+</g>
+<g class="layer layer-252">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="262.8" fill="#7dd6cf" font-weight="normal" textLength="148.8" lengthAdjust="spacing">printf 'done\n'</text>
+</g>
+<g class="layer layer-253">
+<text x="22" y="282.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">done</text>
+</g>
+<g class="layer layer-254">
+<text x="22" y="302.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># stdout highlight</text>
+</g>
+<g class="layer layer-255">
+<text x="22" y="322.8" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-256">
+<text x="22" y="342.8" fill="#e5b567" font-weight="normal" textLength="109.12" lengthAdjust="spacing">line1 alpha</text>
+</g>
+<g class="layer layer-257">
+<text x="22" y="362.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">line2</text>
+<text x="81.52" y="362.8" fill="#ac4142" font-weight="normal" textLength="39.68" lengthAdjust="spacing">beta</text>
+<text x="131.12" y="362.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">gamma</text>
+</g>
+<g class="layer layer-258">
+<rect class="bg" x="22" y="370" width="49.6" height="20" fill="#6c99bb"/>
+<text x="22" y="382.8" fill="#f5f5f5" font-weight="normal" textLength="49.6" lengthAdjust="spacing" style="text-decoration:underline;">line3</text>
+</g>
+<g class="layer layer-259">
+<text x="22" y="402.8" fill="#7dd6cf" font-weight="normal" textLength="218.24" lengthAdjust="spacing"># stderr (default red)</text>
+</g>
+<g class="layer layer-260">
+<text x="22" y="422.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-261">
+<text x="22" y="442.8" fill="#ac4142" font-weight="normal" textLength="119.04" lengthAdjust="spacing">plain stderr</text>
+</g>
+<g class="layer layer-262">
+<text x="22" y="462.8" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacing"># stderr-color override</text>
+</g>
+<g class="layer layer-263">
+<text x="22" y="482.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-264">
+<text x="22" y="502.8" fill="#e5b567" font-weight="normal" textLength="198.4" lengthAdjust="spacing">bright yellow stderr</text>
+</g>
+<g class="layer layer-265">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-266">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-267">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-268">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-269">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-270">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-271">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;D</text>
+</g>
+<g class="layer layer-272">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;Do</text>
+</g>
+<g class="layer layer-273">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Don</text>
+</g>
+<g class="layer layer-274">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Done</text>
+</g>
+<g class="layer layer-275">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Done!</text>
+</g>
+<g class="layer layer-276">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Done!&quot;</text>
+</g>
+<g class="layer layer-277">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf 'name\tversion\nscenetake\t1.0\n'</text>
+</g>
+<g class="layer layer-278">
+<text x="22" y="82.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">name    version</text>
+</g>
+<g class="layer layer-279">
+<text x="22" y="102.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">scenetake       1.0</text>
+</g>
+<g class="layer layer-280">
+<text x="22" y="122.8" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacing"># Per-step timing overrides</text>
+</g>
+<g class="layer layer-281">
+<text x="22" y="142.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'typing slowly...\n'</text>
+</g>
+<g class="layer layer-282">
+<text x="22" y="162.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">typing slowly...</text>
+</g>
+<g class="layer layer-283">
+<text x="22" y="182.8" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacing"># execution-duration</text>
+</g>
+<g class="layer layer-284">
+<text x="22" y="202.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ sleep 1</text>
+</g>
+<g class="layer layer-285">
+<text x="22" y="222.8" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacing"># run-highlight colors the typed command</text>
+</g>
+<g class="layer layer-286">
+<text x="22" y="242.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="242.8" fill="#7dd6cf" font-weight="normal" textLength="148.8" lengthAdjust="spacing">printf 'done\n'</text>
+</g>
+<g class="layer layer-287">
+<text x="22" y="262.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">done</text>
+</g>
+<g class="layer layer-288">
+<text x="22" y="282.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># stdout highlight</text>
+</g>
+<g class="layer layer-289">
+<text x="22" y="302.8" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-290">
+<text x="22" y="322.8" fill="#e5b567" font-weight="normal" textLength="109.12" lengthAdjust="spacing">line1 alpha</text>
+</g>
+<g class="layer layer-291">
+<text x="22" y="342.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">line2</text>
+<text x="81.52" y="342.8" fill="#ac4142" font-weight="normal" textLength="39.68" lengthAdjust="spacing">beta</text>
+<text x="131.12" y="342.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">gamma</text>
+</g>
+<g class="layer layer-292">
+<rect class="bg" x="22" y="350" width="49.6" height="20" fill="#6c99bb"/>
+<text x="22" y="362.8" fill="#f5f5f5" font-weight="normal" textLength="49.6" lengthAdjust="spacing" style="text-decoration:underline;">line3</text>
+</g>
+<g class="layer layer-293">
+<text x="22" y="382.8" fill="#7dd6cf" font-weight="normal" textLength="218.24" lengthAdjust="spacing"># stderr (default red)</text>
+</g>
+<g class="layer layer-294">
+<text x="22" y="402.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-295">
+<text x="22" y="422.8" fill="#ac4142" font-weight="normal" textLength="119.04" lengthAdjust="spacing">plain stderr</text>
+</g>
+<g class="layer layer-296">
+<text x="22" y="442.8" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacing"># stderr-color override</text>
+</g>
+<g class="layer layer-297">
+<text x="22" y="462.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-298">
+<text x="22" y="482.8" fill="#e5b567" font-weight="normal" textLength="198.4" lengthAdjust="spacing">bright yellow stderr</text>
+</g>
+<g class="layer layer-299">
+<text x="22" y="502.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Done!&quot;</text>
+</g>
+<g class="layer layer-300">
+<text x="22" y="62.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">name    version</text>
+</g>
+<g class="layer layer-301">
+<text x="22" y="82.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">scenetake       1.0</text>
+</g>
+<g class="layer layer-302">
+<text x="22" y="102.8" fill="#7dd6cf" font-weight="normal" textLength="267.84" lengthAdjust="spacing"># Per-step timing overrides</text>
+</g>
+<g class="layer layer-303">
+<text x="22" y="122.8" fill="#d0d0d0" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf 'typing slowly...\n'</text>
+</g>
+<g class="layer layer-304">
+<text x="22" y="142.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">typing slowly...</text>
+</g>
+<g class="layer layer-305">
+<text x="22" y="162.8" fill="#7dd6cf" font-weight="normal" textLength="198.4" lengthAdjust="spacing"># execution-duration</text>
+</g>
+<g class="layer layer-306">
+<text x="22" y="182.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ sleep 1</text>
+</g>
+<g class="layer layer-307">
+<text x="22" y="202.8" fill="#7dd6cf" font-weight="normal" textLength="396.8" lengthAdjust="spacing"># run-highlight colors the typed command</text>
+</g>
+<g class="layer layer-308">
+<text x="22" y="222.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+<text x="41.84" y="222.8" fill="#7dd6cf" font-weight="normal" textLength="148.8" lengthAdjust="spacing">printf 'done\n'</text>
+</g>
+<g class="layer layer-309">
+<text x="22" y="242.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">done</text>
+</g>
+<g class="layer layer-310">
+<text x="22" y="262.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># stdout highlight</text>
+</g>
+<g class="layer layer-311">
+<text x="22" y="282.8" fill="#d0d0d0" font-weight="normal" textLength="486.08" lengthAdjust="spacing">$ printf 'line1 alpha\nline2 beta gamma\nline3\n'</text>
+</g>
+<g class="layer layer-312">
+<text x="22" y="302.8" fill="#e5b567" font-weight="normal" textLength="109.12" lengthAdjust="spacing">line1 alpha</text>
+</g>
+<g class="layer layer-313">
+<text x="22" y="322.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">line2</text>
+<text x="81.52" y="322.8" fill="#ac4142" font-weight="normal" textLength="39.68" lengthAdjust="spacing">beta</text>
+<text x="131.12" y="322.8" fill="#7dd6cf" font-weight="normal" textLength="49.6" lengthAdjust="spacing">gamma</text>
+</g>
+<g class="layer layer-314">
+<rect class="bg" x="22" y="330" width="49.6" height="20" fill="#6c99bb"/>
+<text x="22" y="342.8" fill="#f5f5f5" font-weight="normal" textLength="49.6" lengthAdjust="spacing" style="text-decoration:underline;">line3</text>
+</g>
+<g class="layer layer-315">
+<text x="22" y="362.8" fill="#7dd6cf" font-weight="normal" textLength="218.24" lengthAdjust="spacing"># stderr (default red)</text>
+</g>
+<g class="layer layer-316">
+<text x="22" y="382.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;plain stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-317">
+<text x="22" y="402.8" fill="#ac4142" font-weight="normal" textLength="119.04" lengthAdjust="spacing">plain stderr</text>
+</g>
+<g class="layer layer-318">
+<text x="22" y="422.8" fill="#7dd6cf" font-weight="normal" textLength="228.16" lengthAdjust="spacing"># stderr-color override</text>
+</g>
+<g class="layer layer-319">
+<text x="22" y="442.8" fill="#d0d0d0" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ echo &quot;bright yellow stderr&quot; 1&gt;&amp;2</text>
+</g>
+<g class="layer layer-320">
+<text x="22" y="462.8" fill="#e5b567" font-weight="normal" textLength="198.4" lengthAdjust="spacing">bright yellow stderr</text>
+</g>
+<g class="layer layer-321">
+<text x="22" y="482.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Done!&quot;</text>
+</g>
+<g class="layer layer-322">
+<text x="22" y="502.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">Done!</text>
+</g>
+<g class="layer layer-323">
+<text x="22" y="522.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer cursor-layer-0">
+<rect class="cursor-block" x="41.84" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-1">
+<rect class="cursor-block" x="51.76" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-2">
+<rect class="cursor-block" x="61.68" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-3">
+<rect class="cursor-block" x="71.6" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-4">
+<rect class="cursor-block" x="81.52" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-5">
+<rect class="cursor-block" x="91.44" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-6">
+<rect class="cursor-block" x="101.36" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-7">
+<rect class="cursor-block" x="111.28" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-8">
+<rect class="cursor-block" x="121.2" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-9">
+<rect class="cursor-block" x="131.12" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-10">
+<rect class="cursor-block" x="141.04" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-11">
+<rect class="cursor-block" x="150.96" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-12">
+<rect class="cursor-block" x="160.88" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-13">
+<rect class="cursor-block" x="170.8" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-14">
+<rect class="cursor-block" x="180.72" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-15">
+<rect class="cursor-block" x="190.64" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-16">
+<rect class="cursor-block" x="200.56" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-17">
+<rect class="cursor-block" x="210.48" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-18">
+<rect class="cursor-block" x="220.4" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-19">
+<rect class="cursor-block" x="230.32" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-20">
+<rect class="cursor-block" x="240.24" y="50" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-21">
+<rect class="cursor-block" x="22" y="70" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-22">
+<rect class="cursor-block" x="22" y="90" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-23">
+<rect class="cursor-block" x="22" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-24">
+<rect class="cursor-block" x="41.84" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-25">
+<rect class="cursor-block" x="51.76" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-26">
+<rect class="cursor-block" x="61.68" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-27">
+<rect class="cursor-block" x="71.6" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-28">
+<rect class="cursor-block" x="81.52" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-29">
+<rect class="cursor-block" x="91.44" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-30">
+<rect class="cursor-block" x="101.36" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-31">
+<rect class="cursor-block" x="111.28" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-32">
+<rect class="cursor-block" x="121.2" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-33">
+<rect class="cursor-block" x="131.12" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-34">
+<rect class="cursor-block" x="141.04" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-35">
+<rect class="cursor-block" x="150.96" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-36">
+<rect class="cursor-block" x="160.88" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-37">
+<rect class="cursor-block" x="170.8" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-38">
+<rect class="cursor-block" x="180.72" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-39">
+<rect class="cursor-block" x="190.64" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-40">
+<rect class="cursor-block" x="200.56" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-41">
+<rect class="cursor-block" x="210.48" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-42">
+<rect class="cursor-block" x="220.4" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-43">
+<rect class="cursor-block" x="230.32" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-44">
+<rect class="cursor-block" x="240.24" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-45">
+<rect class="cursor-block" x="250.16" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-46">
+<rect class="cursor-block" x="260.08" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-47">
+<rect class="cursor-block" x="270" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-48">
+<rect class="cursor-block" x="279.92" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-49">
+<rect class="cursor-block" x="289.84" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-50">
+<rect class="cursor-block" x="299.76" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-51">
+<rect class="cursor-block" x="309.68" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-52">
+<rect class="cursor-block" x="319.6" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-53">
+<rect class="cursor-block" x="329.52" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-54">
+<rect class="cursor-block" x="339.44" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-55">
+<rect class="cursor-block" x="349.36" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-56">
+<rect class="cursor-block" x="359.28" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-57">
+<rect class="cursor-block" x="369.2" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-58">
+<rect class="cursor-block" x="379.12" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-59">
+<rect class="cursor-block" x="389.04" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-60">
+<rect class="cursor-block" x="398.96" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-61">
+<rect class="cursor-block" x="408.88" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-62">
+<rect class="cursor-block" x="418.8" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-63">
+<rect class="cursor-block" x="428.72" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-64">
+<rect class="cursor-block" x="438.64" y="110" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-65">
+<rect class="cursor-block" x="22" y="130" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-66">
+<rect class="cursor-block" x="22" y="170" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-67">
+<rect class="cursor-block" x="22" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-68">
+<rect class="cursor-block" x="41.84" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-69">
+<rect class="cursor-block" x="51.76" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-70">
+<rect class="cursor-block" x="61.68" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-71">
+<rect class="cursor-block" x="71.6" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-72">
+<rect class="cursor-block" x="81.52" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-73">
+<rect class="cursor-block" x="91.44" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-74">
+<rect class="cursor-block" x="101.36" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-75">
+<rect class="cursor-block" x="111.28" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-76">
+<rect class="cursor-block" x="121.2" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-77">
+<rect class="cursor-block" x="131.12" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-78">
+<rect class="cursor-block" x="141.04" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-79">
+<rect class="cursor-block" x="150.96" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-80">
+<rect class="cursor-block" x="160.88" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-81">
+<rect class="cursor-block" x="170.8" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-82">
+<rect class="cursor-block" x="180.72" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-83">
+<rect class="cursor-block" x="190.64" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-84">
+<rect class="cursor-block" x="200.56" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-85">
+<rect class="cursor-block" x="210.48" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-86">
+<rect class="cursor-block" x="220.4" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-87">
+<rect class="cursor-block" x="230.32" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-88">
+<rect class="cursor-block" x="240.24" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-89">
+<rect class="cursor-block" x="250.16" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-90">
+<rect class="cursor-block" x="260.08" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-91">
+<rect class="cursor-block" x="270" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-92">
+<rect class="cursor-block" x="279.92" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-93">
+<rect class="cursor-block" x="289.84" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-94">
+<rect class="cursor-block" x="299.76" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-95">
+<rect class="cursor-block" x="309.68" y="190" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-96">
+<rect class="cursor-block" x="22" y="210" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-97">
+<rect class="cursor-block" x="22" y="230" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-98">
+<rect class="cursor-block" x="22" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-99">
+<rect class="cursor-block" x="41.84" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-100">
+<rect class="cursor-block" x="51.76" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-101">
+<rect class="cursor-block" x="61.68" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-102">
+<rect class="cursor-block" x="71.6" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-103">
+<rect class="cursor-block" x="81.52" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-104">
+<rect class="cursor-block" x="91.44" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-105">
+<rect class="cursor-block" x="101.36" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-106">
+<rect class="cursor-block" x="111.28" y="250" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-107">
+<rect class="cursor-block" x="22" y="270" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-108">
+<rect class="cursor-block" x="22" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-109">
+<rect class="cursor-block" x="41.84" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-110">
+<rect class="cursor-block" x="51.76" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-111">
+<rect class="cursor-block" x="61.68" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-112">
+<rect class="cursor-block" x="71.6" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-113">
+<rect class="cursor-block" x="81.52" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-114">
+<rect class="cursor-block" x="91.44" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-115">
+<rect class="cursor-block" x="101.36" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-116">
+<rect class="cursor-block" x="111.28" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-117">
+<rect class="cursor-block" x="121.2" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-118">
+<rect class="cursor-block" x="131.12" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-119">
+<rect class="cursor-block" x="141.04" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-120">
+<rect class="cursor-block" x="150.96" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-121">
+<rect class="cursor-block" x="160.88" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-122">
+<rect class="cursor-block" x="170.8" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-123">
+<rect class="cursor-block" x="180.72" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-124">
+<rect class="cursor-block" x="190.64" y="290" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-125">
+<rect class="cursor-block" x="22" y="310" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-126">
+<rect class="cursor-block" x="22" y="330" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-127">
+<rect class="cursor-block" x="22" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-128">
+<rect class="cursor-block" x="41.84" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-129">
+<rect class="cursor-block" x="51.76" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-130">
+<rect class="cursor-block" x="61.68" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-131">
+<rect class="cursor-block" x="71.6" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-132">
+<rect class="cursor-block" x="81.52" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-133">
+<rect class="cursor-block" x="91.44" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-134">
+<rect class="cursor-block" x="101.36" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-135">
+<rect class="cursor-block" x="111.28" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-136">
+<rect class="cursor-block" x="121.2" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-137">
+<rect class="cursor-block" x="131.12" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-138">
+<rect class="cursor-block" x="141.04" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-139">
+<rect class="cursor-block" x="150.96" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-140">
+<rect class="cursor-block" x="160.88" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-141">
+<rect class="cursor-block" x="170.8" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-142">
+<rect class="cursor-block" x="180.72" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-143">
+<rect class="cursor-block" x="190.64" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-144">
+<rect class="cursor-block" x="200.56" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-145">
+<rect class="cursor-block" x="210.48" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-146">
+<rect class="cursor-block" x="220.4" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-147">
+<rect class="cursor-block" x="230.32" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-148">
+<rect class="cursor-block" x="240.24" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-149">
+<rect class="cursor-block" x="250.16" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-150">
+<rect class="cursor-block" x="260.08" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-151">
+<rect class="cursor-block" x="270" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-152">
+<rect class="cursor-block" x="279.92" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-153">
+<rect class="cursor-block" x="289.84" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-154">
+<rect class="cursor-block" x="299.76" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-155">
+<rect class="cursor-block" x="309.68" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-156">
+<rect class="cursor-block" x="319.6" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-157">
+<rect class="cursor-block" x="329.52" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-158">
+<rect class="cursor-block" x="339.44" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-159">
+<rect class="cursor-block" x="349.36" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-160">
+<rect class="cursor-block" x="359.28" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-161">
+<rect class="cursor-block" x="369.2" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-162">
+<rect class="cursor-block" x="379.12" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-163">
+<rect class="cursor-block" x="389.04" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-164">
+<rect class="cursor-block" x="398.96" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-165">
+<rect class="cursor-block" x="408.88" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-166">
+<rect class="cursor-block" x="418.8" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-167">
+<rect class="cursor-block" x="428.72" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-168">
+<rect class="cursor-block" x="438.64" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-169">
+<rect class="cursor-block" x="448.56" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-170">
+<rect class="cursor-block" x="458.48" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-171">
+<rect class="cursor-block" x="468.4" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-172">
+<rect class="cursor-block" x="478.32" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-173">
+<rect class="cursor-block" x="488.24" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-174">
+<rect class="cursor-block" x="498.16" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-175">
+<rect class="cursor-block" x="508.08" y="350" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-176">
+<rect class="cursor-block" x="22" y="370" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-177">
+<rect class="cursor-block" x="22" y="430" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-178">
+<rect class="cursor-block" x="22" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-179">
+<rect class="cursor-block" x="41.84" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-180">
+<rect class="cursor-block" x="51.76" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-181">
+<rect class="cursor-block" x="61.68" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-182">
+<rect class="cursor-block" x="71.6" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-183">
+<rect class="cursor-block" x="81.52" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-184">
+<rect class="cursor-block" x="91.44" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-185">
+<rect class="cursor-block" x="101.36" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-186">
+<rect class="cursor-block" x="111.28" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-187">
+<rect class="cursor-block" x="121.2" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-188">
+<rect class="cursor-block" x="131.12" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-189">
+<rect class="cursor-block" x="141.04" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-190">
+<rect class="cursor-block" x="150.96" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-191">
+<rect class="cursor-block" x="160.88" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-192">
+<rect class="cursor-block" x="170.8" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-193">
+<rect class="cursor-block" x="180.72" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-194">
+<rect class="cursor-block" x="190.64" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-195">
+<rect class="cursor-block" x="200.56" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-196">
+<rect class="cursor-block" x="210.48" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-197">
+<rect class="cursor-block" x="220.4" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-198">
+<rect class="cursor-block" x="230.32" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-199">
+<rect class="cursor-block" x="240.24" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-200">
+<rect class="cursor-block" x="250.16" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-201">
+<rect class="cursor-block" x="260.08" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-202">
+<rect class="cursor-block" x="270" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-203">
+<rect class="cursor-block" x="279.92" y="450" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-204">
+<rect class="cursor-block" x="22" y="470" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-205">
+<rect class="cursor-block" x="22" y="490" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-206">
+<rect class="cursor-block" x="22" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-207">
+<rect class="cursor-block" x="41.84" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-208">
+<rect class="cursor-block" x="51.76" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-209">
+<rect class="cursor-block" x="61.68" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-210">
+<rect class="cursor-block" x="71.6" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-211">
+<rect class="cursor-block" x="81.52" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-212">
+<rect class="cursor-block" x="91.44" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-213">
+<rect class="cursor-block" x="101.36" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-214">
+<rect class="cursor-block" x="111.28" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-215">
+<rect class="cursor-block" x="121.2" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-216">
+<rect class="cursor-block" x="131.12" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-217">
+<rect class="cursor-block" x="141.04" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-218">
+<rect class="cursor-block" x="150.96" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-219">
+<rect class="cursor-block" x="160.88" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-220">
+<rect class="cursor-block" x="170.8" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-221">
+<rect class="cursor-block" x="180.72" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-222">
+<rect class="cursor-block" x="190.64" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-223">
+<rect class="cursor-block" x="200.56" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-224">
+<rect class="cursor-block" x="210.48" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-225">
+<rect class="cursor-block" x="220.4" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-226">
+<rect class="cursor-block" x="230.32" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-227">
+<rect class="cursor-block" x="240.24" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-228">
+<rect class="cursor-block" x="250.16" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-229">
+<rect class="cursor-block" x="260.08" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-230">
+<rect class="cursor-block" x="270" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-231">
+<rect class="cursor-block" x="279.92" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-232">
+<rect class="cursor-block" x="289.84" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-233">
+<rect class="cursor-block" x="299.76" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-234">
+<rect class="cursor-block" x="309.68" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-235">
+<rect class="cursor-block" x="319.6" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-236">
+<rect class="cursor-block" x="329.52" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-237">
+<rect class="cursor-block" x="339.44" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-238">
+<rect class="cursor-block" x="349.36" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-239">
+<rect class="cursor-block" x="359.28" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-240">
+<rect class="cursor-block" x="22" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-241">
+<rect class="cursor-block" x="41.84" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-242">
+<rect class="cursor-block" x="51.76" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-243">
+<rect class="cursor-block" x="61.68" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-244">
+<rect class="cursor-block" x="71.6" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-245">
+<rect class="cursor-block" x="81.52" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-246">
+<rect class="cursor-block" x="91.44" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-247">
+<rect class="cursor-block" x="101.36" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-248">
+<rect class="cursor-block" x="111.28" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-249">
+<rect class="cursor-block" x="121.2" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-250">
+<rect class="cursor-block" x="131.12" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-251">
+<rect class="cursor-block" x="141.04" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-252">
+<rect class="cursor-block" x="150.96" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-253">
+<rect class="cursor-block" x="160.88" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-254">
+<rect class="cursor-block" x="22" y="510" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-255">
+<rect class="cursor-block" x="41.84" y="510" width="9.92" height="20"/>
+</g>
+</g>
+</svg>

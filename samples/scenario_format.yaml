@@ -1,0 +1,76 @@
+# Scenario format reference — runnable demo (samples/scenario_format.yaml).
+# Required: steps only. Everything else is optional.
+
+title: "Scenario Format Demo"  # Optional cast title
+width: 80                        # Default: 120
+height: 24                       # Default: 24
+# cwd: /your/project             # Optional working directory for all commands
+shell: bash                      # bash | pwsh | powershell | path. Windows: Git Bash when bash
+
+render:                          # Optional display metadata for cast header and SVG
+  font-size: 16
+  font-family: ui-monospace, monospace
+  theme:
+    preset: dark                 # dark | light; optional fg / bg / palette overrides
+  window: macos                  # none | macos | windows
+
+settings:                        # Defaults for all steps; map-form steps can override per key
+  prompt: "$ "
+  typing-speed: 0.04             # Average seconds per typed character
+  typing-jitter: 0.01            # Random variance (+/- seconds) per character
+  pre-delay: 0.5                 # Pause before typing each step
+  post-delay: 1.0                # Pause after output before the next step
+  execution-duration: 0.1        # Cast wait after command execution
+  stderr-color: red              # When stderr has no ANSI SGR sequences
+
+# Optional setup; runs before steps, not recorded in cast
+pre:
+  - echo "environment check (not recorded)"
+
+steps:
+  # String form - uses settings defaults
+  - echo "Hello, World!"
+
+  # Map form - comment line, per-step timing
+  - name: "[cyan]Project status"
+    run: printf 'name\tversion\nscenetake\t1.0\n'
+    post-delay: 1.5
+
+  - name: "Per-step timing overrides"
+    run: printf 'typing slowly...\n'
+    typing-speed: 0.12
+    pre-delay: 0.8
+    post-delay: 1.2
+
+  - name: "execution-duration"
+    run: sleep 1
+    execution-duration: 0.5
+
+  - name: "run-highlight colors the typed command"
+    run: printf 'done\n'
+    run-highlight: bright-cyan
+
+  - name: "stdout highlight"
+    run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
+    highlight:
+      - color: yellow
+        at: "1"
+      - color: red
+        at: "2:7-10"
+      - color: bright-cyan
+        at: "2:12-"
+      - color: underline fg:bright-white bg:blue
+        at: "3"
+
+  - name: "stderr (default red)"
+    run: echo "plain stderr" 1>&2
+
+  - name: "stderr-color override"
+    run: echo "bright yellow stderr" 1>&2
+    stderr-color: bright-yellow
+
+  - echo "Done!"
+
+# Optional teardown; runs after cast is written, not recorded
+post:
+  - echo "demo complete (not recorded)"

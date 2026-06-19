@@ -153,165 +153,88 @@ scenetake svg [--font-size N] [--font-family FAMILIES] [--theme dark|light]
 
 ## シナリオファイル形式
 
-```yaml
-title: "Demo Title"     # cast のタイトル（任意）
-width: 120              # ターミナル幅（デフォルト: 120）
-height: 24              # ターミナル高さ（デフォルト: 24）
-cwd: /path/to/dir       # step を実行するディレクトリ（任意）
-shell: bash             # 実行シェルを指定（任意）
+必須なのは `steps` のみで、他の top-level キーはすべて任意です。以下は実行可能なサンプルです。正本は [samples/scenario_format.yaml](samples/scenario_format.yaml)。フィールド定義の詳細は [.github/docs/spec_scenario.md](.github/docs/spec_scenario.md)。色・スタイル構文は [spec_highlight.md](.github/docs/spec_highlight.md)。pre/post の挙動は [spec_pre_post.md](.github/docs/spec_pre_post.md)。色の追加例は [samples/highlight.yaml](samples/highlight.yaml)。
 
-render:                  # cast ヘッダーと SVG 用の表示メタデータ（任意）
+![](samples/scenario_format.svg)
+
+```yaml
+# Scenario format reference — runnable demo (samples/scenario_format.yaml).
+# Required: steps only. Everything else is optional.
+
+title: "Scenario Format Demo"  # Optional cast title
+width: 80                        # Default: 120
+height: 24                       # Default: 24
+# cwd: /your/project             # Optional working directory for all commands
+shell: bash                      # bash | pwsh | powershell | path. Windows: Git Bash when bash
+
+render:                          # Optional display metadata for cast header and SVG
   font-size: 16
   font-family: ui-monospace, monospace
   theme:
-    preset: dark        # dark | light。fg / bg / palette の上書きも可
-  window: macos         # none | macos | windows
+    preset: dark                 # dark | light; optional fg / bg / palette overrides
+  window: macos                  # none | macos | windows
 
-settings:
+settings:                        # Defaults for all steps; map-form steps can override per key
   prompt: "$ "
-  typing-speed: 0.05       # 1文字あたりの平均秒数
-  typing-jitter: 0.015     # ジッター幅 ±秒
-  pre-delay: 0.8           # 次の step のタイピング開始前の停止時間
-  post-delay: 1.5          # プロンプト表示後・次の step 入力までの停止時間
-  execution-duration: 0.1  # 任意。各コマンド実行の cast 上待機時間
-  stderr-color: red        # stderr に ANSI SGR がない場合の既定色（デフォルト: red）
+  typing-speed: 0.04             # Average seconds per typed character
+  typing-jitter: 0.01            # Random variance (+/- seconds) per character
+  pre-delay: 0.5                 # Pause before typing each step
+  post-delay: 1.0                # Pause after output before the next step
+  execution-duration: 0.1        # Cast wait after command execution
+  stderr-color: red              # When stderr has no ANSI SGR sequences
 
+# Optional setup; runs before steps, not recorded in cast
 pre:
-  - dotnet build
+  - echo "environment check (not recorded)"
 
 steps:
-  # コマンドをリスト形式で書くと、settings の既定値が適用
+  # String form - uses settings defaults
   - echo "Hello, World!"
-  - ls -la
 
-  # コマンドをマッピング形式で書くと、コマンドごとに設定を上書き可能
-  - run: git log --oneline -10
-    post-delay: 3.0
+  # Map form - comment line, per-step timing
+  - name: "[cyan]Project status"
+    run: printf 'name\tversion\nscenetake\t1.0\n'
+    post-delay: 1.5
 
-  - run: git status
-    typing-speed: 0.10
-    pre-delay: 1.5
-    post-delay: 2.0
+  - name: "Per-step timing overrides"
+    run: printf 'typing slowly...\n'
+    typing-speed: 0.12
+    pre-delay: 0.8
+    post-delay: 1.2
 
-  - run: sleep 2
-    execution-duration: 0.4
+  - name: "execution-duration"
+    run: sleep 1
+    execution-duration: 0.5
 
-  # run highlight
-  - run: git log --oneline -3
+  - name: "run-highlight colors the typed command"
+    run: printf 'done\n'
     run-highlight: bright-cyan
 
-  # stdout highlight
-  - run: git status
+  - name: "stdout highlight"
+    run: printf 'line1 alpha\nline2 beta gamma\nline3\n'
     highlight:
       - color: yellow
-        at: "4"                   # 4行目
+        at: "1"
       - color: red
-        at: "6-7:3-"             # 複数行カラム帯。6-7行目、3列目から行末
+        at: "2:7-10"
       - color: bright-cyan
-        at: "8-"                  # 8行目から出力末尾まで
+        at: "2:12-"
+      - color: underline fg:bright-white bg:blue
+        at: "3"
 
-  # stderr highlight（stderr に ANSI SGR がない場合）
-  - run: echo "plain stderr" 1>&2
+  - name: "stderr (default red)"
+    run: echo "plain stderr" 1>&2
 
-  # この step の stderr 既定色を上書き
-  - run: echo "stderr override" 1>&2
+  - name: "stderr-color override"
+    run: echo "bright yellow stderr" 1>&2
     stderr-color: bright-yellow
 
+  - echo "Done!"
+
+# Optional teardown; runs after cast is written, not recorded
 post:
-  - git clean -fd
+  - echo "demo complete (not recorded)"
 ```
-
-### Pre/Post コマンド
-
-`pre` と `post` は setup / teardown コマンドを書く top-level の文字列配列です。`steps` と同じ `shell` と `cwd` を使い、各配列要素は 1 つのコマンド文字列として shell に渡されます。空の要素は無視されます。
-
-`pre` は `steps` の前に実行されます。fail-fast です。いずれかの `pre` コマンドが非 0 で終了した場合、後続の `pre` はスキップされ、`steps` は実行されず、cast ファイルは書き込まれず、`post` も実行されません。scenetake は失敗したコマンドの exit code で終了します。
-
-`post` は `steps` の実行後、cast ファイルを書き込んだ後に実行されます。こちらも fail-fast です。いずれかの `post` コマンドが非 0 で終了した場合、後続の `post` はスキップされ、すでに書き込まれた cast ファイルはそのまま残り、scenetake は失敗したコマンドの exit code で終了します。
-
-記録対象の `steps` は成功しても失敗しても、その結果が記録されます。step の exit code は scenetake の exit code を決めません。`pre` と `post` は録画フロー外です。stdout/stderr は元のストリームを保って CLI に表示されますが、コマンド文字列も出力も cast ファイルには一切書き込まれません。
-
-`--verbose` を使うと、正常に実行された `pre` / `post` のコマンドラベルとフェーズマーカーを表示します。既存の `steps` の `running:` ログは常に表示されます。失敗した `pre` / `post` は、`--verbose` の有無に関係なく、完全なコマンド文字列と exit code を常に表示します。
-
-- `highlight` は step のみ対応です（map-form の `run` step）。
-- `run-highlight` は step のみ対応です（map-form の `run` step）。
-- `stderr-color` は両対応です（`settings.stderr-color` の既定値 + step の `stderr-color` 上書き）。
-- stderr 側に既存 ANSI がある場合はそれを保持し、`stderr-color` は ANSI がない stderr にのみ適用されます。
-
-### スタイル指定（bold/underline/background/intensity）
-
-`highlight.color`、`run-highlight`、`stderr-color` には、単純なカラー名に加えてスタイル文字列も指定できます。
-
-- カラー名: `red`、`bright-cyan`
-- スタイルトークン: `bold`、`underline`、`bright`
-- 前景/背景プレフィックス:
-  - 16色名: `fg:bright-white`、`bg:blue`
-  - 256色インデックス: `fg:196`、`bg:235`
-  - トゥルーカラー RGB: `fg:#ff8c00`、`bg:#282828`、`fg:#f80`、`fg:255,140,0`
-- 生 SGR リテラル: `1;31`、`38;5;196`、`48;5;235`、`38;2;255;140;0`、`48;2;40;40;40`、`\e[1;31m`、`\x1b[1;31m`
-
-```yaml
-steps:
-  - run: git log --oneline -3
-    run-highlight: "bold bright-cyan"
-
-  - run: printf 'line1\nline2\n'
-    highlight:
-      - color: "underline fg:196 bg:235"
-        at: "2"
-
-  - run: printf 'true color\n'
-    highlight:
-      - color: "fg:#ff8c00 bg:#282828"
-        at: "1"
-
-  - run: echo "plain stderr" 1>&2
-    stderr-color: "\\e[1;93m"
-```
-
-**カラー名とANSIコード**
-
-| 名前 | ANSI SGR |
-|------|----------|
-| `black` | `30` |
-| `red` | `31` |
-| `green` | `32` |
-| `yellow` | `33` |
-| `blue` | `34` |
-| `magenta` | `35` |
-| `cyan` | `36` |
-| `white` | `37` |
-| `bright-black` (`gray`, `grey`) | `90` |
-| `bright-red` | `91` |
-| `bright-green` | `92` |
-| `bright-yellow` | `93` |
-| `bright-blue` | `94` |
-| `bright-magenta` | `95` |
-| `bright-cyan` | `96` |
-| `bright-white` | `97` |
-
-ANSI 256色パレットを使う場合は、`fg:<0-255>` / `bg:<0-255>`、または生SGRの `38;5;n` / `48;5;n` を指定します。
-
-トゥルーカラー RGB は `fg:#rrggbb` / `bg:#rrggbb`、短縮形 `fg:#rgb`、10進 `fg:r,g,b`、または生 SGR `38;2;r;g;b` / `48;2;r;g;b`（各成分 `0`–`255`）で指定します。
-
-### コマンド設定一覧
-
-| キー | 説明 | デフォルト |
-|------|------|-----------|
-| `run` | 実行するコマンド | 必須 |
-| `typing-speed` | 1文字あたりの平均秒数 | `settings.typing-speed` |
-| `typing-jitter` | ジッター幅 | `settings.typing-jitter` |
-| `pre-delay` | タイピング前の停止時間 | `settings.pre-delay` |
-| `post-delay` | プロンプト表示後の停止時間 | `settings.post-delay` |
-| `execution-duration` | このコマンド実行の cast 上待機時間を上書き | `settings.execution-duration` |
-| `run-highlight` | タイピングされるコマンド文字列に色を付ける | なし（stepのみ） |
-| `stderr-color` | stderr に ANSI SGR がない場合の既定色 | `settings.stderr-color` |
-
-### settings 対応 / step 対応メモ
-
-- `highlight` はこのバージョンでは `settings` 既定値を持ちません。
-- `run-highlight` はこのバージョンでは `settings` 既定値を持ちません。
-- `stderr-color` は `settings` と step の両方で設定できます。
 
 ## Development
 

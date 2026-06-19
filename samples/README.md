@@ -9,6 +9,7 @@ Sample scenarios for scenetake. Use this page to quickly see each scenario’s *
 | Scenario | Purpose | Input | Outputs |
 |----------|---------|-------|---------|
 | [basic](#basic) | Getting started — typing, highlights, sleep | [basic.yaml](basic.yaml) | [cast](basic.cast) · [gif](basic.gif) · [svg](basic.svg) |
+| [scenario-format](#scenario-format) | Full scenario format reference (README embed) | [scenario_format.yaml](scenario_format.yaml) | [cast](scenario_format.cast) · [svg](scenario_format.svg) |
 | [demo](#demo) | README workflow (YAML → cast → GIF) | [demo.yaml](demo.yaml) | [cast](demo.cast) · [gif](demo.gif) · [svg](demo.svg) |
 | [git](#git) | Real `git` command demo | [git.yaml](git.yaml) | [cast](git.cast) · [gif](git.gif) · [svg](git.svg) |
 | [highlight](#highlight) | Comment, stdout, and stderr coloring | [highlight.yaml](highlight.yaml) | [cast](highlight.cast) · [gif](highlight.gif) · [svg](highlight.svg) |
@@ -49,6 +50,24 @@ docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
 
 ```bash
 scenetake --format svg samples/basic.yaml
+```
+
+---
+
+## scenario-format
+
+**Purpose:** Runnable reference for the scenario YAML format embedded in the main README.
+
+- All top-level sections: metadata, `settings`, `render`, harmless `pre`/`post`, string and map `steps`
+- `run-highlight`, `highlight`, and `stderr-color` with fixed `printf` output (no git or file changes)
+- `render.window: macos` for README preview
+
+| SVG |
+|-----|
+| ![](scenario_format.svg) |
+
+```bash
+scenetake --format svg samples/scenario_format.yaml
 ```
 
 ---

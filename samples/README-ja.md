@@ -9,6 +9,7 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 | シナリオ | 目的 | 入力 | 出力 |
 |----------|------|------|------|
 | [basic](#basic) | 入門・タイピング・ハイライト・sleep | [basic.yaml](basic.yaml) | [cast](basic.cast) · [gif](basic.gif) · [svg](basic.svg) |
+| [scenario-format](#scenario-format) | シナリオ形式の全体リファレンス（README 埋め込み） | [scenario_format.yaml](scenario_format.yaml) | [cast](scenario_format.cast) · [svg](scenario_format.svg) |
 | [demo](#demo) | README 用の一連のワークフロー | [demo.yaml](demo.yaml) | [cast](demo.cast) · [gif](demo.gif) · [svg](demo.svg) |
 | [git](#git) | 実コマンドの git デモ | [git.yaml](git.yaml) | [cast](git.cast) · [gif](git.gif) · [svg](git.svg) |
 | [highlight](#highlight) | コメント・stdout / stderr の色指定 | [highlight.yaml](highlight.yaml) | [cast](highlight.cast) · [gif](highlight.gif) · [svg](highlight.svg) |
@@ -49,6 +50,24 @@ docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
 
 ```bash
 scenetake --format svg samples/basic.yaml
+```
+
+---
+
+## scenario-format
+
+**目的:** メイン README に埋め込んでいるシナリオ YAML 形式の実行可能リファレンス。
+
+- top-level 各セクション（メタデータ、`settings`、`render`、無害な `pre`/`post`、文字列 / マップ形式の `steps`）
+- 固定 `printf` 出力での `run-highlight` / `highlight` / `stderr-color`（git やファイル変更なし）
+- README プレビュー用に `render.window: macos`
+
+| SVG |
+|-----|
+| ![](scenario_format.svg) |
+
+```bash
+scenetake --format svg samples/scenario_format.yaml
 ```
 
 ---
