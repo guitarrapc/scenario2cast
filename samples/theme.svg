@@ -8,97 +8,131 @@ text { dominant-baseline: alphabetic; }
 @keyframes layer-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes layer-out { from { opacity: 1; } to { opacity: 0; } }
 .cursor-block { fill: #383838; fill-opacity: 0.5; }
-.layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 0.833333s; }
-.layer-1 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 2.416667s; }
-.layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 3s; }
-.layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 4.166667s; }
-.layer-4 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 5.25s; }
-.layer-5 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-6 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-7 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-8 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-9 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-10 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-11 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-12 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-13 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-14 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-15 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-16 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-17 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-18 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-19 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-20 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-21 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-22 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-23 { animation-name: layer-in; animation-delay: 0.416667s; }
-.layer-24 { animation-name: layer-in, layer-out; animation-delay: 0.833333s, 0.875s; }
-.layer-25 { animation-name: layer-in, layer-out; animation-delay: 0.875s, 0.916667s; }
-.layer-26 { animation-name: layer-in, layer-out; animation-delay: 0.916667s, 1s; }
-.layer-27 { animation-name: layer-in, layer-out; animation-delay: 1s, 1.083333s; }
-.layer-28 { animation-name: layer-in, layer-out; animation-delay: 1.083333s, 1.166667s; }
-.layer-29 { animation-name: layer-in, layer-out; animation-delay: 1.166667s, 1.25s; }
-.layer-30 { animation-name: layer-in, layer-out; animation-delay: 1.25s, 1.333333s; }
-.layer-31 { animation-name: layer-in, layer-out; animation-delay: 1.333333s, 1.416667s; }
-.layer-32 { animation-name: layer-in, layer-out; animation-delay: 1.416667s, 1.5s; }
-.layer-33 { animation-name: layer-in, layer-out; animation-delay: 1.5s, 1.583333s; }
-.layer-34 { animation-name: layer-in, layer-out; animation-delay: 1.583333s, 1.666667s; }
-.layer-35 { animation-name: layer-in, layer-out; animation-delay: 1.666667s, 1.75s; }
-.layer-36 { animation-name: layer-in, layer-out; animation-delay: 1.75s, 1.833333s; }
-.layer-37 { animation-name: layer-in, layer-out; animation-delay: 1.833333s, 1.916667s; }
-.layer-38 { animation-name: layer-in, layer-out; animation-delay: 1.916667s, 2s; }
-.layer-39 { animation-name: layer-in, layer-out; animation-delay: 2s, 2.083333s; }
-.layer-40 { animation-name: layer-in, layer-out; animation-delay: 2.083333s, 2.125s; }
-.layer-41 { animation-name: layer-in, layer-out; animation-delay: 2.125s, 2.166667s; }
-.layer-42 { animation-name: layer-in, layer-out; animation-delay: 2.166667s, 2.208333s; }
-.layer-43 { animation-name: layer-in; animation-delay: 2.208333s; }
-.layer-44 { animation-name: layer-in; animation-delay: 2.416667s; }
-.layer-45 { animation-name: layer-in, layer-out; animation-delay: 3s, 3.583333s; }
-.layer-46 { animation-name: layer-in, layer-out; animation-delay: 3.583333s, 3.625s; }
-.layer-47 { animation-name: layer-in, layer-out; animation-delay: 3.625s, 3.666667s; }
-.layer-48 { animation-name: layer-in, layer-out; animation-delay: 3.666667s, 3.833333s; }
-.layer-49 { animation-name: layer-in, layer-out; animation-delay: 3.833333s, 3.875s; }
-.layer-50 { animation-name: layer-in, layer-out; animation-delay: 3.875s, 3.916667s; }
-.layer-51 { animation-name: layer-in, layer-out; animation-delay: 3.916667s, 3.958333s; }
-.layer-52 { animation-name: layer-in; animation-delay: 3.958333s; }
-.layer-53 { animation-name: layer-in; animation-delay: 4.166667s; }
-.layer-54 { animation-name: layer-in; animation-delay: 5.25s; }
-.cursor-layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.416667s, 0.833333s; }
-.cursor-layer-1 { animation-name: layer-in, layer-out; animation-delay: 0.833333s, 0.875s; }
-.cursor-layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.875s, 0.916667s; }
-.cursor-layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.916667s, 1s; }
-.cursor-layer-4 { animation-name: layer-in, layer-out; animation-delay: 1s, 1.083333s; }
-.cursor-layer-5 { animation-name: layer-in, layer-out; animation-delay: 1.083333s, 1.166667s; }
-.cursor-layer-6 { animation-name: layer-in, layer-out; animation-delay: 1.166667s, 1.25s; }
-.cursor-layer-7 { animation-name: layer-in, layer-out; animation-delay: 1.25s, 1.333333s; }
-.cursor-layer-8 { animation-name: layer-in, layer-out; animation-delay: 1.333333s, 1.416667s; }
-.cursor-layer-9 { animation-name: layer-in, layer-out; animation-delay: 1.416667s, 1.5s; }
-.cursor-layer-10 { animation-name: layer-in, layer-out; animation-delay: 1.5s, 1.583333s; }
-.cursor-layer-11 { animation-name: layer-in, layer-out; animation-delay: 1.583333s, 1.666667s; }
-.cursor-layer-12 { animation-name: layer-in, layer-out; animation-delay: 1.666667s, 1.75s; }
-.cursor-layer-13 { animation-name: layer-in, layer-out; animation-delay: 1.75s, 1.833333s; }
-.cursor-layer-14 { animation-name: layer-in, layer-out; animation-delay: 1.833333s, 1.916667s; }
-.cursor-layer-15 { animation-name: layer-in, layer-out; animation-delay: 1.916667s, 2s; }
-.cursor-layer-16 { animation-name: layer-in, layer-out; animation-delay: 2s, 2.083333s; }
-.cursor-layer-17 { animation-name: layer-in, layer-out; animation-delay: 2.083333s, 2.125s; }
-.cursor-layer-18 { animation-name: layer-in, layer-out; animation-delay: 2.125s, 2.166667s; }
-.cursor-layer-19 { animation-name: layer-in, layer-out; animation-delay: 2.166667s, 2.208333s; }
-.cursor-layer-20 { animation-name: layer-in, layer-out; animation-delay: 2.208333s, 2.25s; }
-.cursor-layer-21 { animation-name: layer-in, layer-out; animation-delay: 2.25s, 2.416667s; }
-.cursor-layer-22 { animation-name: layer-in, layer-out; animation-delay: 2.416667s, 3s; }
-.cursor-layer-23 { animation-name: layer-in, layer-out; animation-delay: 3s, 3.583333s; }
-.cursor-layer-24 { animation-name: layer-in, layer-out; animation-delay: 3.583333s, 3.625s; }
-.cursor-layer-25 { animation-name: layer-in, layer-out; animation-delay: 3.625s, 3.666667s; }
-.cursor-layer-26 { animation-name: layer-in, layer-out; animation-delay: 3.666667s, 3.75s; }
-.cursor-layer-27 { animation-name: layer-in, layer-out; animation-delay: 3.75s, 3.833333s; }
-.cursor-layer-28 { animation-name: layer-in, layer-out; animation-delay: 3.833333s, 3.875s; }
-.cursor-layer-29 { animation-name: layer-in, layer-out; animation-delay: 3.875s, 3.916667s; }
-.cursor-layer-30 { animation-name: layer-in, layer-out; animation-delay: 3.916667s, 3.958333s; }
-.cursor-layer-31 { animation-name: layer-in, layer-out; animation-delay: 3.958333s, 4s; }
-.cursor-layer-32 { animation-name: layer-in, layer-out; animation-delay: 4s, 4.166667s; }
-.cursor-layer-33 { animation-name: layer-in, layer-out; animation-delay: 4.166667s, 5.25s; }
-.cursor-layer-34 { animation-name: layer-in; animation-delay: 5.25s; }
-.viewport-mask-0, .viewport-bg-0 { animation-name: layer-in; animation-delay: 0.416667s; }
+.layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.8s, 0.85s; }
+.layer-1 { animation-name: layer-in, layer-out; animation-delay: 0.85s, 0.879338s; }
+.layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.879338s, 0.915451s; }
+.layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.915451s, 0.954668s; }
+.layer-4 { animation-name: layer-in, layer-out; animation-delay: 0.954668s, 0.989945s; }
+.layer-5 { animation-name: layer-in, layer-out; animation-delay: 0.989945s, 1.029497s; }
+.layer-6 { animation-name: layer-in, layer-out; animation-delay: 1.029497s, 1.080904s; }
+.layer-7 { animation-name: layer-in, layer-out; animation-delay: 1.080904s, 1.106375s; }
+.layer-8 { animation-name: layer-in, layer-out; animation-delay: 1.106375s, 1.141994s; }
+.layer-9 { animation-name: layer-in, layer-out; animation-delay: 1.141994s, 1.181719s; }
+.layer-10 { animation-name: layer-in, layer-out; animation-delay: 1.181719s, 1.205974s; }
+.layer-11 { animation-name: layer-in, layer-out; animation-delay: 1.205974s, 1.226602s; }
+.layer-12 { animation-name: layer-in, layer-out; animation-delay: 1.226602s, 1.254681s; }
+.layer-13 { animation-name: layer-in, layer-out; animation-delay: 1.254681s, 1.282058s; }
+.layer-14 { animation-name: layer-in, layer-out; animation-delay: 1.282058s, 1.314032s; }
+.layer-15 { animation-name: layer-in, layer-out; animation-delay: 1.314032s, 1.347848s; }
+.layer-16 { animation-name: layer-in, layer-out; animation-delay: 1.347848s, 1.387127s; }
+.layer-17 { animation-name: layer-in, layer-out; animation-delay: 1.387127s, 1.417793s; }
+.layer-18 { animation-name: layer-in, layer-out; animation-delay: 1.417793s, 1.455834s; }
+.layer-19 { animation-name: layer-in, layer-out; animation-delay: 1.455834s, 1.490138s; }
+.layer-20 { animation-name: layer-in, layer-out; animation-delay: 1.490138s, 1.519213s; }
+.layer-21 { animation-name: layer-in, layer-out; animation-delay: 1.519213s, 1.543144s; }
+.layer-22 { animation-name: layer-in, layer-out; animation-delay: 1.543144s, 1.60683s; }
+.layer-23 { animation-name: layer-in, layer-out; animation-delay: 1.60683s, 1.635777s; }
+.layer-24 { animation-name: layer-in, layer-out; animation-delay: 1.635777s, 1.661813s; }
+.layer-25 { animation-name: layer-in, layer-out; animation-delay: 1.661813s, 1.695108s; }
+.layer-26 { animation-name: layer-in, layer-out; animation-delay: 1.695108s, 1.726526s; }
+.layer-27 { animation-name: layer-in, layer-out; animation-delay: 1.726526s, 1.795792s; }
+.layer-28 { animation-name: layer-in, layer-out; animation-delay: 1.795792s, 1.827531s; }
+.layer-29 { animation-name: layer-in, layer-out; animation-delay: 1.827531s, 1.855339s; }
+.layer-30 { animation-name: layer-in, layer-out; animation-delay: 1.855339s, 1.885591s; }
+.layer-31 { animation-name: layer-in, layer-out; animation-delay: 1.885591s, 1.921282s; }
+.layer-32 { animation-name: layer-in, layer-out; animation-delay: 1.921282s, 1.952855s; }
+.layer-33 { animation-name: layer-in, layer-out; animation-delay: 1.952855s, 1.975352s; }
+.layer-34 { animation-name: layer-in, layer-out; animation-delay: 1.975352s, 1.996872s; }
+.layer-35 { animation-name: layer-in, layer-out; animation-delay: 1.996872s, 2.02063s; }
+.layer-36 { animation-name: layer-in, layer-out; animation-delay: 2.02063s, 2.040907s; }
+.layer-37 { animation-name: layer-in, layer-out; animation-delay: 2.040907s, 2.074124s; }
+.layer-38 { animation-name: layer-in, layer-out; animation-delay: 2.074124s, 2.103571s; }
+.layer-39 { animation-name: layer-in, layer-out; animation-delay: 2.103571s, 2.137465s; }
+.layer-40 { animation-name: layer-in, layer-out; animation-delay: 2.137465s, 2.174941s; }
+.layer-41 { animation-name: layer-in, layer-out; animation-delay: 2.174941s, 2.196696s; }
+.layer-42 { animation-name: layer-in, layer-out; animation-delay: 2.196696s, 2.236685s; }
+.layer-43 { animation-name: layer-in; animation-delay: 2.236685s; }
+.layer-44 { animation-name: layer-in; animation-delay: 2.458047s; }
+.layer-45 { animation-name: layer-in, layer-out; animation-delay: 3.558047s, 3.608047s; }
+.layer-46 { animation-name: layer-in, layer-out; animation-delay: 3.608047s, 3.62893s; }
+.layer-47 { animation-name: layer-in, layer-out; animation-delay: 3.62893s, 3.665905s; }
+.layer-48 { animation-name: layer-in, layer-out; animation-delay: 3.665905s, 3.699157s; }
+.layer-49 { animation-name: layer-in, layer-out; animation-delay: 3.699157s, 3.764197s; }
+.layer-50 { animation-name: layer-in, layer-out; animation-delay: 3.764197s, 3.799146s; }
+.layer-51 { animation-name: layer-in, layer-out; animation-delay: 3.799146s, 3.830063s; }
+.layer-52 { animation-name: layer-in, layer-out; animation-delay: 3.830063s, 3.866866s; }
+.layer-53 { animation-name: layer-in, layer-out; animation-delay: 3.866866s, 3.905826s; }
+.layer-54 { animation-name: layer-in, layer-out; animation-delay: 3.905826s, 3.931233s; }
+.layer-55 { animation-name: layer-in, layer-out; animation-delay: 3.931233s, 3.961592s; }
+.layer-56 { animation-name: layer-in; animation-delay: 3.961592s; }
+.layer-57 { animation-name: layer-in; animation-delay: 4.182877s; }
+.layer-58 { animation-name: layer-in; animation-delay: 5.282877s; }
+.cursor-layer-0 { animation-name: layer-in, layer-out; animation-delay: 0.8s, 0.85s; }
+.cursor-layer-1 { animation-name: layer-in, layer-out; animation-delay: 0.85s, 0.879338s; }
+.cursor-layer-2 { animation-name: layer-in, layer-out; animation-delay: 0.879338s, 0.915451s; }
+.cursor-layer-3 { animation-name: layer-in, layer-out; animation-delay: 0.915451s, 0.954668s; }
+.cursor-layer-4 { animation-name: layer-in, layer-out; animation-delay: 0.954668s, 0.989945s; }
+.cursor-layer-5 { animation-name: layer-in, layer-out; animation-delay: 0.989945s, 1.029497s; }
+.cursor-layer-6 { animation-name: layer-in, layer-out; animation-delay: 1.029497s, 1.058191s; }
+.cursor-layer-7 { animation-name: layer-in, layer-out; animation-delay: 1.058191s, 1.080904s; }
+.cursor-layer-8 { animation-name: layer-in, layer-out; animation-delay: 1.080904s, 1.106375s; }
+.cursor-layer-9 { animation-name: layer-in, layer-out; animation-delay: 1.106375s, 1.141994s; }
+.cursor-layer-10 { animation-name: layer-in, layer-out; animation-delay: 1.141994s, 1.181719s; }
+.cursor-layer-11 { animation-name: layer-in, layer-out; animation-delay: 1.181719s, 1.205974s; }
+.cursor-layer-12 { animation-name: layer-in, layer-out; animation-delay: 1.205974s, 1.226602s; }
+.cursor-layer-13 { animation-name: layer-in, layer-out; animation-delay: 1.226602s, 1.254681s; }
+.cursor-layer-14 { animation-name: layer-in, layer-out; animation-delay: 1.254681s, 1.282058s; }
+.cursor-layer-15 { animation-name: layer-in, layer-out; animation-delay: 1.282058s, 1.314032s; }
+.cursor-layer-16 { animation-name: layer-in, layer-out; animation-delay: 1.314032s, 1.347848s; }
+.cursor-layer-17 { animation-name: layer-in, layer-out; animation-delay: 1.347848s, 1.387127s; }
+.cursor-layer-18 { animation-name: layer-in, layer-out; animation-delay: 1.387127s, 1.417793s; }
+.cursor-layer-19 { animation-name: layer-in, layer-out; animation-delay: 1.417793s, 1.455834s; }
+.cursor-layer-20 { animation-name: layer-in, layer-out; animation-delay: 1.455834s, 1.490138s; }
+.cursor-layer-21 { animation-name: layer-in, layer-out; animation-delay: 1.490138s, 1.519213s; }
+.cursor-layer-22 { animation-name: layer-in, layer-out; animation-delay: 1.519213s, 1.543144s; }
+.cursor-layer-23 { animation-name: layer-in, layer-out; animation-delay: 1.543144s, 1.568898s; }
+.cursor-layer-24 { animation-name: layer-in, layer-out; animation-delay: 1.568898s, 1.60683s; }
+.cursor-layer-25 { animation-name: layer-in, layer-out; animation-delay: 1.60683s, 1.635777s; }
+.cursor-layer-26 { animation-name: layer-in, layer-out; animation-delay: 1.635777s, 1.661813s; }
+.cursor-layer-27 { animation-name: layer-in, layer-out; animation-delay: 1.661813s, 1.695108s; }
+.cursor-layer-28 { animation-name: layer-in, layer-out; animation-delay: 1.695108s, 1.726526s; }
+.cursor-layer-29 { animation-name: layer-in, layer-out; animation-delay: 1.726526s, 1.764213s; }
+.cursor-layer-30 { animation-name: layer-in, layer-out; animation-delay: 1.764213s, 1.795792s; }
+.cursor-layer-31 { animation-name: layer-in, layer-out; animation-delay: 1.795792s, 1.827531s; }
+.cursor-layer-32 { animation-name: layer-in, layer-out; animation-delay: 1.827531s, 1.855339s; }
+.cursor-layer-33 { animation-name: layer-in, layer-out; animation-delay: 1.855339s, 1.885591s; }
+.cursor-layer-34 { animation-name: layer-in, layer-out; animation-delay: 1.885591s, 1.921282s; }
+.cursor-layer-35 { animation-name: layer-in, layer-out; animation-delay: 1.921282s, 1.952855s; }
+.cursor-layer-36 { animation-name: layer-in, layer-out; animation-delay: 1.952855s, 1.975352s; }
+.cursor-layer-37 { animation-name: layer-in, layer-out; animation-delay: 1.975352s, 1.996872s; }
+.cursor-layer-38 { animation-name: layer-in, layer-out; animation-delay: 1.996872s, 2.02063s; }
+.cursor-layer-39 { animation-name: layer-in, layer-out; animation-delay: 2.02063s, 2.040907s; }
+.cursor-layer-40 { animation-name: layer-in, layer-out; animation-delay: 2.040907s, 2.074124s; }
+.cursor-layer-41 { animation-name: layer-in, layer-out; animation-delay: 2.074124s, 2.103571s; }
+.cursor-layer-42 { animation-name: layer-in, layer-out; animation-delay: 2.103571s, 2.137465s; }
+.cursor-layer-43 { animation-name: layer-in, layer-out; animation-delay: 2.137465s, 2.174941s; }
+.cursor-layer-44 { animation-name: layer-in, layer-out; animation-delay: 2.174941s, 2.196696s; }
+.cursor-layer-45 { animation-name: layer-in, layer-out; animation-delay: 2.196696s, 2.236685s; }
+.cursor-layer-46 { animation-name: layer-in, layer-out; animation-delay: 2.236685s, 2.258047s; }
+.cursor-layer-47 { animation-name: layer-in, layer-out; animation-delay: 2.258047s, 2.458047s; }
+.cursor-layer-48 { animation-name: layer-in, layer-out; animation-delay: 2.458047s, 3.558047s; }
+.cursor-layer-49 { animation-name: layer-in, layer-out; animation-delay: 3.558047s, 3.608047s; }
+.cursor-layer-50 { animation-name: layer-in, layer-out; animation-delay: 3.608047s, 3.62893s; }
+.cursor-layer-51 { animation-name: layer-in, layer-out; animation-delay: 3.62893s, 3.665905s; }
+.cursor-layer-52 { animation-name: layer-in, layer-out; animation-delay: 3.665905s, 3.699157s; }
+.cursor-layer-53 { animation-name: layer-in, layer-out; animation-delay: 3.699157s, 3.735397s; }
+.cursor-layer-54 { animation-name: layer-in, layer-out; animation-delay: 3.735397s, 3.764197s; }
+.cursor-layer-55 { animation-name: layer-in, layer-out; animation-delay: 3.764197s, 3.799146s; }
+.cursor-layer-56 { animation-name: layer-in, layer-out; animation-delay: 3.799146s, 3.830063s; }
+.cursor-layer-57 { animation-name: layer-in, layer-out; animation-delay: 3.830063s, 3.866866s; }
+.cursor-layer-58 { animation-name: layer-in, layer-out; animation-delay: 3.866866s, 3.905826s; }
+.cursor-layer-59 { animation-name: layer-in, layer-out; animation-delay: 3.905826s, 3.931233s; }
+.cursor-layer-60 { animation-name: layer-in, layer-out; animation-delay: 3.931233s, 3.961592s; }
+.cursor-layer-61 { animation-name: layer-in, layer-out; animation-delay: 3.961592s, 3.982877s; }
+.cursor-layer-62 { animation-name: layer-in, layer-out; animation-delay: 3.982877s, 4.182877s; }
+.cursor-layer-63 { animation-name: layer-in, layer-out; animation-delay: 4.182877s, 5.282877s; }
+.cursor-layer-64 { animation-name: layer-in; animation-delay: 5.282877s; }
+.viewport-mask-0, .viewport-bg-0 { animation-name: layer-in; animation-delay: 0.8s; }
 </style>
 <defs>
 <mask id="viewport-mask" x="0" y="0" width="829.6" height="504" maskUnits="userSpaceOnUse">
@@ -111,104 +145,127 @@ text { dominant-baseline: alphabetic; }
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
 </g>
 <g class="layer layer-1">
-</g>
-<g class="layer layer-2">
-</g>
-<g class="layer layer-3">
-</g>
-<g class="layer layer-4">
-</g>
-<g class="layer layer-5">
-</g>
-<g class="layer layer-6">
-</g>
-<g class="layer layer-7">
-</g>
-<g class="layer layer-8">
-</g>
-<g class="layer layer-9">
-</g>
-<g class="layer layer-10">
-</g>
-<g class="layer layer-11">
-</g>
-<g class="layer layer-12">
-</g>
-<g class="layer layer-13">
-</g>
-<g class="layer layer-14">
-</g>
-<g class="layer layer-15">
-</g>
-<g class="layer layer-16">
-</g>
-<g class="layer layer-17">
-</g>
-<g class="layer layer-18">
-</g>
-<g class="layer layer-19">
-</g>
-<g class="layer layer-20">
-</g>
-<g class="layer layer-21">
-</g>
-<g class="layer layer-22">
-</g>
-<g class="layer layer-23">
-</g>
-<g class="layer layer-24">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ p</text>
 </g>
-<g class="layer layer-25">
+<g class="layer layer-2">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ pr</text>
 </g>
-<g class="layer layer-26">
+<g class="layer layer-3">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ pri</text>
+</g>
+<g class="layer layer-4">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ prin</text>
 </g>
-<g class="layer layer-27">
+<g class="layer layer-5">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ print</text>
 </g>
-<g class="layer layer-28">
+<g class="layer layer-6">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ printf</text>
+</g>
+<g class="layer layer-7">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ printf '</text>
+</g>
+<g class="layer layer-8">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ printf '\</text>
 </g>
-<g class="layer layer-29">
+<g class="layer layer-9">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ printf '\0</text>
+</g>
+<g class="layer layer-10">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ printf '\03</text>
+</g>
+<g class="layer layer-11">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ printf '\033</text>
 </g>
-<g class="layer layer-30">
+<g class="layer layer-12">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ printf '\033[</text>
 </g>
-<g class="layer layer-31">
+<g class="layer layer-13">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ printf '\033[1</text>
+</g>
+<g class="layer layer-14">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ printf '\033[1;</text>
+</g>
+<g class="layer layer-15">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ printf '\033[1;3</text>
+</g>
+<g class="layer layer-16">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ printf '\033[1;34</text>
 </g>
-<g class="layer layer-32">
+<g class="layer layer-17">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ printf '\033[1;34m</text>
+</g>
+<g class="layer layer-18">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ printf '\033[1;34mL</text>
+</g>
+<g class="layer layer-19">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ printf '\033[1;34mLi</text>
 </g>
-<g class="layer layer-33">
+<g class="layer layer-20">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ printf '\033[1;34mLig</text>
 </g>
-<g class="layer layer-34">
+<g class="layer layer-21">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ printf '\033[1;34mLigh</text>
+</g>
+<g class="layer layer-22">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="248" lengthAdjust="spacing">$ printf '\033[1;34mLight</text>
+</g>
+<g class="layer layer-23">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ printf '\033[1;34mLight t</text>
 </g>
-<g class="layer layer-35">
+<g class="layer layer-24">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="277.76" lengthAdjust="spacing">$ printf '\033[1;34mLight th</text>
+</g>
+<g class="layer layer-25">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="287.68" lengthAdjust="spacing">$ printf '\033[1;34mLight the</text>
+</g>
+<g class="layer layer-26">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="297.6" lengthAdjust="spacing">$ printf '\033[1;34mLight them</text>
 </g>
-<g class="layer layer-36">
+<g class="layer layer-27">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="307.52" lengthAdjust="spacing">$ printf '\033[1;34mLight theme</text>
 </g>
-<g class="layer layer-37">
+<g class="layer layer-28">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="327.36" lengthAdjust="spacing">$ printf '\033[1;34mLight theme p</text>
+</g>
+<g class="layer layer-29">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="337.28" lengthAdjust="spacing">$ printf '\033[1;34mLight theme pr</text>
+</g>
+<g class="layer layer-30">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="347.2" lengthAdjust="spacing">$ printf '\033[1;34mLight theme pre</text>
 </g>
-<g class="layer layer-38">
+<g class="layer layer-31">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="357.12" lengthAdjust="spacing">$ printf '\033[1;34mLight theme pres</text>
+</g>
+<g class="layer layer-32">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="367.04" lengthAdjust="spacing">$ printf '\033[1;34mLight theme prese</text>
+</g>
+<g class="layer layer-33">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="376.96" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset</text>
 </g>
-<g class="layer layer-39">
+<g class="layer layer-34">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="386.88" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\</text>
 </g>
-<g class="layer layer-40">
+<g class="layer layer-35">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="396.8" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\0</text>
+</g>
+<g class="layer layer-36">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="406.72" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\03</text>
+</g>
+<g class="layer layer-37">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="416.64" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033</text>
+</g>
+<g class="layer layer-38">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="426.56" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033[</text>
+</g>
+<g class="layer layer-39">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="436.48" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033[0</text>
 </g>
-<g class="layer layer-41">
+<g class="layer layer-40">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="446.4" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033[0m</text>
+</g>
+<g class="layer layer-41">
+<text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="456.32" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033[0m\</text>
 </g>
 <g class="layer layer-42">
 <text x="18" y="24.8" fill="#383838" font-weight="normal" textLength="466.24" lengthAdjust="spacing">$ printf '\033[1;34mLight theme preset\033[0m\n</text>
@@ -229,24 +286,36 @@ text { dominant-baseline: alphabetic; }
 <text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
 </g>
 <g class="layer layer-48">
-<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
 </g>
 <g class="layer layer-49">
-<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Don</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
 </g>
 <g class="layer layer-50">
-<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Done</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
 </g>
 <g class="layer layer-51">
-<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Done!</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;D</text>
 </g>
 <g class="layer layer-52">
-<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Done!&quot;</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;Do</text>
 </g>
 <g class="layer layer-53">
-<text x="18" y="84.8" fill="#383838" font-weight="normal" textLength="49.6" lengthAdjust="spacing">Done!</text>
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Don</text>
 </g>
 <g class="layer layer-54">
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Done</text>
+</g>
+<g class="layer layer-55">
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Done!</text>
+</g>
+<g class="layer layer-56">
+<text x="18" y="64.8" fill="#383838" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Done!&quot;</text>
+</g>
+<g class="layer layer-57">
+<text x="18" y="84.8" fill="#383838" font-weight="normal" textLength="49.6" lengthAdjust="spacing">Done!</text>
+</g>
+<g class="layer layer-58">
 <text x="18" y="104.8" fill="#383838" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
 </g>
 <g class="layer cursor-layer-0">
@@ -259,99 +328,189 @@ text { dominant-baseline: alphabetic; }
 <rect class="cursor-block" x="57.68" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-3">
-<rect class="cursor-block" x="77.52" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="67.6" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-4">
-<rect class="cursor-block" x="87.44" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="77.52" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-5">
-<rect class="cursor-block" x="127.12" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="87.44" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-6">
-<rect class="cursor-block" x="156.88" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="97.36" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-7">
-<rect class="cursor-block" x="166.8" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="107.28" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-8">
-<rect class="cursor-block" x="206.48" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="117.2" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-9">
-<rect class="cursor-block" x="236.24" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="127.12" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-10">
-<rect class="cursor-block" x="246.16" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="137.04" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-11">
-<rect class="cursor-block" x="285.84" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="146.96" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-12">
-<rect class="cursor-block" x="315.6" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="156.88" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-13">
-<rect class="cursor-block" x="325.52" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="166.8" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-14">
-<rect class="cursor-block" x="365.2" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="176.72" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-15">
-<rect class="cursor-block" x="394.96" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="186.64" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-16">
-<rect class="cursor-block" x="404.88" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="196.56" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-17">
-<rect class="cursor-block" x="454.48" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="206.48" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-18">
-<rect class="cursor-block" x="464.4" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="216.4" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-19">
-<rect class="cursor-block" x="484.24" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="226.32" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-20">
-<rect class="cursor-block" x="494.16" y="12" width="9.92" height="20"/>
+<rect class="cursor-block" x="236.24" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-21">
-<rect class="cursor-block" x="18" y="32" width="9.92" height="20"/>
+<rect class="cursor-block" x="246.16" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-22">
-<rect class="cursor-block" x="18" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="256.08" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-23">
-<rect class="cursor-block" x="37.84" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="266" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-24">
-<rect class="cursor-block" x="47.76" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="275.92" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-25">
-<rect class="cursor-block" x="57.68" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="285.84" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-26">
-<rect class="cursor-block" x="77.52" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="295.76" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-27">
-<rect class="cursor-block" x="87.44" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="305.68" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-28">
-<rect class="cursor-block" x="127.12" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="315.6" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-29">
-<rect class="cursor-block" x="137.04" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="325.52" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-30">
-<rect class="cursor-block" x="146.96" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="335.44" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-31">
-<rect class="cursor-block" x="156.88" y="52" width="9.92" height="20"/>
+<rect class="cursor-block" x="345.36" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-32">
-<rect class="cursor-block" x="18" y="72" width="9.92" height="20"/>
+<rect class="cursor-block" x="355.28" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-33">
-<rect class="cursor-block" x="18" y="92" width="9.92" height="20"/>
+<rect class="cursor-block" x="365.2" y="12" width="9.92" height="20"/>
 </g>
 <g class="layer cursor-layer-34">
+<rect class="cursor-block" x="375.12" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-35">
+<rect class="cursor-block" x="385.04" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-36">
+<rect class="cursor-block" x="394.96" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-37">
+<rect class="cursor-block" x="404.88" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-38">
+<rect class="cursor-block" x="414.8" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-39">
+<rect class="cursor-block" x="424.72" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-40">
+<rect class="cursor-block" x="434.64" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-41">
+<rect class="cursor-block" x="444.56" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-42">
+<rect class="cursor-block" x="454.48" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-43">
+<rect class="cursor-block" x="464.4" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-44">
+<rect class="cursor-block" x="474.32" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-45">
+<rect class="cursor-block" x="484.24" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-46">
+<rect class="cursor-block" x="494.16" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-47">
+<rect class="cursor-block" x="18" y="32" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-48">
+<rect class="cursor-block" x="18" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-49">
+<rect class="cursor-block" x="37.84" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-50">
+<rect class="cursor-block" x="47.76" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-51">
+<rect class="cursor-block" x="57.68" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-52">
+<rect class="cursor-block" x="67.6" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-53">
+<rect class="cursor-block" x="77.52" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-54">
+<rect class="cursor-block" x="87.44" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-55">
+<rect class="cursor-block" x="97.36" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-56">
+<rect class="cursor-block" x="107.28" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-57">
+<rect class="cursor-block" x="117.2" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-58">
+<rect class="cursor-block" x="127.12" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-59">
+<rect class="cursor-block" x="137.04" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-60">
+<rect class="cursor-block" x="146.96" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-61">
+<rect class="cursor-block" x="156.88" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-62">
+<rect class="cursor-block" x="18" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-63">
+<rect class="cursor-block" x="18" y="92" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-64">
 <rect class="cursor-block" x="37.84" y="92" width="9.92" height="20"/>
 </g>
 </g>

@@ -114,6 +114,21 @@ internal sealed class ScreenBuffer
         return true;
     }
 
+    internal bool IsRowBlank(int row)
+    {
+        if ((uint)row >= (uint)Height)
+            return true;
+
+        for (var col = 0; col < Width; col++)
+        {
+            ref readonly var cell = ref _cells[row, col];
+            if (cell.Text != Space || cell.Style != DefaultStyle || cell.IsWide || cell.IsWideContinuation)
+                return false;
+        }
+
+        return true;
+    }
+
     internal ulong ComputeCanvasSignature(int canvasWidth, int canvasHeight)
     {
         const ulong fnvOffset = 1469598103934665603UL;

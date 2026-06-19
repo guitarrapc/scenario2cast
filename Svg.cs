@@ -18,7 +18,7 @@ internal static class SvgRender
     }
 }
 
-internal readonly record struct ResolvedRenderSettings(int FontSize, string FontFamily, ResolvedTheme Theme)
+internal readonly record struct ResolvedRenderSettings(int FontSize, string FontFamily, ResolvedTheme Theme, int MaxFps = RenderSettingsResolver.DefaultMaxFps)
 {
     public string DefaultFg => Theme.Fg;
 }
@@ -31,6 +31,8 @@ internal static class RenderSettingsResolver
     internal const int MinTerminalCols = 1, MaxTerminalCols = 512;
     internal const int MinTerminalRows = 1, MaxTerminalRows = 512;
     internal const int DefaultFontSize = 16;
+    internal const int DefaultMaxFps = 0;
+    internal const int MinMaxFps = 0, MaxMaxFps = 120;
     internal const int MaxFontFamilyLength = 256, MaxFontFamilyCount = 10;
     internal const string FontSizeTagPrefix = "s2c:font-size=";
     internal const string FontFamilyTagPrefix = "s2c:font-family=";
@@ -144,6 +146,25 @@ internal static class RenderSettingsResolver
         return true;
     }
 
+    internal static bool TryParseMaxFps(string text, out int maxFps, out string error)
+    {
+        maxFps = 0;
+        error = "";
+        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out maxFps))
+        {
+            error = $"invalid --max-fps value: {text}";
+            return false;
+        }
+
+        if (maxFps is < MinMaxFps or > MaxMaxFps)
+        {
+            error = $"--max-fps must be between {MinMaxFps} and {MaxMaxFps} ({MinMaxFps} disables sampling): {maxFps}";
+            return false;
+        }
+
+        return true;
+    }
+
     internal static bool TryResolve(
         Scenario scenario,
         string? cliThemePreset,
@@ -202,6 +223,7 @@ internal static class RenderSettingsResolver
         int? fontSizeOverride,
         string? fontFamilyOverride,
         string? themePresetOverride,
+        int? maxFpsOverride,
         out string error)
     {
         error = "";
@@ -221,6 +243,9 @@ internal static class RenderSettingsResolver
 
         if (fontFamilyOverride is string fontFamily)
             settings = settings with { FontFamily = fontFamily };
+
+        if (maxFpsOverride is int maxFps)
+            settings = settings with { MaxFps = maxFps };
 
         return settings;
     }
@@ -276,7 +301,6 @@ internal static class SvgFrameRenderer
     private const double InnerPaddingVerticalMax = 8.0;
     private const double LayerFadeSeconds = 0.001;
     private const double CursorBlockOpacity = 0.5;
-    private const double DefaultMaxFps = 12d;
     private const string Space = " ";
 
     [ThreadStatic] private static StringBuilder? t_runText;
@@ -291,7 +315,7 @@ internal static class SvgFrameRenderer
         if (frames.Count == 0)
             return BuildEmptySvg(render, canvasWidth, canvasHeight);
 
-        frames = OptimizeFrames(frames);
+        frames = OptimizeFrames(frames, render.MaxFps);
         var theme = TerminalTheme.FromResolved(render.Theme);
         var metrics = CreateMetrics(render.FontSize, canvasWidth, canvasHeight);
 
@@ -345,8 +369,21 @@ internal static class SvgFrameRenderer
 
             for (var row = 0; row < canvasHeight; row++)
             {
-                if (previous is not null && previous.RowEquals(buffer, row))
+                if (activeByRow[row] is { Buffer: ScreenBuffer activeBuf } && activeBuf.RowEquals(buffer, row))
                     continue;
+
+                if (activeByRow[row] is null && previous is not null && previous.RowEquals(buffer, row))
+                    continue;
+
+                var rowBlank = buffer.IsRowBlank(row);
+                if (rowBlank)
+                {
+                    if (activeByRow[row] is not { Buffer: ScreenBuffer prior } || prior.IsRowBlank(row))
+                        continue;
+
+                    if (!IsLikelyFullClear(previous, buffer))
+                        continue;
+                }
 
                 if (activeByRow[row] is { } active)
                     active.Hide = time;
@@ -360,6 +397,21 @@ internal static class SvgFrameRenderer
         }
 
         return new LayerSet(rows, cursors, viewports);
+    }
+
+    private static bool IsLikelyFullClear(ScreenBuffer? previous, ScreenBuffer current)
+    {
+        if (previous is null)
+            return false;
+
+        var changedToBlank = 0;
+        for (var row = 0; row < current.Height; row++)
+        {
+            if (!previous.RowEquals(current, row) && current.IsRowBlank(row))
+                changedToBlank++;
+        }
+
+        return changedToBlank >= Math.Max(1, current.Height / 2);
     }
 
     private static string BuildLayeredSvg(
@@ -659,17 +711,20 @@ internal static class SvgFrameRenderer
         return text;
     }
 
-    private static List<ReplayFrame> OptimizeFrames(IReadOnlyList<ReplayFrame> frames, double maxFps = DefaultMaxFps)
+    private static List<ReplayFrame> OptimizeFrames(IReadOnlyList<ReplayFrame> frames, int maxFps)
     {
-        if (frames.Count <= 1)
+        if (maxFps <= 0)
             return frames is List<ReplayFrame> list ? list : [.. frames];
+
+        if (frames.Count <= 1)
+            return frames is List<ReplayFrame> single ? single : [.. frames];
 
         var normalized = NormalizeTiming(frames, maxFps);
         var reduced = ReduceFrames(normalized, maxFps);
         return SpreadCollapsedFrameTimes(reduced, maxFps);
     }
 
-    private static List<ReplayFrame> NormalizeTiming(IReadOnlyList<ReplayFrame> frames, double maxFps)
+    private static List<ReplayFrame> NormalizeTiming(IReadOnlyList<ReplayFrame> frames, int maxFps)
     {
         if (frames.Count == 0 || maxFps <= 0)
             return frames.ToList();
@@ -693,7 +748,7 @@ internal static class SvgFrameRenderer
         return normalized;
     }
 
-    private static List<ReplayFrame> ReduceFrames(IReadOnlyList<ReplayFrame> frames, double maxFps)
+    private static List<ReplayFrame> ReduceFrames(IReadOnlyList<ReplayFrame> frames, int maxFps)
     {
         if (frames.Count <= 2 || maxFps <= 0)
             return frames.ToList();
@@ -761,7 +816,7 @@ internal static class SvgFrameRenderer
         return reduced;
     }
 
-    private static List<ReplayFrame> SpreadCollapsedFrameTimes(IReadOnlyList<ReplayFrame> frames, double maxFps)
+    private static List<ReplayFrame> SpreadCollapsedFrameTimes(IReadOnlyList<ReplayFrame> frames, int maxFps)
     {
         if (frames.Count <= 1)
             return frames.ToList();

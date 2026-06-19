@@ -73,7 +73,7 @@ if (args[0] is "svg")
         return 0;
     }
 
-    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgFontSize, out var svgFontFamily, out var svgThemePreset, out var svgError))
+    if (!TryParseSvgArgs(args, out var castArg, out var svgOutputArg, out var svgFontSize, out var svgFontFamily, out var svgThemePreset, out var svgMaxFps, out var svgError))
     {
         Console.Error.WriteLine($"Error: {svgError}");
         PrintSvgUsage();
@@ -98,6 +98,7 @@ if (args[0] is "svg")
             svgFontSize,
             svgFontFamily,
             svgThemePreset,
+            svgMaxFps,
             out var svgOverrideError);
         if (svgOverrideError.Length != 0)
         {
@@ -139,7 +140,7 @@ if (args[0] is "-h" or "--help")
     return 0;
 }
 
-if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runFontSize, out var runFontFamily, out var runThemePreset, out var runError))
+if (!TryParseRunArgs(args, out var scenarioArg, out var outputArg, out var outputFormat, out var verbose, out var runFontSize, out var runFontFamily, out var runThemePreset, out var runMaxFps, out var runError))
 {
     Console.Error.WriteLine($"Error: {runError}");
     PrintUsage();
@@ -176,6 +177,8 @@ if (runFontSize is int runFontSizeValue)
     renderSettings = renderSettings with { FontSize = runFontSizeValue };
 if (runFontFamily is string runFontFamilyValue)
     renderSettings = renderSettings with { FontFamily = runFontFamilyValue };
+if (runMaxFps is int runMaxFpsValue)
+    renderSettings = renderSettings with { MaxFps = runMaxFpsValue };
 var deterministicSeed = ComputeDeterministicSeed(yaml);
 var deterministicTimestamp = ComputeDeterministicTimestamp(deterministicSeed);
 
@@ -261,6 +264,7 @@ static bool TryParseSvgArgs(
     out int? fontSizeOverride,
     out string? fontFamilyOverride,
     out string? themePresetOverride,
+    out int? maxFpsOverride,
     out string error)
 {
     castPath = "";
@@ -268,6 +272,7 @@ static bool TryParseSvgArgs(
     fontSizeOverride = null;
     fontFamilyOverride = null;
     themePresetOverride = null;
+    maxFpsOverride = null;
     error = "";
 
     for (var i = 1; i < args.Length; i++)
@@ -288,6 +293,13 @@ static bool TryParseSvgArgs(
         }
 
         if (TryConsumeThemeArg(args, ref i, ref themePresetOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
+            continue;
+        }
+
+        if (TryConsumeMaxFpsArg(args, ref i, ref maxFpsOverride, out error))
         {
             if (error.Length != 0)
                 return false;
@@ -332,6 +344,7 @@ static bool TryParseRunArgs(
     out int? fontSizeOverride,
     out string? fontFamilyOverride,
     out string? themePresetOverride,
+    out int? maxFpsOverride,
     out string error)
 {
     scenarioPath = "";
@@ -341,6 +354,7 @@ static bool TryParseRunArgs(
     fontSizeOverride = null;
     fontFamilyOverride = null;
     themePresetOverride = null;
+    maxFpsOverride = null;
     error = "";
 
     for (var i = 0; i < args.Length; i++)
@@ -367,6 +381,13 @@ static bool TryParseRunArgs(
         }
 
         if (TryConsumeThemeArg(args, ref i, ref themePresetOverride, out error))
+        {
+            if (error.Length != 0)
+                return false;
+            continue;
+        }
+
+        if (TryConsumeMaxFpsArg(args, ref i, ref maxFpsOverride, out error))
         {
             if (error.Length != 0)
                 return false;
@@ -464,6 +485,49 @@ static bool TryConsumeFontSizeArg(string[] args, ref int i, ref int? fontSizeOve
         return true;
 
     fontSizeOverride = parsed;
+    return true;
+}
+
+static bool TryConsumeMaxFpsArg(string[] args, ref int i, ref int? maxFpsOverride, out string error)
+{
+    error = "";
+    var arg = args[i];
+    string? value;
+
+    if (arg == "--max-fps")
+    {
+        if (i + 1 >= args.Length)
+        {
+            error = "--max-fps requires a value";
+            return true;
+        }
+
+        value = args[++i];
+    }
+    else if (arg.StartsWith("--max-fps=", StringComparison.Ordinal))
+    {
+        value = arg["--max-fps=".Length..];
+        if (value.Length == 0)
+        {
+            error = "--max-fps requires a value";
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if (maxFpsOverride.HasValue)
+    {
+        error = "duplicate option: --max-fps";
+        return true;
+    }
+
+    if (!RenderSettingsResolver.TryParseMaxFps(value, out var parsed, out error))
+        return true;
+
+    maxFpsOverride = parsed;
     return true;
 }
 
@@ -1997,8 +2061,8 @@ static string CreateInitialScenarioYaml()
 
 static void PrintUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] [--font-size N] [--font-family FAMILIES] [--theme dark|light] <scenario.yaml> [output]");
-    Console.Error.WriteLine("       scenario2cast svg [--font-size N] [--font-family FAMILIES] [--theme dark|light] <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast [--verbose] [--format cast|svg] [--font-size N] [--font-family FAMILIES] [--theme dark|light] [--max-fps N] <scenario.yaml> [output]");
+    Console.Error.WriteLine("       scenario2cast svg [--font-size N] [--font-family FAMILIES] [--theme dark|light] [--max-fps N] <input.cast> [output.svg]");
     Console.Error.WriteLine("       scenario2cast init [scenario.yaml]");
     Console.Error.WriteLine("       scenario2cast --help");
 }
@@ -2011,7 +2075,7 @@ static void PrintInitUsage()
 
 static void PrintSvgUsage()
 {
-    Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] [--font-family FAMILIES] [--theme dark|light] <input.cast> [output.svg]");
+    Console.Error.WriteLine("Usage: scenario2cast svg [--font-size N] [--font-family FAMILIES] [--theme dark|light] [--max-fps N] <input.cast> [output.svg]");
     Console.Error.WriteLine("Converts an existing asciinema v2/v3 cast file to animated SVG.");
 }
 

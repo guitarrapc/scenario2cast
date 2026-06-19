@@ -14,7 +14,7 @@ Rich TUI recordings (`copilot --banner`, `sl`, etc.) are expected from **externa
 
 - SVG output via `--format svg` or the `svg` subcommand. CLI: [spec_cli.md](spec_cli.md). Scenario `render:` keys: [spec_scenario.md](spec_scenario.md).
 - Built-in C# SVG renderer (no bundled external binary).
-- **Row-diff** animated SVG (changed rows only, CSS layer fade) with **12 fps** frame sampling (console2svg-style `ReduceFrames` + `SpreadCollapsedFrameTimes`).
+- **Row-diff** animated SVG (changed rows only, CSS layer fade) with optional **`--max-fps`** frame sampling (default **off**; console2svg-style `ReduceFrames` + `SpreadCollapsedFrameTimes` when enabled).
 - VT emulator at console2svg reference level (see [VT emulator](#vt-emulator)).
 - Theme presets `dark` (default) and `light`; default `font-size` of `16`; default `font-family` stack tuned for programming.
 - Block cursor (`theme.fg` at 50% opacity, no blink); DECTCEM visibility (`\e[?25h`, `\e[?25l`).
@@ -51,7 +51,7 @@ Implementation: `Terminal.cs` (AnsiParser, ScreenBuffer, TerminalReplay). Tests:
 
 ### Animation and visuals
 
-- Replay follows cast event timestamps; frame optimizer caps sampling at **12 fps** while preserving the latest visual change within each interval.
+- Replay follows cast event timestamps. **`--max-fps`** (default **off**) caps sampling when set; preserves the latest visual change within each interval. When off, every visual change is kept (~125KB for `basic.cast`).
 - Output is self-contained animated SVG (CSS only, no JavaScript).
 - **Row-diff** animation: only changed rows are emitted as timed layers (`layer-in` / `layer-out` keyframes). Cursor and viewport resize use separate layers.
 - Trailing blank frames after alternate-screen restore are trimmed when the event stream indicates a screen clear.
@@ -99,5 +99,5 @@ The cast file is never modified by the `svg` subcommand.
 ## Lessons Learned
 
 - Row-diff layers keep typing-heavy casts small (~80KB for `basic.cast`); full-screen redraws still work but emit one layer per changed row.
-- Frame sampling at 12 fps (with pending-frame coalescing) prevents one defs/frame per keystroke; match console2svg `ReduceFrames` order: reduce, then spread collapsed times.
+- Frame sampling is optional (`--max-fps`); default off keeps full timing for typing and bulk output (e.g. curl). Use sampling on long TUI casts to limit layer count.
 - Trailing blank alternate-screen restore frames should be trimmed when the event stream contains screen-clear sequences.
