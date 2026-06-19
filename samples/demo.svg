@@ -470,7 +470,7 @@ text { dominant-baseline: alphabetic; }
 .cursor-layer-180 { animation-name: layer-in, layer-out; animation-delay: 8.465386s, 8.481458s; }
 .cursor-layer-181 { animation-name: layer-in, layer-out; animation-delay: 8.481458s, 11.331458s; }
 .cursor-layer-182 { animation-name: layer-in; animation-delay: 11.331458s; }
-.viewport-mask-0, .viewport-bg-0 { animation-name: layer-in; animation-delay: 1s; }
+.viewport-mask-0, .viewport-bg-0 { animation-name: layer-in; animation-delay: 0s; }
 </style>
 <defs>
 <mask id="viewport-mask" x="0" y="0" width="1226.4" height="504" maskUnits="userSpaceOnUse">
