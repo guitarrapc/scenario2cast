@@ -126,14 +126,17 @@ static string BuildFrame(ColumnState[] columns, Random rng, bool first)
 
 static void WriteCast(string path, List<(double Time, string Data)> events)
 {
+    // Matrix-style: black background, green trail (palette 2), white heads tinted to bright green (10).
+    const string bg = "#000000";
+    const string fg = "#00ff41";
     const string palette =
-        "#151515:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#d0d0d0:" +
-        "#505050:#ac4142:#7e8e50:#e5b567:#6c99bb:#9f4e85:#7dd6cf:#f5f5f5";
+        "#000000:#3d0000:#008f11:#3d3d00:#0000cc:#3d003d:#00cccc:#ffffff:" +
+        "#1a1a1a:#ff4444:#00ff41:#ffff44:#4444ff:#ff44ff:#44ffff:#ffffff";
 
     using var writer = new StreamWriter(path, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     writer.WriteLine(
         "{\"version\":3,\"term\":{\"cols\":80,\"rows\":24,\"type\":\"xterm-256color\"," +
-        "\"theme\":{\"fg\":\"#d0d0d0\",\"bg\":\"#282c34\",\"palette\":" + JsonString(palette) + "}}," +
+        "\"theme\":{\"fg\":" + JsonString(fg) + ",\"bg\":" + JsonString(bg) + ",\"palette\":" + JsonString(palette) + "}}," +
         "\"timestamp\":1711000000,\"title\":\"Matrix Rain Tint\"," +
         "\"env\":{\"SHELL\":\"bash\"}," +
         "\"tags\":[\"st:font-size=16\",\"st:window=macos\"]}");

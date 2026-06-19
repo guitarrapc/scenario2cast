@@ -157,6 +157,7 @@ scenetake --format svg samples/theme-windows.yaml
 
 - [matrix-gen.cs](matrix-gen.cs) writes a 72-frame cast at 12 fps (alternate screen, full-screen clears, no command typing between frames)
 - ASCII letter/digit/symbol columns with falling trails and white heads (agg-friendly)
+- Black background (`#000000`), trail green (`#008f11`), bright matrix green (`#00ff41`) for heads / contextual tint
 - macOS window chrome in the cast header
 
 | GIF | SVG |
