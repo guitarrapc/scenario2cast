@@ -54,7 +54,7 @@ Tests: `tests/terminal_tests.cs`.
 - Replay follows cast event timestamps. **`--max-fps`** (default **off**) caps sampling when set.
 - Output is self-contained animated SVG (CSS only, no JavaScript).
 - Animations **loop indefinitely**; one cycle matches agg GIF timing with `--last-frame-duration 0`: cast playback through the last output event, then hold the final frame for the preceding output-to-output idle gap before restarting at `t = 0`.
-- **Row-diff** animation: only changed rows are emitted as timed layers (deduplicated `@keyframes kN` with compact percentage ranges, console2svg-style). Cursor and viewport resize use separate layers.
+- **Row-diff** animation: only changed rows are emitted as timed layers (deduplicated `@keyframes kN` with compact percentage ranges). Cursor and viewport resize use separate layers.
 - Trailing blank frames after alternate-screen restore are trimmed when the event stream indicates a screen clear.
 - Background from `theme.bg`; monospace font at resolved `font-size` and `font-family`.
 - Cell metrics: `CharWidthFactor` 0.62, `LineHeightFactor` 1.25.
