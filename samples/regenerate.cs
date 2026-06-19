@@ -42,15 +42,23 @@ foreach (var scenario in scenarios)
         failures++;
 }
 
+Console.Error.WriteLine();
+Console.Error.WriteLine("=== matrix-gen.cs ===");
+if (RunScript(repoRoot, "samples/matrix-gen.cs") != 0)
+    failures++;
+else if (RunSvgCast(repoRoot, toolPath, "samples/matrix.cast") != 0)
+    failures++;
+
+var total = scenarios.Length + 1;
 if (failures > 0)
 {
     Console.Error.WriteLine();
-    Console.Error.WriteLine($"Failed: {failures}/{scenarios.Length} scenario(s)");
+    Console.Error.WriteLine($"Failed: {failures}/{total} sample(s)");
     return 1;
 }
 
 Console.Error.WriteLine();
-Console.Error.WriteLine($"Done: {scenarios.Length} scenario(s)");
+Console.Error.WriteLine($"Done: {total} sample(s)");
 return 0;
 
 static int RunScenario(string repoRoot, string toolPath, string scenarioPath)
@@ -69,6 +77,54 @@ static int RunScenario(string repoRoot, string toolPath, string scenarioPath)
     psi.ArgumentList.Add("--format");
     psi.ArgumentList.Add("svg");
     psi.ArgumentList.Add(relativeScenario);
+
+    using var process = Process.Start(psi);
+    if (process is null)
+    {
+        Console.Error.WriteLine("Error: failed to start dotnet");
+        return 1;
+    }
+
+    process.WaitForExit();
+    return process.ExitCode;
+}
+
+static int RunScript(string repoRoot, string scriptPath)
+{
+    var psi = new ProcessStartInfo
+    {
+        FileName = "dotnet",
+        WorkingDirectory = repoRoot,
+        UseShellExecute = false,
+    };
+    psi.ArgumentList.Add("run");
+    psi.ArgumentList.Add(scriptPath);
+
+    using var process = Process.Start(psi);
+    if (process is null)
+    {
+        Console.Error.WriteLine("Error: failed to start dotnet");
+        return 1;
+    }
+
+    process.WaitForExit();
+    return process.ExitCode;
+}
+
+static int RunSvgCast(string repoRoot, string toolPath, string castPath)
+{
+    var relativeCast = Path.GetRelativePath(repoRoot, castPath).Replace('\\', '/');
+    var psi = new ProcessStartInfo
+    {
+        FileName = "dotnet",
+        WorkingDirectory = repoRoot,
+        UseShellExecute = false,
+    };
+    psi.ArgumentList.Add("run");
+    psi.ArgumentList.Add(toolPath);
+    psi.ArgumentList.Add("--");
+    psi.ArgumentList.Add("svg");
+    psi.ArgumentList.Add(relativeCast);
 
     using var process = Process.Start(psi);
     if (process is null)

@@ -283,6 +283,8 @@ dotnet run scenetake.cs -- svg <scenario.cast> [output.svg]
 dotnet publish scenetake.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None
 ```
 
+See [samples/README.md](samples/README.md) for each scenario’s purpose and preview (GIF / SVG).
+
 Regenerate samples cast/svg files:
 
 ```bash
