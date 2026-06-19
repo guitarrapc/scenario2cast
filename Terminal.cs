@@ -102,17 +102,88 @@ internal sealed class ScreenBuffer
         if (Width != other.Width)
             return false;
 
-        for (var col = 0; col < Width; col++)
+        var w = Width;
+        for (var col = 0; col < w; col++)
         {
-            var a = _cells[row, col];
-            var b = other._cells[row, col];
+            ref readonly var a = ref _cells[row, col];
+            ref readonly var b = ref other._cells[row, col];
             if (a.Text != b.Text || a.Style != b.Style || a.IsWide != b.IsWide || a.IsWideContinuation != b.IsWideContinuation)
-            {
                 return false;
-            }
         }
 
         return true;
+    }
+
+    internal ulong ComputeCanvasSignature(int canvasWidth, int canvasHeight)
+    {
+        const ulong fnvOffset = 1469598103934665603UL;
+        const ulong fnvPrime = 1099511628211UL;
+
+        var signature = fnvOffset;
+        signature = MixInt(signature, CursorRow, fnvPrime);
+        signature = MixInt(signature, CursorCol, fnvPrime);
+        signature = MixInt(signature, CursorVisible ? 1 : 0, fnvPrime);
+
+        var blank = BlankCell();
+        for (var row = 0; row < canvasHeight; row++)
+        {
+            var inRow = (uint)row < (uint)Height;
+            for (var col = 0; col < canvasWidth; col++)
+            {
+                var cell = inRow && (uint)col < (uint)Width ? _cells[row, col] : blank;
+                var style = cell.Style;
+                signature = MixString(signature, cell.Text.AsSpan(), fnvPrime);
+                signature = MixString(signature, style.Foreground.AsSpan(), fnvPrime);
+                signature = MixString(signature, style.Background.AsSpan(), fnvPrime);
+                signature = MixByte(signature, PackStyleFlags(style, cell.IsWide, cell.IsWideContinuation), fnvPrime);
+            }
+        }
+
+        return signature;
+    }
+
+    private static ulong MixString(ulong signature, ReadOnlySpan<char> value, ulong fnvPrime)
+    {
+        foreach (var ch in value)
+        {
+            signature ^= ch;
+            signature *= fnvPrime;
+        }
+
+        signature ^= 0xFF;
+        signature *= fnvPrime;
+        return signature;
+    }
+
+    private static byte PackStyleFlags(CellStyle style, bool isWide, bool isWideContinuation)
+    {
+        byte flags = 0;
+        if (style.Bold) flags |= 1;
+        if (style.Italic) flags |= 2;
+        if (style.Underline) flags |= 4;
+        if (style.Reversed) flags |= 8;
+        if (style.Faint) flags |= 16;
+        if (isWide) flags |= 32;
+        if (isWideContinuation) flags |= 64;
+        return flags;
+    }
+
+    private static ulong MixByte(ulong signature, byte value, ulong fnvPrime)
+    {
+        signature ^= value;
+        signature *= fnvPrime;
+        return signature;
+    }
+
+    private static ulong MixInt(ulong signature, int value, ulong fnvPrime)
+    {
+        unchecked
+        {
+            signature ^= (ulong)(uint)value;
+            signature *= fnvPrime;
+        }
+
+        return signature;
     }
 
     internal static string CharStr(char value) =>
@@ -648,12 +719,7 @@ internal sealed class ScreenBuffer
     private static ScreenCell[,] CloneCells(ScreenCell[,] source)
     {
         var cloned = new ScreenCell[source.GetLength(0), source.GetLength(1)];
-        for (var row = 0; row < source.GetLength(0); row++)
-        {
-            for (var col = 0; col < source.GetLength(1); col++)
-                cloned[row, col] = source[row, col];
-        }
-
+        Array.Copy(source, cloned, source.Length);
         return cloned;
     }
 
@@ -1213,7 +1279,7 @@ internal sealed class ReplayFrame
         Buffer = buffer;
         ViewportWidth = viewportWidth;
         ViewportHeight = viewportHeight;
-        Signature = signature ?? TerminalReplay.BuildVisualSignature(buffer);
+        Signature = signature ?? buffer.ComputeCanvasSignature(buffer.Width, buffer.Height);
     }
 
     internal double Time { get; }
@@ -1242,12 +1308,11 @@ internal static class TerminalReplay
 
         void CaptureIfChanged(double time)
         {
-            var padded = PadToCanvas(buffer, canvasWidth, canvasHeight, theme);
-            var signature = BuildVisualSignature(padded);
+            var signature = buffer.ComputeCanvasSignature(canvasWidth, canvasHeight);
             if (lastSignature is ulong previous && previous == signature)
                 return;
 
-            frames.Add(new ReplayFrame(time, padded, buffer.Width, buffer.Height, signature));
+            frames.Add(new ReplayFrame(time, SnapshotForCanvas(buffer, canvasWidth, canvasHeight), buffer.Width, buffer.Height, signature));
             lastSignature = signature;
         }
 
@@ -1271,9 +1336,17 @@ internal static class TerminalReplay
         }
 
         if (frames.Count == 0)
-            frames.Add(new ReplayFrame(0, PadToCanvas(buffer, canvasWidth, canvasHeight, theme), buffer.Width, buffer.Height));
+            frames.Add(new ReplayFrame(0, SnapshotForCanvas(buffer, canvasWidth, canvasHeight), buffer.Width, buffer.Height));
 
         return TrimTrailingBlankRestore(frames, events);
+    }
+
+    private static ScreenBuffer SnapshotForCanvas(ScreenBuffer source, int canvasWidth, int canvasHeight)
+    {
+        var copy = source.Clone();
+        if (copy.Width != canvasWidth || copy.Height != canvasHeight)
+            copy.Resize(canvasWidth, canvasHeight);
+        return copy;
     }
 
     internal static (int width, int height) ResolveCanvasSize(
@@ -1295,30 +1368,17 @@ internal static class TerminalReplay
         return (maxWidth, maxHeight);
     }
 
-    private static ScreenBuffer PadToCanvas(ScreenBuffer source, int canvasWidth, int canvasHeight, TerminalTheme theme) =>
-        CopyToCanvas(source, canvasWidth, canvasHeight, theme);
-
-    private static ScreenBuffer CopyToCanvas(ScreenBuffer source, int canvasWidth, int canvasHeight, TerminalTheme theme)
-    {
-        var copy = source.Clone();
-        if (copy.Width == canvasWidth && copy.Height == canvasHeight)
-            return copy;
-
-        copy.Resize(canvasWidth, canvasHeight);
-        return copy;
-    }
-
     private static List<ReplayFrame> TrimTrailingBlankRestore(
-        IReadOnlyList<ReplayFrame> frames,
+        List<ReplayFrame> frames,
         IReadOnlyList<CastEvent> events)
     {
         if (frames.Count <= 1)
-            return frames.ToList();
+            return frames;
 
         var lastNonBlank = -1;
         for (var i = frames.Count - 1; i >= 0; i--)
         {
-            if (!IsBlankFrame(frames[i].Buffer))
+            if (!IsBlankBuffer(frames[i].Buffer))
             {
                 lastNonBlank = i;
                 break;
@@ -1326,10 +1386,10 @@ internal static class TerminalReplay
         }
 
         if (lastNonBlank < 0 || lastNonBlank == frames.Count - 1)
-            return frames.ToList();
+            return frames;
 
         if (!HasTrailingBlankIndicators(events, lastNonBlank + 1))
-            return frames.ToList();
+            return frames;
 
         return frames.Take(lastNonBlank + 1).ToList();
     }
@@ -1352,8 +1412,6 @@ internal static class TerminalReplay
         return true;
     }
 
-    private static bool IsBlankFrame(ScreenBuffer buffer) => IsBlankBuffer(buffer);
-
     private static bool HasTrailingBlankIndicators(IReadOnlyList<CastEvent> events, int startIndex)
     {
         for (var i = startIndex; i < events.Count; i++)
@@ -1375,81 +1433,6 @@ internal static class TerminalReplay
         }
 
         return false;
-    }
-
-    internal static ulong BuildVisualSignature(ScreenBuffer buffer)
-    {
-        const ulong fnvOffset = 1469598103934665603UL;
-        const ulong fnvPrime = 1099511628211UL;
-
-        var signature = fnvOffset;
-        signature = HashInt(signature, buffer.CursorRow, fnvPrime);
-        signature = HashInt(signature, buffer.CursorCol, fnvPrime);
-
-        for (var row = 0; row < buffer.Height; row++)
-        {
-            for (var col = 0; col < buffer.Width; col++)
-            {
-                var cell = buffer.GetCell(row, col);
-                var style = cell.Style;
-                signature = HashString(signature, cell.Text.AsSpan(), fnvPrime);
-                signature = HashString(signature, style.Foreground.AsSpan(), fnvPrime);
-                signature = HashString(signature, style.Background.AsSpan(), fnvPrime);
-                signature = HashByte(signature, PackStyleFlags(style, cell.IsWide, cell.IsWideContinuation), fnvPrime);
-            }
-        }
-
-        return signature;
-    }
-
-    private static ulong HashString(ulong signature, ReadOnlySpan<char> value, ulong fnvPrime)
-    {
-        foreach (var ch in value)
-        {
-            signature ^= ch;
-            signature *= fnvPrime;
-        }
-
-        signature ^= 0xFF;
-        signature *= fnvPrime;
-        return signature;
-    }
-
-    private static byte PackStyleFlags(CellStyle style, bool isWide, bool isWideContinuation)
-    {
-        byte flags = 0;
-        if (style.Bold) flags |= 1;
-        if (style.Italic) flags |= 2;
-        if (style.Underline) flags |= 4;
-        if (style.Reversed) flags |= 8;
-        if (style.Faint) flags |= 16;
-        if (isWide) flags |= 32;
-        if (isWideContinuation) flags |= 64;
-        return flags;
-    }
-
-    private static ulong HashByte(ulong signature, byte value, ulong fnvPrime)
-    {
-        signature ^= value;
-        signature *= fnvPrime;
-        return signature;
-    }
-
-    private static ulong HashInt(ulong signature, int value, ulong fnvPrime)
-    {
-        unchecked
-        {
-            signature ^= (byte)value;
-            signature *= fnvPrime;
-            signature ^= (byte)(value >> 8);
-            signature *= fnvPrime;
-            signature ^= (byte)(value >> 16);
-            signature *= fnvPrime;
-            signature ^= (byte)(value >> 24);
-            signature *= fnvPrime;
-        }
-
-        return signature;
     }
 }
 

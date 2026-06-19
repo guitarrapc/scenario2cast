@@ -310,7 +310,7 @@ internal static class SvgFrameRenderer
         var cursors = new List<AnimLayer>();
         var viewports = new List<AnimLayer>();
         var activeByRow = new AnimLayer?[canvasHeight];
-        var previous = new ScreenBuffer(canvasWidth, canvasHeight, theme);
+        ScreenBuffer? previous = null;
         AnimLayer? cursorActive = null;
         AnimLayer? viewportActive = null;
 
@@ -345,13 +345,13 @@ internal static class SvgFrameRenderer
 
             for (var row = 0; row < canvasHeight; row++)
             {
-                if (previous.RowEquals(buffer, row))
+                if (previous is not null && previous.RowEquals(buffer, row))
                     continue;
 
                 if (activeByRow[row] is { } active)
                     active.Hide = time;
 
-                var layer = new AnimLayer(time, row, buffer);
+                var layer = new AnimLayer(time, row, buffer: buffer);
                 rows.Add(layer);
                 activeByRow[row] = layer;
             }
@@ -545,12 +545,15 @@ internal static class SvgFrameRenderer
                 col++;
             }
 
-            var visible = runText.ToString().TrimEnd();
-            if (visible.Length == 0 && runBg is null)
+            var visibleLen = runText.Length;
+            while (visibleLen > 0 && runText[visibleLen - 1] == ' ')
+                visibleLen--;
+
+            if (visibleLen == 0 && runBg is null)
                 continue;
 
-            var drawText = visible.Length > 0 ? visible : runText.ToString();
-            var drawWidth = (visible.Length > 0 ? visible.Length : runWidth) * metrics.CharWidth;
+            var drawWidth = (visibleLen > 0 ? visibleLen : runWidth) * metrics.CharWidth;
+            var drawText = visibleLen == runText.Length ? runText.ToString() : runText.ToString(0, visibleLen);
             var x = originX + runStart * metrics.CharWidth;
             if (runBg is not null)
             {
@@ -659,7 +662,7 @@ internal static class SvgFrameRenderer
     private static List<ReplayFrame> OptimizeFrames(IReadOnlyList<ReplayFrame> frames, double maxFps = DefaultMaxFps)
     {
         if (frames.Count <= 1)
-            return frames.ToList();
+            return frames is List<ReplayFrame> list ? list : [.. frames];
 
         var normalized = NormalizeTiming(frames, maxFps);
         var reduced = ReduceFrames(normalized, maxFps);
@@ -920,16 +923,13 @@ internal static class SvgFrameRenderer
         internal List<AnimLayer> Viewports { get; } = viewports;
     }
 
-    private sealed class AnimLayer
+    private sealed class AnimLayer(double show, int p0, int p1 = 0, ScreenBuffer? buffer = null)
     {
-        internal AnimLayer(double show, int p0, ScreenBuffer buffer) { Show = show; P0 = p0; Buffer = buffer; }
-        internal AnimLayer(double show, int p0, int p1) { Show = show; P0 = p0; P1 = p1; }
-
-        internal double Show { get; }
+        internal double Show { get; } = show;
         internal double? Hide { get; set; }
-        internal int P0 { get; }
-        internal int P1 { get; }
-        internal ScreenBuffer? Buffer { get; }
+        internal int P0 { get; } = p0;
+        internal int P1 { get; } = p1;
+        internal ScreenBuffer? Buffer { get; } = buffer;
     }
 }
 
