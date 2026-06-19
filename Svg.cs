@@ -696,8 +696,7 @@ internal static class SvgFrameRenderer
 
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"<rect class=\"{titleClass}\" x=\"{x:0.##}\" y=\"{y:0.##}\" width=\"{width:0.##}\" height=\"{totalHeight:0.##}\" rx=\"{rx:0.##}\" ry=\"{rx:0.##}\" fill=\"none\" stroke=\"{chrome.Border}\" stroke-width=\"1\" filter=\"url(#window-shadow)\"/>");
-        sb.AppendLine(CultureInfo.InvariantCulture,
-            $"<rect class=\"{titleClass}\" x=\"{x:0.##}\" y=\"{y:0.##}\" width=\"{width:0.##}\" height=\"{metrics.TitleBarHeight:0.##}\" rx=\"{rx:0.##}\" ry=\"{rx:0.##}\" fill=\"{chrome.TitleBarBg}\"/>");
+        AppendTopRoundedRect(sb, titleClass, x, y, width, metrics.TitleBarHeight, rx, chrome.TitleBarBg);
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"<line class=\"{titleClass}\" x1=\"{x:0.##}\" y1=\"{y + metrics.TitleBarHeight:0.##}\" x2=\"{x + width:0.##}\" y2=\"{y + metrics.TitleBarHeight:0.##}\" stroke=\"{chrome.Border}\" stroke-width=\"1\"/>");
 
@@ -705,6 +704,33 @@ internal static class SvgFrameRenderer
             AppendMacWindowButtons(sb, titleClass, x, y, metrics, chrome);
         else
             AppendWindowsWindowButtons(sb, titleClass, x, y, width, metrics, chrome);
+    }
+
+    private static void AppendTopRoundedRect(
+        StringBuilder sb,
+        string className,
+        double x,
+        double y,
+        double width,
+        double height,
+        double rx,
+        string fill)
+    {
+        if (width <= 0 || height <= 0)
+            return;
+
+        rx = Math.Min(rx, width / 2d);
+        if (rx <= 0)
+        {
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<rect class=\"{className}\" x=\"{x:0.##}\" y=\"{y:0.##}\" width=\"{width:0.##}\" height=\"{height:0.##}\" fill=\"{fill}\"/>");
+            return;
+        }
+
+        var right = x + width;
+        var bottom = y + height;
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $"<path class=\"{className}\" d=\"M {x + rx:0.##},{y:0.##} H {right - rx:0.##} Q {right:0.##},{y:0.##} {right:0.##},{y + rx:0.##} V {bottom:0.##} H {x:0.##} V {y + rx:0.##} Q {x:0.##},{y:0.##} {x + rx:0.##},{y:0.##} Z\" fill=\"{fill}\"/>");
     }
 
     private static void AppendMacWindowButtons(
