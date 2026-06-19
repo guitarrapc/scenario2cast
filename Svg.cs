@@ -416,6 +416,19 @@ internal static class SvgFrameRenderer
     private const double CursorBlockOpacity = 0.5;
     private const string Space = " ";
 
+    // Window chrome layout — fixed px (matches font-size 16 appearance; does not scale with terminal font)
+    private const double ChromeTitleBarHeight = 34.0;
+    private const double ChromeSidePadding = 14.0;
+    private const double ChromeTopPadding = 9.0;
+    private const double ChromeOuterMargin = 6.0;
+    private const double ChromeMacCornerRadius = 8.0;
+    private const double ChromeWindowsCornerRadius = 4.0;
+    private const double ChromeShadowBlur = 4.0;
+    private const double MacButtonDiameter = 16.0;
+    private const double MacButtonGap = 10.0;
+    private const double WinButtonSize = 17.0;
+    private const double WinButtonGap = 5.5;
+
     [ThreadStatic] private static StringBuilder? t_runText;
     [ThreadStatic] private static StringBuilder? t_escape;
 
@@ -591,7 +604,7 @@ internal static class SvgFrameRenderer
 
         if (metrics.HasChrome)
         {
-            var shadowBlur = (metrics.FontSize * 0.25).ToString("0.##", CultureInfo.InvariantCulture);
+            var shadowBlur = ChromeShadowBlur.ToString("0.##", CultureInfo.InvariantCulture);
             sb.AppendLine("<defs>");
             sb.AppendLine(CultureInfo.InvariantCulture,
                 $"<filter id=\"window-shadow\" x=\"-25%\" y=\"-25%\" width=\"150%\" height=\"150%\">" +
@@ -741,11 +754,11 @@ internal static class SvgFrameRenderer
         SvgMetrics metrics,
         WindowChromePalette chrome)
     {
-        var diameter = metrics.FontSize * 1.0;
+        var diameter = MacButtonDiameter;
         var radius = diameter / 2d;
-        var gap = diameter * 0.6;
-        var leftPadding = metrics.FontSize * 0.875;
-        var topPadding = metrics.FontSize * 0.56;
+        var gap = MacButtonGap;
+        var leftPadding = ChromeSidePadding;
+        var topPadding = ChromeTopPadding;
         var centerY = frameY + topPadding + radius;
         var centerX = frameX + leftPadding + radius;
         var colors = new[] { chrome.MacClose, chrome.MacMinimize, chrome.MacMaximize };
@@ -766,10 +779,10 @@ internal static class SvgFrameRenderer
         SvgMetrics metrics,
         WindowChromePalette chrome)
     {
-        var size = metrics.FontSize * 1.04;
-        var gap = size * 0.33;
-        var rightPadding = metrics.FontSize * 0.875;
-        var topPadding = metrics.FontSize * 0.56;
+        var size = WinButtonSize;
+        var gap = WinButtonGap;
+        var rightPadding = ChromeSidePadding;
+        var topPadding = ChromeTopPadding;
         var top = frameY + topPadding;
         var left = frameX + frameWidth - rightPadding - (size * 3) - (gap * 2);
         for (var i = 0; i < 3; i++)
@@ -789,7 +802,7 @@ internal static class SvgFrameRenderer
             $"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{metrics.SvgWidth:0.##}\" height=\"{metrics.SvgHeight:0.##}\" viewBox=\"0 0 {metrics.SvgWidth:0.##} {metrics.SvgHeight:0.##}\">");
         if (metrics.HasChrome)
         {
-            var shadowBlur = (metrics.FontSize * 0.25).ToString("0.##", CultureInfo.InvariantCulture);
+            var shadowBlur = ChromeShadowBlur.ToString("0.##", CultureInfo.InvariantCulture);
             sb.AppendLine("<defs>");
             sb.AppendLine(CultureInfo.InvariantCulture,
                 $"<filter id=\"window-shadow\" x=\"-25%\" y=\"-25%\" width=\"150%\" height=\"150%\">" +
@@ -1209,9 +1222,9 @@ internal static class SvgFrameRenderer
         }
         else
         {
-            outerMargin = Math.Max(4, fontSize * 0.375);
-            titleBarHeight = fontSize * 2.15;
-            cornerRadius = window == WindowStyle.Macos ? fontSize * 0.5 : fontSize * 0.25;
+            outerMargin = ChromeOuterMargin;
+            titleBarHeight = ChromeTitleBarHeight;
+            cornerRadius = window == WindowStyle.Macos ? ChromeMacCornerRadius : ChromeWindowsCornerRadius;
         }
 
         var contentOriginX = outerMargin + innerPaddingH;
@@ -1225,7 +1238,6 @@ internal static class SvgFrameRenderer
             charWidth,
             lineHeight,
             fontSize * 0.8,
-            fontSize,
             innerPaddingH,
             innerPaddingV,
             contentOriginX,
@@ -1251,7 +1263,6 @@ internal static class SvgFrameRenderer
         double CharWidth,
         double LineHeight,
         double BaselineOffset,
-        double FontSize,
         double InnerPaddingH,
         double InnerPaddingV,
         double ContentOriginX,
