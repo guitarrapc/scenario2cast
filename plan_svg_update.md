@@ -1,6 +1,6 @@
 # SVG Renderer Update Plan
 
-Status: **Implemented**
+Status: **v1 implemented** · **v2 window chrome planned**
 
 ## Goal
 
@@ -10,16 +10,38 @@ Reference behavior is documented from `.references/console2svg` (read-only; **no
 
 ## Decisions (grill-me summary)
 
+### v1 (done)
+
 | Topic | Decision |
 |-------|----------|
-| Target quality | console2svg-level VT emulator + full-frame SVG |
+| Target quality | console2svg-level VT emulator + row-diff animated SVG |
 | PTY recording | **Out of scope** — scenario path stays pipe-based |
 | Scope | Shared renderer for `svg` + `--format svg` |
-| Animation | **Full-frame** with visual-hash `<defs>` dedup |
-| Window chrome | **v2** — v1 is plain terminal (padding only) |
-| Tests | Unit tests (CSI / Unicode) + golden cast fixtures |
-| Samples | Regenerate `samples/*.svg` in v1 |
+| Window chrome | Plain terminal (8px outer padding only) |
+| Tests | Unit tests (CSI / Unicode) + smoke fixtures |
+| Samples | Regenerate `samples/*.svg` |
 | Implementation order | Emulator → SVG → tests → samples |
+
+### v2 window chrome (planned)
+
+| Topic | Decision |
+|-------|----------|
+| Default | **`none`** — chrome only when `render.window` is set |
+| Presets | **`macos`**, **`windows`** |
+| Chrome colors | Auto from `render.theme.preset` (`dark` / `light`); fixed palette per `(window, preset)` pair; `theme.fg` / `theme.bg` overrides affect terminal content only |
+| Title bar text | **None** — traffic lights / Windows buttons only |
+| Config surface | scenario `render.window` + v3 cast tag + CLI `--window` |
+| Priority | **CLI > cast header > default `none`** |
+| Cast header | v3 `tags`: `s2c:window=macos` (omit when `none`) |
+| v2 cast header | **No scenario2cast-specific fields** — ignore legacy `scenario2cast` block on read; v2 uses `width` / `height` / `theme` only |
+| Resize | Chrome resizes with viewport; title bar height fixed (scale with `font-size`) |
+| Resize animation | Chrome rects tied to existing `viewport-*` layer show/hide timing |
+| Decoration | Rounded corners + light drop shadow (`macos` larger radius; `windows` smaller) |
+| Layout | Chrome **replaces** outer 8px padding; inner terminal padding unchanged; shadow margin in metrics |
+| Invalid values | **Error** (same strictness as `--theme`) |
+| Samples | Keep `theme.yaml` (colors only); add `theme-macos.yaml` / `theme-windows.yaml` (`preset: dark`, same steps as `theme.yaml`) |
+| Tests | Resolver unit tests + structural SVG asserts (chrome elements present, dimensions shift) |
+| Implementation order | Resolver + cast write/read → `WindowChrome` metrics/draw → tests → samples → specs |
 
 ## Architecture
 
@@ -60,9 +82,65 @@ Match console2svg reference coverage:
 ### Out of scope (v1)
 
 - PTY / `asciinema rec` integration in scenario path
-- Window chrome (`render.window: macos` etc.)
+- Window chrome (`render.window: macos` etc.) — **v2**
 - Matrix rain contextual tint, crop, command header line
 - `loop` / `video-fps` CLI knobs (fixed sensible defaults)
+
+## v2 — Window chrome
+
+Terminal-style window frame around SVG output for README embeds.
+
+### Configuration
+
+```yaml
+render:
+  window: macos   # macos | windows (omit or none = plain terminal)
+  theme:
+    preset: dark    # drives chrome palette (dark / light)
+```
+
+CLI: `--window macos|windows|none` on both scenario (`--format svg`) and `svg` subcommand.
+
+Cast write (v3 only): append `s2c:window=macos` to `tags` when not `none`.
+
+### Rendering
+
+```
+┌─ shadow margin ─────────────────────────┐
+│  ╭─ title bar (buttons only) ───────╮  │
+│  │ ● ● ●                            │  │
+│  ╰───────────────────────────────────╯  │
+│  ┌─ terminal viewport (theme.bg) ───┐  │
+│  │  inner padding + cell content    │  │
+│  └──────────────────────────────────┘  │
+└───────────────────────────────────────┘
+```
+
+- `WindowChromeTheme.For(window, preset)` — four built-in palettes (`macos`×2 + `windows`×2).
+- `SvgMetrics` gains chrome offsets: title bar height ≈ `fontSize * 1.75`, shadow margin, corner radius per preset.
+- `window: none` path unchanged (current `Padding = 8` behavior).
+- Chrome `<rect>` / button `<circle>` elements use the same `viewport-*` animation classes as terminal background.
+
+### Cast header cleanup (v2)
+
+Remove v2 `scenario2cast` read support from `CastReader` and drop it from `spec_cast.md`. v2 casts remain readable for events and terminal size; render metadata on v2 is CLI-only.
+
+### Samples
+
+| File | Purpose |
+|------|---------|
+| `samples/theme.yaml` | Color demo (`preset: light`) — unchanged |
+| `samples/theme-macos.yaml` | `window: macos`, `preset: dark`, same steps as `theme.yaml` |
+| `samples/theme-windows.yaml` | `window: windows`, `preset: dark`, same steps as `theme.yaml` |
+
+Regenerate via `dotnet run samples/regenerate.cs` after implementation.
+
+### Specs to update
+
+- `.github/docs/spec_scenario.md` — `render.window`
+- `.github/docs/spec_cli.md` — `--window`
+- `.github/docs/spec_cast.md` — `s2c:window` tag; remove v2 `scenario2cast` object
+- `.github/docs/spec_svg.md` — window chrome section (move from “out of scope v1”)
 
 ## Testing
 
