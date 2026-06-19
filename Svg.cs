@@ -18,7 +18,19 @@ internal static class SvgRender
     }
 }
 
-internal readonly record struct ResolvedRenderSettings(int FontSize, string FontFamily, ResolvedTheme Theme, int MaxFps = RenderSettingsResolver.DefaultMaxFps)
+internal enum WindowStyle
+{
+    None,
+    Macos,
+    Windows,
+}
+
+internal readonly record struct ResolvedRenderSettings(
+    int FontSize,
+    string FontFamily,
+    ResolvedTheme Theme,
+    WindowStyle Window = WindowStyle.None,
+    int MaxFps = RenderSettingsResolver.DefaultMaxFps)
 {
     public string DefaultFg => Theme.Fg;
 }
@@ -36,8 +48,11 @@ internal static class RenderSettingsResolver
     internal const int MaxFontFamilyLength = 256, MaxFontFamilyCount = 10;
     internal const string FontSizeTagPrefix = "s2c:font-size=";
     internal const string FontFamilyTagPrefix = "s2c:font-family=";
+    internal const string WindowTagPrefix = "s2c:window=";
     internal const string DarkName = "dark", LightName = "light";
+    internal const string MacosWindowName = "macos", WindowsWindowName = "windows", NoneWindowName = "none";
     internal static string ExpectedPresetNames => $"{DarkName}|{LightName}";
+    internal static string ExpectedWindowNames => $"{NoneWindowName}|{MacosWindowName}|{WindowsWindowName}";
     internal const string DefaultFontFamily =
         "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", \"JetBrains Mono\", \"Noto Sans Mono\", SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace";
 
@@ -74,6 +89,34 @@ internal static class RenderSettingsResolver
         error = "";
         return true;
     }
+
+    internal static bool TryParseWindow(string text, out WindowStyle window, out string error)
+    {
+        window = WindowStyle.None;
+        error = "";
+        switch (text.Trim().ToLowerInvariant())
+        {
+            case "":
+            case NoneWindowName:
+                return true;
+            case MacosWindowName:
+                window = WindowStyle.Macos;
+                return true;
+            case WindowsWindowName:
+                window = WindowStyle.Windows;
+                return true;
+            default:
+                error = $"unknown window style: {text} (expected: {ExpectedWindowNames})";
+                return false;
+        }
+    }
+
+    internal static string WindowToTagValue(WindowStyle window) => window switch
+    {
+        WindowStyle.Macos => MacosWindowName,
+        WindowStyle.Windows => WindowsWindowName,
+        _ => NoneWindowName,
+    };
 
     internal static bool TryParseFontFamily(string text, out string fontFamily, out string error)
     {
@@ -191,7 +234,13 @@ internal static class RenderSettingsResolver
             }
         }
 
-        settings = new ResolvedRenderSettings(fontSize, fontFamily, theme);
+        if (!TryParseWindow(render?.Window ?? NoneWindowName, out var window, out error))
+        {
+            error = $"invalid render.window: {error}";
+            return false;
+        }
+
+        settings = new ResolvedRenderSettings(fontSize, fontFamily, theme, window);
         return true;
     }
 
@@ -223,6 +272,7 @@ internal static class RenderSettingsResolver
         int? fontSizeOverride,
         string? fontFamilyOverride,
         string? themePresetOverride,
+        WindowStyle? windowOverride,
         int? maxFpsOverride,
         out string error)
     {
@@ -243,6 +293,9 @@ internal static class RenderSettingsResolver
 
         if (fontFamilyOverride is string fontFamily)
             settings = settings with { FontFamily = fontFamily };
+
+        if (windowOverride is WindowStyle window)
+            settings = settings with { Window = window };
 
         if (maxFpsOverride is int maxFps)
             settings = settings with { MaxFps = maxFps };
@@ -303,6 +356,28 @@ internal static class SvgFrameRenderer
     private const double CursorBlockOpacity = 0.5;
     private const string Space = " ";
 
+    // Window chrome — fixed px; does not scale with terminal font-size
+    private const double ChromeTitleBarHeight = 34.0;
+    private const double ChromeSidePadding = 14.0;
+    private const double ChromeTopPadding = 9.0;
+    private const double ChromeOuterMargin = 12.0;
+    private const double ChromeMacCornerRadius = 8.0;
+    private const double ChromeWindowsCornerRadius = 4.0;
+    private const double MacButtonDiameter = 16.0;
+    private const double MacButtonGap = 10.0;
+    private const double WinButtonSize = 17.0;
+    private const double WinButtonGap = 5.5;
+    private const double WinButtonCornerRadius = 2.55;
+    private const string WindowShadowFilter =
+        "<filter id=\"window-shadow\" x=\"-25%\" y=\"-25%\" width=\"150%\" height=\"150%\"><feDropShadow dx=\"0\" dy=\"2\" stdDeviation=\"4\" flood-opacity=\"0.22\"/></filter>";
+
+    private static readonly ChromePalette MacDark = new("#323232", "#1a1a1a", "#8a8a8a");
+    private static readonly ChromePalette MacLight = new("#dcdcdc", "#b0b0b0", "#8a8a8a");
+    private static readonly ChromePalette WinDark = new("#2d2d2d", "#404040", "#8a8a8a");
+    private static readonly ChromePalette WinLight = new("#f3f3f3", "#d0d0d0", "#8a8a8a");
+
+    private readonly record struct ChromePalette(string TitleBarBg, string Border, string WinButton);
+
     [ThreadStatic] private static StringBuilder? t_runText;
     [ThreadStatic] private static StringBuilder? t_escape;
 
@@ -317,7 +392,7 @@ internal static class SvgFrameRenderer
 
         frames = OptimizeFrames(frames, render.MaxFps);
         var theme = TerminalTheme.FromResolved(render.Theme);
-        var metrics = CreateMetrics(render.FontSize, canvasWidth, canvasHeight);
+        var metrics = CreateMetrics(render.FontSize, canvasWidth, canvasHeight, render.Window);
 
         var layers = BuildLayers(frames, canvasWidth, canvasHeight);
 
@@ -467,11 +542,19 @@ internal static class SvgFrameRenderer
             AppendLayerStyle(sb, $".cursor-layer-{i}", cursorLayers[i].Show, cursorLayers[i].Hide);
 
         for (var i = 0; i < viewportLayers.Count; i++)
-            AppendLayerStyle(sb, $".viewport-mask-{i}, .viewport-bg-{i}", viewportLayers[i].Show, viewportLayers[i].Hide);
+        {
+            var viewportSelector = metrics.HasChrome
+                ? $".viewport-mask-{i}, .viewport-bg-{i}, .viewport-chrome-{i}"
+                : $".viewport-mask-{i}, .viewport-bg-{i}";
+            AppendLayerStyle(sb, viewportSelector, viewportLayers[i].Show, viewportLayers[i].Hide);
+        }
 
         sb.AppendLine("</style>");
 
         sb.AppendLine("<defs>");
+        if (metrics.HasChrome)
+            sb.AppendLine(WindowShadowFilter);
+
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"<mask id=\"viewport-mask\" x=\"0\" y=\"0\" width=\"{metrics.SvgWidth:0.##}\" height=\"{metrics.SvgHeight:0.##}\" maskUnits=\"userSpaceOnUse\">");
         for (var i = 0; i < viewportLayers.Count; i++)
@@ -480,11 +563,21 @@ internal static class SvgFrameRenderer
             var viewportWidth = metrics.ViewportPixelWidth(viewport.P0);
             var viewportHeight = metrics.ViewportPixelHeight(viewport.P1);
             sb.AppendLine(CultureInfo.InvariantCulture,
-                $"<rect class=\"layer viewport-mask-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"white\"/>");
+                $"<rect class=\"layer viewport-mask-{i}\" x=\"{metrics.TerminalOriginX:0.##}\" y=\"{metrics.TerminalOriginY:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"white\"/>");
         }
 
         sb.AppendLine("</mask>");
         sb.AppendLine("</defs>");
+
+        if (metrics.HasChrome)
+        {
+            var chrome = ResolveChromePalette(render.Window, render.Theme.Bg);
+            for (var i = 0; i < viewportLayers.Count; i++)
+            {
+                var viewport = viewportLayers[i];
+                AppendWindowChrome(sb, metrics, chrome, render.Window, viewport.P0, viewport.P1, i);
+            }
+        }
 
         sb.AppendLine("<g mask=\"url(#viewport-mask)\">");
         for (var i = 0; i < viewportLayers.Count; i++)
@@ -493,7 +586,7 @@ internal static class SvgFrameRenderer
             var viewportWidth = metrics.ViewportPixelWidth(viewport.P0);
             var viewportHeight = metrics.ViewportPixelHeight(viewport.P1);
             sb.AppendLine(CultureInfo.InvariantCulture,
-                $"<rect class=\"bg layer viewport-bg-{i}\" x=\"{Padding:0.##}\" y=\"{Padding:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"{render.Theme.Bg}\"/>");
+                $"<rect class=\"bg layer viewport-bg-{i}\" x=\"{metrics.TerminalOriginX:0.##}\" y=\"{metrics.TerminalOriginY:0.##}\" width=\"{viewportWidth:0.##}\" height=\"{viewportHeight:0.##}\" fill=\"{render.Theme.Bg}\"/>");
         }
 
         var origin = metrics.ContentOrigin;
@@ -537,16 +630,105 @@ internal static class SvgFrameRenderer
         sb.AppendLine("s; }");
     }
 
+    private static ChromePalette ResolveChromePalette(WindowStyle window, string terminalBg)
+    {
+        var light = IsLightTerminalBg(terminalBg);
+        return window switch
+        {
+            WindowStyle.Macos => light ? MacLight : MacDark,
+            WindowStyle.Windows => light ? WinLight : WinDark,
+            _ => MacDark,
+        };
+    }
+
+    private static bool IsLightTerminalBg(string bg)
+    {
+        if (!TryParseHexColor(bg, out var r, out var g, out var b))
+            return false;
+
+        return (0.299 * r) + (0.587 * g) + (0.114 * b) > 140;
+    }
+
+    private static void AppendWindowChrome(
+        StringBuilder sb,
+        SvgMetrics metrics,
+        ChromePalette chrome,
+        WindowStyle window,
+        int cols,
+        int rows,
+        int layerIndex)
+    {
+        var x = metrics.OuterMargin;
+        var y = metrics.OuterMargin;
+        var width = metrics.ViewportPixelWidth(cols);
+        var terminalHeight = metrics.ViewportPixelHeight(rows);
+        var barH = metrics.TitleBarHeight;
+        var totalHeight = barH + terminalHeight;
+        var rx = metrics.CornerRadius;
+        var right = x + width;
+        var barBottom = y + barH;
+        var cls = $"layer viewport-chrome-{layerIndex}";
+
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $"<rect class=\"{cls}\" x=\"{x:0.##}\" y=\"{y:0.##}\" width=\"{width:0.##}\" height=\"{totalHeight:0.##}\" rx=\"{rx:0.##}\" ry=\"{rx:0.##}\" fill=\"none\" stroke=\"{chrome.Border}\" stroke-width=\"1\" filter=\"url(#window-shadow)\"/>");
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $"<path class=\"{cls}\" d=\"M {x + rx:0.##},{y:0.##} H {right - rx:0.##} Q {right:0.##},{y:0.##} {right:0.##},{y + rx:0.##} V {barBottom:0.##} H {x:0.##} V {y + rx:0.##} Q {x:0.##},{y:0.##} {x + rx:0.##},{y:0.##} Z\" fill=\"{chrome.TitleBarBg}\"/>");
+        sb.AppendLine(CultureInfo.InvariantCulture,
+            $"<line class=\"{cls}\" x1=\"{x:0.##}\" y1=\"{barBottom:0.##}\" x2=\"{right:0.##}\" y2=\"{barBottom:0.##}\" stroke=\"{chrome.Border}\" stroke-width=\"1\"/>");
+
+        if (window == WindowStyle.Macos)
+        {
+            var radius = MacButtonDiameter / 2d;
+            var cx = x + ChromeSidePadding + radius;
+            var cy = y + ChromeTopPadding + radius;
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<circle class=\"{cls}\" cx=\"{cx:0.##}\" cy=\"{cy:0.##}\" r=\"{radius:0.##}\" fill=\"#ff5f57\"/>");
+            cx += MacButtonDiameter + MacButtonGap;
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<circle class=\"{cls}\" cx=\"{cx:0.##}\" cy=\"{cy:0.##}\" r=\"{radius:0.##}\" fill=\"#febc2e\"/>");
+            cx += MacButtonDiameter + MacButtonGap;
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<circle class=\"{cls}\" cx=\"{cx:0.##}\" cy=\"{cy:0.##}\" r=\"{radius:0.##}\" fill=\"#28c840\"/>");
+            return;
+        }
+
+        var size = WinButtonSize;
+        var gap = WinButtonGap;
+        var top = y + ChromeTopPadding;
+        var left = right - ChromeSidePadding - (size * 3) - (gap * 2);
+        for (var i = 0; i < 3; i++)
+        {
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<rect class=\"{cls}\" x=\"{left:0.##}\" y=\"{top:0.##}\" width=\"{size:0.##}\" height=\"{size:0.##}\" rx=\"{WinButtonCornerRadius:0.##}\" ry=\"{WinButtonCornerRadius:0.##}\" fill=\"{chrome.WinButton}\"/>");
+            left += size + gap;
+        }
+    }
+
     private static string BuildEmptySvg(ResolvedRenderSettings render, int width, int height)
     {
-        var metrics = CreateMetrics(render.FontSize, width, height);
+        var metrics = CreateMetrics(render.FontSize, width, height, render.Window);
         var sb = new StringBuilder();
         sb.AppendLine(CultureInfo.InvariantCulture, $"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         sb.AppendLine(CultureInfo.InvariantCulture,
             $"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{metrics.SvgWidth:0.##}\" height=\"{metrics.SvgHeight:0.##}\" viewBox=\"0 0 {metrics.SvgWidth:0.##} {metrics.SvgHeight:0.##}\">");
-        var bgRect = metrics.BackgroundRect();
-        sb.AppendLine(CultureInfo.InvariantCulture,
-            $"<rect x=\"{bgRect.X:0.##}\" y=\"{bgRect.Y:0.##}\" width=\"{bgRect.Width:0.##}\" height=\"{bgRect.Height:0.##}\" fill=\"{render.Theme.Bg}\"/>");
+        if (metrics.HasChrome)
+        {
+            sb.AppendLine("<defs>");
+            sb.AppendLine(WindowShadowFilter);
+            sb.AppendLine("</defs>");
+            var chrome = ResolveChromePalette(render.Window, render.Theme.Bg);
+            AppendWindowChrome(sb, metrics, chrome, render.Window, width, height, 0);
+            var bgRect = metrics.TerminalBackgroundRect(width, height);
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<rect x=\"{bgRect.X:0.##}\" y=\"{bgRect.Y:0.##}\" width=\"{bgRect.Width:0.##}\" height=\"{bgRect.Height:0.##}\" fill=\"{render.Theme.Bg}\"/>");
+        }
+        else
+        {
+            var bgRect = metrics.BackgroundRect();
+            sb.AppendLine(CultureInfo.InvariantCulture,
+                $"<rect x=\"{bgRect.X:0.##}\" y=\"{bgRect.Y:0.##}\" width=\"{bgRect.Width:0.##}\" height=\"{bgRect.Height:0.##}\" fill=\"{render.Theme.Bg}\"/>");
+        }
+
         sb.AppendLine("</svg>");
         return sb.ToString();
     }
@@ -932,17 +1114,33 @@ internal static class SvgFrameRenderer
         }
     }
 
-    private static SvgMetrics CreateMetrics(int fontSize, int cols, int rows)
+    private static SvgMetrics CreateMetrics(int fontSize, int cols, int rows, WindowStyle window)
     {
         var lineHeight = fontSize * LineHeightFactor;
         var charWidth = fontSize * CharWidthFactor;
         var (innerPaddingH, innerPaddingV) = ResolveInnerPadding(fontSize);
-        var contentOriginX = Padding + innerPaddingH;
-        var contentOriginY = Padding + innerPaddingV;
+        double outerMargin;
+        double titleBarHeight;
+        double cornerRadius;
+        if (window == WindowStyle.None)
+        {
+            outerMargin = Padding;
+            titleBarHeight = 0;
+            cornerRadius = 0;
+        }
+        else
+        {
+            outerMargin = ChromeOuterMargin;
+            titleBarHeight = ChromeTitleBarHeight;
+            cornerRadius = window == WindowStyle.Macos ? ChromeMacCornerRadius : ChromeWindowsCornerRadius;
+        }
+
+        var contentOriginX = outerMargin + innerPaddingH;
+        var contentOriginY = outerMargin + titleBarHeight + innerPaddingV;
         var contentWidth = cols * charWidth + innerPaddingH * 2;
         var contentHeight = rows * lineHeight + innerPaddingV * 2;
-        var svgWidth = contentWidth + Padding * 2;
-        var svgHeight = contentHeight + Padding * 2;
+        var svgWidth = contentWidth + outerMargin * 2;
+        var svgHeight = titleBarHeight + contentHeight + outerMargin * 2;
 
         return new SvgMetrics(
             charWidth,
@@ -955,7 +1153,11 @@ internal static class SvgFrameRenderer
             contentWidth,
             contentHeight,
             svgWidth,
-            svgHeight);
+            svgHeight,
+            window,
+            outerMargin,
+            titleBarHeight,
+            cornerRadius);
     }
 
     private static (double horizontal, double vertical) ResolveInnerPadding(int fontSize)
@@ -976,13 +1178,22 @@ internal static class SvgFrameRenderer
         double ContentWidth,
         double ContentHeight,
         double SvgWidth,
-        double SvgHeight)
+        double SvgHeight,
+        WindowStyle Window,
+        double OuterMargin,
+        double TitleBarHeight,
+        double CornerRadius)
     {
+        internal bool HasChrome => Window != WindowStyle.None;
+        internal double TerminalOriginX => OuterMargin;
+        internal double TerminalOriginY => OuterMargin + TitleBarHeight;
         internal (double X, double Y) ContentOrigin => (ContentOriginX, ContentOriginY);
         internal double ViewportPixelWidth(int cols) => cols * CharWidth + InnerPaddingH * 2;
         internal double ViewportPixelHeight(int rows) => rows * LineHeight + InnerPaddingV * 2;
         internal (double X, double Y, double Width, double Height) BackgroundRect() =>
-            (Padding, Padding, SvgWidth - Padding * 2, SvgHeight - Padding * 2);
+            (OuterMargin, OuterMargin, SvgWidth - OuterMargin * 2, SvgHeight - OuterMargin * 2);
+        internal (double X, double Y, double Width, double Height) TerminalBackgroundRect(int cols, int rows) =>
+            (TerminalOriginX, TerminalOriginY, ViewportPixelWidth(cols), ViewportPixelHeight(rows));
     }
 
     private readonly struct LayerSet(List<AnimLayer> rows, List<AnimLayer> cursors, List<AnimLayer> viewports)
