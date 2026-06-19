@@ -283,6 +283,8 @@ dotnet run scenetake.cs -- svg <scenario.cast> [output.svg]
 dotnet publish scenetake.cs --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None
 ```
 
+各シナリオの目的とプレビュー（GIF / SVG）は [samples/README-ja.md](samples/README-ja.md) を参照してください。
+
 サンプルシナリオを `.cast` と `.gif` に変換するには、以下のようにします。
 
 ```bash
