@@ -111,7 +111,7 @@ static string BuildFrame(ColumnState[] columns, Random rng, bool first)
             }
 
             if (tone[row, col] == 2)
-                sb.Append("\u001b[37m");
+                sb.Append("\u001b[97m"); // bright white head (palette 15; not matrix-tinted)
             else
                 sb.Append("\u001b[32m");
 
@@ -126,11 +126,11 @@ static string BuildFrame(ColumnState[] columns, Random rng, bool first)
 
 static void WriteCast(string path, List<(double Time, string Data)> events)
 {
-    // Matrix-style: black background, green trail (palette 2), white heads tinted to bright green (10).
+    // Matrix-style: black bg, green trail (32m / palette 2), bright white heads (97m / palette 15).
     const string bg = "#000000";
     const string fg = "#00ff41";
     const string palette =
-        "#000000:#3d0000:#008f11:#3d3d00:#0000cc:#3d003d:#00cccc:#ffffff:" +
+        "#000000:#3d0000:#008f11:#3d3d00:#0000cc:#3d003d:#00cccc:#888888:" +
         "#1a1a1a:#ff4444:#00ff41:#ffff44:#4444ff:#ff44ff:#44ffff:#ffffff";
 
     using var writer = new StreamWriter(path, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));

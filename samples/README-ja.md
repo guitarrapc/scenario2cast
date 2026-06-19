@@ -157,7 +157,7 @@ scenetake --format svg samples/theme-windows.yaml
 
 - [matrix-gen.cs](matrix-gen.cs) が 12 fps・72 フレームの cast を生成（alternate screen、画面クリア、フレーム間にコマンド入力なし）
 - ASCII 文字（英数字・記号）の落ちる列、白い先頭＋緑の尾（agg でも描画しやすい）
-- 背景 `#000000`、尾 `#008f11`、先頭／tint `#00ff41` の Matrix 風パレット
+- 背景 `#000000`、尾 `#008f11`、先頭は明るい白 `#ffffff`（`97m`）
 - cast ヘッダーに macOS ウィンドウ chrome
 
 | GIF | SVG |
