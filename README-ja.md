@@ -79,6 +79,12 @@ scenetake は、asciinema を介さずシナリオから `.cast`（任意で `.s
 
 GitHub の Releases ページから利用 OS 向けアセットをダウンロードし、`scenetake`（Windows は `scenetake.exe`）を任意の場所に配置します。
 
+```sh
+# Windows (Scoop)
+scoop bucket add guitarrapc https://github.com/guitarrapc/scoop-bucket
+scoop install scenetake
+```
+
 ![](samples/quickstart.svg)
 
 ```bash
