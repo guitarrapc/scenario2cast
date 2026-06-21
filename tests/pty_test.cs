@@ -15,7 +15,8 @@ var failures = 0;
 failures += Run("PtyEchoOutput", PtyEchoOutput);
 failures += Run("PtyTtyCheck", PtyTtyCheck);
 failures += Run("PtyStdinEof", PtyStdinEof);
-failures += Run("PtyCancellation", PtyCancellation);
+failures += Run("PtyCancellationKill", PtyCancellationKill);
+failures += Run("PtyCancellationWait", PtyCancellationWait);
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryResolvePwsh(out var pwshPath))
     failures += Run("PtyMatrixPwsh", () => PtyMatrixPwsh(pwshPath));
 else if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -124,7 +125,53 @@ static bool PtyStdinEof()
     return unixOutput.ExitCode == 0 && unixOutput.Stdout.Contains(marker, StringComparison.Ordinal);
 }
 
-static bool PtyCancellation()
+static bool PtyCancellationKill()
+{
+    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var cmd = Environment.GetEnvironmentVariable("ComSpec") ?? @"C:\Windows\System32\cmd.exe";
+        using var session = PseudoTerminal.Start(
+            cmd,
+            ["/c", "ping -n 30 127.0.0.1 >nul"],
+            null,
+            40,
+            8,
+            TestContext("cmd"));
+        try
+        {
+            session.WaitForExitOrKillAsync(cts.Token).GetAwaiter().GetResult();
+            return false;
+        }
+        catch (OperationCanceledException)
+        {
+            Thread.Sleep(200);
+            return session.HasExited;
+        }
+    }
+
+    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
+    using var unixSession = PseudoTerminal.Start(
+        shell,
+        ["-lc", "sleep 30"],
+        null,
+        40,
+        8,
+        TestContext(shell));
+    try
+    {
+        unixSession.WaitForExitOrKillAsync(cts.Token).GetAwaiter().GetResult();
+        return false;
+    }
+    catch (OperationCanceledException)
+    {
+        Thread.Sleep(200);
+        return unixSession.HasExited;
+    }
+}
+
+static bool PtyCancellationWait()
 {
     using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 
@@ -145,7 +192,7 @@ static bool PtyCancellation()
         }
         catch (OperationCanceledException)
         {
-            return !session.HasExited || session.ProcessId > 0;
+            return !session.HasExited;
         }
     }
 
@@ -164,7 +211,7 @@ static bool PtyCancellation()
     }
     catch (OperationCanceledException)
     {
-        return unixSession.ProcessId > 0;
+        return !unixSession.HasExited;
     }
 }
 

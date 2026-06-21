@@ -95,8 +95,13 @@ public sealed class PseudoTerminalSession : IAsyncDisposable, IDisposable
 
     public void Kill() => _backend.Kill();
 
+    /// <summary>Waits for the child to exit. Cancellation stops waiting only; the child keeps running.</summary>
     public Task<int> WaitForExitAsync(CancellationToken cancellationToken = default) =>
-        _backend.WaitForExitAsync(cancellationToken);
+        _backend.WaitForExitAsync(cancellationToken, killOnCancellation: false);
+
+    /// <summary>Waits for the child to exit. Cancellation calls <see cref="Kill"/> then throws <see cref="OperationCanceledException"/>.</summary>
+    public Task<int> WaitForExitOrKillAsync(CancellationToken cancellationToken = default) =>
+        _backend.WaitForExitAsync(cancellationToken, killOnCancellation: true);
 
     public CommandOutput Complete(bool verbose = false) => _backend.Complete(verbose);
 
@@ -123,7 +128,7 @@ interface IPtySessionBackend : IDisposable
     void WriteInput(string input);
     void SendEof();
     void Kill();
-    Task<int> WaitForExitAsync(CancellationToken cancellationToken);
+    Task<int> WaitForExitAsync(CancellationToken cancellationToken, bool killOnCancellation);
     CommandOutput Complete(bool verbose);
 }
 
@@ -173,7 +178,7 @@ public static class PseudoTerminal
                 session.WriteInput(input);
             session.SendEof();
         }
-        session.WaitForExitAsync(cancellationToken).GetAwaiter().GetResult();
+        session.WaitForExitOrKillAsync(cancellationToken).GetAwaiter().GetResult();
         return session.Complete(verbose);
     }
 }
@@ -370,49 +375,60 @@ static partial class WindowsPseudoTerminal
             TerminateProcess(_processInfo.hProcess, 1);
         }
 
-        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken)
+        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken, bool killOnCancellation)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
             if (_exited)
                 return _exitCode;
 
-            using var registration = cancellationToken.Register(static state =>
+            CancellationTokenRegistration registration = default;
+            if (killOnCancellation)
             {
-                var session = (WindowsPtySession)state!;
-                session.Kill();
-            }, this);
-
-            while (!_exited)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var waitResult = WaitForSingleObject(_processInfo.hProcess, WaitPollMs);
-                CloseInputPipeIfEofSignaled();
-                if (waitResult == WaitObject0)
+                registration = cancellationToken.Register(static state =>
                 {
-                    if (!GetExitCodeProcess(_processInfo.hProcess, out var exitCode))
-                        throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
-
-                    _exitCode = unchecked((int)exitCode);
-                    _exited = true;
-                    CloseTransport();
-                    break;
-                }
-
-                if (waitResult == WaitTimeout)
-                {
-                    await Task.Yield();
-                    continue;
-                }
-
-                if (waitResult == WaitFailed)
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "WaitForSingleObject failed");
-
-                throw new InvalidOperationException($"WaitForSingleObject returned unexpected code 0x{waitResult:X8}");
+                    var session = (WindowsPtySession)state!;
+                    session.Kill();
+                }, this);
             }
 
-            cancellationToken.ThrowIfCancellationRequested();
-            return _exitCode;
+            try
+            {
+                while (!_exited)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var waitResult = WaitForSingleObject(_processInfo.hProcess, WaitPollMs);
+                    CloseInputPipeIfEofSignaled();
+                    if (waitResult == WaitObject0)
+                    {
+                        if (!GetExitCodeProcess(_processInfo.hProcess, out var exitCode))
+                            throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
+
+                        _exitCode = unchecked((int)exitCode);
+                        _exited = true;
+                        CloseTransport();
+                        break;
+                    }
+
+                    if (waitResult == WaitTimeout)
+                    {
+                        await Task.Yield();
+                        continue;
+                    }
+
+                    if (waitResult == WaitFailed)
+                        throw new Win32Exception(Marshal.GetLastPInvokeError(), "WaitForSingleObject failed");
+
+                    throw new InvalidOperationException($"WaitForSingleObject returned unexpected code 0x{waitResult:X8}");
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return _exitCode;
+            }
+            finally
+            {
+                registration.Dispose();
+            }
         }
 
         public CommandOutput Complete(bool verbose)
@@ -913,39 +929,50 @@ static partial class UnixPseudoTerminal
             kill(_pid, SigKill);
         }
 
-        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken)
+        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken, bool killOnCancellation)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
             if (_exited)
                 return _exitCode;
 
-            using var registration = cancellationToken.Register(static state =>
+            CancellationTokenRegistration registration = default;
+            if (killOnCancellation)
             {
-                var session = (UnixPtySession)state!;
-                session.Kill();
-            }, this);
-
-            while (!_exited)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
-                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "waitpid failed");
-
-                if (result == _pid)
+                registration = cancellationToken.Register(static state =>
                 {
-                    _exitCode = MapWaitStatusToExitCode(status);
-                    _exited = true;
-                    break;
-                }
-
-                SendEotIfPending();
-
-                await Task.Delay(WaitPollMs, cancellationToken);
+                    var session = (UnixPtySession)state!;
+                    session.Kill();
+                }, this);
             }
 
-            cancellationToken.ThrowIfCancellationRequested();
-            return _exitCode;
+            try
+            {
+                while (!_exited)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
+                        throw new Win32Exception(Marshal.GetLastPInvokeError(), "waitpid failed");
+
+                    if (result == _pid)
+                    {
+                        _exitCode = MapWaitStatusToExitCode(status);
+                        _exited = true;
+                        break;
+                    }
+
+                    SendEotIfPending();
+
+                    await Task.Delay(WaitPollMs, cancellationToken);
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return _exitCode;
+            }
+            finally
+            {
+                registration.Dispose();
+            }
         }
 
         public CommandOutput Complete(bool verbose)

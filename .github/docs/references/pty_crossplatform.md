@@ -13,7 +13,7 @@ scenetake uses a single OS-specific backend selected at runtime:
 | Windows | ConPTY (`CreatePseudoConsole`) | `WindowsPseudoTerminal.Start` |
 | Linux / macOS / FreeBSD | `openpty` + `fork` + `execvp` | `UnixPseudoTerminal.Start` |
 
-Upper layers (`RunCommandCore`, cast generation) call `PseudoTerminal.Run` (or `Start` + `WaitForExitAsync` for library callers) with the scenario shell executable and arguments. They receive a `CommandOutput` with timestamped `CommandOutputChunk` entries.
+Upper layers (`RunCommandCore`, cast generation) call `PseudoTerminal.Run` (or `Start` + `WaitForExitAsync` / `WaitForExitOrKillAsync` for library callers) with the scenario shell executable and arguments. They receive a `CommandOutput` with timestamped `CommandOutputChunk` entries.
 
 PTY capture and terminal display are separate:
 
@@ -26,14 +26,15 @@ Do not parse escape sequences inside the PTY backend. Do not spawn processes fro
 
 ## Session lifecycle and cancellation
 
-Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession` over blocking `Run` when they need timeouts or cooperative shutdown.
+Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession` over blocking `Run` when they need timeouts or cooperative shutdown. Use `WaitForExitAsync` when cancellation should only stop waiting (child keeps running); use `WaitForExitOrKillAsync` when cancellation should tear down the child (as `Run` does).
 
 | API | Behavior |
 |---|---|
 | `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
 | `WriteInput(string)` | Writes UTF-8 bytes to the PTY stdin. Does not close stdin. |
 | `SendEof()` | **Windows:** closes the ConPTY input pipe on the first `WaitForExitAsync` poll (or `CloseTransport`) — always deferred; `WriteFile` success is not a safe attach signal. **Unix:** writes EOT (`0x04`, Ctrl-D); immediate after successful `WriteInput`, deferred when there were no bytes — see [Staged stdin EOF](#staged-stdin-eof). |
-| `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
+| `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). Cancellation stops waiting only; the child keeps running (`OperationCanceledException`). |
+| `WaitForExitOrKillAsync(CancellationToken)` | Same polling. Cancellation calls `Kill()` then throws `OperationCanceledException`. Used by `PseudoTerminal.Run`. |
 | `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
 | `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
 | `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. On Unix, `Dispose` also attempts a bounded `waitpid` after `SIGKILL` to avoid leaving a zombie (up to ~1s). |
