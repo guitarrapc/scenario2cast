@@ -44,7 +44,8 @@ PTY capture records bytes from the child session. Terminal rendering (ANSI parsi
 |---|---|---|
 | Windows | ConPTY (`CreatePseudoConsole`) | Windows 10 1809+, Windows 11 |
 | Linux | `openpty` + `fork` | Common glibc/musl targets |
-| macOS | `openpty` + `fork` | Supported macOS runners |
+| macOS | `openpty` + `fork` | Supported macOS runners (BSD `TIOCSCTTY`, `libutil`) |
+| FreeBSD | `openpty` + `fork` | `libutil` + BSD `TIOCSCTTY` (CI coverage TBD) |
 
 Windows does **not** use winpty or third-party PTY libraries. scenetake ships as a NativeAOT binary; the PTY backend is in-process P/Invoke only.
 

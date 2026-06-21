@@ -662,7 +662,7 @@ static partial class UnixPseudoTerminal
         PtyLaunchContext context)
     {
         var winsize = new Winsize { ws_col = (ushort)width, ws_row = (ushort)height };
-        if (openpty(out var master, out var slave, IntPtr.Zero, IntPtr.Zero, ref winsize) != 0)
+        if (OpenPty(out var master, out var slave, ref winsize) != 0)
         {
             var error = new Win32Exception(Marshal.GetLastPInvokeError(), "openpty failed");
             PtyDiagnostics.Fail("openpty", error, context);
@@ -683,7 +683,7 @@ static partial class UnixPseudoTerminal
         {
             close(master);
             setsid();
-            ioctl(slave, TIOCSCTTY, 0);
+            ioctl(slave, TiocSetCtty(), 0);
             dup2(slave, 0);
             dup2(slave, 1);
             dup2(slave, 2);
@@ -909,10 +909,53 @@ static partial class UnixPseudoTerminal
     private static bool WIFEXITED(int status) => (status & 0x7f) == 0;
     private static int WEXITSTATUS(int status) => (status >> 8) & 0xff;
 
-    private const ulong TIOCSCTTY = 0x540E;
+    private static int OpenPty(out int master, out int slave, ref Winsize winsize)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            return LinuxOpenPty(out master, out slave, IntPtr.Zero, IntPtr.Zero, ref winsize);
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            return MacOSOpenPty(out master, out slave, IntPtr.Zero, IntPtr.Zero, ref winsize);
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            return FreeBSDOpenPty(out master, out slave, IntPtr.Zero, IntPtr.Zero, ref winsize);
+
+        throw new PlatformNotSupportedException("PTY recording is not supported on this Unix operating system.");
+    }
+
+    private static ulong TiocSetCtty()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            return Linux.TIOCSCTTY;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            return MacOS.TIOCSCTTY;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            return FreeBSD.TIOCSCTTY;
+
+        throw new PlatformNotSupportedException("PTY recording is not supported on this Unix operating system.");
+    }
+
+    private static class Linux
+    {
+        internal const ulong TIOCSCTTY = 0x540E;
+    }
+
+    private static class MacOS
+    {
+        internal const ulong TIOCSCTTY = 0x20007461;
+    }
+
+    private static class FreeBSD
+    {
+        internal const ulong TIOCSCTTY = 0x20007461;
+    }
 
     [LibraryImport("libc", SetLastError = true)]
-    private static partial int openpty(out int amaster, out int aslave, IntPtr name, IntPtr termp, ref Winsize winp);
+    private static partial int LinuxOpenPty(out int amaster, out int aslave, IntPtr name, IntPtr termp, ref Winsize winp);
+
+    [LibraryImport("libutil", SetLastError = true)]
+    private static partial int MacOSOpenPty(out int amaster, out int aslave, IntPtr name, IntPtr termp, ref Winsize winp);
+
+    [LibraryImport("libutil", SetLastError = true)]
+    private static partial int FreeBSDOpenPty(out int amaster, out int aslave, IntPtr name, IntPtr termp, ref Winsize winp);
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int fork();

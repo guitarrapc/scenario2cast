@@ -120,7 +120,15 @@ execvp via UTF-8 argv built with NativeMemory (byte**)
 
 ### Platform differences
 
-Linux and macOS are similar but not identical (`ioctl`, `termios`, `ptsname_r`, job control). Keep one `UnixPseudoTerminal` path but expect platform-specific fixes. Do not assume Linux-only `ioctl` values work on macOS without verification.
+Shared session logic and per-OS constants / `openpty` imports all live in `UnixPseudoTerminal` inside `PseudoTerminal.cs`. Runtime dispatch selects the correct pair; do not reuse Linux-only values on BSD.
+
+| OS | `TIOCSCTTY` | `openpty` library |
+|---|---|---|
+| Linux | `0x540E` | `libc` (`LinuxOpenPty`) |
+| macOS | `0x20007461` (`_IO('t', 97)`) | `libutil` (`MacOSOpenPty`) |
+| FreeBSD | `0x20007461` (`_IO('t', 97)`) | `libutil` (`FreeBSDOpenPty`) |
+
+`fork`, `setsid`, `ioctl`, `waitpid`, and other syscalls remain on `libc` in the shared partial class. macOS/FreeBSD CI must pass before claiming support on those platforms; do not assume Linux-only constants work elsewhere.
 
 ## Shared rules
 
