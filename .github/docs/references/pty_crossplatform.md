@@ -121,7 +121,7 @@ execvp via UTF-8 argv built with NativeMemory (byte**)
 2. Start background read on `master`.
 3. If one-shot stdin was provided, `CloseInput()` before waiting — see [Unix stdin EOF](#unix-stdin-eof).
 4. If no stdin bytes, leave the master open for writes until the child exits (TUI programs).
-5. `waitpid`, then `close(master)` after the read task drains.
+5. `waitpid`, then `close(master)` after the read task drains on the normal exit path; on `Dispose`, close the master before draining the read task (same ordering as Windows `CloseTransport` → `DrainOutputTask`).
 
 ### Unix stdin EOF
 

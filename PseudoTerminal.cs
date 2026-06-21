@@ -826,6 +826,7 @@ static partial class UnixPseudoTerminal
         private readonly string[] _arguments;
         private readonly PtyLaunchContext _context;
         private bool _inputEofSignaled;
+        private bool _masterClosed;
         private bool _exited;
         private int _exitCode;
         private bool _disposed;
@@ -931,8 +932,17 @@ static partial class UnixPseudoTerminal
             if (!_exited)
                 Kill();
 
+            CloseTransport();
             DrainOutputTask();
+        }
+
+        private void CloseTransport()
+        {
+            if (_masterClosed)
+                return;
+
             close(_master);
+            _masterClosed = true;
         }
 
         private void SignalInputEof()
