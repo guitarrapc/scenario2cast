@@ -705,6 +705,8 @@ static partial class UnixPseudoTerminal
     private const int WaitNoHang = 1;
     private const int SigKill = 9;
     private const int WaitPollMs = 100;
+    private const int ReapPollMs = 10;
+    private const int ReapDeadlineMs = 1_000;
     private const int EINTR = 4;
 
     public static IPtySessionBackend Start(
@@ -930,10 +932,35 @@ static partial class UnixPseudoTerminal
 
             _disposed = true;
             if (!_exited)
+            {
                 Kill();
+                TryReapChild();
+            }
 
             CloseTransport();
             DrainOutputTask();
+        }
+
+        private void TryReapChild()
+        {
+            if (_exited)
+                return;
+
+            var deadline = Environment.TickCount64 + ReapDeadlineMs;
+            while (Environment.TickCount64 < deadline)
+            {
+                if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
+                    return;
+
+                if (result == _pid)
+                {
+                    _exitCode = MapWaitStatusToExitCode(status);
+                    _exited = true;
+                    return;
+                }
+
+                Thread.Sleep(ReapPollMs);
+            }
         }
 
         private void CloseTransport()

@@ -36,7 +36,7 @@ Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession`
 | `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
 | `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
 | `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
-| `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. |
+| `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. On Unix, `Dispose` also attempts a bounded `waitpid` after `SIGKILL` to avoid leaving a zombie (up to ~1s). |
 | `PseudoTerminal.Run(..., input: string?)` | `input: null` — stdin stays open (TUI / no stdin). `input: ""` or text — write (if non-empty) then `CloseInput()` before wait. |
 | `PtyCaptureOptions.OutputEncoding` | Byte-to-text decoding for captured chunks (default `Encoding.UTF8`). |
 
