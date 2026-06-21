@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="829.6" height="504" viewBox="0 0 829.6 504" preserveAspectRatio="xMidYMid meet" role="img" aria-label="scenetake output">
+<style>
+text { font-family: ui-monospace, "Cascadia Mono", "Cascadia Code", "JetBrains Mono", "Noto Sans Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 16px; white-space: pre; }
+text { dominant-baseline: alphabetic; }
+.bg { shape-rendering: crispEdges; }
+.layer { opacity: 0; }
+.cursor-block { fill: #d0d0d0; fill-opacity: 0.5; }
+@keyframes k0 { 0%,10.741554%{opacity:0;} 10.747525%,11.34461%{opacity:1;} 11.356551%,100%{opacity:0;} }
+@keyframes k1 { 0%,11.338639%{opacity:0;} 11.34461%,11.67758%{opacity:1;} 11.689522%,100%{opacity:0;} }
+@keyframes k2 { 0%,11.671609%{opacity:0;} 11.67758%,11.983586%{opacity:1;} 11.995528%,100%{opacity:0;} }
+@keyframes k3 { 0%,11.977615%{opacity:0;} 11.983586%,12.137407%{opacity:1;} 12.149349%,100%{opacity:0;} }
+@keyframes k4 { 0%,12.131436%{opacity:0;} 12.137407%,12.595932%{opacity:1;} 12.607874%,100%{opacity:0;} }
+@keyframes k5 { 0%,12.589961%{opacity:0;} 12.595932%,12.93682%{opacity:1;} 12.948761%,100%{opacity:0;} }
+@keyframes k6 { 0%,12.930849%{opacity:0;} 12.93682%,13.10232%{opacity:1;} 13.114261%,100%{opacity:0;} }
+@keyframes k7 { 0%,13.096349%{opacity:0;} 13.10232%,13.430704%{opacity:1;} 13.442646%,100%{opacity:0;} }
+@keyframes k8 { 0%,13.424733%{opacity:0;} 13.430704%,13.648139%{opacity:1;} 13.66008%,100%{opacity:0;} }
+@keyframes k9 { 0%,13.642168%{opacity:0;} 13.648139%,13.789564%{opacity:1;} 13.801506%,100%{opacity:0;} }
+@keyframes k10 { 0%,13.783593%{opacity:0;} 13.789564%,14.03622%{opacity:1;} 14.048162%,100%{opacity:0;} }
+@keyframes k11 { 0%,14.030249%{opacity:0;} 14.03622%,14.534117%{opacity:1;} 14.546059%,100%{opacity:0;} }
+@keyframes k12 { 0%,14.528146%{opacity:0;} 14.534117%,14.680546%{opacity:1;} 14.692488%,100%{opacity:0;} }
+@keyframes k13 { 0%,14.674575%{opacity:0;} 14.680546%,14.920622%{opacity:1;} 14.932563%,100%{opacity:0;} }
+@keyframes k14 { 0%,14.914651%{opacity:0;} 14.920622%,15.104476%{opacity:1;} 15.116418%,100%{opacity:0;} }
+@keyframes k15 { 0%,15.098505%{opacity:0;} 15.104476%,15.427559%{opacity:1;} 15.4395%,100%{opacity:0;} }
+@keyframes k16 { 0%,15.421588%{opacity:0;} 15.427559%,15.752898%{opacity:1;} 15.76484%,100%{opacity:0;} }
+@keyframes k17 { 0%,15.746927%{opacity:0;} 15.752898%,15.895315%{opacity:1;} 15.907257%,100%{opacity:0;} }
+@keyframes k18 { 0%,15.889344%{opacity:0;} 15.895315%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k19 { 0%,18.449249%{opacity:0;} 18.45522%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k20 { 0%,35.167621%{opacity:0;} 35.173592%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k21 { 0%,35.764706%{opacity:0;} 35.770677%,36.367762%{opacity:1;} 36.379703%,100%{opacity:0;} }
+@keyframes k22 { 0%,36.361791%{opacity:0;} 36.367762%,36.602858%{opacity:1;} 36.6148%,100%{opacity:0;} }
+@keyframes k23 { 0%,36.596887%{opacity:0;} 36.602858%,36.821821%{opacity:1;} 36.833762%,100%{opacity:0;} }
+@keyframes k24 { 0%,36.81585%{opacity:0;} 36.821821%,37.056344%{opacity:1;} 37.068285%,100%{opacity:0;} }
+@keyframes k25 { 0%,37.050373%{opacity:0;} 37.056344%,37.524183%{opacity:1;} 37.536125%,100%{opacity:0;} }
+@keyframes k26 { 0%,37.518213%{opacity:0;} 37.524183%,37.667746%{opacity:1;} 37.679688%,100%{opacity:0;} }
+@keyframes k27 { 0%,37.661776%{opacity:0;} 37.667746%,37.856258%{opacity:1;} 37.8682%,100%{opacity:0;} }
+@keyframes k28 { 0%,37.850287%{opacity:0;} 37.856258%,38.107356%{opacity:1;} 38.119298%,100%{opacity:0;} }
+@keyframes k29 { 0%,38.101385%{opacity:0;} 38.107356%,38.277943%{opacity:1;} 38.289885%,100%{opacity:0;} }
+@keyframes k30 { 0%,38.271972%{opacity:0;} 38.277943%,38.496608%{opacity:1;} 38.508549%,100%{opacity:0;} }
+@keyframes k31 { 0%,38.490637%{opacity:0;} 38.496608%,38.69115%{opacity:1;} 38.703091%,100%{opacity:0;} }
+@keyframes k32 { 0%,38.685179%{opacity:0;} 38.69115%,39.033088%{opacity:1;} 39.04503%,100%{opacity:0;} }
+@keyframes k33 { 0%,39.027117%{opacity:0;} 39.033088%,39.582848%{opacity:1;} 39.59479%,100%{opacity:0;} }
+@keyframes k34 { 0%,39.576877%{opacity:0;} 39.582848%,39.825061%{opacity:1;} 39.837003%,100%{opacity:0;} }
+@keyframes k35 { 0%,39.81909%{opacity:0;} 39.825061%,40.021287%{opacity:1;} 40.033229%,100%{opacity:0;} }
+@keyframes k36 { 0%,40.015316%{opacity:0;} 40.021287%,40.221764%{opacity:1;} 40.233706%,100%{opacity:0;} }
+@keyframes k37 { 0%,40.215794%{opacity:0;} 40.221764%,40.546758%{opacity:1;} 40.558699%,100%{opacity:0;} }
+@keyframes k38 { 0%,40.540787%{opacity:0;} 40.546758%,40.800351%{opacity:1;} 40.812293%,100%{opacity:0;} }
+@keyframes k39 { 0%,40.794381%{opacity:0;} 40.800351%,41.056322%{opacity:1;} 41.068263%,100%{opacity:0;} }
+@keyframes k40 { 0%,41.050351%{opacity:0;} 41.056322%,41.297675%{opacity:1;} 41.309617%,100%{opacity:0;} }
+@keyframes k41 { 0%,41.291704%{opacity:0;} 41.297675%,41.452547%{opacity:1;} 41.464489%,100%{opacity:0;} }
+@keyframes k42 { 0%,41.446576%{opacity:0;} 41.452547%,41.714787%{opacity:1;} 41.726728%,100%{opacity:0;} }
+@keyframes k43 { 0%,41.708816%{opacity:0;} 41.714787%,41.985135%{opacity:1;} 41.997076%,100%{opacity:0;} }
+@keyframes k44 { 0%,41.979164%{opacity:0;} 41.985135%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k45 { 0%,44.679503%{opacity:0;} 44.685474%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k46 { 0%,61.397876%{opacity:0;} 61.403846%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k47 { 0%,61.99496%{opacity:0;} 62.000931%,62.598016%{opacity:1;} 62.609958%,100%{opacity:0;} }
+@keyframes k48 { 0%,62.592045%{opacity:0;} 62.598016%,62.854846%{opacity:1;} 62.866788%,100%{opacity:0;} }
+@keyframes k49 { 0%,62.848875%{opacity:0;} 62.854846%,62.976245%{opacity:1;} 62.988187%,100%{opacity:0;} }
+@keyframes k50 { 0%,62.970274%{opacity:0;} 62.976245%,63.098516%{opacity:1;} 63.110458%,100%{opacity:0;} }
+@keyframes k51 { 0%,63.092545%{opacity:0;} 63.098516%,63.284532%{opacity:1;} 63.296474%,100%{opacity:0;} }
+@keyframes k52 { 0%,63.278561%{opacity:0;} 63.284532%,63.449304%{opacity:1;} 63.461245%,100%{opacity:0;} }
+@keyframes k53 { 0%,63.443333%{opacity:0;} 63.449304%,63.936262%{opacity:1;} 63.948204%,100%{opacity:0;} }
+@keyframes k54 { 0%,63.930291%{opacity:0;} 63.936262%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k55 { 0%,83.275657%{opacity:0;} 83.281628%,100%{opacity:1;} }
+@keyframes k56 { 0%,12.131436%{opacity:0;} 12.137407%,12.30625%{opacity:1;} 12.318192%,100%{opacity:0;} }
+@keyframes k57 { 0%,12.30028%{opacity:0;} 12.30625%,12.595932%{opacity:1;} 12.607874%,100%{opacity:0;} }
+@keyframes k58 { 0%,14.030249%{opacity:0;} 14.03622%,14.298997%{opacity:1;} 14.310939%,100%{opacity:0;} }
+@keyframes k59 { 0%,14.293026%{opacity:0;} 14.298997%,14.534117%{opacity:1;} 14.546059%,100%{opacity:0;} }
+@keyframes k60 { 0%,15.889344%{opacity:0;} 15.895315%,16.066881%{opacity:1;} 16.078823%,100%{opacity:0;} }
+@keyframes k61 { 0%,16.06091%{opacity:0;} 16.066881%,18.45522%{opacity:1;} 18.467162%,100%{opacity:0;} }
+@keyframes k62 { 0%,18.449249%{opacity:0;} 18.45522%,35.173592%{opacity:1;} 35.185534%,100%{opacity:0;} }
+@keyframes k63 { 0%,35.167621%{opacity:0;} 35.173592%,35.770677%{opacity:1;} 35.782619%,100%{opacity:0;} }
+@keyframes k64 { 0%,37.050373%{opacity:0;} 37.056344%,37.384788%{opacity:1;} 37.39673%,100%{opacity:0;} }
+@keyframes k65 { 0%,37.378817%{opacity:0;} 37.384788%,37.524183%{opacity:1;} 37.536125%,100%{opacity:0;} }
+@keyframes k66 { 0%,39.027117%{opacity:0;} 39.033088%,39.340002%{opacity:1;} 39.351943%,100%{opacity:0;} }
+@keyframes k67 { 0%,39.334031%{opacity:0;} 39.340002%,39.582848%{opacity:1;} 39.59479%,100%{opacity:0;} }
+@keyframes k68 { 0%,41.979164%{opacity:0;} 41.985135%,42.297135%{opacity:1;} 42.309077%,100%{opacity:0;} }
+@keyframes k69 { 0%,42.291165%{opacity:0;} 42.297135%,44.685474%{opacity:1;} 44.697416%,100%{opacity:0;} }
+@keyframes k70 { 0%,44.679503%{opacity:0;} 44.685474%,61.403846%{opacity:1;} 61.415788%,100%{opacity:0;} }
+@keyframes k71 { 0%,61.397876%{opacity:0;} 61.403846%,62.000931%{opacity:1;} 62.012873%,100%{opacity:0;} }
+@keyframes k72 { 0%,63.443333%{opacity:0;} 63.449304%,63.789128%{opacity:1;} 63.80107%,100%{opacity:0;} }
+@keyframes k73 { 0%,63.783157%{opacity:0;} 63.789128%,63.936262%{opacity:1;} 63.948204%,100%{opacity:0;} }
+@keyframes k74 { 0%,63.930291%{opacity:0;} 63.936262%,64.174917%{opacity:1;} 64.186858%,100%{opacity:0;} }
+@keyframes k75 { 0%,64.168946%{opacity:0;} 64.174917%,66.563256%{opacity:1;} 66.575197%,100%{opacity:0;} }
+@keyframes k76 { 0%,66.557285%{opacity:0;} 66.563256%,83.281628%{opacity:1;} 83.293569%,100%{opacity:0;} }
+@keyframes k77 { 0%,100%{opacity:1;} }
+.layer-0 { animation:k0 8.374021s linear infinite; }
+.layer-1 { animation:k1 8.374021s linear infinite; }
+.layer-2 { animation:k2 8.374021s linear infinite; }
+.layer-3 { animation:k3 8.374021s linear infinite; }
+.layer-4 { animation:k4 8.374021s linear infinite; }
+.layer-5 { animation:k5 8.374021s linear infinite; }
+.layer-6 { animation:k6 8.374021s linear infinite; }
+.layer-7 { animation:k7 8.374021s linear infinite; }
+.layer-8 { animation:k8 8.374021s linear infinite; }
+.layer-9 { animation:k9 8.374021s linear infinite; }
+.layer-10 { animation:k10 8.374021s linear infinite; }
+.layer-11 { animation:k11 8.374021s linear infinite; }
+.layer-12 { animation:k12 8.374021s linear infinite; }
+.layer-13 { animation:k13 8.374021s linear infinite; }
+.layer-14 { animation:k14 8.374021s linear infinite; }
+.layer-15 { animation:k15 8.374021s linear infinite; }
+.layer-16 { animation:k16 8.374021s linear infinite; }
+.layer-17 { animation:k17 8.374021s linear infinite; }
+.layer-18 { animation:k18 8.374021s linear infinite; }
+.layer-19 { animation:k19 8.374021s linear infinite; }
+.layer-20 { animation:k20 8.374021s linear infinite; }
+.layer-21 { animation:k21 8.374021s linear infinite; }
+.layer-22 { animation:k22 8.374021s linear infinite; }
+.layer-23 { animation:k23 8.374021s linear infinite; }
+.layer-24 { animation:k24 8.374021s linear infinite; }
+.layer-25 { animation:k25 8.374021s linear infinite; }
+.layer-26 { animation:k26 8.374021s linear infinite; }
+.layer-27 { animation:k27 8.374021s linear infinite; }
+.layer-28 { animation:k28 8.374021s linear infinite; }
+.layer-29 { animation:k29 8.374021s linear infinite; }
+.layer-30 { animation:k30 8.374021s linear infinite; }
+.layer-31 { animation:k31 8.374021s linear infinite; }
+.layer-32 { animation:k32 8.374021s linear infinite; }
+.layer-33 { animation:k33 8.374021s linear infinite; }
+.layer-34 { animation:k34 8.374021s linear infinite; }
+.layer-35 { animation:k35 8.374021s linear infinite; }
+.layer-36 { animation:k36 8.374021s linear infinite; }
+.layer-37 { animation:k37 8.374021s linear infinite; }
+.layer-38 { animation:k38 8.374021s linear infinite; }
+.layer-39 { animation:k39 8.374021s linear infinite; }
+.layer-40 { animation:k40 8.374021s linear infinite; }
+.layer-41 { animation:k41 8.374021s linear infinite; }
+.layer-42 { animation:k42 8.374021s linear infinite; }
+.layer-43 { animation:k43 8.374021s linear infinite; }
+.layer-44 { animation:k44 8.374021s linear infinite; }
+.layer-45 { animation:k45 8.374021s linear infinite; }
+.layer-46 { animation:k46 8.374021s linear infinite; }
+.layer-47 { animation:k47 8.374021s linear infinite; }
+.layer-48 { animation:k48 8.374021s linear infinite; }
+.layer-49 { animation:k49 8.374021s linear infinite; }
+.layer-50 { animation:k50 8.374021s linear infinite; }
+.layer-51 { animation:k51 8.374021s linear infinite; }
+.layer-52 { animation:k52 8.374021s linear infinite; }
+.layer-53 { animation:k53 8.374021s linear infinite; }
+.layer-54 { animation:k54 8.374021s linear infinite; }
+.layer-55 { animation:k55 8.374021s linear infinite; }
+.cursor-layer-0 { animation:k0 8.374021s linear infinite; }
+.cursor-layer-1 { animation:k1 8.374021s linear infinite; }
+.cursor-layer-2 { animation:k2 8.374021s linear infinite; }
+.cursor-layer-3 { animation:k3 8.374021s linear infinite; }
+.cursor-layer-4 { animation:k56 8.374021s linear infinite; }
+.cursor-layer-5 { animation:k57 8.374021s linear infinite; }
+.cursor-layer-6 { animation:k5 8.374021s linear infinite; }
+.cursor-layer-7 { animation:k6 8.374021s linear infinite; }
+.cursor-layer-8 { animation:k7 8.374021s linear infinite; }
+.cursor-layer-9 { animation:k8 8.374021s linear infinite; }
+.cursor-layer-10 { animation:k9 8.374021s linear infinite; }
+.cursor-layer-11 { animation:k10 8.374021s linear infinite; }
+.cursor-layer-12 { animation:k58 8.374021s linear infinite; }
+.cursor-layer-13 { animation:k59 8.374021s linear infinite; }
+.cursor-layer-14 { animation:k12 8.374021s linear infinite; }
+.cursor-layer-15 { animation:k13 8.374021s linear infinite; }
+.cursor-layer-16 { animation:k14 8.374021s linear infinite; }
+.cursor-layer-17 { animation:k15 8.374021s linear infinite; }
+.cursor-layer-18 { animation:k16 8.374021s linear infinite; }
+.cursor-layer-19 { animation:k17 8.374021s linear infinite; }
+.cursor-layer-20 { animation:k60 8.374021s linear infinite; }
+.cursor-layer-21 { animation:k61 8.374021s linear infinite; }
+.cursor-layer-22 { animation:k62 8.374021s linear infinite; }
+.cursor-layer-23 { animation:k63 8.374021s linear infinite; }
+.cursor-layer-24 { animation:k21 8.374021s linear infinite; }
+.cursor-layer-25 { animation:k22 8.374021s linear infinite; }
+.cursor-layer-26 { animation:k23 8.374021s linear infinite; }
+.cursor-layer-27 { animation:k24 8.374021s linear infinite; }
+.cursor-layer-28 { animation:k64 8.374021s linear infinite; }
+.cursor-layer-29 { animation:k65 8.374021s linear infinite; }
+.cursor-layer-30 { animation:k26 8.374021s linear infinite; }
+.cursor-layer-31 { animation:k27 8.374021s linear infinite; }
+.cursor-layer-32 { animation:k28 8.374021s linear infinite; }
+.cursor-layer-33 { animation:k29 8.374021s linear infinite; }
+.cursor-layer-34 { animation:k30 8.374021s linear infinite; }
+.cursor-layer-35 { animation:k31 8.374021s linear infinite; }
+.cursor-layer-36 { animation:k32 8.374021s linear infinite; }
+.cursor-layer-37 { animation:k66 8.374021s linear infinite; }
+.cursor-layer-38 { animation:k67 8.374021s linear infinite; }
+.cursor-layer-39 { animation:k34 8.374021s linear infinite; }
+.cursor-layer-40 { animation:k35 8.374021s linear infinite; }
+.cursor-layer-41 { animation:k36 8.374021s linear infinite; }
+.cursor-layer-42 { animation:k37 8.374021s linear infinite; }
+.cursor-layer-43 { animation:k38 8.374021s linear infinite; }
+.cursor-layer-44 { animation:k39 8.374021s linear infinite; }
+.cursor-layer-45 { animation:k40 8.374021s linear infinite; }
+.cursor-layer-46 { animation:k41 8.374021s linear infinite; }
+.cursor-layer-47 { animation:k42 8.374021s linear infinite; }
+.cursor-layer-48 { animation:k43 8.374021s linear infinite; }
+.cursor-layer-49 { animation:k68 8.374021s linear infinite; }
+.cursor-layer-50 { animation:k69 8.374021s linear infinite; }
+.cursor-layer-51 { animation:k70 8.374021s linear infinite; }
+.cursor-layer-52 { animation:k71 8.374021s linear infinite; }
+.cursor-layer-53 { animation:k47 8.374021s linear infinite; }
+.cursor-layer-54 { animation:k48 8.374021s linear infinite; }
+.cursor-layer-55 { animation:k49 8.374021s linear infinite; }
+.cursor-layer-56 { animation:k50 8.374021s linear infinite; }
+.cursor-layer-57 { animation:k51 8.374021s linear infinite; }
+.cursor-layer-58 { animation:k52 8.374021s linear infinite; }
+.cursor-layer-59 { animation:k72 8.374021s linear infinite; }
+.cursor-layer-60 { animation:k73 8.374021s linear infinite; }
+.cursor-layer-61 { animation:k74 8.374021s linear infinite; }
+.cursor-layer-62 { animation:k75 8.374021s linear infinite; }
+.cursor-layer-63 { animation:k76 8.374021s linear infinite; }
+.cursor-layer-64 { animation:k55 8.374021s linear infinite; }
+.viewport-mask-0,.viewport-bg-0 { animation:k77 8.374021s linear infinite; }
+</style>
+<defs>
+<mask id="viewport-mask" x="0" y="0" width="829.6" height="504" maskUnits="userSpaceOnUse">
+<rect class="layer viewport-mask-0" x="8" y="8" width="813.6" height="488" fill="white"/>
+</mask>
+</defs>
+<g mask="url(#viewport-mask)">
+<rect class="bg layer viewport-bg-0" x="8" y="8" width="813.6" height="488" fill="#282c34"/>
+<g class="layer layer-0">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-1">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-2">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-3">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-4">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-5">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-6">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;H</text>
+</g>
+<g class="layer layer-7">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;He</text>
+</g>
+<g class="layer layer-8">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Hel</text>
+</g>
+<g class="layer layer-9">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Hell</text>
+</g>
+<g class="layer layer-10">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Hello</text>
+</g>
+<g class="layer layer-11">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Hello,</text>
+</g>
+<g class="layer layer-12">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="158.72" lengthAdjust="spacing">$ echo &quot;Hello, W</text>
+</g>
+<g class="layer layer-13">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ echo &quot;Hello, Wo</text>
+</g>
+<g class="layer layer-14">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ echo &quot;Hello, Wor</text>
+</g>
+<g class="layer layer-15">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ echo &quot;Hello, Worl</text>
+</g>
+<g class="layer layer-16">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ echo &quot;Hello, World</text>
+</g>
+<g class="layer layer-17">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ echo &quot;Hello, World!</text>
+</g>
+<g class="layer layer-18">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ echo &quot;Hello, World!&quot;</text>
+</g>
+<g class="layer layer-19">
+<text x="18" y="44.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">Hello, World!</text>
+</g>
+<g class="layer layer-20">
+<text x="18" y="64.8" fill="#7dd6cf" font-weight="normal" textLength="178.56" lengthAdjust="spacing"># Name of the step</text>
+</g>
+<g class="layer layer-21">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-22">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ e</text>
+</g>
+<g class="layer layer-23">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ec</text>
+</g>
+<g class="layer layer-24">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ ech</text>
+</g>
+<g class="layer layer-25">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ echo</text>
+</g>
+<g class="layer layer-26">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ echo &quot;</text>
+</g>
+<g class="layer layer-27">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="89.28" lengthAdjust="spacing">$ echo &quot;C</text>
+</g>
+<g class="layer layer-28">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ echo &quot;Cu</text>
+</g>
+<g class="layer layer-29">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="109.12" lengthAdjust="spacing">$ echo &quot;Cur</text>
+</g>
+<g class="layer layer-30">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="119.04" lengthAdjust="spacing">$ echo &quot;Curr</text>
+</g>
+<g class="layer layer-31">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="128.96" lengthAdjust="spacing">$ echo &quot;Curre</text>
+</g>
+<g class="layer layer-32">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="138.88" lengthAdjust="spacing">$ echo &quot;Curren</text>
+</g>
+<g class="layer layer-33">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="148.8" lengthAdjust="spacing">$ echo &quot;Current</text>
+</g>
+<g class="layer layer-34">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="168.64" lengthAdjust="spacing">$ echo &quot;Current d</text>
+</g>
+<g class="layer layer-35">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">$ echo &quot;Current di</text>
+</g>
+<g class="layer layer-36">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="188.48" lengthAdjust="spacing">$ echo &quot;Current dir</text>
+</g>
+<g class="layer layer-37">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="198.4" lengthAdjust="spacing">$ echo &quot;Current dire</text>
+</g>
+<g class="layer layer-38">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="208.32" lengthAdjust="spacing">$ echo &quot;Current direc</text>
+</g>
+<g class="layer layer-39">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="218.24" lengthAdjust="spacing">$ echo &quot;Current direct</text>
+</g>
+<g class="layer layer-40">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="228.16" lengthAdjust="spacing">$ echo &quot;Current directo</text>
+</g>
+<g class="layer layer-41">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="238.08" lengthAdjust="spacing">$ echo &quot;Current director</text>
+</g>
+<g class="layer layer-42">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="248" lengthAdjust="spacing">$ echo &quot;Current directory</text>
+</g>
+<g class="layer layer-43">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="257.92" lengthAdjust="spacing">$ echo &quot;Current directory:</text>
+</g>
+<g class="layer layer-44">
+<text x="18" y="84.8" fill="#d0d0d0" font-weight="normal" textLength="267.84" lengthAdjust="spacing">$ echo &quot;Current directory:&quot;</text>
+</g>
+<g class="layer layer-45">
+<text x="18" y="104.8" fill="#d0d0d0" font-weight="normal" textLength="178.56" lengthAdjust="spacing">Current directory:</text>
+</g>
+<g class="layer layer-46">
+<text x="18" y="124.8" fill="#7dd6cf" font-weight="normal" textLength="99.2" lengthAdjust="spacing"># pty demo</text>
+</g>
+<g class="layer layer-47">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer layer-48">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="29.76" lengthAdjust="spacing">$ m</text>
+</g>
+<g class="layer layer-49">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="39.68" lengthAdjust="spacing">$ ma</text>
+</g>
+<g class="layer layer-50">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="49.6" lengthAdjust="spacing">$ mat</text>
+</g>
+<g class="layer layer-51">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="59.52" lengthAdjust="spacing">$ matr</text>
+</g>
+<g class="layer layer-52">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="69.44" lengthAdjust="spacing">$ matri</text>
+</g>
+<g class="layer layer-53">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="79.36" lengthAdjust="spacing">$ matrix</text>
+</g>
+<g class="layer layer-54">
+<text x="18" y="144.8" fill="#d0d0d0" font-weight="normal" textLength="99.2" lengthAdjust="spacing">$ matrix 5</text>
+</g>
+<g class="layer layer-55">
+<text x="18" y="24.8" fill="#d0d0d0" font-weight="normal" textLength="9.92" lengthAdjust="spacing">$</text>
+</g>
+<g class="layer cursor-layer-0">
+<rect class="cursor-block" x="37.84" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-1">
+<rect class="cursor-block" x="47.76" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-2">
+<rect class="cursor-block" x="57.68" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-3">
+<rect class="cursor-block" x="67.6" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-4">
+<rect class="cursor-block" x="77.52" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-5">
+<rect class="cursor-block" x="87.44" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-6">
+<rect class="cursor-block" x="97.36" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-7">
+<rect class="cursor-block" x="107.28" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-8">
+<rect class="cursor-block" x="117.2" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-9">
+<rect class="cursor-block" x="127.12" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-10">
+<rect class="cursor-block" x="137.04" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-11">
+<rect class="cursor-block" x="146.96" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-12">
+<rect class="cursor-block" x="156.88" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-13">
+<rect class="cursor-block" x="166.8" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-14">
+<rect class="cursor-block" x="176.72" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-15">
+<rect class="cursor-block" x="186.64" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-16">
+<rect class="cursor-block" x="196.56" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-17">
+<rect class="cursor-block" x="206.48" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-18">
+<rect class="cursor-block" x="216.4" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-19">
+<rect class="cursor-block" x="226.32" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-20">
+<rect class="cursor-block" x="236.24" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-21">
+<rect class="cursor-block" x="18" y="32" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-22">
+<rect class="cursor-block" x="18" y="52" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-23">
+<rect class="cursor-block" x="18" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-24">
+<rect class="cursor-block" x="37.84" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-25">
+<rect class="cursor-block" x="47.76" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-26">
+<rect class="cursor-block" x="57.68" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-27">
+<rect class="cursor-block" x="67.6" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-28">
+<rect class="cursor-block" x="77.52" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-29">
+<rect class="cursor-block" x="87.44" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-30">
+<rect class="cursor-block" x="97.36" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-31">
+<rect class="cursor-block" x="107.28" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-32">
+<rect class="cursor-block" x="117.2" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-33">
+<rect class="cursor-block" x="127.12" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-34">
+<rect class="cursor-block" x="137.04" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-35">
+<rect class="cursor-block" x="146.96" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-36">
+<rect class="cursor-block" x="156.88" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-37">
+<rect class="cursor-block" x="166.8" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-38">
+<rect class="cursor-block" x="176.72" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-39">
+<rect class="cursor-block" x="186.64" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-40">
+<rect class="cursor-block" x="196.56" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-41">
+<rect class="cursor-block" x="206.48" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-42">
+<rect class="cursor-block" x="216.4" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-43">
+<rect class="cursor-block" x="226.32" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-44">
+<rect class="cursor-block" x="236.24" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-45">
+<rect class="cursor-block" x="246.16" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-46">
+<rect class="cursor-block" x="256.08" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-47">
+<rect class="cursor-block" x="266" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-48">
+<rect class="cursor-block" x="275.92" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-49">
+<rect class="cursor-block" x="285.84" y="72" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-50">
+<rect class="cursor-block" x="18" y="92" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-51">
+<rect class="cursor-block" x="18" y="112" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-52">
+<rect class="cursor-block" x="18" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-53">
+<rect class="cursor-block" x="37.84" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-54">
+<rect class="cursor-block" x="47.76" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-55">
+<rect class="cursor-block" x="57.68" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-56">
+<rect class="cursor-block" x="67.6" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-57">
+<rect class="cursor-block" x="77.52" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-58">
+<rect class="cursor-block" x="87.44" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-59">
+<rect class="cursor-block" x="97.36" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-60">
+<rect class="cursor-block" x="107.28" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-61">
+<rect class="cursor-block" x="117.2" y="132" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-62">
+<rect class="cursor-block" x="18" y="152" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-63">
+<rect class="cursor-block" x="18" y="12" width="9.92" height="20"/>
+</g>
+<g class="layer cursor-layer-64">
+<rect class="cursor-block" x="37.84" y="12" width="9.92" height="20"/>
+</g>
+</g>
+</svg>

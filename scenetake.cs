@@ -7,6 +7,7 @@
 #:include Terminal.cs
 #:include Svg.cs
 #:include CastReader.cs
+#:include PseudoTerminal.cs
 
 using System.Diagnostics;
 using System.Globalization;
@@ -769,9 +770,12 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         t += 0.15;
 
         Console.Error.WriteLine($"  running: {command.Cmd}");
-        var execution = RunCommand(command.Cmd, scenario.Cwd, shell);
+        var usePty = GetBool(command.Extra, false, "pty");
+        var execution = RunCommandCore(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24);
         t += cmdExecutionDuration;
-        var mergedOutput = MergeCommandOutput(execution, cmdStderrStyle);
+        var mergedOutput = execution.IsTerminalOutput
+            ? execution.Stdout
+            : MergeCommandOutput(execution, cmdStderrStyle);
 
         if (!string.IsNullOrEmpty(mergedOutput))
         {
@@ -829,8 +833,14 @@ static CommandEntry ParseCommand(object? item)
     return new CommandEntry();
 }
 
-static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell)
+static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell) =>
+    RunCommandCore(cmd, cwd, shell, false, 120, 24);
+
+static CommandOutput RunCommandCore(string cmd, string? cwd, ShellLaunch shell, bool usePty, int width, int height)
 {
+    if (usePty)
+        return PseudoTerminal.Run(shell.FileName, BuildPtyShellArguments(shell, cmd), cwd, width, height);
+
     var psi = new ProcessStartInfo(shell.FileName)
     {
         RedirectStandardOutput = true,
@@ -848,7 +858,15 @@ static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell)
     var stdout = proc.StandardOutput.ReadToEnd();
     var stderr = proc.StandardError.ReadToEnd();
     proc.WaitForExit();
-    return new CommandOutput(stdout, stderr, proc.ExitCode);
+    return new CommandOutput(stdout, stderr, proc.ExitCode, false);
+}
+
+static string[] BuildPtyShellArguments(ShellLaunch shell, string cmd)
+{
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && IsPowerShellName(shell.DisplayName))
+        return [.. shell.Arguments.TakeWhile(static x => !string.Equals(x, "-Command", StringComparison.OrdinalIgnoreCase)), "-NonInteractive", "-Command", cmd];
+
+    return [.. shell.Arguments, cmd];
 }
 
 static int RunScenarioCommands(List<string>? commands, string phase, string? cwd, ShellLaunch shell, bool verbose)
@@ -1898,6 +1916,26 @@ static double GetDouble(Dictionary<string, object?> d, double def, params string
     return def;
 }
 
+static bool GetBool(Dictionary<string, object?> d, bool def, params string[] keys)
+{
+    foreach (var key in keys)
+    {
+        if (!d.TryGetValue(key, out var value))
+            continue;
+
+        if (value is bool b)
+            return b;
+
+        if (bool.TryParse(value?.ToString(), out var parsed))
+            return parsed;
+
+        Warn(key, null, $"invalid boolean value '{value}'; using {def.ToString().ToLowerInvariant()}");
+        return def;
+    }
+
+    return def;
+}
+
 static ShellLaunch ResolveShell(Scenario scenario)
 {
     var requested = scenario.Shell;
@@ -2165,7 +2203,7 @@ enum OutputFormat
     Svg,
 }
 
-readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode);
+readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode, bool IsTerminalOutput = false);
 
 static class TypingChars
 {

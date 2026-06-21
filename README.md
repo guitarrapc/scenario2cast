@@ -152,12 +152,20 @@ scenetake svg [--font-size N] [--font-family FAMILIES] [--theme dark|light]
 - `pre` / `post` run setup and teardown commands outside the recording flow. Their stdout/stderr are printed to the CLI, but are never written to the cast file.
 - `steps`:
   - Steps are executed for real, so use caution with commands that modify files or affect external systems.
-  - Interactive commands are not supported. See [Limitations (scenario recording)](#limitations-scenario-recording).
+  - Commands that need a terminal can opt into pseudo-terminal capture with `pty: true`. See [Limitations (scenario recording)](#limitations-scenario-recording).
   - For long-running commands, use `execution-duration` to keep playback readable.
 
 ## Limitations (scenario recording)
 
-Scenario recording runs commands without a PTY and captures each command's output in one batch after it finishes. It does not support interactive programs, real-time terminal animations, or full-screen TUIs (for example `vim`, `htop`, `sl`, or `copilot --banner`). For those, record with [asciinema](https://asciinema.org/) and convert with `scenetake svg` — the SVG renderer supports rich TUI output from external casts.
+Scenario recording normally runs commands without a PTY and captures each command's output in one batch after it finishes. For terminal-aware commands, use map-form steps with `pty: true`; the PTY size comes from scenario `width` / `height`.
+
+```yaml
+steps:
+  - run: matrix --duration 5
+    pty: true
+```
+
+`pty: true` is intended for terminal UI commands and real-time terminal animations. It records the terminal stream directly, so stdout and stderr are not separated and `stderr-color` does not apply to that step. Fully interactive workflows that require user input are still outside the scenario model; for those, record with [asciinema](https://asciinema.org/) and convert with `scenetake svg`.
 
 ## Scenario Format
 
@@ -213,6 +221,10 @@ steps:
   - name: "execution-duration"
     run: sleep 1
     execution-duration: 0.5
+
+  - name: "pty demo"
+    run: echo "This command runs in a PTY, so output appears immediately and can include interactive features like colors and progress bars."
+    pty: true
 
   - name: "run-highlight colors the typed command"
     run: printf 'done\n'

@@ -46,6 +46,10 @@ steps:
     run: sleep 1
     execution-duration: 0.5
 
+  - name: "pty demo"
+    run: echo "This command runs in a PTY, so output appears immediately and can include interactive features like colors and progress bars."
+    pty: true
+
   - name: "run-highlight colors the typed command"
     run: printf 'done\n'
     run-highlight: bright-cyan
