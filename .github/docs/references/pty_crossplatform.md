@@ -108,6 +108,8 @@ dup2(slave, 0..2)
 execvp via UTF-8 argv built with NativeMemory (byte**)
 ```
 
+**`fork()` safety:** Build executable path, `argv`, and optional `cwd` as unmanaged UTF-8 C strings in the **parent** before `fork()`. The child path (`ChildMainAfterFork`) calls only libc P/Invoke (`close`, `setsid`, `ioctl`, `dup2`, `chdir`, `execvp`, `_exit`) — no managed allocation, no `RuntimeInformation`, no string marshalling. The parent frees the payload after `fork()`; the child retains a copy-on-write mapping until `execvp` replaces the address space.
+
 `execvp` uses `LibraryImport` with `byte* file` and `byte** argv` — not `string[]` marshalling — so NativeAOT does not depend on runtime array marshalling for the exec boundary. Each argument is a null-terminated UTF-8 C string; the pointer array ends with `NULL`.
 
 `execve` (explicit environment block) is a future option if scenetake needs to override `TERM` or other variables independently of the parent process.

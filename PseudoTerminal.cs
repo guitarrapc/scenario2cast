@@ -712,35 +712,95 @@ static partial class UnixPseudoTerminal
             throw error;
         }
 
-        var pid = fork();
-        if (pid < 0)
+        var tiocSetCtty = TiocSetCtty();
+        var exec = UnixExecPayload.Create(fileName, arguments, cwd);
+        try
         {
-            close(master);
-            close(slave);
-            var error = new Win32Exception(Marshal.GetLastPInvokeError(), "fork failed");
-            PtyDiagnostics.Fail("fork", error, context);
-            throw error;
-        }
-
-        if (pid == 0)
-        {
-            close(master);
-            setsid();
-            ioctl(slave, TiocSetCtty(), 0);
-            dup2(slave, 0);
-            dup2(slave, 1);
-            dup2(slave, 2);
-            if (slave > 2)
+            var pid = fork();
+            if (pid < 0)
+            {
+                close(master);
                 close(slave);
-            if (!string.IsNullOrWhiteSpace(cwd))
-                chdir(cwd);
-            ExecvpOrExit(fileName, arguments);
+                var error = new Win32Exception(Marshal.GetLastPInvokeError(), "fork failed");
+                PtyDiagnostics.Fail("fork", error, context);
+                throw error;
+            }
+
+            if (pid == 0)
+                ChildMainAfterFork(master, slave, tiocSetCtty, exec.Executable, exec.Argv, exec.WorkingDirectory);
+
+            close(slave);
+            var stopwatch = Stopwatch.StartNew();
+            var outputTask = Task.Run(() => ReadChunks(master, stopwatch));
+            return new UnixPtySession(master, pid, outputTask, stopwatch, fileName, arguments, context);
+        }
+        finally
+        {
+            exec.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Child path after <c>fork()</c>. Only async-signal-safe libc calls — no managed allocation or runtime APIs.
+    /// </summary>
+    private static unsafe void ChildMainAfterFork(
+        int master,
+        int slave,
+        ulong tiocSetCtty,
+        IntPtr executable,
+        IntPtr argv,
+        IntPtr workingDirectory)
+    {
+        close(master);
+        setsid();
+        ioctl(slave, tiocSetCtty, 0);
+        dup2(slave, 0);
+        dup2(slave, 1);
+        dup2(slave, 2);
+        if (slave > 2)
+            close(slave);
+        if (workingDirectory != IntPtr.Zero)
+            chdir((byte*)workingDirectory);
+        execvp((byte*)executable, (byte**)argv);
+        _exit(127);
+    }
+
+    private sealed class UnixExecPayload : IDisposable
+    {
+        private readonly List<IntPtr> _owned;
+
+        private UnixExecPayload(List<IntPtr> owned, IntPtr executable, IntPtr argv, IntPtr workingDirectory)
+        {
+            _owned = owned;
+            Executable = executable;
+            Argv = argv;
+            WorkingDirectory = workingDirectory;
         }
 
-        close(slave);
-        var stopwatch = Stopwatch.StartNew();
-        var outputTask = Task.Run(() => ReadChunks(master, stopwatch));
-        return new UnixPtySession(master, pid, outputTask, stopwatch, fileName, arguments, context);
+        public IntPtr Executable { get; }
+        public IntPtr Argv { get; }
+        public IntPtr WorkingDirectory { get; }
+
+        public static unsafe UnixExecPayload Create(string fileName, string[] arguments, string? cwd)
+        {
+            var owned = new List<IntPtr>();
+            try
+            {
+                var executable = AllocUtf8CString(fileName, owned);
+                var argv = AllocUtf8Argv(fileName, arguments, owned);
+                IntPtr workingDirectory = IntPtr.Zero;
+                if (!string.IsNullOrWhiteSpace(cwd))
+                    workingDirectory = (IntPtr)AllocUtf8CString(cwd, owned);
+                return new UnixExecPayload(owned, (IntPtr)executable, (IntPtr)argv, workingDirectory);
+            }
+            catch
+            {
+                FreeUtf8Allocations(owned);
+                throw;
+            }
+        }
+
+        public void Dispose() => FreeUtf8Allocations(_owned);
     }
 
     private sealed class UnixPtySession : IPtySessionBackend
@@ -884,22 +944,6 @@ static partial class UnixPseudoTerminal
         }
     }
 
-    private static unsafe void ExecvpOrExit(string fileName, string[] arguments)
-    {
-        var owned = new List<IntPtr>();
-        try
-        {
-            var argv = AllocUtf8Argv(fileName, arguments, owned);
-            execvp(argv[0], argv);
-        }
-        finally
-        {
-            FreeUtf8Allocations(owned);
-        }
-
-        _exit(127);
-    }
-
     private static unsafe byte** AllocUtf8Argv(string fileName, string[] arguments, List<IntPtr> owned)
     {
         var argc = arguments.Length + 1;
@@ -1013,8 +1057,8 @@ static partial class UnixPseudoTerminal
     [LibraryImport("libc", SetLastError = true)]
     private static partial int dup2(int oldfd, int newfd);
 
-    [LibraryImport("libc", SetLastError = true, StringMarshalling = StringMarshalling.Utf8)]
-    private static partial int chdir(string path);
+    [LibraryImport("libc", SetLastError = true)]
+    private static unsafe partial int chdir(byte* path);
 
     [LibraryImport("libc", SetLastError = true)]
     private static unsafe partial int execvp(byte* file, byte** argv);
