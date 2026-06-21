@@ -76,7 +76,10 @@ public sealed class PseudoTerminalSession : IAsyncDisposable, IDisposable
 
     public bool HasExited => _backend.HasExited;
 
-    public void WriteInput(string? input) => _backend.WriteInput(input);
+    public void WriteInput(string input) => _backend.WriteInput(input);
+
+    /// <summary>Signals EOF on the PTY stdin (closes the input pipe / shuts down SHUT_WR).</summary>
+    public void CloseInput() => _backend.CloseInput();
 
     public void Kill() => _backend.Kill();
 
@@ -105,7 +108,8 @@ interface IPtySessionBackend : IDisposable
 {
     int ProcessId { get; }
     bool HasExited { get; }
-    void WriteInput(string? input);
+    void WriteInput(string input);
+    void CloseInput();
     void Kill();
     Task<int> WaitForExitAsync(CancellationToken cancellationToken);
     CommandOutput Complete(bool verbose);
@@ -148,7 +152,12 @@ public static class PseudoTerminal
         CancellationToken cancellationToken = default)
     {
         using var session = Start(fileName, arguments, cwd, width, height, context);
-        session.WriteInput(input);
+        if (input is not null)
+        {
+            if (input.Length > 0)
+                session.WriteInput(input);
+            session.CloseInput();
+        }
         session.WaitForExitAsync(cancellationToken).GetAwaiter().GetResult();
         return session.Complete(verbose);
     }
@@ -314,14 +323,26 @@ static partial class WindowsPseudoTerminal
 
         public bool HasExited => _exited;
 
-        public void WriteInput(string? input)
+        public void WriteInput(string input)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_exited || _inputClosed || input.Length == 0)
+                return;
+
+            WriteAll(_inputWriteHandle, Encoding.UTF8.GetBytes(input));
+        }
+
+        public void CloseInput()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
             if (_exited || _inputClosed)
                 return;
 
-            if (!string.IsNullOrEmpty(input))
-                WriteAll(_inputWriteHandle, Encoding.UTF8.GetBytes(input));
+            // ConPTY may not have wired child stdin yet right after CreateProcess.
+            Thread.Sleep(100);
+            FlushFileBuffers(_inputWriteHandle);
+            _inputWriteHandle.Dispose();
+            _inputClosed = true;
         }
 
         public void Kill()
@@ -443,11 +464,21 @@ static partial class WindowsPseudoTerminal
         }
     }
 
-    private static void WriteAll(SafeFileHandle handle, byte[] bytes)
+    private static unsafe void WriteAll(SafeFileHandle handle, byte[] bytes)
     {
-        using var stream = new FileStream(handle, FileAccess.Write, 4096, false);
-        stream.Write(bytes, 0, bytes.Length);
-        stream.Flush();
+        fixed (byte* ptr = bytes)
+        {
+            var offset = 0;
+            while (offset < bytes.Length)
+            {
+                var remaining = (uint)(bytes.Length - offset);
+                if (!WriteFile(handle, ptr + offset, remaining, out var written, IntPtr.Zero))
+                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "WriteFile failed");
+                if (written == 0)
+                    throw new IOException("WriteFile wrote 0 bytes");
+                offset += (int)written;
+            }
+        }
     }
 
     private static List<CommandOutputChunk> ReadChunks(SafeFileHandle handle, Stopwatch stopwatch)
@@ -585,6 +616,14 @@ static partial class WindowsPseudoTerminal
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool FlushFileBuffers(SafeFileHandle hFile);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static unsafe partial bool WriteFile(SafeFileHandle hFile, byte* lpBuffer, uint nNumberOfBytesToWrite, out uint lpNumberOfBytesWritten, IntPtr lpOverlapped);
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -736,16 +775,19 @@ static partial class UnixPseudoTerminal
 
         public bool HasExited => _exited;
 
-        public void WriteInput(string? input)
+        public void WriteInput(string input)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _writeClosed)
+            if (_exited || _writeClosed || input.Length == 0)
                 return;
 
-            if (!string.IsNullOrEmpty(input))
-                WriteAll(_master, Encoding.UTF8.GetBytes(input));
-            else
-                CloseWriteSide();
+            WriteAll(_master, Encoding.UTF8.GetBytes(input));
+        }
+
+        public void CloseInput()
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            CloseWriteSide();
         }
 
         public void Kill()

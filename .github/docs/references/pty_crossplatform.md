@@ -31,12 +31,13 @@ Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession`
 | API | Behavior |
 |---|---|
 | `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
-| `WriteInput(string?)` | Writes optional stdin bytes. An empty/null input closes the PTY write side (Unix `shutdown(SHUT_WR)`; Windows closes the input pipe on exit). |
+| `WriteInput(string)` | Writes UTF-8 bytes to the PTY stdin. Does not close stdin. |
+| `CloseInput()` | Signals EOF (`CloseHandle` on the ConPTY input pipe after flush; `shutdown(SHUT_WR)` on Unix). On Windows, a short post-start delay avoids closing before the child attaches to ConPTY stdin. |
 | `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
 | `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
 | `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
 | `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. |
-| `PseudoTerminal.Run(..., CancellationToken)` | Convenience wrapper: `Start` → `WriteInput` → `WaitForExitAsync` → `Complete`. |
+| `PseudoTerminal.Run(..., input: string?)` | `input: null` — stdin stays open (TUI / no stdin). `input: ""` or text — write (if non-empty) then `CloseInput()` before wait. |
 
 The scenetake CLI uses `Run` with `CancellationToken.None` (no scenario-level timeout in Phase 1).
 
@@ -64,7 +65,7 @@ Redirecting `CreateProcess` stdin/stdout to anonymous pipes **without** ConPTY i
 5. Build `STARTUPINFOEX` with `PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE`.
 6. `CreateProcessW` with `EXTENDED_STARTUPINFO_PRESENT` and `bInheritHandles = false`.
 7. Start a background read on `outputRead` before or as the child runs.
-8. On shutdown: wait for child → close `inputWrite` → `ClosePseudoConsole` → drain read task.
+8. On shutdown: if one-shot stdin was used, `CloseInput()` before wait → wait for child → `ClosePseudoConsole` → drain read task.
 
 ### Parent console attachment
 
@@ -115,8 +116,9 @@ execvp via UTF-8 argv built with NativeMemory (byte**)
 
 1. `close(slave)` after fork.
 2. Start background read on `master`.
-3. If no input bytes, `shutdown(master, SHUT_WR)` to send EOF without closing the read side.
-4. `waitpid`, then `close(master)` after the read task drains.
+3. If one-shot stdin was provided, `CloseInput()` before waiting — children that block on stdin EOF (`cat`, `ReadToEnd`, etc.) otherwise hang.
+4. If no stdin bytes, leave the write side open until the child exits (TUI programs).
+5. `waitpid`, then `close(master)` after the read task drains.
 
 ### Platform differences
 

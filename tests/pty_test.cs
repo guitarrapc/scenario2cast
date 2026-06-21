@@ -14,6 +14,7 @@ var failures = 0;
 
 failures += Run("PtyEchoOutput", PtyEchoOutput);
 failures += Run("PtyTtyCheck", PtyTtyCheck);
+failures += Run("PtyStdinEof", PtyStdinEof);
 failures += Run("PtyCancellation", PtyCancellation);
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryResolvePwsh(out var pwshPath))
     failures += Run("PtyMatrixPwsh", () => PtyMatrixPwsh(pwshPath));
@@ -92,6 +93,37 @@ static bool PtyEchoOutput()
         && unixOutput.Stdout.Contains("pty-layer-echo", StringComparison.Ordinal);
 }
 
+static bool PtyStdinEof()
+{
+    const string marker = "pty-stdin-eof";
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var sort = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "sort.exe");
+        var output = PseudoTerminal.Run(
+            sort,
+            [],
+            null,
+            40,
+            8,
+            TestContext("sort"),
+            input: $"zzz\r\n{marker}\r\naaa\r\n");
+        return output.Stdout.Contains(marker, StringComparison.Ordinal)
+            && output.Stdout.Contains("aaa", StringComparison.Ordinal);
+    }
+
+    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
+    var unixOutput = PseudoTerminal.Run(
+        shell,
+        ["-lc", "cat"],
+        null,
+        40,
+        8,
+        TestContext(shell),
+        input: marker);
+    return unixOutput.ExitCode == 0 && unixOutput.Stdout.Contains(marker, StringComparison.Ordinal);
+}
+
 static bool PtyCancellation()
 {
     using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
@@ -106,7 +138,6 @@ static bool PtyCancellation()
             40,
             8,
             TestContext("cmd"));
-        session.WriteInput(null);
         try
         {
             session.WaitForExitAsync(cts.Token).GetAwaiter().GetResult();
@@ -126,7 +157,6 @@ static bool PtyCancellation()
         40,
         8,
         TestContext(shell));
-    unixSession.WriteInput(null);
     try
     {
         unixSession.WaitForExitAsync(cts.Token).GetAwaiter().GetResult();
