@@ -193,6 +193,7 @@ static partial class WindowsPseudoTerminal
     private const uint WaitTimeout = 0x00000102;
     private const uint WaitFailed = 0xFFFFFFFF;
     private const uint WaitPollMs = 100;
+    private const int Utf8StackThreshold = 256;
 
     public static IPtySessionBackend Start(
         string fileName,
@@ -352,7 +353,7 @@ static partial class WindowsPseudoTerminal
             if (_exited || _inputClosed || _eofSignaled || input.Length == 0)
                 return;
 
-            WriteAll(_inputWriteHandle, Encoding.UTF8.GetBytes(input));
+            WriteUtf8(_inputWriteHandle, input);
         }
 
         public void SendEof()
@@ -516,8 +517,11 @@ static partial class WindowsPseudoTerminal
         }
     }
 
-    private static unsafe void WriteAll(SafeFileHandle handle, byte[] bytes)
+    private static unsafe void WriteAll(SafeFileHandle handle, ReadOnlySpan<byte> bytes)
     {
+        if (bytes.IsEmpty)
+            return;
+
         fixed (byte* ptr = bytes)
         {
             var offset = 0;
@@ -531,6 +535,25 @@ static partial class WindowsPseudoTerminal
                 offset += (int)written;
             }
         }
+    }
+
+    private static void WriteAll(SafeFileHandle handle, byte[] bytes) => WriteAll(handle, bytes.AsSpan());
+
+    private static void WriteUtf8(SafeFileHandle handle, string input)
+    {
+        var byteCount = Encoding.UTF8.GetByteCount(input);
+        if (byteCount == 0)
+            return;
+
+        if (byteCount <= Utf8StackThreshold)
+        {
+            Span<byte> buffer = stackalloc byte[byteCount];
+            Encoding.UTF8.GetBytes(input, buffer);
+            WriteAll(handle, buffer);
+            return;
+        }
+
+        WriteAll(handle, Encoding.UTF8.GetBytes(input));
     }
 
     private static List<CommandOutputChunk> ReadChunks(SafeFileHandle handle, Stopwatch stopwatch, Encoding outputEncoding)
@@ -745,6 +768,7 @@ static partial class UnixPseudoTerminal
     private const int WaitPollMs = 100;
     private const int ReapPollMs = 10;
     private const int ReapDeadlineMs = 1_000;
+    private const int Utf8StackThreshold = 256;
     private const int EINTR = 4;
 
     public static IPtySessionBackend Start(
@@ -901,7 +925,7 @@ static partial class UnixPseudoTerminal
             if (_exited || _eofSent || _eofPending || input.Length == 0)
                 return;
 
-            WriteAll(_master, Encoding.UTF8.GetBytes(input));
+            WriteUtf8(_master, input);
             _inputWritten = true;
         }
 
@@ -1048,7 +1072,7 @@ static partial class UnixPseudoTerminal
             if (_eofSent || _exited)
                 return;
 
-            WriteAll(_master, [InputEot]);
+            WriteAll(_master, stackalloc byte[1] { InputEot });
             _eofPending = false;
             _eofSent = true;
         }
@@ -1095,17 +1119,47 @@ static partial class UnixPseudoTerminal
         owned.Clear();
     }
 
-    private static void WriteAll(int fd, byte[] bytes)
+    private static unsafe void WriteAll(int fd, ReadOnlySpan<byte> bytes)
     {
-        var offset = 0;
-        while (offset < bytes.Length)
+        if (bytes.IsEmpty)
+            return;
+
+        fixed (byte* ptr = bytes)
         {
-            var buffer = offset == 0 ? bytes : bytes[offset..];
-            var written = write(fd, buffer, (nuint)buffer.Length);
-            if (written <= 0)
-                throw new Win32Exception(Marshal.GetLastPInvokeError(), "write failed");
-            offset += written;
+            var offset = 0;
+            while (offset < bytes.Length)
+            {
+                var written = write(fd, ptr + offset, (nuint)(bytes.Length - offset));
+                if (written < 0)
+                {
+                    if (Marshal.GetLastPInvokeError() == EINTR)
+                        continue;
+                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "write failed");
+                }
+                if (written == 0)
+                    throw new IOException("write wrote 0 bytes");
+                offset += written;
+            }
         }
+    }
+
+    private static void WriteAll(int fd, byte[] bytes) => WriteAll(fd, bytes.AsSpan());
+
+    private static void WriteUtf8(int fd, string input)
+    {
+        var byteCount = Encoding.UTF8.GetByteCount(input);
+        if (byteCount == 0)
+            return;
+
+        if (byteCount <= Utf8StackThreshold)
+        {
+            Span<byte> buffer = stackalloc byte[byteCount];
+            Encoding.UTF8.GetBytes(input, buffer);
+            WriteAll(fd, buffer);
+            return;
+        }
+
+        WriteAll(fd, Encoding.UTF8.GetBytes(input));
     }
 
     private static List<CommandOutputChunk> ReadChunks(int fd, Stopwatch stopwatch, Encoding outputEncoding)
@@ -1218,7 +1272,7 @@ static partial class UnixPseudoTerminal
     private static partial int kill(int pid, int sig);
 
     [LibraryImport("libc", SetLastError = true)]
-    private static partial int write(int fd, byte[] buf, nuint count);
+    private static unsafe partial int write(int fd, byte* buf, nuint count);
 
     [LibraryImport("libc")]
     private static partial void _exit(int status);
