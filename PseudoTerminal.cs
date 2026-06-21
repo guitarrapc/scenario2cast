@@ -20,12 +20,23 @@ static class PtyDiagnostics
         var message = exception switch
         {
             Win32Exception win32 => $"{win32.Message} ({FormatOsError(win32.NativeErrorCode)})",
+            ExternalException external when external.ErrorCode != 0
+                => $"{external.Message} (HRESULT 0x{unchecked((uint)external.ErrorCode):X8})",
             _ => exception.Message,
         };
         Console.Error.WriteLine($"scenetake: pty error: {step} failed: {message}");
         Console.Error.WriteLine($"scenetake: pty context: shell={context.Shell} cols={context.Columns} rows={context.Rows}");
         if (!string.IsNullOrWhiteSpace(context.Cwd))
             Console.Error.WriteLine($"scenetake: pty context: cwd={context.Cwd}");
+    }
+
+    public static void ThrowForHResult(string step, int hr, PtyLaunchContext context)
+    {
+        Console.Error.WriteLine($"scenetake: pty error: {step} failed: HRESULT 0x{unchecked((uint)hr):X8}");
+        Console.Error.WriteLine($"scenetake: pty context: shell={context.Shell} cols={context.Columns} rows={context.Rows}");
+        if (!string.IsNullOrWhiteSpace(context.Cwd))
+            Console.Error.WriteLine($"scenetake: pty context: cwd={context.Cwd}");
+        Marshal.ThrowExceptionForHR(hr);
     }
 
     public static void VerboseLog(
@@ -102,12 +113,8 @@ static partial class WindowsPseudoTerminal
 
         var size = new COORD((short)width, (short)height);
         var hr = CreatePseudoConsole(size, inputRead, outputWrite, 0, out var hpc);
-        if (hr != 0)
-        {
-            var error = new Win32Exception(hr, "CreatePseudoConsole failed");
-            PtyDiagnostics.Fail("CreatePseudoConsole", error, context);
-            throw error;
-        }
+        if (hr < 0)
+            PtyDiagnostics.ThrowForHResult("CreatePseudoConsole", hr, context);
 
         inputRead.Dispose();
         outputWrite.Dispose();
