@@ -43,7 +43,7 @@ Redirecting `CreateProcess` stdin/stdout to anonymous pipes **without** ConPTY i
 
 1. Create input and output pipe pairs (`CreatePipe` with inheritable handles).
 2. Mark the **parent** ends non-inheritable (`SetHandleInformation` on `inputWrite` and `outputRead`).
-3. `CreatePseudoConsole(size, inputRead, outputWrite, …)` → `HPCON`. Returns **HRESULT** (not `GetLastError`); treat `hr < 0` as failure and use `Marshal.ThrowExceptionForHR(hr)` — do not pass the value to `Win32Exception` as a Win32 error code.
+3. `CreatePseudoConsole(size, inputRead, outputWrite, …)` → `SafePseudoConsoleHandle` (`HPCON`). Returns **HRESULT** (not `GetLastError`); treat `hr < 0` as failure and use `Marshal.ThrowExceptionForHR(hr)` — do not pass the value to `Win32Exception` as a Win32 error code.
 4. **Close** `inputRead` and `outputWrite` in the parent immediately (ConPTY holds its own duplicates).
 5. Build `STARTUPINFOEX` with `PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE`.
 6. `CreateProcessW` with `EXTENDED_STARTUPINFO_PRESENT` and `bInheritHandles = false`.
@@ -68,6 +68,7 @@ Without this, command output can appear on the parent's console instead of the c
 | Mistake | Symptom |
 |---|---|
 | Not closing ConPTY pipe ends after `CreatePseudoConsole` | Missing output, hung reads |
+| Letting `HPCON` leak as raw `IntPtr` | Double-close or missed `ClosePseudoConsole` on error paths |
 | Closing `inputWrite` before the child is ready | `STATUS_CONTROL_C_EXIT` (0xC000013A) |
 | `CREATE_NEW_CONSOLE` with ConPTY | Wrong console attachment |
 | Serial read while child blocks on full pipe buffer | Deadlock |

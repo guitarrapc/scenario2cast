@@ -112,10 +112,11 @@ static partial class WindowsPseudoTerminal
         using var outputReadHandle = outputRead;
 
         var size = new COORD((short)width, (short)height);
-        var hr = CreatePseudoConsole(size, inputRead, outputWrite, 0, out var hpc);
+        var hr = CreatePseudoConsole(size, inputRead, outputWrite, 0, out var pseudoConsoleHandle);
         if (hr < 0)
             PtyDiagnostics.ThrowForHResult("CreatePseudoConsole", hr, context);
 
+        var hpc = new SafePseudoConsoleHandle(pseudoConsoleHandle);
         inputRead.Dispose();
         outputWrite.Dispose();
 
@@ -132,7 +133,7 @@ static partial class WindowsPseudoTerminal
             if (!InitializeProcThreadAttributeList(attrList, 1, 0, ref attrListSize))
                 throw new Win32Exception(Marshal.GetLastPInvokeError(), "InitializeProcThreadAttributeList failed");
 
-            if (!UpdateProcThreadAttribute(attrList, 0, (IntPtr)PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE, hpc, (IntPtr)IntPtr.Size, IntPtr.Zero, IntPtr.Zero))
+            if (!UpdateProcThreadAttribute(attrList, 0, (IntPtr)PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE, hpc.DangerousGetHandle(), (IntPtr)IntPtr.Size, IntPtr.Zero, IntPtr.Zero))
                 throw new Win32Exception(Marshal.GetLastPInvokeError(), "UpdateProcThreadAttribute failed");
 
             var startupInfo = new STARTUPINFOEX
@@ -179,8 +180,7 @@ static partial class WindowsPseudoTerminal
             if (!GetExitCodeProcess(processInfo.hProcess, out var exitCode))
                 throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
 
-            ClosePseudoConsole(hpc);
-            hpc = IntPtr.Zero;
+            hpc.Dispose();
             var chunks = outputTask.GetAwaiter().GetResult();
             var totalChars = chunks.Sum(static x => x.Data.Length);
             if (verbose)
@@ -199,8 +199,7 @@ static partial class WindowsPseudoTerminal
                 DeleteProcThreadAttributeList(attrList);
                 Marshal.FreeHGlobal(attrList);
             }
-            if (hpc != IntPtr.Zero)
-                ClosePseudoConsole(hpc);
+            hpc.Dispose();
         }
     }
 
@@ -282,6 +281,19 @@ static partial class WindowsPseudoTerminal
         sb.Append('\\', backslashes * 2);
         sb.Append('"');
         return sb.ToString();
+    }
+
+    private sealed class SafePseudoConsoleHandle : SafeHandle
+    {
+        public SafePseudoConsoleHandle(IntPtr value) : base(IntPtr.Zero, ownsHandle: true) => SetHandle(value);
+
+        public override bool IsInvalid => handle == IntPtr.Zero;
+
+        protected override bool ReleaseHandle()
+        {
+            ClosePseudoConsole(handle);
+            return true;
+        }
     }
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
