@@ -78,7 +78,11 @@ public sealed class PseudoTerminalSession : IAsyncDisposable, IDisposable
 
     public void WriteInput(string input) => _backend.WriteInput(input);
 
-    /// <summary>Signals EOF on the PTY stdin (closes the input pipe / shuts down SHUT_WR).</summary>
+    /// <summary>Signals that no further stdin bytes will be sent.</summary>
+    /// <remarks>
+    /// Windows: closes the ConPTY input pipe write end (true EOF to the child).
+    /// Unix: writes EOT (0x04, Ctrl-D) to the PTY master — PTY fds are not sockets and cannot be half-closed with <c>shutdown(SHUT_WR)</c>.
+    /// </remarks>
     public void CloseInput() => _backend.CloseInput();
 
     public void Kill() => _backend.Kill();
@@ -687,7 +691,7 @@ static partial class WindowsPseudoTerminal
 
 static partial class UnixPseudoTerminal
 {
-    private const int ShutWrite = 1;
+    private const byte InputEot = 0x04;
     private const int WaitNoHang = 1;
     private const int SigKill = 9;
     private const int WaitPollMs = 100;
@@ -748,7 +752,7 @@ static partial class UnixPseudoTerminal
         private readonly string _fileName;
         private readonly string[] _arguments;
         private readonly PtyLaunchContext _context;
-        private bool _writeClosed;
+        private bool _inputEofSignaled;
         private bool _exited;
         private int _exitCode;
         private bool _disposed;
@@ -778,7 +782,7 @@ static partial class UnixPseudoTerminal
         public void WriteInput(string input)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _writeClosed || input.Length == 0)
+            if (_exited || _inputEofSignaled || input.Length == 0)
                 return;
 
             WriteAll(_master, Encoding.UTF8.GetBytes(input));
@@ -787,7 +791,7 @@ static partial class UnixPseudoTerminal
         public void CloseInput()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            CloseWriteSide();
+            SignalInputEof();
         }
 
         public void Kill()
@@ -819,7 +823,6 @@ static partial class UnixPseudoTerminal
                 {
                     _exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
                     _exited = true;
-                    CloseWriteSide();
                     break;
                 }
 
@@ -856,18 +859,17 @@ static partial class UnixPseudoTerminal
             if (!_exited)
                 Kill();
 
-            CloseWriteSide();
             DrainOutputTask();
             close(_master);
         }
 
-        private void CloseWriteSide()
+        private void SignalInputEof()
         {
-            if (_writeClosed)
+            if (_inputEofSignaled || _exited)
                 return;
 
-            shutdown(_master, ShutWrite);
-            _writeClosed = true;
+            WriteAll(_master, [InputEot]);
+            _inputEofSignaled = true;
         }
 
         private void DrainOutputTask()
@@ -1019,9 +1021,6 @@ static partial class UnixPseudoTerminal
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int close(int fd);
-
-    [LibraryImport("libc", SetLastError = true)]
-    private static partial int shutdown(int fd, int how);
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int waitpid(int pid, out int status, int options);

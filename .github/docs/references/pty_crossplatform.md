@@ -32,7 +32,7 @@ Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession`
 |---|---|
 | `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
 | `WriteInput(string)` | Writes UTF-8 bytes to the PTY stdin. Does not close stdin. |
-| `CloseInput()` | Signals EOF (`CloseHandle` on the ConPTY input pipe after flush; `shutdown(SHUT_WR)` on Unix). On Windows, a short post-start delay avoids closing before the child attaches to ConPTY stdin. |
+| `CloseInput()` | **Windows:** closes the ConPTY input pipe write end (true EOF). **Unix:** writes EOT (`0x04`, Ctrl-D) to the PTY master — see [Unix stdin EOF](#unix-stdin-eof) below. |
 | `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
 | `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
 | `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
@@ -116,9 +116,23 @@ execvp via UTF-8 argv built with NativeMemory (byte**)
 
 1. `close(slave)` after fork.
 2. Start background read on `master`.
-3. If one-shot stdin was provided, `CloseInput()` before waiting — children that block on stdin EOF (`cat`, `ReadToEnd`, etc.) otherwise hang.
-4. If no stdin bytes, leave the write side open until the child exits (TUI programs).
+3. If one-shot stdin was provided, `CloseInput()` before waiting — see [Unix stdin EOF](#unix-stdin-eof).
+4. If no stdin bytes, leave the master open for writes until the child exits (TUI programs).
 5. `waitpid`, then `close(master)` after the read task drains.
+
+### Unix stdin EOF
+
+PTY master fds are **not** sockets. `shutdown(master, SHUT_WR)` is invalid (`ENOTSOCK`) and must not be used. Closing the master fd ends both read and write, so the parent cannot keep draining output.
+
+| Approach | When | scenetake |
+|---|---|---|
+| **EOT (`0x04`, Ctrl-D)** | One-shot / line-discipline programs (`cat`, shells) | `CloseInput()` writes EOT to the master |
+| **Leave master open** | TUI / no stdin (`matrix`, `cmatrix`) | `Run(..., input: null)` — no `CloseInput()` |
+| **`Kill()` / `close(master)` on dispose** | Forced teardown | `Dispose()` kills if still running, then `close(master)` |
+
+EOT is a **terminal convention**, not a kernel EOF like closing a pipe. Raw-mode readers that never interpret `VEOF` may ignore it; that is acceptable for P0/P1 (shell-wrapped commands) but is a known limitation for future interactive (P3) work.
+
+**Windows vs Unix asymmetry:** `CloseInput()` closes the ConPTY input pipe on Windows (true EOF). On Unix it sends EOT only. Callers using `PseudoTerminalSession` should treat `CloseInput()` as “I am done sending input” rather than assuming identical kernel semantics.
 
 ### Platform differences
 
@@ -159,10 +173,11 @@ Phase 1 inherits the parent environment. Unix tools often expect `TERM=xterm-256
 PTY shutdown is timing-sensitive. General pattern:
 
 ```text
-1. Detect child exit (wait / WaitForSingleObject)
-2. Close PTY input to the child (pipe write end / shutdown SHUT_WR)
-3. Close ConPTY (Windows) or master fd (Unix) after draining output
-4. Release process handles
+1. Start background read on PTY output
+2. One-shot stdin: WriteInput → CloseInput (Windows: pipe close; Unix: EOT) before wait
+3. Detect child exit (wait / WaitForSingleObject)
+4. Close ConPTY (Windows) or master fd (Unix) after draining output
+5. Release process handles
 ```
 
 Exact ordering differs slightly by OS; avoid forcing one sequence if it causes hangs on one platform.
@@ -173,7 +188,7 @@ At minimum, separate:
 
 - **Output read** — background task reading the PTY while the child runs
 - **Process wait** — foreground wait for exit
-- **Input write** — optional; close when done to signal EOF
+- **Input write** — optional; `CloseInput()` when done (platform-specific EOF semantics)
 
 PTY is full-duplex; serializing read and wait on one thread risks deadlock when buffers fill.
 
