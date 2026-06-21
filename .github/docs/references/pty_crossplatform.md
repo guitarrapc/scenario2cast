@@ -10,10 +10,10 @@ scenetake uses a single OS-specific backend selected at runtime:
 
 | OS | API | Entry point |
 |---|---|---|
-| Windows | ConPTY (`CreatePseudoConsole`) | `WindowsPseudoTerminal.Run` |
-| Linux / macOS / FreeBSD | `openpty` + `fork` + `execvp` | `UnixPseudoTerminal.Run` |
+| Windows | ConPTY (`CreatePseudoConsole`) | `WindowsPseudoTerminal.Start` |
+| Linux / macOS / FreeBSD | `openpty` + `fork` + `execvp` | `UnixPseudoTerminal.Start` |
 
-Upper layers (`RunCommandCore`, cast generation) call `PseudoTerminal.Run` with the scenario shell executable and arguments. They receive a `CommandOutput` with timestamped `CommandOutputChunk` entries.
+Upper layers (`RunCommandCore`, cast generation) call `PseudoTerminal.Run` (or `Start` + `WaitForExitAsync` for library callers) with the scenario shell executable and arguments. They receive a `CommandOutput` with timestamped `CommandOutputChunk` entries.
 
 PTY capture and terminal display are separate:
 
@@ -23,6 +23,22 @@ PTY capture and terminal display are separate:
 | **Terminal display** | Parse ANSI/VT, screen buffer, SVG rendering | `Terminal.cs`, `Svg.cs` |
 
 Do not parse escape sequences inside the PTY backend. Do not spawn processes from the SVG renderer.
+
+## Session lifecycle and cancellation
+
+Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession` over blocking `Run` when they need timeouts or cooperative shutdown.
+
+| API | Behavior |
+|---|---|
+| `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
+| `WriteInput(string?)` | Writes optional stdin bytes. An empty/null input closes the PTY write side (Unix `shutdown(SHUT_WR)`; Windows closes the input pipe on exit). |
+| `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
+| `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
+| `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
+| `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. |
+| `PseudoTerminal.Run(..., CancellationToken)` | Convenience wrapper: `Start` → `WriteInput` → `WaitForExitAsync` → `Complete`. |
+
+The scenetake CLI uses `Run` with `CancellationToken.None` (no scenario-level timeout in Phase 1).
 
 ## Windows: ConPTY
 

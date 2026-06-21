@@ -14,6 +14,7 @@ var failures = 0;
 
 failures += Run("PtyEchoOutput", PtyEchoOutput);
 failures += Run("PtyTtyCheck", PtyTtyCheck);
+failures += Run("PtyCancellation", PtyCancellation);
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryResolvePwsh(out var pwshPath))
     failures += Run("PtyMatrixPwsh", () => PtyMatrixPwsh(pwshPath));
 else if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -89,6 +90,52 @@ static bool PtyEchoOutput()
     return unixOutput.ExitCode == 0
         && unixOutput.IsTerminalOutput
         && unixOutput.Stdout.Contains("pty-layer-echo", StringComparison.Ordinal);
+}
+
+static bool PtyCancellation()
+{
+    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var cmd = Environment.GetEnvironmentVariable("ComSpec") ?? @"C:\Windows\System32\cmd.exe";
+        using var session = PseudoTerminal.Start(
+            cmd,
+            ["/c", "ping -n 30 127.0.0.1 >nul"],
+            null,
+            40,
+            8,
+            TestContext("cmd"));
+        session.WriteInput(null);
+        try
+        {
+            session.WaitForExitAsync(cts.Token).GetAwaiter().GetResult();
+            return false;
+        }
+        catch (OperationCanceledException)
+        {
+            return !session.HasExited || session.ProcessId > 0;
+        }
+    }
+
+    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
+    using var unixSession = PseudoTerminal.Start(
+        shell,
+        ["-lc", "sleep 30"],
+        null,
+        40,
+        8,
+        TestContext(shell));
+    unixSession.WriteInput(null);
+    try
+    {
+        unixSession.WaitForExitAsync(cts.Token).GetAwaiter().GetResult();
+        return false;
+    }
+    catch (OperationCanceledException)
+    {
+        return unixSession.ProcessId > 0;
+    }
 }
 
 static bool PtyTtyCheck()

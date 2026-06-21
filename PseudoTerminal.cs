@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
-readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode, bool IsTerminalOutput = false, List<CommandOutputChunk>? TerminalChunks = null)
+public readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode, bool IsTerminalOutput = false, List<CommandOutputChunk>? TerminalChunks = null)
 {
     public List<CommandOutputChunk> Chunks => TerminalChunks ?? [];
 }
 
-readonly record struct CommandOutputChunk(double Time, string Data);
+public readonly record struct CommandOutputChunk(double Time, string Data);
 
-readonly record struct PtyLaunchContext(string Shell, int Columns, int Rows, string? Cwd);
+public readonly record struct PtyLaunchContext(string Shell, int Columns, int Rows, string? Cwd);
 
 static class PtyDiagnostics
 {
@@ -61,8 +61,81 @@ static class PtyDiagnostics
             : $"errno {code}";
 }
 
-static class PseudoTerminal
+/// <summary>
+/// A running pseudo-terminal child session. Dispose kills the child if it is still running,
+/// then releases ConPTY / pipe / process handles.
+/// </summary>
+public sealed class PseudoTerminalSession : IAsyncDisposable, IDisposable
 {
+    private readonly IPtySessionBackend _backend;
+    private bool _disposed;
+
+    internal PseudoTerminalSession(IPtySessionBackend backend) => _backend = backend;
+
+    public int ProcessId => _backend.ProcessId;
+
+    public bool HasExited => _backend.HasExited;
+
+    public void WriteInput(string? input) => _backend.WriteInput(input);
+
+    public void Kill() => _backend.Kill();
+
+    public Task<int> WaitForExitAsync(CancellationToken cancellationToken = default) =>
+        _backend.WaitForExitAsync(cancellationToken);
+
+    public CommandOutput Complete(bool verbose = false) => _backend.Complete(verbose);
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+        _backend.Dispose();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        Dispose();
+        return ValueTask.CompletedTask;
+    }
+}
+
+interface IPtySessionBackend : IDisposable
+{
+    int ProcessId { get; }
+    bool HasExited { get; }
+    void WriteInput(string? input);
+    void Kill();
+    Task<int> WaitForExitAsync(CancellationToken cancellationToken);
+    CommandOutput Complete(bool verbose);
+}
+
+public static class PseudoTerminal
+{
+    public static PseudoTerminalSession Start(
+        string fileName,
+        string[] arguments,
+        string? cwd,
+        int width,
+        int height,
+        PtyLaunchContext context)
+    {
+        width = Math.Clamp(width, 1, 512);
+        height = Math.Clamp(height, 1, 512);
+        context = context with { Columns = width, Rows = height };
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return new PseudoTerminalSession(WindowsPseudoTerminal.Start(fileName, arguments, cwd, width, height, context));
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+            RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+            RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            return new PseudoTerminalSession(UnixPseudoTerminal.Start(fileName, arguments, cwd, width, height, context));
+
+        throw new PlatformNotSupportedException("PTY recording is not supported on this operating system.");
+    }
+
     public static CommandOutput Run(
         string fileName,
         string[] arguments,
@@ -71,21 +144,13 @@ static class PseudoTerminal
         int height,
         PtyLaunchContext context,
         string? input = null,
-        bool verbose = false)
+        bool verbose = false,
+        CancellationToken cancellationToken = default)
     {
-        width = Math.Clamp(width, 1, 512);
-        height = Math.Clamp(height, 1, 512);
-        context = context with { Columns = width, Rows = height };
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return WindowsPseudoTerminal.Run(fileName, arguments, cwd, width, height, context, input, verbose);
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
-            RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-            return UnixPseudoTerminal.Run(fileName, arguments, cwd, width, height, context, input, verbose);
-
-        throw new PlatformNotSupportedException("PTY recording is not supported on this operating system.");
+        using var session = Start(fileName, arguments, cwd, width, height, context);
+        session.WriteInput(input);
+        session.WaitForExitAsync(cancellationToken).GetAwaiter().GetResult();
+        return session.Complete(verbose);
     }
 }
 
@@ -95,21 +160,22 @@ static partial class WindowsPseudoTerminal
     private const uint EXTENDED_STARTUPINFO_PRESENT = 0x00080000;
     private const uint STARTF_USESTDHANDLES = 0x00000100;
     private static readonly IntPtr InvalidHandleValue = new(-1);
-    private const uint INFINITE = 0xFFFFFFFF;
+    private const uint WaitObject0 = 0;
+    private const uint WaitTimeout = 0x00000102;
+    private const uint WaitFailed = 0xFFFFFFFF;
+    private const uint WaitPollMs = 100;
 
-    public static CommandOutput Run(
+    public static IPtySessionBackend Start(
         string fileName,
         string[] arguments,
         string? cwd,
         int width,
         int height,
-        PtyLaunchContext context,
-        string? input,
-        bool verbose)
+        PtyLaunchContext context)
     {
         CreateConPtyPipes(out var inputRead, out var inputWrite, out var outputRead, out var outputWrite);
-        using var inputWriteHandle = inputWrite;
-        using var outputReadHandle = outputRead;
+        var inputWriteHandle = inputWrite;
+        var outputReadHandle = outputRead;
 
         var size = new COORD((short)width, (short)height);
         var hr = CreatePseudoConsole(size, inputRead, outputWrite, 0, out var pseudoConsoleHandle);
@@ -172,23 +238,19 @@ static partial class WindowsPseudoTerminal
 
             var stopwatch = Stopwatch.StartNew();
             var outputTask = Task.Run(() => ReadChunks(outputReadHandle, stopwatch));
-            if (!string.IsNullOrEmpty(input))
-                WriteAll(inputWriteHandle, Encoding.UTF8.GetBytes(input));
-
-            WaitForSingleObject(processInfo.hProcess, INFINITE);
-            inputWriteHandle.Dispose();
-            if (!GetExitCodeProcess(processInfo.hProcess, out var exitCode))
-                throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
-
-            hpc.Dispose();
-            var chunks = outputTask.GetAwaiter().GetResult();
-            var totalChars = chunks.Sum(static x => x.Data.Length);
-            if (verbose)
-                PtyDiagnostics.VerboseLog(context, fileName, arguments, processInfo.dwProcessId, chunks.Count, totalChars);
-
-            return new CommandOutput(string.Concat(chunks.Select(static x => x.Data)), "", unchecked((int)exitCode), true, chunks);
+            return new WindowsPtySession(
+                inputWriteHandle,
+                outputReadHandle,
+                hpc,
+                attrList,
+                processInfo,
+                outputTask,
+                stopwatch,
+                fileName,
+                arguments,
+                context);
         }
-        finally
+        catch
         {
             if (processInfo.hThread != IntPtr.Zero)
                 CloseHandle(processInfo.hThread);
@@ -200,6 +262,184 @@ static partial class WindowsPseudoTerminal
                 Marshal.FreeHGlobal(attrList);
             }
             hpc.Dispose();
+            inputWriteHandle.Dispose();
+            outputReadHandle.Dispose();
+            throw;
+        }
+    }
+
+    private sealed class WindowsPtySession : IPtySessionBackend
+    {
+        private readonly SafeFileHandle _inputWriteHandle;
+        private readonly SafeFileHandle _outputReadHandle;
+        private readonly SafePseudoConsoleHandle _hpc;
+        private readonly IntPtr _attrList;
+        private readonly PROCESS_INFORMATION _processInfo;
+        private readonly Task<List<CommandOutputChunk>> _outputTask;
+        private readonly Stopwatch _stopwatch;
+        private readonly string _fileName;
+        private readonly string[] _arguments;
+        private readonly PtyLaunchContext _context;
+        private bool _inputClosed;
+        private bool _hpcClosed;
+        private bool _exited;
+        private int _exitCode;
+        private bool _disposed;
+
+        public WindowsPtySession(
+            SafeFileHandle inputWriteHandle,
+            SafeFileHandle outputReadHandle,
+            SafePseudoConsoleHandle hpc,
+            IntPtr attrList,
+            PROCESS_INFORMATION processInfo,
+            Task<List<CommandOutputChunk>> outputTask,
+            Stopwatch stopwatch,
+            string fileName,
+            string[] arguments,
+            PtyLaunchContext context)
+        {
+            _inputWriteHandle = inputWriteHandle;
+            _outputReadHandle = outputReadHandle;
+            _hpc = hpc;
+            _attrList = attrList;
+            _processInfo = processInfo;
+            _outputTask = outputTask;
+            _stopwatch = stopwatch;
+            _fileName = fileName;
+            _arguments = arguments;
+            _context = context;
+        }
+
+        public int ProcessId => _processInfo.dwProcessId;
+
+        public bool HasExited => _exited;
+
+        public void WriteInput(string? input)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_exited || _inputClosed)
+                return;
+
+            if (!string.IsNullOrEmpty(input))
+                WriteAll(_inputWriteHandle, Encoding.UTF8.GetBytes(input));
+        }
+
+        public void Kill()
+        {
+            if (_disposed || _exited || _processInfo.hProcess == IntPtr.Zero)
+                return;
+
+            TerminateProcess(_processInfo.hProcess, 1);
+        }
+
+        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_exited)
+                return _exitCode;
+
+            using var registration = cancellationToken.Register(static state =>
+            {
+                var session = (WindowsPtySession)state!;
+                session.Kill();
+            }, this);
+
+            while (!_exited)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var waitResult = WaitForSingleObject(_processInfo.hProcess, WaitPollMs);
+                if (waitResult == WaitObject0)
+                {
+                    if (!GetExitCodeProcess(_processInfo.hProcess, out var exitCode))
+                        throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
+
+                    _exitCode = unchecked((int)exitCode);
+                    _exited = true;
+                    CloseTransport();
+                    break;
+                }
+
+                if (waitResult == WaitTimeout)
+                {
+                    await Task.Yield();
+                    continue;
+                }
+
+                if (waitResult == WaitFailed)
+                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "WaitForSingleObject failed");
+
+                throw new InvalidOperationException($"WaitForSingleObject returned unexpected code 0x{waitResult:X8}");
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return _exitCode;
+        }
+
+        public CommandOutput Complete(bool verbose)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (!_exited)
+                throw new InvalidOperationException("The PTY child process has not exited yet.");
+
+            var chunks = _outputTask.GetAwaiter().GetResult();
+            var totalChars = chunks.Sum(static x => x.Data.Length);
+            if (verbose)
+                PtyDiagnostics.VerboseLog(_context, _fileName, _arguments, _processInfo.dwProcessId, chunks.Count, totalChars);
+
+            return new CommandOutput(string.Concat(chunks.Select(static x => x.Data)), "", _exitCode, true, chunks);
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            if (!_exited)
+                Kill();
+
+            CloseTransport();
+            DrainOutputTask();
+
+            if (_processInfo.hThread != IntPtr.Zero)
+                CloseHandle(_processInfo.hThread);
+            if (_processInfo.hProcess != IntPtr.Zero)
+                CloseHandle(_processInfo.hProcess);
+            if (_attrList != IntPtr.Zero)
+            {
+                DeleteProcThreadAttributeList(_attrList);
+                Marshal.FreeHGlobal(_attrList);
+            }
+
+            _inputWriteHandle.Dispose();
+            _outputReadHandle.Dispose();
+        }
+
+        private void CloseTransport()
+        {
+            if (!_inputClosed)
+            {
+                _inputWriteHandle.Dispose();
+                _inputClosed = true;
+            }
+
+            if (!_hpcClosed)
+            {
+                _hpc.Dispose();
+                _hpcClosed = true;
+            }
+        }
+
+        private void DrainOutputTask()
+        {
+            try
+            {
+                _ = _outputTask.GetAwaiter().GetResult();
+            }
+            catch
+            {
+            }
         }
     }
 
@@ -344,6 +584,10 @@ static partial class WindowsPseudoTerminal
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool CloseHandle(IntPtr hObject);
 
     [StructLayout(LayoutKind.Sequential)]
@@ -405,16 +649,17 @@ static partial class WindowsPseudoTerminal
 static partial class UnixPseudoTerminal
 {
     private const int ShutWrite = 1;
+    private const int WaitNoHang = 1;
+    private const int SigKill = 9;
+    private const int WaitPollMs = 100;
 
-    public static CommandOutput Run(
+    public static IPtySessionBackend Start(
         string fileName,
         string[] arguments,
         string? cwd,
         int width,
         int height,
-        PtyLaunchContext context,
-        string? input,
-        bool verbose)
+        PtyLaunchContext context)
     {
         var winsize = new Winsize { ws_col = (ushort)width, ws_row = (ushort)height };
         if (openpty(out var master, out var slave, IntPtr.Zero, IntPtr.Zero, ref winsize) != 0)
@@ -452,20 +697,147 @@ static partial class UnixPseudoTerminal
         close(slave);
         var stopwatch = Stopwatch.StartNew();
         var outputTask = Task.Run(() => ReadChunks(master, stopwatch));
-        if (!string.IsNullOrEmpty(input))
-            WriteAll(master, Encoding.UTF8.GetBytes(input));
-        else
-            shutdown(master, ShutWrite);
+        return new UnixPtySession(master, pid, outputTask, stopwatch, fileName, arguments, context);
+    }
 
-        waitpid(pid, out var status, 0);
-        var output = outputTask.GetAwaiter().GetResult();
-        close(master);
-        var exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
-        var totalChars = output.Sum(static x => x.Data.Length);
-        if (verbose)
-            PtyDiagnostics.VerboseLog(context, fileName, arguments, pid, output.Count, totalChars);
+    private sealed class UnixPtySession : IPtySessionBackend
+    {
+        private readonly int _master;
+        private readonly int _pid;
+        private readonly Task<List<CommandOutputChunk>> _outputTask;
+        private readonly Stopwatch _stopwatch;
+        private readonly string _fileName;
+        private readonly string[] _arguments;
+        private readonly PtyLaunchContext _context;
+        private bool _writeClosed;
+        private bool _exited;
+        private int _exitCode;
+        private bool _disposed;
 
-        return new CommandOutput(string.Concat(output.Select(static x => x.Data)), "", exitCode, true, output);
+        public UnixPtySession(
+            int master,
+            int pid,
+            Task<List<CommandOutputChunk>> outputTask,
+            Stopwatch stopwatch,
+            string fileName,
+            string[] arguments,
+            PtyLaunchContext context)
+        {
+            _master = master;
+            _pid = pid;
+            _outputTask = outputTask;
+            _stopwatch = stopwatch;
+            _fileName = fileName;
+            _arguments = arguments;
+            _context = context;
+        }
+
+        public int ProcessId => _pid;
+
+        public bool HasExited => _exited;
+
+        public void WriteInput(string? input)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_exited || _writeClosed)
+                return;
+
+            if (!string.IsNullOrEmpty(input))
+                WriteAll(_master, Encoding.UTF8.GetBytes(input));
+            else
+                CloseWriteSide();
+        }
+
+        public void Kill()
+        {
+            if (_disposed || _exited)
+                return;
+
+            kill(_pid, SigKill);
+        }
+
+        public async Task<int> WaitForExitAsync(CancellationToken cancellationToken)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_exited)
+                return _exitCode;
+
+            using var registration = cancellationToken.Register(static state =>
+            {
+                var session = (UnixPtySession)state!;
+                session.Kill();
+            }, this);
+
+            while (!_exited)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var result = waitpid(_pid, out var status, WaitNoHang);
+                if (result == _pid)
+                {
+                    _exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+                    _exited = true;
+                    CloseWriteSide();
+                    break;
+                }
+
+                if (result < 0)
+                    throw new Win32Exception(Marshal.GetLastPInvokeError(), "waitpid failed");
+
+                await Task.Delay(WaitPollMs, cancellationToken);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return _exitCode;
+        }
+
+        public CommandOutput Complete(bool verbose)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (!_exited)
+                throw new InvalidOperationException("The PTY child process has not exited yet.");
+
+            var output = _outputTask.GetAwaiter().GetResult();
+            var totalChars = output.Sum(static x => x.Data.Length);
+            if (verbose)
+                PtyDiagnostics.VerboseLog(_context, _fileName, _arguments, _pid, output.Count, totalChars);
+
+            return new CommandOutput(string.Concat(output.Select(static x => x.Data)), "", _exitCode, true, output);
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            if (!_exited)
+                Kill();
+
+            CloseWriteSide();
+            DrainOutputTask();
+            close(_master);
+        }
+
+        private void CloseWriteSide()
+        {
+            if (_writeClosed)
+                return;
+
+            shutdown(_master, ShutWrite);
+            _writeClosed = true;
+        }
+
+        private void DrainOutputTask()
+        {
+            try
+            {
+                _ = _outputTask.GetAwaiter().GetResult();
+            }
+            catch
+            {
+            }
+        }
     }
 
     private static unsafe void ExecvpOrExit(string fileName, string[] arguments)
@@ -568,6 +940,9 @@ static partial class UnixPseudoTerminal
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int waitpid(int pid, out int status, int options);
+
+    [LibraryImport("libc", SetLastError = true)]
+    private static partial int kill(int pid, int sig);
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int write(int fd, byte[] buf, nuint count);
