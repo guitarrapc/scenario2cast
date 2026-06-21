@@ -1,22 +1,78 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
+readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode, bool IsTerminalOutput = false, List<CommandOutputChunk>? TerminalChunks = null)
+{
+    public List<CommandOutputChunk> Chunks => TerminalChunks ?? [];
+}
+
+readonly record struct CommandOutputChunk(double Time, string Data);
+
+readonly record struct PtyLaunchContext(string Shell, int Columns, int Rows, string? Cwd);
+
+static class PtyDiagnostics
+{
+    public static void Fail(string step, Exception exception, PtyLaunchContext context)
+    {
+        var message = exception switch
+        {
+            Win32Exception win32 => $"{win32.Message} ({FormatOsError(win32.NativeErrorCode)})",
+            _ => exception.Message,
+        };
+        Console.Error.WriteLine($"scenetake: pty error: {step} failed: {message}");
+        Console.Error.WriteLine($"scenetake: pty context: shell={context.Shell} cols={context.Columns} rows={context.Rows}");
+        if (!string.IsNullOrWhiteSpace(context.Cwd))
+            Console.Error.WriteLine($"scenetake: pty context: cwd={context.Cwd}");
+    }
+
+    public static void VerboseLog(
+        PtyLaunchContext context,
+        string fileName,
+        string[] arguments,
+        int processId,
+        int chunkCount,
+        int totalChars)
+    {
+        Console.Error.WriteLine($"scenetake: pty verbose: shell={context.Shell} cols={context.Columns} rows={context.Rows}");
+        if (!string.IsNullOrWhiteSpace(context.Cwd))
+            Console.Error.WriteLine($"scenetake: pty verbose: cwd={context.Cwd}");
+        Console.Error.WriteLine($"scenetake: pty verbose: executable={fileName}");
+        Console.Error.WriteLine($"scenetake: pty verbose: arguments={string.Join(' ', arguments)}");
+        Console.Error.WriteLine($"scenetake: pty verbose: pid={processId} chunks={chunkCount} chars={totalChars}");
+    }
+
+    private static string FormatOsError(int code) =>
+        RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? $"Win32 {code}"
+            : $"errno {code}";
+}
+
 static class PseudoTerminal
 {
-    public static CommandOutput Run(string fileName, string[] arguments, string? cwd, int width, int height)
+    public static CommandOutput Run(
+        string fileName,
+        string[] arguments,
+        string? cwd,
+        int width,
+        int height,
+        PtyLaunchContext context,
+        string? input = null,
+        bool verbose = false)
     {
         width = Math.Clamp(width, 1, 512);
         height = Math.Clamp(height, 1, 512);
+        context = context with { Columns = width, Rows = height };
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return WindowsPseudoTerminal.Run(fileName, arguments, cwd, width, height);
+            return WindowsPseudoTerminal.Run(fileName, arguments, cwd, width, height, context, input, verbose);
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-            return UnixPseudoTerminal.Run(fileName, arguments, cwd, width, height);
+            return UnixPseudoTerminal.Run(fileName, arguments, cwd, width, height, context, input, verbose);
 
         throw new PlatformNotSupportedException("PTY recording is not supported on this operating system.");
     }
@@ -25,25 +81,36 @@ static class PseudoTerminal
 static class WindowsPseudoTerminal
 {
     private const int PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE = 0x00020016;
-    private const int STARTF_USESTDHANDLES = 0x00000100;
-    private const uint HANDLE_FLAG_INHERIT = 0x00000001;
     private const uint EXTENDED_STARTUPINFO_PRESENT = 0x00080000;
+    private const uint STARTF_USESTDHANDLES = 0x00000100;
+    private static readonly IntPtr InvalidHandleValue = new(-1);
     private const uint INFINITE = 0xFFFFFFFF;
 
-    public static CommandOutput Run(string fileName, string[] arguments, string? cwd, int width, int height)
+    public static CommandOutput Run(
+        string fileName,
+        string[] arguments,
+        string? cwd,
+        int width,
+        int height,
+        PtyLaunchContext context,
+        string? input,
+        bool verbose)
     {
-        CreatePipePair(out var inputRead, out var inputWrite, inheritRead: true, inheritWrite: false);
-        CreatePipePair(out var outputRead, out var outputWrite, inheritRead: false, inheritWrite: true);
-        using var inputReadHandle = inputRead;
+        CreateConPtyPipes(out var inputRead, out var inputWrite, out var outputRead, out var outputWrite);
         using var inputWriteHandle = inputWrite;
         using var outputReadHandle = outputRead;
-        using var outputWriteHandle = outputWrite;
 
         var size = new COORD((short)width, (short)height);
-        var hpc = IntPtr.Zero;
-        var hr = CreatePseudoConsole(size, inputReadHandle.DangerousGetHandle(), outputWriteHandle.DangerousGetHandle(), 0, out hpc);
+        var hr = CreatePseudoConsole(size, inputRead, outputWrite, 0, out var hpc);
         if (hr != 0)
-            throw new Win32Exception(hr, "CreatePseudoConsole failed");
+        {
+            var error = new Win32Exception(hr, "CreatePseudoConsole failed");
+            PtyDiagnostics.Fail("CreatePseudoConsole", error, context);
+            throw error;
+        }
+
+        inputRead.Dispose();
+        outputWrite.Dispose();
 
         var attrList = IntPtr.Zero;
         var processInfo = new PROCESS_INFORMATION();
@@ -57,40 +124,58 @@ static class WindowsPseudoTerminal
             if (!UpdateProcThreadAttribute(attrList, 0, (IntPtr)PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE, hpc, (IntPtr)IntPtr.Size, IntPtr.Zero, IntPtr.Zero))
                 throw new Win32Exception(Marshal.GetLastPInvokeError(), "UpdateProcThreadAttribute failed");
 
-            var startupInfo = new STARTUPINFOEX();
-            startupInfo.StartupInfo.cb = Marshal.SizeOf<STARTUPINFOEX>();
-            startupInfo.StartupInfo.dwFlags = STARTF_USESTDHANDLES;
-            startupInfo.StartupInfo.hStdInput = inputReadHandle.DangerousGetHandle();
-            startupInfo.StartupInfo.hStdOutput = outputWriteHandle.DangerousGetHandle();
-            startupInfo.StartupInfo.hStdError = outputWriteHandle.DangerousGetHandle();
-            startupInfo.lpAttributeList = attrList;
+            var startupInfo = new STARTUPINFOEX
+            {
+                StartupInfo =
+                {
+                    cb = Marshal.SizeOf<STARTUPINFOEX>(),
+                    dwFlags = (int)STARTF_USESTDHANDLES,
+                    hStdInput = InvalidHandleValue,
+                    hStdOutput = InvalidHandleValue,
+                    hStdError = InvalidHandleValue,
+                },
+                lpAttributeList = attrList,
+            };
 
-            var commandLine = QuoteCommandLine(fileName, arguments);
+            var commandLineText = arguments.Length == 0
+                ? QuoteArg(fileName)
+                : QuoteArg(fileName) + " " + string.Join(" ", arguments.Select(QuoteArg));
+            var commandLine = new StringBuilder(commandLineText, commandLineText.Length + 1);
             if (!CreateProcessW(
                     null,
                     commandLine,
                     IntPtr.Zero,
                     IntPtr.Zero,
-                    true,
+                    false,
                     EXTENDED_STARTUPINFO_PRESENT,
                     IntPtr.Zero,
                     string.IsNullOrWhiteSpace(cwd) ? null : cwd,
                     ref startupInfo,
                     out processInfo))
-                throw new Win32Exception(Marshal.GetLastPInvokeError(), "CreateProcess failed");
-            inputReadHandle.Dispose();
-            outputWriteHandle.Dispose();
-            inputWriteHandle.Dispose();
+            {
+                var error = new Win32Exception(Marshal.GetLastPInvokeError(), "CreateProcess failed");
+                PtyDiagnostics.Fail("CreateProcess", error, context);
+                throw error;
+            }
 
-            var outputTask = Task.Run(() => ReadAll(outputReadHandle));
+            var stopwatch = Stopwatch.StartNew();
+            var outputTask = Task.Run(() => ReadChunks(outputReadHandle, stopwatch));
+            if (!string.IsNullOrEmpty(input))
+                WriteAll(inputWriteHandle, Encoding.UTF8.GetBytes(input));
+
             WaitForSingleObject(processInfo.hProcess, INFINITE);
+            inputWriteHandle.Dispose();
             if (!GetExitCodeProcess(processInfo.hProcess, out var exitCode))
                 throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
+
             ClosePseudoConsole(hpc);
             hpc = IntPtr.Zero;
-            var output = outputTask.GetAwaiter().GetResult();
+            var chunks = outputTask.GetAwaiter().GetResult();
+            var totalChars = chunks.Sum(static x => x.Data.Length);
+            if (verbose)
+                PtyDiagnostics.VerboseLog(context, fileName, arguments, processInfo.dwProcessId, chunks.Count, totalChars);
 
-            return new CommandOutput(output, "", unchecked((int)exitCode), true);
+            return new CommandOutput(string.Concat(chunks.Select(static x => x.Data)), "", unchecked((int)exitCode), true, chunks);
         }
         finally
         {
@@ -108,34 +193,40 @@ static class WindowsPseudoTerminal
         }
     }
 
-    private static string ReadAll(SafeFileHandle handle)
+    private static void WriteAll(SafeFileHandle handle, byte[] bytes)
     {
-        using var stream = new FileStream(handle, FileAccess.Read, 4096, false);
-        using var reader = new StreamReader(stream, Console.OutputEncoding, detectEncodingFromByteOrderMarks: false);
-        return reader.ReadToEnd();
+        using var stream = new FileStream(handle, FileAccess.Write, 4096, false);
+        stream.Write(bytes, 0, bytes.Length);
+        stream.Flush();
     }
 
-    private static void CreatePipePair(out SafeFileHandle read, out SafeFileHandle write, bool inheritRead, bool inheritWrite)
+    private static List<CommandOutputChunk> ReadChunks(SafeFileHandle handle, Stopwatch stopwatch)
+    {
+        using var stream = new FileStream(handle, FileAccess.Read, 4096, false);
+        return TerminalChunkReader.Read(stream, stopwatch);
+    }
+
+    private const uint HANDLE_FLAG_INHERIT = 0x00000001;
+
+    private static void CreateConPtyPipes(
+        out SafeFileHandle inputRead,
+        out SafeFileHandle inputWrite,
+        out SafeFileHandle outputRead,
+        out SafeFileHandle outputWrite)
     {
         var securityAttributes = new SECURITY_ATTRIBUTES
         {
             nLength = Marshal.SizeOf<SECURITY_ATTRIBUTES>(),
             bInheritHandle = true,
         };
-        if (!CreatePipe(out read, out write, ref securityAttributes, 0))
+        if (!CreatePipe(out inputRead, out inputWrite, ref securityAttributes, 0))
             throw new Win32Exception(Marshal.GetLastPInvokeError(), "CreatePipe failed");
-        if (!inheritRead && !SetHandleInformation(read, HANDLE_FLAG_INHERIT, 0))
+        if (!CreatePipe(out outputRead, out outputWrite, ref securityAttributes, 0))
+            throw new Win32Exception(Marshal.GetLastPInvokeError(), "CreatePipe failed");
+        if (!SetHandleInformation(inputWrite, HANDLE_FLAG_INHERIT, 0))
             throw new Win32Exception(Marshal.GetLastPInvokeError(), "SetHandleInformation failed");
-        if (!inheritWrite && !SetHandleInformation(write, HANDLE_FLAG_INHERIT, 0))
+        if (!SetHandleInformation(outputRead, HANDLE_FLAG_INHERIT, 0))
             throw new Win32Exception(Marshal.GetLastPInvokeError(), "SetHandleInformation failed");
-    }
-
-    private static string QuoteCommandLine(string fileName, string[] arguments)
-    {
-        var parts = new string[arguments.Length + 1];
-        parts[0] = fileName;
-        Array.Copy(arguments, 0, parts, 1, arguments.Length);
-        return string.Join(" ", parts.Select(QuoteArg));
     }
 
     private static string QuoteArg(string arg)
@@ -179,8 +270,8 @@ static class WindowsPseudoTerminal
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool SetHandleInformation(SafeFileHandle hObject, uint dwMask, uint dwFlags);
 
-    [DllImport("kernel32.dll")]
-    private static extern int CreatePseudoConsole(COORD size, IntPtr hInput, IntPtr hOutput, uint dwFlags, out IntPtr phPC);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern int CreatePseudoConsole(COORD size, SafeFileHandle hInput, SafeFileHandle hOutput, uint dwFlags, out IntPtr phPC);
 
     [DllImport("kernel32.dll")]
     private static extern void ClosePseudoConsole(IntPtr hPC);
@@ -197,7 +288,7 @@ static class WindowsPseudoTerminal
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern bool CreateProcessW(
         string? lpApplicationName,
-        string lpCommandLine,
+        StringBuilder lpCommandLine,
         IntPtr lpProcessAttributes,
         IntPtr lpThreadAttributes,
         bool bInheritHandles,
@@ -274,15 +365,35 @@ static class WindowsPseudoTerminal
 
 static class UnixPseudoTerminal
 {
-    public static CommandOutput Run(string fileName, string[] arguments, string? cwd, int width, int height)
+    private const int ShutWrite = 1;
+
+    public static CommandOutput Run(
+        string fileName,
+        string[] arguments,
+        string? cwd,
+        int width,
+        int height,
+        PtyLaunchContext context,
+        string? input,
+        bool verbose)
     {
         var winsize = new Winsize { ws_col = (ushort)width, ws_row = (ushort)height };
         if (openpty(out var master, out var slave, IntPtr.Zero, IntPtr.Zero, ref winsize) != 0)
-            throw new Win32Exception(Marshal.GetLastPInvokeError(), "openpty failed");
+        {
+            var error = new Win32Exception(Marshal.GetLastPInvokeError(), "openpty failed");
+            PtyDiagnostics.Fail("openpty", error, context);
+            throw error;
+        }
 
         var pid = fork();
         if (pid < 0)
-            throw new Win32Exception(Marshal.GetLastPInvokeError(), "fork failed");
+        {
+            close(master);
+            close(slave);
+            var error = new Win32Exception(Marshal.GetLastPInvokeError(), "fork failed");
+            PtyDiagnostics.Fail("fork", error, context);
+            throw error;
+        }
 
         if (pid == 0)
         {
@@ -301,11 +412,22 @@ static class UnixPseudoTerminal
         }
 
         close(slave);
-        var output = ReadAll(master);
-        close(master);
+        var stopwatch = Stopwatch.StartNew();
+        var outputTask = Task.Run(() => ReadChunks(master, stopwatch));
+        if (!string.IsNullOrEmpty(input))
+            WriteAll(master, Encoding.UTF8.GetBytes(input));
+        else
+            shutdown(master, ShutWrite);
+
         waitpid(pid, out var status, 0);
+        var output = outputTask.GetAwaiter().GetResult();
+        close(master);
         var exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
-        return new CommandOutput(output, "", exitCode, true);
+        var totalChars = output.Sum(static x => x.Data.Length);
+        if (verbose)
+            PtyDiagnostics.VerboseLog(context, fileName, arguments, pid, output.Count, totalChars);
+
+        return new CommandOutput(string.Concat(output.Select(static x => x.Data)), "", exitCode, true, output);
     }
 
     private static string[] BuildArgv(string fileName, string[] arguments)
@@ -317,12 +439,24 @@ static class UnixPseudoTerminal
         return argv;
     }
 
-    private static string ReadAll(int fd)
+    private static void WriteAll(int fd, byte[] bytes)
+    {
+        var offset = 0;
+        while (offset < bytes.Length)
+        {
+            var buffer = offset == 0 ? bytes : bytes[offset..];
+            var written = write(fd, buffer, (nuint)buffer.Length);
+            if (written <= 0)
+                throw new Win32Exception(Marshal.GetLastPInvokeError(), "write failed");
+            offset += written;
+        }
+    }
+
+    private static List<CommandOutputChunk> ReadChunks(int fd, Stopwatch stopwatch)
     {
         using var handle = new SafeFileHandle((IntPtr)fd, ownsHandle: false);
         using var stream = new FileStream(handle, FileAccess.Read, 4096, false);
-        using var reader = new StreamReader(stream, Console.OutputEncoding, detectEncodingFromByteOrderMarks: false);
-        return reader.ReadToEnd();
+        return TerminalChunkReader.Read(stream, stopwatch);
     }
 
     private static bool WIFEXITED(int status) => (status & 0x7f) == 0;
@@ -355,7 +489,13 @@ static class UnixPseudoTerminal
     private static extern int close(int fd);
 
     [DllImport("libc", SetLastError = true)]
+    private static extern int shutdown(int fd, int how);
+
+    [DllImport("libc", SetLastError = true)]
     private static extern int waitpid(int pid, out int status, int options);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int write(int fd, byte[] buf, nuint count);
 
     [DllImport("libc")]
     private static extern void _exit(int status);
@@ -367,5 +507,39 @@ static class UnixPseudoTerminal
         public ushort ws_col;
         public ushort ws_xpixel;
         public ushort ws_ypixel;
+    }
+}
+
+static class TerminalChunkReader
+{
+    public static List<CommandOutputChunk> Read(Stream stream, Stopwatch stopwatch, Action<long>? onChunk = null)
+    {
+        var chunks = new List<CommandOutputChunk>();
+        var bytes = new byte[4096];
+        var chars = new char[Console.OutputEncoding.GetMaxCharCount(bytes.Length)];
+        var decoder = Console.OutputEncoding.GetDecoder();
+
+        while (true)
+        {
+            var read = stream.Read(bytes, 0, bytes.Length);
+            if (read <= 0)
+                break;
+
+            var charCount = decoder.GetChars(bytes, 0, read, chars, 0, flush: false);
+            if (charCount > 0)
+            {
+                onChunk?.Invoke(stopwatch.ElapsedMilliseconds);
+                chunks.Add(new CommandOutputChunk(stopwatch.Elapsed.TotalSeconds, new string(chars, 0, charCount)));
+            }
+        }
+
+        var trailing = decoder.GetChars(Array.Empty<byte>(), 0, 0, chars, 0, flush: true);
+        if (trailing > 0)
+        {
+            onChunk?.Invoke(stopwatch.ElapsedMilliseconds);
+            chunks.Add(new CommandOutputChunk(stopwatch.Elapsed.TotalSeconds, new string(chars, 0, trailing)));
+        }
+
+        return chunks;
     }
 }

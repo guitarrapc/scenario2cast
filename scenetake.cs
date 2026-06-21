@@ -196,7 +196,7 @@ if (verbose)
     PrintPhase("steps");
 
 Console.Error.WriteLine("Generating cast...");
-var events = Generate(scenario, shell, deterministicSeed);
+var events = Generate(scenario, shell, deterministicSeed, verbose);
 
 WriteCast(scenario, events, outputPath, shell, deterministicTimestamp, renderSettings);
 
@@ -711,7 +711,7 @@ static Scenario ParseScenario(string yaml)
     return YamlSerializer.Deserialize<Scenario>(bytes) ?? new Scenario();
 }
 
-static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int deterministicSeed)
+static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int deterministicSeed, bool verbose)
 {
     var settings = scenario.Settings ?? new ScenarioSettings();
     var prompt    = settings.Prompt ?? DefaultPrompt;
@@ -738,6 +738,7 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
         var cmdExecutionDuration = GetDouble(command.Extra, defaultExecutionDuration, "execution-duration");
         var cmdStderrStyle = GetOverrideStyle(command.Extra, "stderr-color", defaultStderrStyle, "stderr-color", command.Cmd);
         var hasRunHighlight = TryGetStepStyle(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightStyle);
+        var usePty = GetBool(command.Extra, false, "pty");
 
         if (events.Count == 0)
             t += preDelay;
@@ -750,39 +751,57 @@ static List<CastEvent> Generate(Scenario scenario, ShellLaunch shell, int determ
             t += 0.05;
         }
 
-        events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
-        t += 0.05;
-
-        if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-            events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
-
-        foreach (var ch in command.Cmd)
+        if (!usePty)
         {
-            events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
-            var delay = cmdSpeed + rng.NextDouble() * 2 * cmdJitter - cmdJitter;
-            t += Math.Max(delay, 0.005);
+            events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
+            t += 0.05;
+
+            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+                events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
+
+            foreach (var ch in command.Cmd)
+            {
+                events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
+                var delay = cmdSpeed + rng.NextDouble() * 2 * cmdJitter - cmdJitter;
+                t += Math.Max(delay, 0.005);
+            }
+
+            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+                events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
+
+            events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
+            t += 0.15;
         }
 
-        if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-            events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
-
-        events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
-        t += 0.15;
-
         Console.Error.WriteLine($"  running: {command.Cmd}");
-        var usePty = GetBool(command.Extra, false, "pty");
-        var execution = RunCommandCore(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24);
-        t += cmdExecutionDuration;
-        var mergedOutput = execution.IsTerminalOutput
-            ? execution.Stdout
-            : MergeCommandOutput(execution, cmdStderrStyle);
-
-        if (!string.IsNullOrEmpty(mergedOutput))
+        var execution = RunCommandCore(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24, verbose);
+        if (execution.IsTerminalOutput)
         {
-            var output = GetHighlights(command.Extra, command.Cmd) is { } highlights
-                ? ApplyHighlights(mergedOutput, highlights, command.Cmd)
-                : mergedOutput;
-            events.Add(CastEvent.Output(Math.Round(t, 6), NormalizeNewlines(output)));
+            var commandStart = t;
+            foreach (var chunk in execution.Chunks)
+            {
+                if (string.IsNullOrEmpty(chunk.Data))
+                    continue;
+
+                events.Add(CastEvent.Output(Math.Round(commandStart + chunk.Time, 6), NormalizeNewlines(chunk.Data)));
+            }
+
+            t = execution.Chunks.Count > 0
+                ? Math.Max(t + cmdExecutionDuration, commandStart + execution.Chunks[^1].Time)
+                : t + cmdExecutionDuration;
+        }
+        else
+        {
+            t += cmdExecutionDuration;
+            var mergedOutput = MergeCommandOutput(execution, cmdStderrStyle);
+
+            if (!string.IsNullOrEmpty(mergedOutput))
+            {
+                var output = GetHighlights(command.Extra, command.Cmd) is { } highlights
+                    ? ApplyHighlights(mergedOutput, highlights, command.Cmd)
+                    : mergedOutput;
+                events.Add(CastEvent.Output(Math.Round(t, 6), NormalizeNewlines(output)));
+            }
         }
 
         t += cmdPost;
@@ -836,10 +855,20 @@ static CommandEntry ParseCommand(object? item)
 static CommandOutput RunCommand(string cmd, string? cwd, ShellLaunch shell) =>
     RunCommandCore(cmd, cwd, shell, false, 120, 24);
 
-static CommandOutput RunCommandCore(string cmd, string? cwd, ShellLaunch shell, bool usePty, int width, int height)
+static CommandOutput RunCommandCore(string cmd, string? cwd, ShellLaunch shell, bool usePty, int width, int height, bool verbose = false)
 {
     if (usePty)
-        return PseudoTerminal.Run(shell.FileName, BuildPtyShellArguments(shell, cmd), cwd, width, height);
+    {
+        var context = new PtyLaunchContext(shell.DisplayName, width, height, cwd);
+        return PseudoTerminal.Run(
+            shell.FileName,
+            BuildPtyShellArguments(shell, cmd),
+            cwd,
+            width,
+            height,
+            context,
+            verbose: verbose);
+    }
 
     var psi = new ProcessStartInfo(shell.FileName)
     {
@@ -864,7 +893,10 @@ static CommandOutput RunCommandCore(string cmd, string? cwd, ShellLaunch shell, 
 static string[] BuildPtyShellArguments(ShellLaunch shell, string cmd)
 {
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && IsPowerShellName(shell.DisplayName))
-        return [.. shell.Arguments.TakeWhile(static x => !string.Equals(x, "-Command", StringComparison.OrdinalIgnoreCase)), "-NonInteractive", "-Command", cmd];
+        return [.. shell.Arguments.TakeWhile(static x => !string.Equals(x, "-Command", StringComparison.OrdinalIgnoreCase)), "-Command", cmd];
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && string.Equals(shell.DisplayName, "cmd", StringComparison.OrdinalIgnoreCase))
+        return ["/c", cmd];
 
     return [.. shell.Arguments, cmd];
 }
@@ -1974,6 +2006,22 @@ static ShellLaunch ResolveWindowsShell(string? requested)
         throw new InvalidOperationException($"Shell '{requested}' was requested, but '{exeName}' could not be found on Windows.");
     }
 
+    if (string.Equals(NormalizeWindowsShellName(requested), "cmd", StringComparison.OrdinalIgnoreCase))
+    {
+        if (TryResolveExecutableOnWindows("cmd", out var resolved))
+            return new ShellLaunch(resolved, ["/c"], resolved, "cmd");
+
+        throw new InvalidOperationException("Shell 'cmd' was requested, but cmd.exe could not be found on Windows.");
+    }
+
+    if (string.Equals(NormalizeWindowsShellName(requested), "cmd", StringComparison.OrdinalIgnoreCase))
+    {
+        if (TryResolveExecutableOnWindows("cmd", out var resolved))
+            return new ShellLaunch(resolved, ["/c"], resolved, "cmd");
+
+        throw new InvalidOperationException("Shell 'cmd' was requested, but cmd.exe could not be found on Windows.");
+    }
+
     if (string.Equals(NormalizeWindowsShellName(requested), "bash", StringComparison.OrdinalIgnoreCase))
     {
         if (TryResolveWindowsBash(out var resolved))
@@ -2202,8 +2250,6 @@ enum OutputFormat
     Cast,
     Svg,
 }
-
-readonly record struct CommandOutput(string Stdout, string Stderr, int ExitCode, bool IsTerminalOutput = false);
 
 static class TypingChars
 {

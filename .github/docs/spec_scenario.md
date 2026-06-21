@@ -106,11 +106,9 @@ Map-form steps recognize:
 | `run-highlight` | no | Style for typed command text |
 | `highlight` | no | List of `{ color, at }` for command output |
 | `stderr-color` | no | Override `settings.stderr-color` for this step |
-| `pty` | no | Run the command in a pseudo-terminal sized from `width` / `height`. Use for terminal UI commands that require a TTY. |
+| `pty` | no | Run the command in a pseudo-terminal. Behavior: [spec_pty.md](spec_pty.md) |
 
 Coloring value formats, range grammar, and validation: [spec_highlight.md](spec_highlight.md).
-
-`pty: true` records the terminal stream as command output. stdout and stderr are not separated in PTY mode, so `stderr-color` is ignored for that step. The PTY size is the scenario terminal size (`width`, `height`) so full-screen and size-aware commands render against the same dimensions written to the cast header.
 
 ## Execution Order
 
@@ -133,6 +131,7 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 ## Cross-Document Notes
 
 - [spec_pre_post.md](spec_pre_post.md) — `pre`/`post` recording exclusion and failure behavior.
+- [spec_pty.md](spec_pty.md) — `pty: true` recording behavior and platform support.
 - [spec_highlight.md](spec_highlight.md) — coloring semantics and style strings.
 - [spec_cast.md](spec_cast.md) — cast header mapping, event stream, recording boundary.
 - [spec_svg.md](spec_svg.md) — SVG renderer.
@@ -142,4 +141,4 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 
 - Separating `settings` (recording) from `render` (presentation) keeps cast behavior independent of SVG output.
 - String-form steps cover simple demos; map-form steps carry per-command timing and coloring without a second schema.
-- PTY output is a terminal stream, not separate stdout/stderr text. Keeping `pty` opt-in preserves the simpler and more predictable pipe-based behavior for ordinary commands.
+- Keeping `pty` opt-in preserves the simpler and more predictable pipe-based behavior for ordinary commands. PTY semantics live in [spec_pty.md](spec_pty.md).

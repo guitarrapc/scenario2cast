@@ -1,0 +1,7 @@
+title: "Matrix PTY PowerShell"
+width: 80
+height: 24
+shell: pwsh
+steps:
+  - run: matrix 3
+    pty: true
