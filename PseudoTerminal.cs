@@ -362,12 +362,19 @@ static partial class WindowsPseudoTerminal
 
         public int ProcessId => _processInfo.dwProcessId;
 
-        public bool HasExited => _exited;
+        public bool HasExited
+        {
+            get
+            {
+                TryRefreshExitState();
+                return _exited;
+            }
+        }
 
         public void WriteInput(string input)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _inputClosed || _eofSignaled || input.Length == 0)
+            if (TryRefreshExitState() || _inputClosed || _eofSignaled || input.Length == 0)
                 return;
 
             WriteUtf8(_inputWriteHandle, input);
@@ -376,7 +383,7 @@ static partial class WindowsPseudoTerminal
         public void SendEof()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _inputClosed)
+            if (TryRefreshExitState() || _inputClosed)
                 return;
 
             // Windows: always defer pipe close to WaitForExitAsync (or CloseTransport).
@@ -387,7 +394,7 @@ static partial class WindowsPseudoTerminal
 
         public void Kill()
         {
-            if (_disposed || _exited || _processInfo.hProcess == IntPtr.Zero)
+            if (_disposed || TryRefreshExitState() || _processInfo.hProcess == IntPtr.Zero)
                 return;
 
             TerminateProcess(_processInfo.hProcess, 1);
@@ -396,8 +403,11 @@ static partial class WindowsPseudoTerminal
         public async Task<int> WaitForExitAsync(CancellationToken cancellationToken, bool killOnCancellation)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited)
+            if (TryRefreshExitState())
+            {
+                CloseTransport();
                 return _exitCode;
+            }
 
             CancellationTokenRegistration registration = default;
             if (killOnCancellation)
@@ -411,35 +421,23 @@ static partial class WindowsPseudoTerminal
 
             try
             {
-                while (!_exited)
+                while (!TryRefreshExitState())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var waitResult = WaitForSingleObject(_processInfo.hProcess, WaitPollMs);
                     CloseInputPipeIfEofSignaled();
-                    if (waitResult == WaitObject0)
-                    {
-                        if (!GetExitCodeProcess(_processInfo.hProcess, out var exitCode))
-                            throw new Win32Exception(Marshal.GetLastPInvokeError(), "GetExitCodeProcess failed");
-
-                        _exitCode = unchecked((int)exitCode);
-                        _exited = true;
-                        CloseTransport();
-                        break;
-                    }
-
-                    if (waitResult == WaitTimeout)
-                    {
-                        await Task.Yield();
-                        continue;
-                    }
-
                     if (waitResult == WaitFailed)
                         throw new Win32Exception(Marshal.GetLastPInvokeError(), "WaitForSingleObject failed");
 
-                    throw new InvalidOperationException($"WaitForSingleObject returned unexpected code 0x{waitResult:X8}");
+                    if (waitResult != WaitObject0 && waitResult != WaitTimeout)
+                        throw new InvalidOperationException($"WaitForSingleObject returned unexpected code 0x{waitResult:X8}");
+
+                    if (waitResult == WaitTimeout)
+                        await Task.Yield();
                 }
 
+                CloseTransport();
                 cancellationToken.ThrowIfCancellationRequested();
                 return _exitCode;
             }
@@ -452,7 +450,7 @@ static partial class WindowsPseudoTerminal
         public CommandOutput Complete(bool verbose)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (!_exited)
+            if (!TryRefreshExitState())
                 throw new InvalidOperationException("The PTY child process has not exited yet.");
 
             var chunks = AwaitOutputChunks(throwOnTimeout: true);
@@ -469,7 +467,7 @@ static partial class WindowsPseudoTerminal
                 return;
 
             _disposed = true;
-            if (!_exited)
+            if (!TryRefreshExitState())
                 Kill();
 
             CloseTransport();
@@ -487,6 +485,28 @@ static partial class WindowsPseudoTerminal
 
             _inputWriteHandle.Dispose();
             _outputReadHandle.Dispose();
+        }
+
+        private bool TryRefreshExitState()
+        {
+            if (_exited)
+                return true;
+
+            if (_processInfo.hProcess == IntPtr.Zero)
+                return false;
+
+            var waitResult = WaitForSingleObject(_processInfo.hProcess, 0);
+            if (waitResult == WaitTimeout)
+                return false;
+            if (waitResult == WaitFailed)
+                return false;
+
+            if (!GetExitCodeProcess(_processInfo.hProcess, out var exitCode))
+                return false;
+
+            _exitCode = unchecked((int)exitCode);
+            _exited = true;
+            return true;
         }
 
         private void CloseInputPipeIfEofSignaled()
@@ -843,6 +863,7 @@ static partial class UnixPseudoTerminal
     private const int ReapDeadlineMs = 1_000;
     private const int Utf8StackThreshold = 256;
     private const int EINTR = 4;
+    private const int ECHILD = 10;
 
     public static IPtySessionBackend Start(
         string fileName,
@@ -1005,12 +1026,19 @@ static partial class UnixPseudoTerminal
 
         public int ProcessId => _pid;
 
-        public bool HasExited => _exited;
+        public bool HasExited
+        {
+            get
+            {
+                TryRefreshExitState();
+                return _exited;
+            }
+        }
 
         public void WriteInput(string input)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _eofSent || _eofPending || input.Length == 0)
+            if (TryRefreshExitState() || _eofSent || _eofPending || input.Length == 0)
                 return;
 
             WriteUtf8(_master, input);
@@ -1020,7 +1048,7 @@ static partial class UnixPseudoTerminal
         public void SendEof()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _eofSent)
+            if (TryRefreshExitState() || _eofSent)
                 return;
 
             if (_inputWritten)
@@ -1035,7 +1063,7 @@ static partial class UnixPseudoTerminal
 
         public void Kill()
         {
-            if (_disposed || _exited)
+            if (_disposed || TryRefreshExitState())
                 return;
 
             kill(_pid, SigKill);
@@ -1044,7 +1072,7 @@ static partial class UnixPseudoTerminal
         public async Task<int> WaitForExitAsync(CancellationToken cancellationToken, bool killOnCancellation)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited)
+            if (TryRefreshExitState())
                 return _exitCode;
 
             CancellationTokenRegistration registration = default;
@@ -1059,19 +1087,9 @@ static partial class UnixPseudoTerminal
 
             try
             {
-                while (!_exited)
+                while (!TryRefreshExitState())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
-                    if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
-                        throw new Win32Exception(Marshal.GetLastPInvokeError(), "waitpid failed");
-
-                    if (result == _pid)
-                    {
-                        _exitCode = MapWaitStatusToExitCode(status);
-                        _exited = true;
-                        break;
-                    }
 
                     SendEotIfPending();
 
@@ -1090,7 +1108,7 @@ static partial class UnixPseudoTerminal
         public CommandOutput Complete(bool verbose)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (!_exited)
+            if (!TryRefreshExitState())
                 throw new InvalidOperationException("The PTY child process has not exited yet.");
 
             var output = AwaitOutputChunks(throwOnTimeout: true);
@@ -1107,7 +1125,7 @@ static partial class UnixPseudoTerminal
                 return;
 
             _disposed = true;
-            if (!_exited)
+            if (!TryRefreshExitState())
             {
                 Kill();
                 TryReapChild();
@@ -1119,24 +1137,38 @@ static partial class UnixPseudoTerminal
 
         private void TryReapChild()
         {
-            if (_exited)
-                return;
-
             var deadline = Environment.TickCount64 + ReapDeadlineMs;
             while (Environment.TickCount64 < deadline)
             {
-                if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
+                if (TryRefreshExitState())
                     return;
-
-                if (result == _pid)
-                {
-                    _exitCode = MapWaitStatusToExitCode(status);
-                    _exited = true;
-                    return;
-                }
 
                 Thread.Sleep(ReapPollMs);
             }
+        }
+
+        private bool TryRefreshExitState()
+        {
+            if (_exited)
+                return true;
+
+            if (!TryWaitPid(_pid, WaitNoHang, out var status, out var result))
+            {
+                if (Marshal.GetLastPInvokeError() == ECHILD)
+                {
+                    _exited = true;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (result != _pid)
+                return false;
+
+            _exitCode = MapWaitStatusToExitCode(status);
+            _exited = true;
+            return true;
         }
 
         private void CloseTransport()

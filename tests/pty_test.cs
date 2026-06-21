@@ -15,6 +15,7 @@ var failures = 0;
 failures += Run("PtyEchoOutput", PtyEchoOutput);
 failures += Run("PtyTtyCheck", PtyTtyCheck);
 failures += Run("PtyStdinEof", PtyStdinEof);
+failures += Run("PtyHasExitedPolls", PtyHasExitedPolls);
 failures += Run("PtyCancellationKill", PtyCancellationKill);
 failures += Run("PtyCancellationWait", PtyCancellationWait);
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryResolvePwsh(out var pwshPath))
@@ -123,6 +124,36 @@ static bool PtyStdinEof()
         TestContext(shell),
         input: marker);
     return unixOutput.ExitCode == 0 && unixOutput.Stdout.Contains(marker, StringComparison.Ordinal);
+}
+
+static bool PtyHasExitedPolls()
+{
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var cmd = Environment.GetEnvironmentVariable("ComSpec") ?? @"C:\Windows\System32\cmd.exe";
+        using var session = PseudoTerminal.Start(
+            cmd,
+            ["/c", "exit 0"],
+            null,
+            40,
+            8,
+            TestContext("cmd"));
+        for (var i = 0; i < 50 && !session.HasExited; i++)
+            Thread.Sleep(20);
+        return session.HasExited;
+    }
+
+    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
+    using var unixSession = PseudoTerminal.Start(
+        shell,
+        ["-lc", "exit 0"],
+        null,
+        40,
+        8,
+        TestContext(shell));
+    for (var i = 0; i < 50 && !unixSession.HasExited; i++)
+        Thread.Sleep(20);
+    return unixSession.HasExited;
 }
 
 static bool PtyCancellationKill()

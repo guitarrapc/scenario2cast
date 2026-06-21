@@ -31,6 +31,7 @@ Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession`
 | API | Behavior |
 |---|---|
 | `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
+| `HasExited` | Polls the child (`WaitForSingleObject(0)` / `waitpid(WNOHANG)`). On Unix, a successful poll reaps the zombie and records the exit code. |
 | `WriteInput(string)` | Writes UTF-8 bytes to the PTY stdin. Does not close stdin. |
 | `SendEof()` | **Windows:** closes the ConPTY input pipe on the first `WaitForExitAsync` poll (or `CloseTransport`) — always deferred; `WriteFile` success is not a safe attach signal. **Unix:** writes EOT (`0x04`, Ctrl-D); immediate after successful `WriteInput`, deferred when there were no bytes — see [Staged stdin EOF](#staged-stdin-eof). |
 | `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). Cancellation stops waiting only; the child keeps running (`OperationCanceledException`). |
