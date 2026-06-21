@@ -32,12 +32,12 @@ Library callers should prefer `PseudoTerminal.Start` → `PseudoTerminalSession`
 |---|---|
 | `PseudoTerminal.Start(...)` | Spawns the child and starts the background PTY read. Does not wait. |
 | `WriteInput(string)` | Writes UTF-8 bytes to the PTY stdin. Does not close stdin. |
-| `CloseInput()` | **Windows:** closes the ConPTY input pipe write end (true EOF). **Unix:** writes EOT (`0x04`, Ctrl-D) to the PTY master — see [Unix stdin EOF](#unix-stdin-eof) below. |
+| `SendEof()` | **Windows:** closes the ConPTY input pipe write end (kernel EOF). **Unix:** writes EOT (`0x04`, Ctrl-D) — not an fd close; see [Unix stdin EOF](#unix-stdin-eof). |
 | `WaitForExitAsync(CancellationToken)` | Polls the child (`WaitForSingleObject` / `waitpid(WNOHANG)`). On cancellation, calls `Kill()` then throws `OperationCanceledException`. |
 | `Kill()` | `TerminateProcess` (Windows) or `kill(SIGKILL)` (Unix). Does not release handles; call `Dispose` or `Complete` afterward. |
 | `Complete(verbose)` | After exit, drains the read task and returns `CommandOutput`. |
 | `Dispose()` | If the child is still running, **kills** it, then closes ConPTY/pipes/process handles. Unlike `System.Diagnostics.Process.Dispose`, this is intentional for short-lived PTY sessions. On Unix, `Dispose` also attempts a bounded `waitpid` after `SIGKILL` to avoid leaving a zombie (up to ~1s). |
-| `PseudoTerminal.Run(..., input: string?)` | `input: null` — stdin stays open (TUI / no stdin). `input: ""` or text — write (if non-empty) then `CloseInput()` before wait. |
+| `PseudoTerminal.Run(..., input: string?)` | `input: null` — stdin stays open (TUI / no stdin). `input: ""` or text — write (if non-empty) then `SendEof()` before wait. |
 | `PtyCaptureOptions.OutputEncoding` | Byte-to-text decoding for captured chunks (default `Encoding.UTF8`). |
 
 The scenetake CLI uses `Run` with `CancellationToken.None` (no scenario-level timeout in Phase 1).
@@ -66,7 +66,7 @@ Redirecting `CreateProcess` stdin/stdout to anonymous pipes **without** ConPTY i
 5. Build `STARTUPINFOEX` with `PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE`.
 6. `CreateProcessW` with `EXTENDED_STARTUPINFO_PRESENT` and `bInheritHandles = false`.
 7. Start a background read on `outputRead` before or as the child runs.
-8. On shutdown: if one-shot stdin was used, `CloseInput()` before wait → wait for child → `ClosePseudoConsole` → drain read task.
+8. On shutdown: if one-shot stdin was used, `SendEof()` before wait → wait for child → `ClosePseudoConsole` → drain read task.
 
 ### Parent console attachment
 
@@ -119,7 +119,7 @@ execvp via UTF-8 argv built with NativeMemory (byte**)
 
 1. `close(slave)` after fork.
 2. Start background read on `master`.
-3. If one-shot stdin was provided, `CloseInput()` before waiting — see [Unix stdin EOF](#unix-stdin-eof).
+3. If one-shot stdin was provided, `SendEof()` before waiting — see [Unix stdin EOF](#unix-stdin-eof).
 4. If no stdin bytes, leave the master open for writes until the child exits (TUI programs).
 5. `waitpid`, then `close(master)` after the read task drains on the normal exit path; on `Dispose`, close the master before draining the read task (same ordering as Windows `CloseTransport` → `DrainOutputTask`).
 
@@ -129,13 +129,22 @@ PTY master fds are **not** sockets. `shutdown(master, SHUT_WR)` is invalid (`ENO
 
 | Approach | When | scenetake |
 |---|---|---|
-| **EOT (`0x04`, Ctrl-D)** | One-shot / line-discipline programs (`cat`, shells) | `CloseInput()` writes EOT to the master |
-| **Leave master open** | TUI / no stdin (`matrix`, `cmatrix`) | `Run(..., input: null)` — no `CloseInput()` |
+| **EOT (`0x04`, Ctrl-D)** | One-shot / line-discipline programs (`cat`, shells) | `SendEof()` writes EOT to the master |
+| **Leave master open** | TUI / no stdin (`matrix`, `cmatrix`) | `Run(..., input: null)` — no `SendEof()` |
 | **`Kill()` / `close(master)` on dispose** | Forced teardown | `Dispose()` kills if still running, then `close(master)` |
 
-EOT is a **terminal convention**, not a kernel EOF like closing a pipe. Raw-mode readers that never interpret `VEOF` may ignore it; that is acceptable for P0/P1 (shell-wrapped commands) but is a known limitation for future interactive (P3) work.
+EOT is a **terminal convention**, not a kernel EOF like closing a pipe. It is reliable for P0/P1 shell-wrapped one-shot commands (`cat`, `sort`, pipelines through `bash -lc`) when the line discipline is in **canonical mode**.
 
-**Windows vs Unix asymmetry:** `CloseInput()` closes the ConPTY input pipe on Windows (true EOF). On Unix it sends EOT only. Callers using `PseudoTerminalSession` should treat `CloseInput()` as “I am done sending input” rather than assuming identical kernel semantics.
+**Does not work reliably for:**
+
+- Raw-mode readers (`stty raw`, binary protocols)
+- Full-screen TUIs (`vim`, `less`, `ssh`)
+- REPLs and long-lived interactive sessions
+- Applications that bind Ctrl-D to another action
+
+For those cases, omit `SendEof()` (keep stdin open), use `Kill()` / process exit, or plan P3 interactive APIs.
+
+**Windows vs Unix asymmetry:** `SendEof()` closes the ConPTY input pipe on Windows (kernel EOF). On Unix it writes Ctrl-D only — it does **not** close the PTY master fd. Callers should not assume identical semantics across platforms.
 
 ### Platform differences
 
@@ -177,7 +186,7 @@ PTY shutdown is timing-sensitive. General pattern:
 
 ```text
 1. Start background read on PTY output
-2. One-shot stdin: WriteInput → CloseInput (Windows: pipe close; Unix: EOT) before wait
+2. One-shot stdin: WriteInput → SendEof (Windows: pipe close; Unix: EOT) before wait
 3. Detect child exit (wait / WaitForSingleObject)
 4. Close ConPTY (Windows) or master fd (Unix) after draining output
 5. Release process handles
@@ -191,7 +200,7 @@ At minimum, separate:
 
 - **Output read** — background task reading the PTY while the child runs
 - **Process wait** — foreground wait for exit
-- **Input write** — optional; `CloseInput()` when done (platform-specific EOF semantics)
+- **Input write** — optional; `SendEof()` when done (platform-specific EOF semantics)
 
 PTY is full-duplex; serializing read and wait on one thread risks deadlock when buffers fill.
 
@@ -228,7 +237,7 @@ Not implemented yet; listed for planning:
 | Phase | Features |
 |---|---|
 | **1 (current)** | spawn, read, wait, exit code, timestamped chunks, shell launch |
-| **2** | resize, explicit `CloseInput`, Ctrl-C (`\x03` write), cancellation, `execve` env control |
+| **2** | resize, explicit `SendEof`, Ctrl-C (`\x03` write), cancellation, `execve` env control |
 | **3+** | Long-lived interactive sessions, disk spill for huge captures |
 
 ## NativeAOT interop

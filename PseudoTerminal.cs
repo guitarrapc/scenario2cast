@@ -83,12 +83,15 @@ public sealed class PseudoTerminalSession : IAsyncDisposable, IDisposable
 
     public void WriteInput(string input) => _backend.WriteInput(input);
 
-    /// <summary>Signals that no further stdin bytes will be sent.</summary>
+    /// <summary>Signals end of stdin to the child.</summary>
     /// <remarks>
-    /// Windows: closes the ConPTY input pipe write end (true EOF to the child).
-    /// Unix: writes EOT (0x04, Ctrl-D) to the PTY master — PTY fds are not sockets and cannot be half-closed with <c>shutdown(SHUT_WR)</c>.
+    /// <para><b>Windows:</b> closes the ConPTY input pipe write end (kernel EOF).</para>
+    /// <para><b>Unix:</b> does not close a file descriptor. Writes EOT (<c>0x04</c>, Ctrl-D) to the PTY master.
+    /// This is interpreted as EOF only when the terminal line discipline is in canonical mode.
+    /// It does not work reliably for raw-mode programs, full-screen TUIs (<c>vim</c>, <c>less</c>), REPLs,
+    /// or applications that treat Ctrl-D differently.</para>
     /// </remarks>
-    public void CloseInput() => _backend.CloseInput();
+    public void SendEof() => _backend.SendEof();
 
     public void Kill() => _backend.Kill();
 
@@ -118,7 +121,7 @@ interface IPtySessionBackend : IDisposable
     int ProcessId { get; }
     bool HasExited { get; }
     void WriteInput(string input);
-    void CloseInput();
+    void SendEof();
     void Kill();
     Task<int> WaitForExitAsync(CancellationToken cancellationToken);
     CommandOutput Complete(bool verbose);
@@ -168,7 +171,7 @@ public static class PseudoTerminal
         {
             if (input.Length > 0)
                 session.WriteInput(input);
-            session.CloseInput();
+            session.SendEof();
         }
         session.WaitForExitAsync(cancellationToken).GetAwaiter().GetResult();
         return session.Complete(verbose);
@@ -346,7 +349,7 @@ static partial class WindowsPseudoTerminal
             WriteAll(_inputWriteHandle, Encoding.UTF8.GetBytes(input));
         }
 
-        public void CloseInput()
+        public void SendEof()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
             if (_exited || _inputClosed)
@@ -827,7 +830,7 @@ static partial class UnixPseudoTerminal
         private readonly string _fileName;
         private readonly string[] _arguments;
         private readonly PtyLaunchContext _context;
-        private bool _inputEofSignaled;
+        private bool _eofSent;
         private bool _masterClosed;
         private bool _exited;
         private int _exitCode;
@@ -858,16 +861,16 @@ static partial class UnixPseudoTerminal
         public void WriteInput(string input)
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            if (_exited || _inputEofSignaled || input.Length == 0)
+            if (_exited || _eofSent || input.Length == 0)
                 return;
 
             WriteAll(_master, Encoding.UTF8.GetBytes(input));
         }
 
-        public void CloseInput()
+        public void SendEof()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
-            SignalInputEof();
+            WriteEotToMaster();
         }
 
         public void Kill()
@@ -972,13 +975,13 @@ static partial class UnixPseudoTerminal
             _masterClosed = true;
         }
 
-        private void SignalInputEof()
+        private void WriteEotToMaster()
         {
-            if (_inputEofSignaled || _exited)
+            if (_eofSent || _exited)
                 return;
 
             WriteAll(_master, [InputEot]);
-            _inputEofSignaled = true;
+            _eofSent = true;
         }
 
         private void DrainOutputTask()
