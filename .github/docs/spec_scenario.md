@@ -34,6 +34,8 @@ steps:
   - run: git status
     name: "[cyan] status"
     post-delay: 2.0
+  - run: matrix 3
+    pty: true
 
 post:
   - git clean -fd
@@ -44,8 +46,8 @@ post:
 | Key | Default | Description |
 |---|---|---|
 | `title` | — | Optional cast title |
-| `width` | `120` | Terminal columns in the cast |
-| `height` | `24` | Terminal rows in the cast |
+| `width` | `120` | Terminal columns in the cast header and PTY geometry when a step uses `pty: true` |
+| `height` | `24` | Terminal rows in the cast header and PTY geometry when a step uses `pty: true` |
 | `cwd` | process cwd | Working directory for `pre`, `steps`, and `post` |
 | `shell` | `$SHELL` / `pwsh` | Shell for all commands. Values: `bash`, `pwsh`, `powershell`, or a path |
 
@@ -105,10 +107,24 @@ Map-form steps recognize:
 | `typing-speed`, `typing-jitter`, `pre-delay`, `post-delay`, `execution-duration` | no | Override `settings` for this step |
 | `run-highlight` | no | Style for typed command text |
 | `highlight` | no | List of `{ color, at }` for command output |
-| `stderr-color` | no | Override `settings.stderr-color` for this step |
-| `pty` | no | Run the command in a pseudo-terminal. Behavior: [spec_pty.md](spec_pty.md) |
+| `stderr-color` | no | Override `settings.stderr-color` for this step. Ignored when `pty: true` |
+| `pty` | no | default `false`. Pseudo-terminal capture for TUI commands. Recording behavior: [spec_pty.md](spec_pty.md) |
 
-Coloring value formats, range grammar, and validation: [spec_highlight.md](spec_highlight.md).
+Coloring value formats, range grammar, and validation: [spec_highlight.md](spec_highlight.md). Coloring does not apply to PTY-captured output.
+
+## Step exit codes
+
+Recorded `steps` (pipe redirect or `pty: true`) observe the child exit code when the command finishes.
+
+| Outcome | Behavior |
+|---|---|
+| Exit code `0` | No warning; recording continues |
+| Non-zero exit | Warning on stderr; recording continues; later steps still run |
+| Fatal error | Run aborts (for example PTY spawn failure or output drain timeout). See [spec_pty.md](spec_pty.md) |
+
+scenetake exits `0` after a successful cast write even when individual steps exited non-zero, unless `pre`, `post`, SVG, or another fatal error occurs. Failed command output can remain in the cast as legitimate demo content.
+
+Contrast with `pre` / `post` (fail-fast): [spec_pre_post.md](spec_pre_post.md). Warning message format: [spec_cli.md](spec_cli.md) → Logging.
 
 ## Execution Order
 
@@ -140,5 +156,5 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 ## Lessons Learned
 
 - Separating `settings` (recording) from `render` (presentation) keeps cast behavior independent of SVG output.
-- String-form steps cover simple demos; map-form steps carry per-command timing and coloring without a second schema.
-- Keeping `pty` opt-in preserves the simpler and more predictable pipe-based behavior for ordinary commands. PTY semantics live in [spec_pty.md](spec_pty.md).
+- String-form steps cover simple demos; map-form steps carry per-command timing, coloring, and optional `pty` without a second schema.
+- Recorded step non-zero exits warn but do not stop the scenario; setup/teardown and infrastructure failures use different rules ([spec_pre_post.md](spec_pre_post.md), [spec_pty.md](spec_pty.md)).
