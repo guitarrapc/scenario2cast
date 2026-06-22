@@ -4,7 +4,7 @@
 
 [English](README.md) | 日本語
 
-YAML **scenario** を実行し、ターミナルの scene take（[asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/)、アニメーション `.svg`）を記録するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行し、その出力を `.cast`（任意で `.svg` も）として記録します。
+YAML **scenario** を実行し、ターミナルの scene take（[asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/)、アニメーション `.svg`）を記録するツールです。`asciinema`をインストール・起動する必要はありません。step を並べた YAML を書くだけで、実際にコマンドを実行し、その出力を `.cast`（任意で `.svg` も）として記録します。通常の step はタイピング演出付き、`pty: true` の step は端末ストリームをリアルタイムで記録します。
 
 サンプルシナリオ `samples/basic.yaml` から `.cast` と `.svg` を生成すると、こんな見た目になります。タイプを頑張る必要もないし、実際にコマンドも走るので、リアルなターミナル記録が簡単に作れます。
 
@@ -60,7 +60,8 @@ SVG 出力ではフォント、ライト/ダークテーマ、ウィンドウ枠
 | 既存の asciinema `.cast` を SVG に変換する | `scenetake svg recording.cast` |
 | フォント・テーマ・ウィンドウ枠を調整する | YAML の `render`、または `--font-size` / `--font-family` / `--theme` / `--window` |
 | 非 TTY 実行で CLI が色を出さない出力を着色する | step の `highlight` / `run-highlight` / `stderr-color` — [samples/highlight.yaml](samples/highlight.yaml) を参照 |
-| 対話型 TUI（`vim`、`htop`、フルスクリーンアプリ）を録画する | [asciinema](https://asciinema.org/) で録画し、`scenetake svg recording.cast` |
+| TTY 依存コマンド（`matrix`、ターミナルアニメーションなど）を録画する | step に `pty: true` — [samples/pty.yaml](samples/pty.yaml) または [制限事項（シナリオ録画）](#制限事項シナリオ録画) |
+| ユーザー入力が必要な完全対話（`vim` 操作、REPL など）を録画する | [asciinema](https://asciinema.org/) で録画し、`scenetake svg recording.cast` |
 | スターターシナリオを作る | `scenetake init` |
 | サンプルとプレビューを見る | [samples/README-ja.md](samples/README-ja.md) |
 | 仕様の詳細を読む | [.github/docs/spec_index.md](.github/docs/spec_index.md) |
@@ -72,7 +73,7 @@ SVG 出力ではフォント、ライト/ダークテーマ、ウィンドウ枠
 scenetake は、asciinema を介さずシナリオから `.cast`（任意で `.svg` も）を直接生成するクロスプラットフォームツールです。
 
 1. 実行するコマンドをシナリオに書く
-2. コマンドを一定の間隔で入力しているように cast イベントを生成する
+2. 通常の step は一定の間隔で入力しているように cast イベントを生成する。`pty: true` の step は端末ストリームをリアルタイムで記録する
 3. コマンドを実際に実行し、その出力を cast に書き出す
 
 ## クイックスタート

@@ -4,7 +4,7 @@
 
 English | [日本語](README-ja.md)
 
-Run a YAML **scenario** and record a terminal scene take [asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/), animated `.svg`. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and records the output as `.cast` (and optionally `.svg`) with simulated typing plus real command output.
+Run a YAML **scenario** and record a terminal scene take [asciinema v3 `.cast`](https://docs.asciinema.org/manual/asciicast/v3/), animated `.svg`. You do not need to install or launch `asciinema` to record. Write a YAML scenario with steps, and this tool executes those steps and records the output as `.cast` (and optionally `.svg`)—ordinary steps get simulated typing; steps with `pty: true` capture the terminal stream in real time.
 
 Sample scenario `samples/basic.yaml` generates `.cast` and `.svg` output like below. You don't have to struggle with typing, and since the commands are actually executed, you can easily create realistic terminal recordings.
 
@@ -60,7 +60,8 @@ SVG output supports custom font, light/dark theme, and optional window chrome (`
 | Convert an existing asciinema `.cast` to SVG | `scenetake svg recording.cast` |
 | Tune font, theme, or window chrome | Set `render` in YAML, or pass `--font-size`, `--font-family`, `--theme`, `--window` |
 | Color output when CLI tools stay plain without a TTY | Use `highlight`, `run-highlight`, or `stderr-color` on steps — see [samples/highlight.yaml](samples/highlight.yaml) |
-| Record interactive TUIs (`vim`, `htop`, full-screen apps) | Record with [asciinema](https://asciinema.org/), then `scenetake svg recording.cast` |
+| Record TTY-dependent commands (`matrix`, terminal animations, etc.) | `pty: true` on a step — see [samples/pty.yaml](samples/pty.yaml) or [Limitations (scenario recording)](#limitations-scenario-recording) |
+| Record fully interactive sessions (`vim`, REPLs, user input) | Record with [asciinema](https://asciinema.org/), then `scenetake svg recording.cast` |
 | Scaffold a starter scenario | `scenetake init` |
 | Browse examples and previews | [samples/README.md](samples/README.md) |
 | Read full behavior specs | [.github/docs/spec_index.md](.github/docs/spec_index.md) |
@@ -72,7 +73,7 @@ I want terminal demos without the hassle of typing commands into asciinema. That
 scenetake is a cross-platform tool that records those scenarios as `.cast` files, optionally with `.svg`, without going through asciinema at all.
 
 1. Write the commands to run in the scenario.
-2. Generate cast events as if the commands were typed at a steady pace.
+2. For ordinary steps, generate cast events as if the commands were typed at a steady pace; for `pty: true` steps, record the terminal byte stream as it runs.
 3. Execute the commands for real and write their output into the cast.
 
 ## Quick Start

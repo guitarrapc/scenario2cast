@@ -13,10 +13,10 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 | [demo](#demo) | README 用の一連のワークフロー | [demo.yaml](demo.yaml) | [cast](demo.cast) · [gif](demo.gif) · [svg](demo.svg) |
 | [git](#git) | 実コマンドの git デモ | [git.yaml](git.yaml) | [cast](git.cast) · [gif](git.gif) · [svg](git.svg) |
 | [highlight](#highlight) | コメント・stdout / stderr の色指定 | [highlight.yaml](highlight.yaml) | [cast](highlight.cast) · [gif](highlight.gif) · [svg](highlight.svg) |
+| [pty](#pty) | `pty: true` で TTY 依存コマンド（`matrix`）を録画 | [pty.yaml](pty.yaml) | [cast](pty.cast) · [gif](pty.gif) · [svg](pty.svg) |
 | [theme](#theme) | light テーマ・16 / 256 色 | [theme.yaml](theme.yaml) | [cast](theme.cast) · [gif](theme.gif) · [svg](theme.svg) |
 | [theme-macos](#theme-macos) | macOS ウィンドウ chrome | [theme-macos.yaml](theme-macos.yaml) | [cast](theme-macos.cast) · [gif](theme-macos.gif) · [svg](theme-macos.svg) |
 | [theme-windows](#theme-windows) | Windows ウィンドウ chrome | [theme-windows.yaml](theme-windows.yaml) | [cast](theme-windows.cast) · [gif](theme-windows.gif) · [svg](theme-windows.svg) |
-| [matrix](#matrix) | Matrix rain 向け contextual tint | [matrix-gen.cs](matrix-gen.cs) → [cast](matrix.cast) | [gif](matrix.gif) · [svg](matrix.svg) |
 | [resize](#resize) | ターミナル resize イベント（cast のみ） | [resize.cast](resize.cast) | [gif](resize.gif) · [svg](resize.svg) |
 
 ## 再生成
@@ -26,9 +26,6 @@ scenetake のサンプル集です。各シナリオの**目的**と**生成物*
 ```bash
 # すべての *.yaml から .cast と .svg を再生成
 dotnet run samples/regenerate.cs
-
-# matrix.cast は samples/matrix-gen.cs で生成（regenerate.cs からも実行されます）
-dotnet run samples/matrix-gen.cs
 
 # GIF は agg が必要（Docker 例。v3 cast は ghcr.io/asciinema/agg を使用）
 docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
@@ -59,7 +56,7 @@ scenetake --format svg samples/basic.yaml
 **目的:** メイン README に埋め込んでいるシナリオ YAML 形式の実行可能リファレンス。
 
 - top-level 各セクション（メタデータ、`settings`、`render`、無害な `pre`/`post`、文字列 / マップ形式の `steps`）
-- 固定 `printf` 出力での `run-highlight` / `highlight` / `stderr-color`（git やファイル変更なし）
+- 固定 `printf` 出力での `run-highlight` / `highlight` / `stderr-color`、および依存なしの最小 `pty: true` echo 例（git やファイル変更なし）
 - README プレビュー用に `render.window: macos`
 
 | SVG |
@@ -125,6 +122,25 @@ scenetake --format svg samples/highlight.yaml
 
 ---
 
+## pty
+
+**目的:** 疑似端末（`pty: true`）で TTY 依存コマンドを録画するサンプル。
+
+- 導入 step はタイピング演出あり。その後 `matrix 5` を `pty: true` で実行（PTY step にはタイピング演出なし）
+- [`matrix`](https://github.com/guitarrapc/matrix) の出力で SVG の **Matrix rain contextual tint**（緑の隣の白ハイライトを明るい緑で描画）も確認できる
+- 再生成時は `matrix` CLI が `PATH` に必要
+- 追加依存なしの最小 `pty: true` 例は [scenario-format の pty demo step](#scenario-format) を参照
+
+| GIF | SVG |
+|-----|-----|
+| ![](pty.gif) | ![](pty.svg) |
+
+```bash
+scenetake --format svg samples/pty.yaml
+```
+
+---
+
 ## theme
 
 **目的:** SVG / cast ヘッダーの **`render.theme`**（light プリセット）と ANSI 色の見え方。
@@ -166,35 +182,6 @@ scenetake --format svg samples/theme-macos.yaml
 
 ```bash
 scenetake --format svg samples/theme-windows.yaml
-```
-
----
-
-## matrix
-
-**目的:** SVG の **Matrix rain contextual tint**（緑の隣の白ハイライトを明るい緑で描画）の確認。
-
-- [matrix-gen.cs](matrix-gen.cs) が 12 fps・72 フレームの cast を生成（alternate screen、画面クリア、フレーム間にコマンド入力なし）
-- ASCII 文字（英数字・記号）の落ちる列、白い先頭＋緑の尾（agg でも描画しやすい）
-- 背景 `#000000`、尾 `#008f11`、先頭は明るい白 `#ffffff`（`97m`）
-- cast ヘッダーに macOS ウィンドウ chrome
-
-| GIF | SVG |
-|-----|-----|
-| ![](matrix.gif) | ![](matrix.svg) |
-
-```bash
-dotnet run samples/matrix-gen.cs
-scenetake svg samples/matrix.cast
-docker run --rm -v "$PWD:/data" ghcr.io/asciinema/agg \
-  /data/samples/matrix.cast /data/samples/matrix.gif --last-frame-duration 0
-```
-
-本物の `cmatrix` は PTY が必要です。外部録画する場合:
-
-```bash
-asciinema rec samples/matrix-live.cast -- cmatrix -ab
-scenetake svg samples/matrix-live.cast --window macos
 ```
 
 ---
