@@ -17,6 +17,7 @@ failures += Run("CursorVisibility", CursorVisibility);
 failures += Run("SplitEscapeAcrossChunks", SplitEscapeAcrossChunks);
 failures += Run("SplitUtf8AcrossChunks", SplitUtf8AcrossChunks);
 failures += Run("Utf8ProcessMatchesString", Utf8ProcessMatchesString);
+failures += Run("CsiParameterWhitespace", CsiParameterWhitespace);
 failures += Run("InsertBlankCharacters", InsertBlankCharacters);
 failures += Run("ScrollRegion", ScrollRegion);
 
@@ -188,6 +189,17 @@ static bool Utf8ProcessMatchesString()
     }
 
     return stringBuffer.CursorCol == utf8Buffer.CursorCol;
+}
+
+static bool CsiParameterWhitespace()
+{
+    var theme = DarkTheme();
+    var buffer = new ScreenBuffer(8, 2, theme);
+    var parser = new AnsiParser(buffer, theme);
+    parser.Process("\u001b[ 31mA\u001b[0m");
+
+    return buffer.GetCell(0, 0).Text == "A"
+        && buffer.GetCell(0, 0).Foreground == theme.AnsiPalette[1];
 }
 
 static bool InsertBlankCharacters()

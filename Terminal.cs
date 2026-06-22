@@ -1275,8 +1275,8 @@ internal sealed class AnsiParser
             while (i < parameterText.Length && parameterText[i] is not (byte)';' and not (byte)':')
                 i++;
 
-            var part = parameterText[start..i];
-            if (part.IsEmpty || IsAsciiWhitespace(part))
+            var part = TrimAsciiWhitespace(parameterText[start..i]);
+            if (part.IsEmpty)
                 _csiParams.Add(MissingParameter);
             else if (Utf8Parser.TryParse(part, out int value, out _))
                 _csiParams.Add(value);
@@ -1290,11 +1290,27 @@ internal sealed class AnsiParser
         }
     }
 
+    private static ReadOnlySpan<byte> TrimAsciiWhitespace(ReadOnlySpan<byte> bytes)
+    {
+        var start = 0;
+        while (start < bytes.Length && IsAsciiWhitespaceByte(bytes[start]))
+            start++;
+
+        var end = bytes.Length;
+        while (end > start && IsAsciiWhitespaceByte(bytes[end - 1]))
+            end--;
+
+        return bytes[start..end];
+    }
+
+    private static bool IsAsciiWhitespaceByte(byte b) =>
+        b is (byte)' ' or (byte)'\t' or (byte)'\r' or (byte)'\n';
+
     private static bool IsAsciiWhitespace(ReadOnlySpan<byte> bytes)
     {
         foreach (var b in bytes)
         {
-            if (b is not ((byte)' ' or (byte)'\t' or (byte)'\r' or (byte)'\n'))
+            if (!IsAsciiWhitespaceByte(b))
                 return false;
         }
 
