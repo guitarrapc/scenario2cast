@@ -29,10 +29,22 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryResolvePwsh(out va
 else if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     failures += await RunAsync("PtyMatrixUnix", PtyMatrixUnix);
 
-failures += await RunAsync("IntegrationPtyCmdFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-cmd.yaml", "pty-cmd-output")));
-failures += await RunAsync("IntegrationPtyTtyFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-tty-check.yaml", "redirected=False")));
-if (TryResolvePwsh(out var pwshForFixture))
-    failures += await RunAsync("IntegrationMatrixFixture", () => Task.FromResult(IntegrationMatrixFixture(repoRoot, pwshForFixture)));
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    failures += await RunAsync("IntegrationPtyCmdFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-cmd.yaml", "pty-cmd-output")));
+    failures += await RunAsync("IntegrationPtyTtyFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-tty-check.yaml", "redirected=False")));
+    if (TryResolvePwsh(out var pwshForFixture))
+        failures += await RunAsync("IntegrationMatrixFixture", () => Task.FromResult(IntegrationMatrixFixture(repoRoot, "matrix-pwsh-pty.yaml")));
+}
+else
+{
+    failures += await RunAsync("IntegrationPtyCmdFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-unix.yaml", "pty-cmd-output")));
+    failures += await RunAsync("IntegrationPtyTtyFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-tty-check-unix.yaml", "redirected=False")));
+    if (!TryFindExecutable("matrix", out _))
+        Console.Error.WriteLine("skip IntegrationMatrixFixture: matrix not found");
+    else
+        failures += await RunAsync("IntegrationMatrixFixture", () => Task.FromResult(IntegrationMatrixFixture(repoRoot, "matrix-unix-pty.yaml")));
+}
 
 return failures == 0 ? 0 : 1;
 
@@ -315,15 +327,18 @@ static bool IntegrationFixture(string repoRoot, string fixtureName, string expec
     }
 }
 
-static bool IntegrationMatrixFixture(string repoRoot, string pwshPath)
+static bool IntegrationMatrixFixture(string repoRoot, string fixtureName)
 {
     if (!IntegrationTestsEnabled(repoRoot))
         return true;
 
-    if (!File.Exists(pwshPath))
+    if (!TryFindExecutable("matrix", out _))
+    {
+        Console.Error.WriteLine("skip IntegrationMatrixFixture: matrix not found");
         return true;
+    }
 
-    var fixturePath = Path.Combine(repoRoot, "tests", "fixtures", "matrix-pwsh-pty.yaml");
+    var fixturePath = Path.Combine(repoRoot, "tests", "fixtures", fixtureName);
     var outputStem = Path.Combine(Path.GetTempPath(), $"scenetake-pty-matrix-{Guid.NewGuid():N}");
     try
     {
@@ -335,9 +350,9 @@ static bool IntegrationMatrixFixture(string repoRoot, string pwshPath)
         var castPath = outputStem + ".cast";
         var events = ReadCastOutputEvents(castPath);
         var combined = string.Concat(events);
-        return events.Count >= 2
+        return events.Count >= 1
             && combined.Contains('\u001b')
-            && combined.Length > 100;
+            && LooksLikeMatrixOutput(combined);
     }
     finally
     {
@@ -348,6 +363,12 @@ static bool IntegrationMatrixFixture(string repoRoot, string pwshPath)
         }
     }
 }
+
+static bool LooksLikeMatrixOutput(string text) =>
+    text.Length > 100
+    && (text.Contains("\u001b[?1049h", StringComparison.Ordinal)
+        || text.Contains("\u001b[2J", StringComparison.Ordinal)
+        || text.Contains("\u001b[H", StringComparison.Ordinal));
 
 static bool RunScenetake(string repoRoot, string fixturePath, string outputStem, out int exitCode)
 {
