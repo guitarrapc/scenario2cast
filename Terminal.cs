@@ -882,7 +882,8 @@ internal sealed class AnsiParser
 
             if (status != OperationStatus.Done)
             {
-                i++;
+                ProcessDecodedRune(new Rune(0xFFFD));
+                i += Math.Max(consumed, 1);
                 continue;
             }
 
@@ -1305,17 +1306,6 @@ internal sealed class AnsiParser
 
     private static bool IsAsciiWhitespaceByte(byte b) =>
         b is (byte)' ' or (byte)'\t' or (byte)'\r' or (byte)'\n';
-
-    private static bool IsAsciiWhitespace(ReadOnlySpan<byte> bytes)
-    {
-        foreach (var b in bytes)
-        {
-            if (!IsAsciiWhitespaceByte(b))
-                return false;
-        }
-
-        return true;
-    }
 
     private static int GetParameter(List<int> parameters, int index, int defaultValue)
     {

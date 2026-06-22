@@ -18,6 +18,7 @@ failures += Run("SplitEscapeAcrossChunks", SplitEscapeAcrossChunks);
 failures += Run("SplitUtf8AcrossChunks", SplitUtf8AcrossChunks);
 failures += Run("Utf8ProcessMatchesString", Utf8ProcessMatchesString);
 failures += Run("CsiParameterWhitespace", CsiParameterWhitespace);
+failures += Run("InvalidUtf8Replacement", InvalidUtf8Replacement);
 failures += Run("InsertBlankCharacters", InsertBlankCharacters);
 failures += Run("ScrollRegion", ScrollRegion);
 
@@ -200,6 +201,16 @@ static bool CsiParameterWhitespace()
 
     return buffer.GetCell(0, 0).Text == "A"
         && buffer.GetCell(0, 0).Foreground == theme.AnsiPalette[1];
+}
+
+static bool InvalidUtf8Replacement()
+{
+    var theme = DarkTheme();
+    var buffer = new ScreenBuffer(8, 2, theme);
+    var parser = new AnsiParser(buffer, theme);
+    parser.ProcessUtf8([0xFF]);
+
+    return buffer.GetCell(0, 0).Text == "\uFFFD";
 }
 
 static bool InsertBlankCharacters()
