@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 
 internal readonly record struct TerminalTheme(string Foreground, string Background, string[] AnsiPalette)
 {
@@ -808,6 +809,14 @@ internal sealed class AnsiParser
         ProcessCore(text);
     }
 
+    internal void ProcessUtf8(ReadOnlySpan<byte> utf8)
+    {
+        if (utf8.IsEmpty)
+            return;
+
+        Process(Encoding.UTF8.GetString(utf8));
+    }
+
     private static string MergePending(string pending, string text)
     {
         var len = pending.Length + text.Length;
@@ -1276,9 +1285,15 @@ internal readonly record struct CastEvent(
     CastEventKind Kind,
     string Data,
     int ResizeWidth = 0,
-    int ResizeHeight = 0)
+    int ResizeHeight = 0,
+    ReadOnlyMemory<byte> Utf8Output = default)
 {
+    internal bool HasUtf8Output => !Utf8Output.IsEmpty;
+
     internal static CastEvent Output(double time, string data) => new(time, CastEventKind.Output, data);
+
+    internal static CastEvent OutputUtf8(double time, ReadOnlyMemory<byte> data) =>
+        new(time, CastEventKind.Output, "", Utf8Output: data);
 
     internal static CastEvent Resize(double time, int width, int height) =>
         new(time, CastEventKind.Resize, $"{width}x{height}", width, height);
@@ -1368,7 +1383,10 @@ internal static class TerminalReplay
                 continue;
             }
 
-            parser.Process(ev.Data);
+            if (ev.HasUtf8Output)
+                parser.ProcessUtf8(ev.Utf8Output.Span);
+            else
+                parser.Process(ev.Data);
             CaptureIfChanged(ev.Time);
         }
 
@@ -1458,6 +1476,33 @@ internal static class TerminalReplay
         return index;
     }
 
+    private static bool OutputContainsAnsiBlankIndicator(CastEvent ev)
+    {
+        if (ev.HasUtf8Output)
+        {
+            var span = ev.Utf8Output.Span;
+            return Utf8Contains(span, "\u001b[?1049l"u8)
+                || Utf8Contains(span, "\u001b[?47l"u8)
+                || Utf8Contains(span, "\u001b[?1047l"u8)
+                || Utf8Contains(span, "\u001b[2J"u8)
+                || Utf8Contains(span, "\u001b[J"u8)
+                || Utf8Contains(span, "\u001b[H"u8)
+                || Utf8Contains(span, "\u001b[;H"u8);
+        }
+
+        var data = ev.Data;
+        return data.Contains("\u001b[?1049l", StringComparison.Ordinal)
+            || data.Contains("\u001b[?47l", StringComparison.Ordinal)
+            || data.Contains("\u001b[?1047l", StringComparison.Ordinal)
+            || data.Contains("\u001b[2J", StringComparison.Ordinal)
+            || data.Contains("\u001b[J", StringComparison.Ordinal)
+            || data.Contains("\u001b[H", StringComparison.Ordinal)
+            || data.Contains("\u001b[;H", StringComparison.Ordinal);
+    }
+
+    private static bool Utf8Contains(ReadOnlySpan<byte> haystack, ReadOnlySpan<byte> needle) =>
+        haystack.IndexOf(needle) >= 0;
+
     private static bool HasTrailingBlankIndicators(IReadOnlyList<CastEvent> events, int startIndex)
     {
         for (var i = startIndex; i < events.Count; i++)
@@ -1465,14 +1510,7 @@ internal static class TerminalReplay
             if (events[i].Kind != CastEventKind.Output)
                 continue;
 
-            var data = events[i].Data;
-            if (data.Contains("\u001b[?1049l", StringComparison.Ordinal)
-                || data.Contains("\u001b[?47l", StringComparison.Ordinal)
-                || data.Contains("\u001b[?1047l", StringComparison.Ordinal)
-                || data.Contains("\u001b[2J", StringComparison.Ordinal)
-                || data.Contains("\u001b[J", StringComparison.Ordinal)
-                || data.Contains("\u001b[H", StringComparison.Ordinal)
-                || data.Contains("\u001b[;H", StringComparison.Ordinal))
+            if (OutputContainsAnsiBlankIndicator(events[i]))
             {
                 return true;
             }

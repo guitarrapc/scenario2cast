@@ -20,6 +20,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Unicode;
 using VYaml.Annotations;
 using VYaml.Serialization;
 
@@ -749,7 +750,7 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
 
         if (TryFormatNameComment(command.Name, command.Cmd, out var nameLine, out var nameDisplayText))
         {
-            var prefix = NameCommentPrefix(events.Count > 0 ? events[^1].Data : null);
+            var prefix = NameCommentPrefixForLastEvent(events);
             events.Add(CastEvent.Marker(Math.Round(t, 6), nameDisplayText));
             events.Add(CastEvent.Output(Math.Round(t, 6), prefix + nameLine));
             t += 0.05;
@@ -782,16 +783,18 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         if (execution.IsPty)
         {
             var commandStart = t;
-            foreach (var chunk in execution.PtyChunks!)
+            foreach (var chunk in execution.PtyByteChunks!)
             {
-                if (chunk.Text.IsEmpty)
+                if (chunk.Data.IsEmpty)
                     continue;
 
-                events.Add(CastEvent.Output(Math.Round(commandStart + chunk.Time.TotalSeconds, 6), NormalizeNewlines(new string(chunk.Text.Span))));
+                events.Add(CastEvent.OutputUtf8(
+                    Math.Round(commandStart + chunk.Time.TotalSeconds, 6),
+                    chunk.Data));
             }
 
-            t = execution.PtyChunks.Count > 0
-                ? Math.Max(t + cmdExecutionDuration, commandStart + execution.PtyChunks[^1].Time.TotalSeconds)
+            t = execution.PtyByteChunks.Count > 0
+                ? Math.Max(t + cmdExecutionDuration, commandStart + execution.PtyByteChunks[^1].Time.TotalSeconds)
                 : t + cmdExecutionDuration;
         }
         else
@@ -825,6 +828,30 @@ static string NameCommentPrefix(string? precedingOutput)
         ? ""
         : "\r\n";
 }
+
+static string NameCommentPrefixForLastEvent(IReadOnlyList<CastEvent> events)
+{
+    if (events.Count == 0)
+        return "";
+
+    var last = events[^1];
+    if (last.Kind != CastEventKind.Output)
+        return "\r\n";
+
+    if (last.HasUtf8Output)
+    {
+        var span = last.Utf8Output.Span;
+        if (span.IsEmpty)
+            return "";
+        return Utf8EndsWithNewline(span) ? "" : "\r\n";
+    }
+
+    return NameCommentPrefix(last.Data);
+}
+
+static bool Utf8EndsWithNewline(ReadOnlySpan<byte> span) =>
+    span[^1] == (byte)'\n'
+    || (span.Length >= 2 && span[^2] == (byte)'\r' && span[^1] == (byte)'\n');
 
 static CommandEntry ParseCommand(object? item)
 {
@@ -869,9 +896,9 @@ static async Task<CommandExecution> RunCommandCoreAsync(string cmd, string? cwd,
             Arguments = BuildPtyShellArguments(shell, cmd),
             WorkingDirectory = cwd,
             Size = new(width, height),
-        });
+        }, new PtyCaptureOptions { Completion = new PtyCompleteOptions { DecodeOutput = false } });
         if (verbose)
-            Console.Error.WriteLine($"scenetake: pty verbose: chunks={result.Chunks.Count} chars={result.GetTextString().Length}");
+            Console.Error.WriteLine($"scenetake: pty verbose: chunks={result.Chunks.Count} bytes={result.Output.Length}");
         return CommandExecution.FromCapture(result);
     }
 
@@ -1877,7 +1904,10 @@ static void WriteCast(
         writer.Write('"');
         writer.Write(code);
         writer.Write("\",");
-        WriteJsonString(writer, ev.Data);
+        if (ev.HasUtf8Output)
+            WriteJsonUtf8String(writer, ev.Utf8Output.Span);
+        else
+            WriteJsonString(writer, ev.Data);
         writer.WriteLine(']');
     }
 
@@ -1934,6 +1964,71 @@ static void WriteJsonString(TextWriter writer, ReadOnlySpan<char> s)
 
                 break;
         }
+    }
+
+    writer.Write('"');
+}
+
+static void WriteJsonUtf8String(TextWriter writer, ReadOnlySpan<byte> utf8)
+{
+    writer.Write('"');
+    Span<char> esc = stackalloc char[6];
+    Span<char> runeChars = stackalloc char[2];
+    var index = 0;
+    while (index < utf8.Length)
+    {
+        if (utf8[index] <= 0x7F)
+        {
+            var c = (char)utf8[index++];
+            switch (c)
+            {
+                case '"': writer.Write("\\\""); break;
+                case '\\': writer.Write("\\\\"); break;
+                case '\b': writer.Write("\\b"); break;
+                case '\f': writer.Write("\\f"); break;
+                case '\n': writer.Write("\\n"); break;
+                case '\r': writer.Write("\\r"); break;
+                case '\t': writer.Write("\\t"); break;
+                default:
+                    if (c < 0x20)
+                    {
+                        esc[0] = '\\';
+                        esc[1] = 'u';
+                        ((uint)c).TryFormat(esc[2..], out _, "x4");
+                        writer.Write(esc);
+                    }
+                    else
+                    {
+                        writer.Write(c);
+                    }
+
+                    break;
+            }
+
+            continue;
+        }
+
+        var status = Rune.DecodeFromUtf8(utf8[index..], out var rune, out var consumed);
+        if (status != OperationStatus.Done)
+        {
+            index++;
+            continue;
+        }
+
+        if (rune.Value < 0x20)
+        {
+            esc[0] = '\\';
+            esc[1] = 'u';
+            ((uint)rune.Value).TryFormat(esc[2..], out _, "x4");
+            writer.Write(esc);
+        }
+        else
+        {
+            rune.TryEncodeToUtf16(runeChars, out var charCount);
+            writer.Write(runeChars[..charCount]);
+        }
+
+        index += consumed;
     }
 
     writer.Write('"');
@@ -2287,10 +2382,10 @@ readonly record struct CommandExecution(
     bool IsPty,
     string Output,
     string Stderr,
-    IReadOnlyList<PtyCaptureTextChunk>? PtyChunks)
+    IReadOnlyList<PtyCaptureChunk>? PtyByteChunks)
 {
     public static CommandExecution FromCapture(PtyCaptureResult result) =>
-        new(result.ExitCode, true, result.GetTextString(), "", result.GetTextChunks());
+        new(result.ExitCode, true, "", "", result.Chunks);
 
     public static CommandExecution FromPipe(string stdout, string stderr, int exitCode) =>
         new(exitCode, false, stdout, stderr, null);
