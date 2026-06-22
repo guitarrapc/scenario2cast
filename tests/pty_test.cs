@@ -3,8 +3,8 @@
 #:property Nullable=enable
 #:property ImplicitUsings=enable
 #:property AllowUnsafeBlocks=true
-#:package MiniPty@1.0.0
-#:package MiniPty.Capture@1.0.0
+#:package MiniPty@1.0.1
+#:package MiniPty.Capture@1.0.1
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -18,6 +18,8 @@ var failures = 0;
 failures += await RunAsync("PtyEchoOutput", PtyEchoOutput);
 failures += await RunAsync("PtyTtyCheck", PtyTtyCheck);
 failures += await RunAsync("PtyStdinEof", PtyStdinEof);
+failures += await RunAsync("PtyEmptyInputSignalsEof", PtyEmptyInputSignalsEof);
+failures += await RunAsync("PtyStdinReadCompletesAfterInputEof", PtyStdinReadCompletesAfterInputEof);
 failures += await RunAsync("PtyHasExitedPolls", () => Task.FromResult(PtyHasExitedPolls()));
 failures += await RunAsync("PtyCancellationKill", PtyCancellationKill);
 failures += await RunAsync("PtyCancellationWait", PtyCancellationWait);
@@ -67,20 +69,23 @@ static async Task<int> RunAsync(string name, Func<Task<bool>> test)
 static PtyStartInfo Spawn(string fileName, IReadOnlyList<string> arguments, int columns = 40, int rows = 8) =>
     new() { FileName = fileName, Arguments = arguments, Size = new(columns, rows) };
 
+static PtyStartInfo UnixShell(string command) => Spawn("sh", ["-c", command]);
+
+static PtyStartInfo WindowsCommand(string command)
+{
+    var cmd = Environment.GetEnvironmentVariable("ComSpec") ?? @"C:\Windows\System32\cmd.exe";
+    return Spawn(cmd, ["/c", command]);
+}
+
 static async Task<bool> PtyEchoOutput()
 {
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
-        var cmd = Environment.GetEnvironmentVariable("ComSpec") ?? @"C:\Windows\System32\cmd.exe";
-        var result = await PtyCapture.RunAsync(Spawn(cmd, ["/c", "echo pty-layer-echo"]));
+        var result = await PtyCapture.RunAsync(WindowsCommand("echo pty-layer-echo"));
         return result.ExitCode == 0 && result.Contains("pty-layer-echo", StringComparison.Ordinal);
     }
 
-    var shell = Environment.GetEnvironmentVariable("SHELL");
-    if (string.IsNullOrWhiteSpace(shell))
-        shell = "/bin/bash";
-
-    var unix = await PtyCapture.RunAsync(Spawn(shell, ["-lc", "printf pty-layer-echo"]));
+    var unix = await PtyCapture.RunAsync(UnixShell("printf pty-layer-echo"));
     return unix.ExitCode == 0 && unix.Contains("pty-layer-echo", StringComparison.Ordinal);
 }
 
@@ -98,10 +103,46 @@ static async Task<bool> PtyStdinEof()
             && result.Contains("aaa", StringComparison.Ordinal);
     }
 
-    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
+    // Canonical PTY line discipline needs a submitted line before EOT signals EOF; run cat directly (not a login shell).
     var unix = await PtyCapture.RunAsync(
-        Spawn(shell, ["-lc", "cat"]),
-        new PtyCaptureOptions { Completion = new() { Input = marker } });
+        Spawn("cat", []),
+        new PtyCaptureOptions { Completion = new() { Input = $"{marker}\n" } });
+    return unix.ExitCode == 0 && unix.Contains(marker, StringComparison.Ordinal);
+}
+
+static async Task<bool> PtyEmptyInputSignalsEof()
+{
+    const string marker = "pty-empty-eof-complete";
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var result = await PtyCapture.RunAsync(
+            WindowsCommand($"find /v \"\" >nul & echo {marker}"),
+            new PtyCaptureOptions { Completion = new() { Input = string.Empty } });
+        return result.ExitCode == 0 && result.Contains(marker, StringComparison.Ordinal);
+    }
+
+    var unix = await PtyCapture.RunAsync(
+        UnixShell($"cat >/dev/null; printf {marker}"),
+        new PtyCaptureOptions { Completion = new() { Input = string.Empty } });
+    return unix.ExitCode == 0 && unix.Contains(marker, StringComparison.Ordinal);
+}
+
+static async Task<bool> PtyStdinReadCompletesAfterInputEof()
+{
+    const string marker = "pty-stdin-read-complete";
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        var result = await PtyCapture.RunAsync(
+            WindowsCommand($"find /v \"\" >nul & echo {marker}"),
+            new PtyCaptureOptions { Completion = new() { Input = "line 1\r\nline 2\r\n" } });
+        return result.ExitCode == 0 && result.Contains(marker, StringComparison.Ordinal);
+    }
+
+    var unix = await PtyCapture.RunAsync(
+        UnixShell($"cat >/dev/null; printf {marker}"),
+        new PtyCaptureOptions { Completion = new() { Input = "line 1\nline 2\n" } });
     return unix.ExitCode == 0 && unix.Contains(marker, StringComparison.Ordinal);
 }
 
@@ -219,8 +260,7 @@ static async Task<bool> PtyTtyCheck()
         return result.ExitCode == 0 && result.Contains("redirected=False", StringComparison.OrdinalIgnoreCase);
     }
 
-    var shell = Environment.GetEnvironmentVariable("SHELL") ?? "/bin/bash";
-    var unix = await PtyCapture.RunAsync(Spawn(shell, ["-lc", "if [ -t 1 ]; then echo redirected=False; else echo redirected=True; fi"]));
+    var unix = await PtyCapture.RunAsync(UnixShell("test -t 1 && printf redirected=False || printf redirected=True"));
     return unix.ExitCode == 0 && unix.Contains("redirected=False", StringComparison.Ordinal);
 }
 
