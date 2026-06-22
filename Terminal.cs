@@ -1,5 +1,8 @@
+using System.Buffers;
+using System.Buffers.Text;
 using System.Globalization;
 using System.Text;
+using System.Text.Unicode;
 
 internal readonly record struct TerminalTheme(string Foreground, string Background, string[] AnsiPalette)
 {
@@ -778,9 +781,8 @@ internal sealed class AnsiParser
     private readonly TerminalTheme _theme;
     private readonly List<int> _csiParams = new(8);
     private CellStyle _style;
-    private string _pendingEscape = "";
-    private string _pendingCaret = "";
-    [ThreadStatic] private static char[]? t_pendingBuf;
+    private byte[] _buf = [];
+    private int _pendingLength;
 
     internal AnsiParser(ScreenBuffer buffer, TerminalTheme theme)
     {
@@ -794,19 +796,12 @@ internal sealed class AnsiParser
         if (text.Length == 0)
             return;
 
-        if (_pendingEscape.Length > 0)
-        {
-            text = MergePending(_pendingEscape, text);
-            _pendingEscape = "";
-        }
-
-        if (_pendingCaret.Length > 0)
-        {
-            text = MergePending(_pendingCaret, text);
-            _pendingCaret = "";
-        }
-
-        ProcessCore(text);
+        var byteCount = Encoding.UTF8.GetByteCount(text);
+        EnsureBuffer(_pendingLength + byteCount);
+        Encoding.UTF8.GetBytes(text, _buf.AsSpan(_pendingLength));
+        var combined = _buf.AsSpan(0, _pendingLength + byteCount);
+        _pendingLength = 0;
+        ProcessCoreUtf8(combined);
     }
 
     internal void ProcessUtf8(ReadOnlySpan<byte> utf8)
@@ -814,79 +809,119 @@ internal sealed class AnsiParser
         if (utf8.IsEmpty)
             return;
 
-        Process(Encoding.UTF8.GetString(utf8));
-    }
-
-    private static string MergePending(string pending, string text)
-    {
-        var len = pending.Length + text.Length;
-        var buf = t_pendingBuf ??= new char[256];
-        if (len > buf.Length)
-            buf = t_pendingBuf = new char[len];
-        pending.AsSpan().CopyTo(buf);
-        text.AsSpan().CopyTo(buf.AsSpan(pending.Length));
-        return new string(buf, 0, len);
-    }
-
-    private void ProcessCore(string text)
-    {
-        for (var i = 0; i < text.Length; i++)
+        if (_pendingLength > 0)
         {
-            var ch = text[i];
-            if (ch == '\u001b')
-            {
-                if (!TryHandleEscape(text, i, out var escapeEndIndex))
-                {
-                    _pendingEscape = text[i..];
-                    break;
-                }
-
-                i = escapeEndIndex;
-                continue;
-            }
-
-            if (ch == '^' && i + 2 < text.Length && text[i + 1] == '[' && text[i + 2] == ']')
-            {
-                if (!TrySkipOsc(text, i + 3, out var oscEnd, caretTerminator: true))
-                {
-                    _pendingCaret = text[i..];
-                    break;
-                }
-
-                i = oscEnd;
-                continue;
-            }
-
-            if (char.IsHighSurrogate(ch) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1]))
-            {
-                _buffer.PutSurrogatePair(text[i], text[i + 1], _style);
-                i++;
-                continue;
-            }
-
-            if (char.IsLowSurrogate(ch))
-                continue;
-
-            if (IsVariationSelector(ch))
-            {
-                _buffer.AppendToPreviousCell(ScreenBuffer.CharStr(ch));
-                continue;
-            }
-
-            if (IsZeroWidthChar(ch))
-                continue;
-
-            var category = CharUnicodeInfo.GetUnicodeCategory(ch);
-            if (category is UnicodeCategory.NonSpacingMark
-                or UnicodeCategory.SpacingCombiningMark
-                or UnicodeCategory.EnclosingMark)
-            {
-                _buffer.AppendToPreviousCell(ScreenBuffer.CharStr(ch));
-                continue;
-            }
-
-            _buffer.PutChar(ch, _style);
+            EnsureBuffer(_pendingLength + utf8.Length);
+            utf8.CopyTo(_buf.AsSpan(_pendingLength));
+            var combined = _buf.AsSpan(0, _pendingLength + utf8.Length);
+            _pendingLength = 0;
+            ProcessCoreUtf8(combined);
+            return;
         }
+
+        ProcessCoreUtf8(utf8);
+    }
+
+    private void EnsureBuffer(int capacity)
+    {
+        if (_buf.Length >= capacity)
+            return;
+
+        var newBuf = new byte[Math.Max(capacity, _buf.Length < 16 ? 16 : _buf.Length * 2)];
+        if (_pendingLength > 0)
+            _buf.AsSpan(0, _pendingLength).CopyTo(newBuf);
+        _buf = newBuf;
+    }
+
+    private void SavePending(ReadOnlySpan<byte> tail)
+    {
+        if (tail.IsEmpty)
+            return;
+
+        EnsureBuffer(tail.Length);
+        tail.CopyTo(_buf);
+        _pendingLength = tail.Length;
+    }
+
+    private void ProcessCoreUtf8(ReadOnlySpan<byte> input)
+    {
+        var i = 0;
+        while (i < input.Length)
+        {
+            var b = input[i];
+            if (b == 0x1B)
+            {
+                if (!TryHandleEscape(input, i, out var escapeEndIndex))
+                {
+                    SavePending(input[i..]);
+                    return;
+                }
+
+                i = escapeEndIndex + 1;
+                continue;
+            }
+
+            if (b == (byte)'^' && i + 2 < input.Length && input[i + 1] == (byte)'[' && input[i + 2] == (byte)']')
+            {
+                if (!TrySkipOsc(input, i + 3, out var oscEnd, caretTerminator: true))
+                {
+                    SavePending(input[i..]);
+                    return;
+                }
+
+                i = oscEnd + 1;
+                continue;
+            }
+
+            var status = Rune.DecodeFromUtf8(input[i..], out var rune, out var consumed);
+            if (status == OperationStatus.NeedMoreData)
+            {
+                SavePending(input[i..]);
+                return;
+            }
+
+            if (status != OperationStatus.Done)
+            {
+                ProcessDecodedRune(new Rune(0xFFFD));
+                i += Math.Max(consumed, 1);
+                continue;
+            }
+
+            i += consumed;
+            ProcessDecodedRune(rune);
+        }
+    }
+
+    private void ProcessDecodedRune(Rune rune)
+    {
+        if (rune.Utf16SequenceLength == 2)
+        {
+            Span<char> chars = stackalloc char[2];
+            rune.TryEncodeToUtf16(chars, out _);
+            _buffer.PutSurrogatePair(chars[0], chars[1], _style);
+            return;
+        }
+
+        var ch = (char)rune.Value;
+        if (IsVariationSelector(ch))
+        {
+            _buffer.AppendToPreviousCell(ScreenBuffer.CharStr(ch));
+            return;
+        }
+
+        if (IsZeroWidthChar(ch))
+            return;
+
+        var category = CharUnicodeInfo.GetUnicodeCategory(ch);
+        if (category is UnicodeCategory.NonSpacingMark
+            or UnicodeCategory.SpacingCombiningMark
+            or UnicodeCategory.EnclosingMark)
+        {
+            _buffer.AppendToPreviousCell(ScreenBuffer.CharStr(ch));
+            return;
+        }
+
+        _buffer.PutChar(ch, _style);
     }
 
     private static bool IsZeroWidthChar(char ch) =>
@@ -894,46 +929,46 @@ internal sealed class AnsiParser
 
     private static bool IsVariationSelector(char ch) => ch is >= '\uFE00' and <= '\uFE0F';
 
-    private bool TryHandleEscape(string text, int index, out int endIndex)
+    private bool TryHandleEscape(ReadOnlySpan<byte> input, int index, out int endIndex)
     {
         endIndex = index;
-        if (index + 1 >= text.Length)
+        if (index + 1 >= input.Length)
             return false;
 
-        switch (text[index + 1])
+        switch (input[index + 1])
         {
-            case '[':
-                return TryHandleCsi(text, index + 2, out endIndex);
-            case ']':
-                return TrySkipOsc(text, index + 2, out endIndex);
-            case 'P':
-                return TrySkipOsc(text, index + 2, out endIndex);
-            case '(' or ')' or '*' or '+' or '-' or '.' or '/' or '#' or '%':
-                if (index + 2 >= text.Length)
+            case (byte)'[':
+                return TryHandleCsi(input, index + 2, out endIndex);
+            case (byte)']':
+                return TrySkipOsc(input, index + 2, out endIndex);
+            case (byte)'P':
+                return TrySkipOsc(input, index + 2, out endIndex);
+            case (byte)'(' or (byte)')' or (byte)'*' or (byte)'+' or (byte)'-' or (byte)'.' or (byte)'/' or (byte)'#' or (byte)'%':
+                if (index + 2 >= input.Length)
                     return false;
                 endIndex = index + 2;
                 return true;
-            case '7':
+            case (byte)'7':
                 _buffer.SaveCursor();
                 endIndex = index + 1;
                 return true;
-            case '8':
+            case (byte)'8':
                 _buffer.RestoreCursor();
                 endIndex = index + 1;
                 return true;
-            case 'D':
+            case (byte)'D':
                 _buffer.Index();
                 endIndex = index + 1;
                 return true;
-            case 'E':
+            case (byte)'E':
                 _buffer.NextLine();
                 endIndex = index + 1;
                 return true;
-            case 'M':
+            case (byte)'M':
                 _buffer.ReverseIndex();
                 endIndex = index + 1;
                 return true;
-            case 'c':
+            case (byte)'c':
                 _buffer.ClearDisplay(2);
                 _buffer.MoveCursorTo(0, 0);
                 _style = _buffer.DefaultStyle;
@@ -945,24 +980,24 @@ internal sealed class AnsiParser
         }
     }
 
-    private static bool TrySkipOsc(string text, int start, out int endIndex, bool caretTerminator = false)
+    private static bool TrySkipOsc(ReadOnlySpan<byte> input, int start, out int endIndex, bool caretTerminator = false)
     {
         endIndex = start;
-        for (var i = start; i < text.Length; i++)
+        for (var i = start; i < input.Length; i++)
         {
-            if (text[i] == '\a')
+            if (input[i] == 0x07)
             {
                 endIndex = i;
                 return true;
             }
 
-            if (caretTerminator && text[i] == '^' && i + 2 < text.Length && text[i + 1] == '[' && text[i + 2] == '\\')
+            if (caretTerminator && input[i] == (byte)'^' && i + 2 < input.Length && input[i + 1] == (byte)'[' && input[i + 2] == (byte)'\\')
             {
                 endIndex = i + 2;
                 return true;
             }
 
-            if (text[i] == '\u001b' && i + 1 < text.Length && text[i + 1] == '\\')
+            if (input[i] == 0x1B && i + 1 < input.Length && input[i + 1] == (byte)'\\')
             {
                 endIndex = i + 1;
                 return true;
@@ -972,26 +1007,26 @@ internal sealed class AnsiParser
         return false;
     }
 
-    private bool TryHandleCsi(string text, int start, out int endIndex)
+    private bool TryHandleCsi(ReadOnlySpan<byte> input, int start, out int endIndex)
     {
-        endIndex = text.Length - 1;
+        endIndex = input.Length - 1;
         char? privateMarker = null;
         var paramStart = start;
-        if (start < text.Length && text[start] is '<' or '=' or '>' or '?')
+        if (start < input.Length && input[start] is (byte)'<' or (byte)'=' or (byte)'>' or (byte)'?')
         {
-            privateMarker = text[start];
+            privateMarker = (char)input[start];
             paramStart++;
             start++;
         }
 
         var i = start;
-        while (i < text.Length)
+        while (i < input.Length)
         {
-            var c = text[i];
-            if (c is >= '@' and <= '~')
+            var c = input[i];
+            if (c is >= (byte)'@' and <= (byte)'~')
             {
-                var parameterText = paramStart <= i ? text.AsSpan(paramStart, i - paramStart) : ReadOnlySpan<char>.Empty;
-                ApplyCsi(privateMarker, c, parameterText);
+                var parameterText = paramStart <= i ? input.Slice(paramStart, i - paramStart) : ReadOnlySpan<byte>.Empty;
+                ApplyCsi(privateMarker, (char)c, parameterText);
                 endIndex = i;
                 return true;
             }
@@ -1002,7 +1037,7 @@ internal sealed class AnsiParser
         return false;
     }
 
-    private void ApplyCsi(char? privateMarker, char command, ReadOnlySpan<char> parameterText)
+    private void ApplyCsi(char? privateMarker, char command, ReadOnlySpan<byte> parameterText)
     {
         ParseParameters(parameterText);
         var parameters = _csiParams;
@@ -1228,7 +1263,7 @@ internal sealed class AnsiParser
         return string.Create(CultureInfo.InvariantCulture, $"#{rgbR:X2}{rgbG:X2}{rgbB:X2}");
     }
 
-    private void ParseParameters(ReadOnlySpan<char> parameterText)
+    private void ParseParameters(ReadOnlySpan<byte> parameterText)
     {
         _csiParams.Clear();
         if (parameterText.IsEmpty)
@@ -1238,13 +1273,13 @@ internal sealed class AnsiParser
         while (i <= parameterText.Length)
         {
             var start = i;
-            while (i < parameterText.Length && parameterText[i] is not ';' and not ':')
+            while (i < parameterText.Length && parameterText[i] is not (byte)';' and not (byte)':')
                 i++;
 
-            var part = parameterText[start..i];
-            if (part.IsEmpty || part.IsWhiteSpace())
+            var part = TrimAsciiWhitespace(parameterText[start..i]);
+            if (part.IsEmpty)
                 _csiParams.Add(MissingParameter);
-            else if (int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value))
+            else if (Utf8Parser.TryParse(part, out int value, out _))
                 _csiParams.Add(value);
             else
                 _csiParams.Add(MissingParameter);
@@ -1255,6 +1290,22 @@ internal sealed class AnsiParser
             i++;
         }
     }
+
+    private static ReadOnlySpan<byte> TrimAsciiWhitespace(ReadOnlySpan<byte> bytes)
+    {
+        var start = 0;
+        while (start < bytes.Length && IsAsciiWhitespaceByte(bytes[start]))
+            start++;
+
+        var end = bytes.Length;
+        while (end > start && IsAsciiWhitespaceByte(bytes[end - 1]))
+            end--;
+
+        return bytes[start..end];
+    }
+
+    private static bool IsAsciiWhitespaceByte(byte b) =>
+        b is (byte)' ' or (byte)'\t' or (byte)'\r' or (byte)'\n';
 
     private static int GetParameter(List<int> parameters, int index, int defaultValue)
     {
