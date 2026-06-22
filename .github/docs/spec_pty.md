@@ -7,7 +7,7 @@ User-facing behavior for `pty: true` in scenetake scenarios and the underlying [
 | Layer | Package | Responsibility |
 |-------|---------|----------------|
 | PTY session | **MiniPty** | Spawn, `Input`/`Output` streams, `SendEof`, `Resize`, `WaitForExitAsync`, `CompleteAsync` |
-| Timestamped capture | **MiniPty.Capture** (0.3.x) | `PtyCapture.RunAsync` → `PtyCaptureResult` with `Chunks` |
+| Timestamped capture | **MiniPty.Capture** | `PtyCapture.RunAsync` → `PtyCaptureResult` with `Chunks` |
 | Cast generation | **scenetake** | `PtyCaptureChunk` → cast `o` events; YAML `pty: true` |
 
 Recording semantics (timestamps, chunks) are **not** part of the core PTY API. scenetake depends on **MiniPty** + **MiniPty.Capture**.
