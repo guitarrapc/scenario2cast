@@ -11,9 +11,7 @@ settings:
   post-delay: 1.0 # pause after output before next step
 
 steps:
-  - echo "Hello, World!"
-  - name: Name of the step
-    run: echo "Current directory:"
+  - echo "Showing a simple PTY demo with matrix https://github.com/guitarrapc/matrix"
   - name: pty demo
     run: matrix 5
     pty: true
