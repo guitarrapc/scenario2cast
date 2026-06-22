@@ -10,6 +10,7 @@
 #:include Terminal.cs
 #:include Svg.cs
 #:include CastReader.cs
+#:include JsonEscape.cs
 
 using MiniPty;
 using MiniPty.Capture;
@@ -20,7 +21,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Unicode;
 using VYaml.Annotations;
 using VYaml.Serialization;
 
@@ -1878,13 +1878,13 @@ static void WriteCast(
     };
     if (renderSettings.Window != WindowStyle.None)
         tags.Add(RenderSettingsResolver.WindowTagPrefix + RenderSettingsResolver.WindowToTagValue(renderSettings.Window));
-    var tagsJson = string.Join(",", tags.ConvertAll(static tag => JsonString(tag)));
+    var tagsJson = string.Join(",", tags.ConvertAll(static tag => JsonEscape.JsonString(tag)));
     writer.WriteLine(
         $"{{\"version\":3,\"term\":{{\"cols\":{width},\"rows\":{height}" +
         $",\"type\":\"xterm-256color\"" +
-        $",\"theme\":{{\"fg\":{JsonString(renderSettings.Theme.Fg)},\"bg\":{JsonString(renderSettings.Theme.Bg)},\"palette\":{JsonString(renderSettings.Theme.Palette)}}}}}" +
-        $",\"timestamp\":{timestamp},\"title\":{JsonString(title)}" +
-        $",\"env\":{{\"SHELL\":{JsonString(shell.EnvValue)}}}" +
+        $",\"theme\":{{\"fg\":{JsonEscape.JsonString(renderSettings.Theme.Fg)},\"bg\":{JsonEscape.JsonString(renderSettings.Theme.Bg)},\"palette\":{JsonEscape.JsonString(renderSettings.Theme.Palette)}}}}}" +
+        $",\"timestamp\":{timestamp},\"title\":{JsonEscape.JsonString(title)}" +
+        $",\"env\":{{\"SHELL\":{JsonEscape.JsonString(shell.EnvValue)}}}" +
         $",\"tags\":[{tagsJson}]}}");
 
     var intervalError = 0.0;
@@ -1907,9 +1907,9 @@ static void WriteCast(
         writer.Write(code);
         writer.Write("\",");
         if (ev.HasUtf8Output)
-            WriteJsonUtf8String(writer, ev.Utf8Output.Span);
+            JsonEscape.WriteJsonUtf8String(writer, ev.Utf8Output.Span);
         else
-            WriteJsonString(writer, ev.Data);
+            JsonEscape.WriteJsonString(writer, ev.Data);
         writer.WriteLine(']');
     }
 
@@ -1934,115 +1934,6 @@ static void WriteCastInterval(TextWriter writer, double exact, ref double error)
     Span<char> buf = stackalloc char[16];
     seconds.TryFormat(buf, out var n, "0.000", CultureInfo.InvariantCulture);
     writer.Write(buf[..n]);
-}
-
-static void WriteJsonString(TextWriter writer, ReadOnlySpan<char> s)
-{
-    writer.Write('"');
-    Span<char> esc = stackalloc char[6];
-    foreach (var c in s)
-    {
-        switch (c)
-        {
-            case '"': writer.Write("\\\""); break;
-            case '\\': writer.Write("\\\\"); break;
-            case '\b': writer.Write("\\b"); break;
-            case '\f': writer.Write("\\f"); break;
-            case '\n': writer.Write("\\n"); break;
-            case '\r': writer.Write("\\r"); break;
-            case '\t': writer.Write("\\t"); break;
-            default:
-                if (c < 0x20)
-                {
-                    esc[0] = '\\';
-                    esc[1] = 'u';
-                    ((uint)c).TryFormat(esc[2..], out _, "x4");
-                    writer.Write(esc);
-                }
-                else
-                {
-                    writer.Write(c);
-                }
-
-                break;
-        }
-    }
-
-    writer.Write('"');
-}
-
-static void WriteJsonUtf8String(TextWriter writer, ReadOnlySpan<byte> utf8)
-{
-    writer.Write('"');
-    Span<char> esc = stackalloc char[6];
-    Span<char> runeChars = stackalloc char[2];
-    var index = 0;
-    while (index < utf8.Length)
-    {
-        if (utf8[index] <= 0x7F)
-        {
-            var c = (char)utf8[index++];
-            switch (c)
-            {
-                case '"': writer.Write("\\\""); break;
-                case '\\': writer.Write("\\\\"); break;
-                case '\b': writer.Write("\\b"); break;
-                case '\f': writer.Write("\\f"); break;
-                case '\n': writer.Write("\\n"); break;
-                case '\r': writer.Write("\\r"); break;
-                case '\t': writer.Write("\\t"); break;
-                default:
-                    if (c < 0x20)
-                    {
-                        esc[0] = '\\';
-                        esc[1] = 'u';
-                        ((uint)c).TryFormat(esc[2..], out _, "x4");
-                        writer.Write(esc);
-                    }
-                    else
-                    {
-                        writer.Write(c);
-                    }
-
-                    break;
-            }
-
-            continue;
-        }
-
-        var status = Rune.DecodeFromUtf8(utf8[index..], out var rune, out var consumed);
-        if (status != OperationStatus.Done)
-        {
-            writer.Write("\\uFFFD");
-            index++;
-            continue;
-        }
-
-        if (rune.Value < 0x20)
-        {
-            esc[0] = '\\';
-            esc[1] = 'u';
-            ((uint)rune.Value).TryFormat(esc[2..], out _, "x4");
-            writer.Write(esc);
-        }
-        else
-        {
-            rune.TryEncodeToUtf16(runeChars, out var charCount);
-            writer.Write(runeChars[..charCount]);
-        }
-
-        index += consumed;
-    }
-
-    writer.Write('"');
-}
-
-static string JsonString(ReadOnlySpan<char> s)
-{
-    var sb = new StringBuilder(s.Length + 2);
-    using (var sw = new StringWriter(sb, CultureInfo.InvariantCulture))
-        WriteJsonString(sw, s);
-    return sb.ToString();
 }
 
 static double GetDouble(Dictionary<string, object?> d, double def, params string[] keys)
