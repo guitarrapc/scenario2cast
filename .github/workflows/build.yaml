@@ -17,7 +17,7 @@ jobs:
   publish:
     name: Publish ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 5
     permissions:
       contents: read
     strategy:
@@ -48,6 +48,28 @@ jobs:
           artifact_dir="$GITHUB_WORKSPACE/artifacts/${{ matrix.rid }}"
           mkdir -p "$artifact_dir"
           dotnet publish scenetake.cs -c Release -r "${{ matrix.rid }}" --self-contained true -p:PublishAot=true -p:StripSymbols=true -p:DebugType=None -o "$artifact_dir"
+
+      - name: Install matrix CLI
+        shell: bash
+        run: |
+          matrix_version="v1.0.1"
+          matrix_dir="$RUNNER_TEMP/matrix"
+          mkdir -p "$matrix_dir"
+          case "${{ matrix.rid }}" in
+            win-x64)
+              curl -fsSL -o "$RUNNER_TEMP/matrix.zip" "https://github.com/guitarrapc/matrix/releases/download/${matrix_version}/matrix-win-amd64.zip"
+              unzip -o "$RUNNER_TEMP/matrix.zip" -d "$matrix_dir"
+              ;;
+            linux-x64)
+              curl -fsSL -o "$RUNNER_TEMP/matrix.tar.gz" "https://github.com/guitarrapc/matrix/releases/download/${matrix_version}/matrix-linux-amd64.tar.gz"
+              tar -xzf "$RUNNER_TEMP/matrix.tar.gz" -C "$matrix_dir"
+              ;;
+            osx-arm64)
+              curl -fsSL -o "$RUNNER_TEMP/matrix.tar.gz" "https://github.com/guitarrapc/matrix/releases/download/${matrix_version}/matrix-osx-arm64.tar.gz"
+              tar -xzf "$RUNNER_TEMP/matrix.tar.gz" -C "$matrix_dir"
+              ;;
+          esac
+          echo "$matrix_dir" >> "$GITHUB_PATH"
 
       - name: Smoke test published binary
         shell: bash
@@ -83,6 +105,7 @@ jobs:
           done
 
           dotnet run tests/terminal_tests.cs
+          SCENETAKE_BIN="$binary_path" dotnet run tests/pty_test.cs
           dotnet run tests/readme_sync_test.cs
           dotnet run tests/svg_render_test.cs
           dotnet run tests/window_chrome_test.cs

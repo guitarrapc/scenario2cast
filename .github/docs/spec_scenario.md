@@ -106,6 +106,7 @@ Map-form steps recognize:
 | `run-highlight` | no | Style for typed command text |
 | `highlight` | no | List of `{ color, at }` for command output |
 | `stderr-color` | no | Override `settings.stderr-color` for this step |
+| `pty` | no | Run the command in a pseudo-terminal. Behavior: [spec_pty.md](spec_pty.md) |
 
 Coloring value formats, range grammar, and validation: [spec_highlight.md](spec_highlight.md).
 
@@ -130,6 +131,7 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 ## Cross-Document Notes
 
 - [spec_pre_post.md](spec_pre_post.md) — `pre`/`post` recording exclusion and failure behavior.
+- [spec_pty.md](spec_pty.md) — `pty: true` capture behavior and platform support.
 - [spec_highlight.md](spec_highlight.md) — coloring semantics and style strings.
 - [spec_cast.md](spec_cast.md) — cast header mapping, event stream, recording boundary.
 - [spec_svg.md](spec_svg.md) — SVG renderer.
@@ -139,3 +141,4 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 
 - Separating `settings` (recording) from `render` (presentation) keeps cast behavior independent of SVG output.
 - String-form steps cover simple demos; map-form steps carry per-command timing and coloring without a second schema.
+- Keeping `pty` opt-in preserves the simpler and more predictable pipe-based behavior for ordinary commands. PTY semantics live in [spec_pty.md](spec_pty.md).

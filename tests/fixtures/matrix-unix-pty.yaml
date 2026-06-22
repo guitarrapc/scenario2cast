@@ -1,0 +1,6 @@
+title: "Matrix PTY Unix"
+width: 80
+height: 24
+steps:
+  - run: matrix 3
+    pty: true

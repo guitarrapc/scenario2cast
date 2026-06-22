@@ -152,12 +152,20 @@ scenetake svg [--font-size N] [--font-family FAMILIES] [--theme dark|light]
 - `pre` / `post` は録画フロー外で setup / teardown コマンドを実行します。stdout/stderr は CLI に表示されますが、cast ファイルには一切書き込まれません。
 - `steps`:
   - 実際に実行されるため、ファイル変更や外部システムを操作するような副作用のあるコマンドは慎重に使ってください
-  - 対話的コマンドには非対応です。詳細は [制限事項（シナリオ録画）](#制限事項シナリオ録画)。
+  - ターミナルを必要とするコマンドは `pty: true` で pseudo-terminal capture を有効化できます。詳細は [制限事項（シナリオ録画）](#制限事項シナリオ録画)。
   - 実行時間が長いコマンドは `execution-duration` で見やすく調整できます
 
 ## 制限事項（シナリオ録画）
 
-シナリオ録画は PTY を使わずコマンドを実行し、各コマンドの出力は終了後にまとめて取得します。対話的なプログラム、リアルタイムのターミナルアニメーション、フルスクリーン TUI（例: `vim`、`htop`、`sl`、`copilot --banner`）には対応していません。これらを扱う場合は [asciinema](https://asciinema.org/) で録画し、`scenetake svg` で変換してください。SVG レンダラーは外部 cast のリッチ TUI 出力に対応しています。
+シナリオ録画は通常 PTY を使わずコマンドを実行し、各コマンドの出力は終了後にまとめて取得します。ターミナル対応コマンドでは、map form step に `pty: true` を指定できます。PTY サイズはシナリオの `width` / `height` です。
+
+```yaml
+steps:
+  - run: matrix --duration 5
+    pty: true
+```
+
+`pty: true` はターミナル UI コマンドやリアルタイムのターミナルアニメーション向けです。端末ストリームをそのまま記録するため、stdout と stderr は分離されず、その step では `stderr-color` は適用されません。ユーザー入力を必要とする完全な対話フローは引き続きシナリオモデルの範囲外です。これらを扱う場合は [asciinema](https://asciinema.org/) で録画し、`scenetake svg` で変換してください。
 
 ## シナリオファイル形式
 
@@ -213,6 +221,10 @@ steps:
   - name: "execution-duration"
     run: sleep 1
     execution-duration: 0.5
+
+  - name: "pty demo"
+    run: echo "This command runs in a PTY, so output appears immediately and can include interactive features like colors and progress bars."
+    pty: true
 
   - name: "run-highlight colors the typed command"
     run: printf 'done\n'

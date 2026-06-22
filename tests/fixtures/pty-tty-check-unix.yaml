@@ -1,0 +1,6 @@
+title: "PTY TTY Check Unix"
+width: 40
+height: 8
+steps:
+  - run: if [ -t 1 ]; then printf redirected=False; else printf redirected=True; fi
+    pty: true

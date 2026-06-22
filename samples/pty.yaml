@@ -1,0 +1,17 @@
+title: "PTY Demo"
+width: 80
+height: 24
+shell: bash
+
+settings:
+  prompt: "$ "
+  typing-speed: 0.02 # average seconds per keystroke
+  typing-jitter: 0.01 # random variance (±) per keystroke
+  pre-delay: 0.4 # pause before typing starts
+  post-delay: 1.0 # pause after output before next step
+
+steps:
+  - echo "Showing a simple PTY demo with matrix https://github.com/guitarrapc/matrix"
+  - name: pty demo
+    run: matrix 5
+    pty: true
