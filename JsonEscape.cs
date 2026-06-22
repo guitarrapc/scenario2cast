@@ -1,4 +1,4 @@
-using System.Buffers;
+﻿using System.Buffers;
 using System.Globalization;
 using System.Text;
 using System.Text.Unicode;
@@ -94,21 +94,7 @@ internal static class JsonEscape
             i++;
             while (i < s.Length && !NeedsJsonEscapeOrControl(s[i]))
                 i++;
-            WriteUnescapedCharRun(writer, s.Slice(start, i - start));
-        }
-    }
-
-    static void WriteUnescapedCharRun(TextWriter writer, ReadOnlySpan<char> run)
-    {
-        Span<char> chunk = stackalloc char[CharWriteChunk];
-        var offset = 0;
-        while (offset < run.Length)
-        {
-            var take = Math.Min(CharWriteChunk, run.Length - offset);
-            for (var j = 0; j < take; j++)
-                chunk[j] = run[offset + j];
-            writer.Write(chunk[..take]);
-            offset += take;
+            writer.Write(s.Slice(start, i - start));
         }
     }
 
