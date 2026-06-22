@@ -4,6 +4,8 @@
 #:property ImplicitUsings=enable
 #:include ../Terminal.cs
 
+using System.Text;
+
 var failures = 0;
 failures += Run("SgrColorAndReset", SgrColorAndReset);
 failures += Run("MoveCursorAndOverwrite", MoveCursorAndOverwrite);
@@ -13,6 +15,8 @@ failures += Run("ColonDelimitedTrueColor", ColonDelimitedTrueColor);
 failures += Run("AlternateScreen", AlternateScreen);
 failures += Run("CursorVisibility", CursorVisibility);
 failures += Run("SplitEscapeAcrossChunks", SplitEscapeAcrossChunks);
+failures += Run("SplitUtf8AcrossChunks", SplitUtf8AcrossChunks);
+failures += Run("Utf8ProcessMatchesString", Utf8ProcessMatchesString);
 failures += Run("InsertBlankCharacters", InsertBlankCharacters);
 failures += Run("ScrollRegion", ScrollRegion);
 
@@ -142,6 +146,48 @@ static bool SplitEscapeAcrossChunks()
 
     return buffer.GetCell(0, 0).Text == "A"
         && buffer.GetCell(0, 1).Text == "B";
+}
+
+static void FeedUtf8(AnsiParser parser, byte[][] chunks)
+{
+    foreach (var chunk in chunks)
+        parser.ProcessUtf8(chunk);
+}
+
+static bool SplitUtf8AcrossChunks()
+{
+    var theme = DarkTheme();
+    var buffer = new ScreenBuffer(8, 2, theme);
+    var parser = new AnsiParser(buffer, theme);
+    var utf8 = "\u4e2d"u8.ToArray();
+    FeedUtf8(parser, [utf8[..2], utf8[2..]]);
+
+    return buffer.GetCell(0, 0).Text == "\u4e2d"
+        && buffer.GetCell(0, 0).IsWide
+        && buffer.GetCell(0, 1).IsWideContinuation
+        && buffer.CursorCol == 2;
+}
+
+static bool Utf8ProcessMatchesString()
+{
+    var theme = DarkTheme();
+    var stringBuffer = new ScreenBuffer(12, 2, theme);
+    var utf8Buffer = new ScreenBuffer(12, 2, theme);
+    var stringParser = new AnsiParser(stringBuffer, theme);
+    var utf8Parser = new AnsiParser(utf8Buffer, theme);
+    const string text = "\u001b[31mA\u001b[0mB\u4e2d";
+    stringParser.Process(text);
+    utf8Parser.ProcessUtf8(Encoding.UTF8.GetBytes(text));
+
+    for (var col = 0; col < 4; col++)
+    {
+        if (stringBuffer.GetCell(0, col).Text != utf8Buffer.GetCell(0, col).Text)
+            return false;
+        if (stringBuffer.GetCell(0, col).Foreground != utf8Buffer.GetCell(0, col).Foreground)
+            return false;
+    }
+
+    return stringBuffer.CursorCol == utf8Buffer.CursorCol;
 }
 
 static bool InsertBlankCharacters()
