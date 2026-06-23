@@ -12,6 +12,7 @@ failures += Run("LinearCompressUnderMax", LinearCompressUnderMax);
 failures += Run("AdjustTimelineCombined", AdjustTimelineCombined);
 failures += Run("CoalesceTimedTextMerges", CoalesceTimedTextMerges);
 failures += Run("CoalesceTimedUtf8Merges", CoalesceTimedUtf8Merges);
+failures += Run("MergeBurstGapsCollapses", MergeBurstGapsCollapses);
 failures += Run("HighlightSplitterPreservesSegments", HighlightSplitterPreservesSegments);
 
 return failures == 0 ? 0 : 1;
@@ -98,10 +99,32 @@ static bool LinearCompressUnderMax()
     return Math.Abs(times[1] - 1.0) < 1e-9 && Math.Abs(times[2] - 2.0) < 1e-9;
 }
 
+static void MergeBurstGaps(Span<double> times, ReadOnlySpan<double> originalSeconds, double burstThreshold)
+{
+    if (times.Length <= 1 || burstThreshold <= 0)
+        return;
+
+    for (var i = 1; i < times.Length; i++)
+    {
+        if (originalSeconds[i] - originalSeconds[i - 1] <= burstThreshold)
+            times[i] = times[i - 1];
+    }
+}
+
+static bool MergeBurstGapsCollapses()
+{
+    var times = new[] { 0.0, 0.02, 0.04, 1.0 };
+    var original = new[] { 0.0, 0.01, 0.02, 1.0 };
+    MergeBurstGaps(times, original, burstThreshold: 0.05);
+    return Math.Abs(times[1]) < 1e-9
+        && Math.Abs(times[2]) < 1e-9
+        && Math.Abs(times[3] - 1.0) < 1e-9;
+}
+
 static bool AdjustTimelineCombined()
 {
     var times = Enumerable.Range(0, 201).Select(static i => i * 0.5).ToArray();
-    var adjusted = CastTimingPipeline.AdjustTimeline(times, new CastTimingSettings(2.0, 0.2, 10.0));
+    var adjusted = CastTimingPipeline.AdjustTimeline(times, new CastTimingSettings(2.0, 0.2, 10.0, StreamOutput: true));
     return Math.Abs(adjusted[^1] - 10.0) < 1e-9;
 }
 

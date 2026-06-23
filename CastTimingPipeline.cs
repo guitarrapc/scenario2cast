@@ -1,7 +1,14 @@
 internal readonly record struct CastTimingSettings(
     double SilenceThreshold,
     double MaxIdle,
-    double? MaxDuration);
+    double? MaxDuration,
+    bool StreamOutput);
+
+internal static class CastTimingSettingsExtensions
+{
+    internal static bool UsesStreamEmission(this CastTimingSettings settings) =>
+        settings.StreamOutput || settings.MaxDuration is not null;
+}
 
 internal static class CastTimingPipeline
 {
@@ -102,6 +109,18 @@ internal static class CastTimingPipeline
 
         result.Add((currentTime, ConcatUtf8(buffers, currentLength)));
         return result;
+    }
+
+    internal static void MergeBurstGaps(Span<double> times, ReadOnlySpan<double> originalSeconds, double burstThreshold)
+    {
+        if (times.Length <= 1 || burstThreshold <= 0)
+            return;
+
+        for (var i = 1; i < times.Length; i++)
+        {
+            if (originalSeconds[i] - originalSeconds[i - 1] <= burstThreshold)
+                times[i] = times[i - 1];
+        }
     }
 
     internal static bool HaveSameTime(double left, double right) =>

@@ -36,6 +36,7 @@ const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
 const double DefaultSilenceThreshold = 2.0;
 const double DefaultMaxIdle = 0.2;
+const double DefaultBurstThreshold = 0.05;
 const string DefaultStderrColorSpec = "red";
 const string SgrReset = "\u001b[0m";
 
@@ -808,13 +809,15 @@ static CastTimingSettings ResolveCastTiming(ScenarioSettings settings, Dictionar
     var silenceThreshold = settings.SilenceThreshold ?? DefaultSilenceThreshold;
     var maxIdle = settings.MaxIdle ?? DefaultMaxIdle;
     double? maxDuration = settings.MaxDuration;
+    var streamOutput = settings.StreamOutput ?? false;
     if (stepExtra is null)
-        return new CastTimingSettings(silenceThreshold, maxIdle, maxDuration);
+        return new CastTimingSettings(silenceThreshold, maxIdle, maxDuration, streamOutput);
 
     return new CastTimingSettings(
         GetDouble(stepExtra, silenceThreshold, "silence-threshold"),
         GetDouble(stepExtra, maxIdle, "max-idle"),
-        GetOptionalDouble(stepExtra, maxDuration, "max-duration"));
+        GetOptionalDouble(stepExtra, maxDuration, "max-duration"),
+        GetBool(stepExtra, streamOutput, "stream-output"));
 }
 
 static double EmitPipeStepOutput(
@@ -830,11 +833,65 @@ static double EmitPipeStepOutput(
     if (chunks.Count == 0)
         return commandStart + executionDuration;
 
+    if (!timing.UsesStreamEmission())
+        return EmitPipeStepOutputInstant(events, commandStart, chunks, stderrStyle, highlights, cmd, executionDuration);
+
     var timedChunks = BuildStartupAdjustedPipeChunks(chunks, executionDuration, stderrStyle);
+    ApplyBurstMergeToChunks(timedChunks, chunks);
     ApplyCastTimingToChunks(timedChunks, timing);
     var coalesced = CastTimingPipeline.CoalesceTimedText(timedChunks);
     EmitTimedTextCastEvents(events, commandStart, coalesced, highlights, cmd);
     return Math.Max(commandStart + executionDuration, commandStart + coalesced[^1].Time);
+}
+
+static double EmitPipeStepOutputInstant(
+    List<CastEvent> events,
+    double commandStart,
+    IReadOnlyList<PipeStreamChunk> chunks,
+    string stderrStyle,
+    List<HighlightSpec>? highlights,
+    string cmd,
+    double executionDuration)
+{
+    var merged = MergePipeChunksText(chunks, stderrStyle);
+    if (string.IsNullOrEmpty(merged))
+        return commandStart + executionDuration;
+
+    var output = highlights is not null
+        ? ApplyHighlights(merged, highlights, cmd)
+        : merged;
+    events.Add(CastEvent.Output(
+        Math.Round(commandStart + executionDuration, 6),
+        NormalizeNewlines(output)));
+    return commandStart + executionDuration;
+}
+
+static string MergePipeChunksText(IReadOnlyList<PipeStreamChunk> chunks, string stderrStyle)
+{
+    if (chunks.Count == 0)
+        return "";
+
+    var sb = new StringBuilder();
+    foreach (var chunk in chunks)
+        sb.Append(FormatPipeChunkText(chunk, stderrStyle));
+    return sb.ToString();
+}
+
+static void ApplyBurstMergeToChunks(
+    List<(double Time, string Text)> chunks,
+    IReadOnlyList<PipeStreamChunk> rawChunks)
+{
+    if (chunks.Count <= 1)
+        return;
+
+    var originalSeconds = new double[rawChunks.Count];
+    for (var i = 0; i < rawChunks.Count; i++)
+        originalSeconds[i] = rawChunks[i].Time.TotalSeconds;
+
+    var times = chunks.Select(static chunk => chunk.Time).ToArray();
+    CastTimingPipeline.MergeBurstGaps(times, originalSeconds, DefaultBurstThreshold);
+    for (var i = 0; i < chunks.Count; i++)
+        chunks[i] = (times[i], chunks[i].Text);
 }
 
 static double EmitPtyStepOutput(
@@ -846,7 +903,7 @@ static double EmitPtyStepOutput(
     bool verbose)
 {
     var ptyFilter = new PtyLeadingInitFilter();
-    var timedChunks = new List<(double Time, ReadOnlyMemory<byte> Data)>();
+    var timedChunks = new List<(double Time, double OriginalTime, ReadOnlyMemory<byte> Data)>();
     var startupOffset = 0.0;
     var startupOffsetResolved = false;
 
@@ -860,7 +917,10 @@ static double EmitPtyStepOutput(
                 Console.Error.WriteLine($"scenetake: pty startup compress: {startupOffset:F3}s");
         }
 
-        timedChunks.Add((PtyCastTiming.AdjustChunkSeconds(chunkSeconds, startupOffset), data));
+        timedChunks.Add((
+            PtyCastTiming.AdjustChunkSeconds(chunkSeconds, startupOffset),
+            chunkSeconds,
+            data));
     }
 
     foreach (var chunk in chunks)
@@ -887,8 +947,14 @@ static double EmitPtyStepOutput(
     if (timedChunks.Count == 0)
         return commandStart + executionDuration;
 
-    ApplyCastTimingToUtf8Chunks(timedChunks, timing);
-    var coalesced = CastTimingPipeline.CoalesceTimedUtf8(timedChunks);
+    if (timing.UsesStreamEmission())
+    {
+        ApplyBurstMergeToPtyChunks(timedChunks);
+        ApplyCastTimingToPtyChunks(timedChunks, timing);
+    }
+
+    var coalesced = CastTimingPipeline.CoalesceTimedUtf8(
+        timedChunks.Select(static chunk => (chunk.Time, chunk.Data)).ToList());
     foreach (var (time, data) in coalesced)
     {
         events.Add(CastEvent.OutputUtf8(
@@ -938,7 +1004,9 @@ static void ApplyCastTimingToChunks(List<(double Time, string Text)> chunks, Cas
         chunks[i] = (adjusted[i], chunks[i].Text);
 }
 
-static void ApplyCastTimingToUtf8Chunks(List<(double Time, ReadOnlyMemory<byte> Data)> chunks, CastTimingSettings timing)
+static void ApplyCastTimingToPtyChunks(
+    List<(double Time, double OriginalTime, ReadOnlyMemory<byte> Data)> chunks,
+    CastTimingSettings timing)
 {
     if (chunks.Count == 0)
         return;
@@ -946,7 +1014,19 @@ static void ApplyCastTimingToUtf8Chunks(List<(double Time, ReadOnlyMemory<byte> 
     var times = chunks.Select(static chunk => chunk.Time).ToArray();
     var adjusted = CastTimingPipeline.AdjustTimeline(times, timing);
     for (var i = 0; i < chunks.Count; i++)
-        chunks[i] = (adjusted[i], chunks[i].Data);
+        chunks[i] = (adjusted[i], chunks[i].OriginalTime, chunks[i].Data);
+}
+
+static void ApplyBurstMergeToPtyChunks(List<(double Time, double OriginalTime, ReadOnlyMemory<byte> Data)> chunks)
+{
+    if (chunks.Count <= 1)
+        return;
+
+    var originalSeconds = chunks.Select(static chunk => chunk.OriginalTime).ToArray();
+    var times = chunks.Select(static chunk => chunk.Time).ToArray();
+    CastTimingPipeline.MergeBurstGaps(times, originalSeconds, DefaultBurstThreshold);
+    for (var i = 0; i < chunks.Count; i++)
+        chunks[i] = (times[i], chunks[i].OriginalTime, chunks[i].Data);
 }
 
 static void EmitTimedTextCastEvents(
@@ -2475,6 +2555,7 @@ public partial class ScenarioSettings
     public double? SilenceThreshold { get; set; }
     public double? MaxIdle { get; set; }
     public double? MaxDuration { get; set; }
+    public bool? StreamOutput { get; set; }
     public string? StderrColor { get; set; }
 }
 
