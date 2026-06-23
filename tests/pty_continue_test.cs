@@ -1,0 +1,94 @@
+﻿#:sdk Microsoft.NET.Sdk
+#:property TargetFramework=net10.0
+#:property Nullable=enable
+#:property ImplicitUsings=enable
+#:include ../PtyLeadingInitFilter.cs
+
+using System.Text;
+
+var failures = 0;
+failures += Run("StripClearHomeAndText", StripClearHomeAndText);
+failures += Run("SplitCsiAcrossChunks", SplitCsiAcrossChunks);
+failures += Run("KeepClearAfterPhaseEnd", KeepClearAfterPhaseEnd);
+failures += Run("KeepAlternateScreenAndEndPhase", KeepAlternateScreenAndEndPhase);
+failures += Run("StripOscAndInitOnly", StripOscAndInitOnly);
+failures += Run("KeepLineEraseDuringLeadingPhase", KeepLineEraseDuringLeadingPhase);
+failures += Run("StripPrivateModes", StripPrivateModes);
+
+return failures == 0 ? 0 : 1;
+
+static int Run(string name, Func<bool> test)
+{
+    try
+    {
+        if (test())
+        {
+            Console.Error.WriteLine($"ok {name}");
+            return 0;
+        }
+
+        Console.Error.WriteLine($"FAIL {name}");
+        return 1;
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"FAIL {name}: {ex.Message}");
+        return 1;
+    }
+}
+
+static string Filter(params string[] chunks)
+{
+    var filter = new PtyLeadingInitFilter();
+    var output = new List<byte>();
+    foreach (var chunk in chunks)
+    {
+        var filtered = filter.Process(Encoding.UTF8.GetBytes(chunk));
+        output.AddRange(filtered.ToArray());
+    }
+
+    output.AddRange(filter.Complete().ToArray());
+    return Encoding.UTF8.GetString(output.ToArray());
+}
+
+static bool StripClearHomeAndText()
+{
+    var output = Filter("\u001b[?25l\u001b[2J\u001b[m\u001b[Htext");
+    return output == "text";
+}
+
+static bool SplitCsiAcrossChunks()
+{
+    var output = Filter("\u001b[2", "Jtext");
+    return output == "text";
+}
+
+static bool KeepClearAfterPhaseEnd()
+{
+    var output = Filter("text\u001b[2J");
+    return output == "text\u001b[2J";
+}
+
+static bool KeepAlternateScreenAndEndPhase()
+{
+    var output = Filter("\u001b[2J\u001b[?1049hmatrix\u001b[2J");
+    return output == "\u001b[?1049hmatrix\u001b[2J";
+}
+
+static bool StripOscAndInitOnly()
+{
+    var output = Filter("\u001b]0;title\u0007\u001b[?25h\u001b[0m");
+    return output == "";
+}
+
+static bool KeepLineEraseDuringLeadingPhase()
+{
+    var output = Filter("\u001b[2Ktext");
+    return output == "\u001b[2Ktext";
+}
+
+static bool StripPrivateModes()
+{
+    var output = Filter("\u001b[?9001h\u001b[?1004l\u001b[?2004htext");
+    return output == "text";
+}

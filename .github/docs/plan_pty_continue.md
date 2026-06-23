@@ -1,12 +1,12 @@
 # PTY Continue — Implementation Plan
 
-Status: **Proposed**
+Status: **Implemented**
 
 ## Summary
 
 シナリオ録画で `pty: true` の step を通常 step の直後に置くと、PTY セッション起動時にシェルが送る画面クリア等の ANSI シーケンスにより、それまで積み上がったターミナル状態が消える。本機能は step 単位の opt-in キー `pty-continue: true` を追加し、PTY キャプチャ先頭の **シェル初期化用シーケンスのみ** を除去して、前 step からの描画を継続できるようにする。
 
-実装後は [spec_scenario.md](spec_scenario.md) と [spec_pty.md](spec_pty.md) を更新し、本 plan はアーカイブまたは削除する。
+実装内容は [spec_scenario.md](spec_scenario.md) と [spec_pty.md](spec_pty.md) に反映済み。本 plan は実装経緯の記録として残す。
 
 ## Problem
 
@@ -41,7 +41,7 @@ ESC[?25l ESC[2J ESC[m ESC[H …実際の echo 出力… ESC[?25h
 ### ユーザーが期待すること
 
 - 通常 step → 軽い PTY step（`echo` など）→ 通常 step、という混在シナリオで、PTY 出力が **前のプロンプト行の続き** として見えること。
-- `matrix` や `vim` のようなフルスクリーン TUI は、これまで通りクリアや alternate screen を含む生ストリームのまま録画できること。
+- `matrix` や `vim` のようなフルスクリーン TUI は、これまで通りクリアや alternate screen を含む生ストリームのまま録画できること。TUI終了後は、前 step の画面が復元されること。
 
 ## Goals
 

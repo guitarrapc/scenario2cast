@@ -49,6 +49,7 @@ steps:
   - name: "pty demo"
     run: echo "This command runs in a PTY, so output appears immediately and can include interactive features like colors and progress bars."
     pty: true
+    pty-continue: true
 
   - name: "run-highlight colors the typed command"
     run: printf 'done\n'

@@ -11,6 +11,7 @@
 #:include Svg.cs
 #:include CastReader.cs
 #:include JsonEscape.cs
+#:include PtyLeadingInitFilter.cs
 
 using MiniPty;
 using MiniPty.Capture;
@@ -744,6 +745,12 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         var cmdStderrStyle = GetOverrideStyle(command.Extra, "stderr-color", defaultStderrStyle, "stderr-color", command.Cmd);
         var hasRunHighlight = TryGetStepStyle(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightStyle);
         var usePty = GetBool(command.Extra, false, "pty");
+        var continuePty = GetBool(command.Extra, false, "pty-continue");
+        if (continuePty && !usePty)
+        {
+            Warn("pty-continue", command.Cmd, "requires pty: true; ignoring");
+            continuePty = false;
+        }
 
         if (events.Count == 0)
             t += preDelay;
@@ -785,14 +792,33 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         if (execution.IsPty)
         {
             var commandStart = t;
+            var ptyFilter = continuePty ? new PtyLeadingInitFilter() : null;
+            TimeSpan? lastChunkTime = null;
             foreach (var chunk in execution.PtyByteChunks!)
             {
-                if (chunk.Data.IsEmpty)
+                lastChunkTime = chunk.Time;
+                var data = ptyFilter?.Process(chunk.Data) ?? chunk.Data;
+                if (data.IsEmpty)
                     continue;
 
                 events.Add(CastEvent.OutputUtf8(
                     Math.Round(commandStart + chunk.Time.TotalSeconds, 6),
-                    chunk.Data));
+                    data));
+            }
+
+            if (ptyFilter is not null)
+            {
+                var tail = ptyFilter.Complete();
+                if (!tail.IsEmpty)
+                {
+                    var tailTime = lastChunkTime ?? TimeSpan.Zero;
+                    events.Add(CastEvent.OutputUtf8(
+                        Math.Round(commandStart + tailTime.TotalSeconds, 6),
+                        tail));
+                }
+
+                if (verbose)
+                    Console.Error.WriteLine($"scenetake: pty-continue: stripped {ptyFilter.StrippedByteCount} bytes");
             }
 
             t = execution.PtyByteChunks.Count > 0
