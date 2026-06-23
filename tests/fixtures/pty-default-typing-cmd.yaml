@@ -6,4 +6,3 @@ steps:
   - name: "pty default typing"
     run: echo pty-typed-output
     pty: true
-    pty-continue: true

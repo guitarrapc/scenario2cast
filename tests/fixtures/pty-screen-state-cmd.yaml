@@ -1,11 +1,10 @@
-title: "PTY Continue cmd"
+title: "PTY Screen State cmd"
 width: 40
 height: 8
 shell: cmd
 steps:
   - echo before pty
-  - name: "pty continue"
+  - name: "pty screen state"
     run: echo pty-cmd-output
     pty: true
-    pty-continue: true
   - echo after pty

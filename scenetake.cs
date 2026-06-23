@@ -745,12 +745,6 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         var cmdStderrStyle = GetOverrideStyle(command.Extra, "stderr-color", defaultStderrStyle, "stderr-color", command.Cmd);
         var hasRunHighlight = TryGetStepStyle(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightStyle);
         var usePty = GetBool(command.Extra, false, "pty");
-        var continuePty = GetBool(command.Extra, false, "pty-continue");
-        if (continuePty && !usePty)
-        {
-            Warn("pty-continue", command.Cmd, "requires pty: true; ignoring");
-            continuePty = false;
-        }
 
         if (events.Count == 0)
             t += preDelay;
@@ -772,7 +766,7 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         if (execution.IsPty)
         {
             var commandStart = t;
-            var ptyFilter = continuePty ? new PtyLeadingInitFilter() : null;
+            var ptyFilter = new PtyLeadingInitFilter();
             TimeSpan? lastChunkTime = null;
             foreach (var chunk in execution.PtyByteChunks!)
             {
@@ -798,7 +792,7 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
                 }
 
                 if (verbose)
-                    Console.Error.WriteLine($"scenetake: pty-continue: stripped {ptyFilter.StrippedByteCount} bytes");
+                    Console.Error.WriteLine($"scenetake: pty cleanup: stripped {ptyFilter.StrippedByteCount} bytes");
             }
 
             t = execution.PtyByteChunks.Count > 0

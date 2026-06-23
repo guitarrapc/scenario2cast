@@ -5,4 +5,3 @@ steps:
   - name: "pty default typing"
     run: printf 'pty-typed-output\n'
     pty: true
-    pty-continue: true

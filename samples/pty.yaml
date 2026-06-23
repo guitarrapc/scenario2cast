@@ -12,12 +12,10 @@ settings:
 
 steps:
   - echo "Showing a simple PTY with matrix https://github.com/guitarrapc/matrix"
-  - name: echo in PTY with continue
+  - name: echo in PTY
     run: echo "Running inside PTY"
     pty: true
-    pty-continue: true
-  - name: TUI command in PTY with continue
+  - name: TUI command in PTY
     run: matrix 3
     pty: true
-    pty-continue: true
   - echo "Continue after PTY"

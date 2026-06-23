@@ -109,7 +109,6 @@ Map-form steps recognize:
 | `highlight` | no | List of `{ color, at }` for command output |
 | `stderr-color` | no | Override `settings.stderr-color` for this step. Ignored when `pty: true` |
 | `pty` | no | default `false`. Pseudo-terminal capture for TUI commands. Recording behavior: [spec_pty.md](spec_pty.md) |
-| `pty-continue` | no | default `false`. Requires `pty: true`. Strip leading shell initialization ANSI from PTY capture so output can continue from the previous screen state. |
 
 Coloring value formats, range grammar, and validation: [spec_highlight.md](spec_highlight.md). Coloring does not apply to PTY-captured output.
 
@@ -157,5 +156,5 @@ Deterministic seed and timestamp are derived from the whole YAML file (normalize
 ## Lessons Learned
 
 - Separating `settings` (recording) from `render` (presentation) keeps cast behavior independent of SVG output.
-- String-form steps cover simple demos; map-form steps carry per-command timing, coloring, and optional `pty` / `pty-continue` without a second schema.
+- String-form steps cover simple demos; map-form steps carry per-command timing, coloring, and optional `pty` without a second schema.
 - Recorded step non-zero exits warn but do not stop the scenario; setup/teardown and infrastructure failures use different rules ([spec_pre_post.md](spec_pre_post.md), [spec_pty.md](spec_pty.md)).

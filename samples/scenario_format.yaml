@@ -1,27 +1,27 @@
 # Scenario format reference — runnable demo (samples/scenario_format.yaml).
 # Required: steps only. Everything else is optional.
 
-title: "Scenario Format Demo"  # Optional cast title
-width: 80                        # Default: 120
-height: 24                       # Default: 24
+title: "Scenario Format Demo" # Optional cast title
+width: 80 # Default: 120
+height: 24 # Default: 24
 # cwd: /your/project             # Optional working directory for all commands
-shell: bash                      # bash | pwsh | powershell | path. Windows: Git Bash when bash
+shell: bash # bash | pwsh | powershell | path. Windows: Git Bash when bash
 
-render:                          # Optional display metadata for cast header and SVG
+render: # Optional display metadata for cast header and SVG
   font-size: 16
   font-family: ui-monospace, monospace
   theme:
-    preset: dark                 # dark | light; optional fg / bg / palette overrides
-  window: macos                  # none | macos | windows
+    preset: dark # dark | light; optional fg / bg / palette overrides
+  window: macos # none | macos | windows
 
-settings:                        # Defaults for all steps; map-form steps can override per key
+settings: # Defaults for all steps; map-form steps can override per key
   prompt: "$ "
-  typing-speed: 0.04             # Average seconds per typed character
-  typing-jitter: 0.01            # Random variance (+/- seconds) per character
-  pre-delay: 0.5                 # Pause before typing each step
-  post-delay: 1.0                # Pause after output before the next step
-  execution-duration: 0.1        # Cast wait after command execution
-  stderr-color: red              # When stderr has no ANSI SGR sequences
+  typing-speed: 0.04 # Average seconds per typed character
+  typing-jitter: 0.01 # Random variance (+/- seconds) per character
+  pre-delay: 0.5 # Pause before typing each step
+  post-delay: 1.0 # Pause after output before the next step
+  execution-duration: 0.1 # Cast wait after command execution
+  stderr-color: red # When stderr has no ANSI SGR sequences
 
 # Optional setup; runs before steps, not recorded in cast
 pre:
@@ -49,7 +49,6 @@ steps:
   - name: "pty demo"
     run: echo "This command runs in a PTY, so output appears immediately and can include interactive features like colors and progress bars."
     pty: true
-    pty-continue: true
 
   - name: "run-highlight colors the typed command"
     run: printf 'done\n'
