@@ -17,6 +17,7 @@ failures += Run("StripOscAndInitOnly", StripOscAndInitOnly);
 failures += Run("KeepLineEraseDuringLeadingPhase", KeepLineEraseDuringLeadingPhase);
 failures += Run("StripPrivateModes", StripPrivateModes);
 failures += Run("KeepLargePassthroughChunk", KeepLargePassthroughChunk);
+failures += Run("FastPathOutputIsBufferIndependent", FastPathOutputIsBufferIndependent);
 
 return failures == 0 ? 0 : 1;
 
@@ -113,4 +114,15 @@ static bool KeepLargePassthroughChunk()
     var payload = new string('x', 100_000);
     var output = Filter("start", payload + "\u001b[2Jtail");
     return output == "start" + payload + "\u001b[2Jtail";
+}
+
+static bool FastPathOutputIsBufferIndependent()
+{
+    var filter = new PtyLeadingInitFilter();
+    var source = Encoding.UTF8.GetBytes("hello");
+    var output = filter.Process(source);
+
+    source[0] = (byte)'X';
+
+    return Encoding.UTF8.GetString(output.Span) == "hello";
 }

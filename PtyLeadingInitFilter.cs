@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Buffers;
 
 internal sealed class PtyLeadingInitFilter
 {
@@ -19,9 +19,12 @@ internal sealed class PtyLeadingInitFilter
         if (input.IsEmpty)
             return ReadOnlyMemory<byte>.Empty;
 
+        if (pending.Count == 0 && TryProcessInputWithoutBuffering(input, out var directOutput))
+            return directOutput;
+
         AppendPending(input.Span);
 
-        var output = new List<byte>(input.Length);
+        var output = new List<byte>(pending.Count);
         while (pending.Count > 0)
         {
             var progressed = mode switch
@@ -37,6 +40,29 @@ internal sealed class PtyLeadingInitFilter
         }
 
         return output.Count == 0 ? ReadOnlyMemory<byte>.Empty : output.ToArray();
+    }
+
+    private bool TryProcessInputWithoutBuffering(ReadOnlyMemory<byte> input, out ReadOnlyMemory<byte> output)
+    {
+        output = ReadOnlyMemory<byte>.Empty;
+        var span = input.Span;
+        if (span.IndexOf(Esc) >= 0)
+            return false;
+
+        if (mode == FilterMode.Passthrough)
+        {
+            output = input.ToArray();
+            return true;
+        }
+
+        if (mode is FilterMode.LeadingInit or FilterMode.AfterAlternateScreenExit && IsPrintableUtf8Start(span[0]))
+        {
+            mode = FilterMode.Passthrough;
+            output = input.ToArray();
+            return true;
+        }
+
+        return false;
     }
 
     internal ReadOnlyMemory<byte> Complete()
@@ -202,38 +228,52 @@ internal sealed class PtyLeadingInitFilter
         }
 
         var finalByte = pending[finalIndex];
-        var parameters = GetCsiParameters(finalIndex);
         var length = finalIndex + 1;
+        var parameterCount = CountCsiParameterBytes(finalIndex);
+        byte[]? rentedParameters = null;
+        Span<byte> parameterBuffer = parameterCount <= 128
+            ? stackalloc byte[parameterCount]
+            : rentedParameters = ArrayPool<byte>.Shared.Rent(parameterCount);
+        var parameters = parameterBuffer[..parameterCount];
+        CopyCsiParameters(finalIndex, parameters);
 
-        if (IsAlternateScreenMode(finalByte, parameters, out var alternateEnabled))
+        try
         {
+            if (IsAlternateScreenMode(finalByte, parameters, out var alternateEnabled))
+            {
+                AppendRange(output, pending, 0, length);
+                pending.RemoveRange(0, length);
+                if (alternateEnabled)
+                {
+                    mode = FilterMode.Passthrough;
+                }
+                else
+                {
+                    mode = FilterMode.AfterAlternateScreenExit;
+                    cleanupBytesSeen = 0;
+                }
+                return true;
+            }
+
+            if (ShouldStripCsi(finalByte, parameters, context))
+            {
+                StrippedByteCount += length;
+                pending.RemoveRange(0, length);
+                return true;
+            }
+
+            if (context == EscapeContext.AfterAlternateScreenExit)
+                mode = FilterMode.Passthrough;
+
             AppendRange(output, pending, 0, length);
             pending.RemoveRange(0, length);
-            if (alternateEnabled)
-            {
-                mode = FilterMode.Passthrough;
-            }
-            else
-            {
-                mode = FilterMode.AfterAlternateScreenExit;
-                cleanupBytesSeen = 0;
-            }
             return true;
         }
-
-        if (ShouldStripCsi(finalByte, parameters, context))
+        finally
         {
-            StrippedByteCount += length;
-            pending.RemoveRange(0, length);
-            return true;
+            if (rentedParameters is not null)
+                ArrayPool<byte>.Shared.Return(rentedParameters);
         }
-
-        if (context == EscapeContext.AfterAlternateScreenExit)
-            mode = FilterMode.Passthrough;
-
-        AppendRange(output, pending, 0, length);
-        pending.RemoveRange(0, length);
-        return true;
     }
 
     private bool TryConsumeOsc(List<byte> output, EscapeContext context, out bool incomplete)
@@ -283,7 +323,7 @@ internal sealed class PtyLeadingInitFilter
         return true;
     }
 
-    private string GetCsiParameters(int finalIndex)
+    private int CountCsiParameterBytes(int finalIndex)
     {
         var count = 0;
         for (var i = 2; i < finalIndex; i++)
@@ -292,57 +332,135 @@ internal sealed class PtyLeadingInitFilter
                 count++;
         }
 
-        if (count == 0)
-            return "";
+        return count;
+    }
 
-        Span<byte> bytes = count <= 64 ? stackalloc byte[count] : new byte[count];
+    private void CopyCsiParameters(int finalIndex, Span<byte> destination)
+    {
         var offset = 0;
         for (var i = 2; i < finalIndex; i++)
         {
             if (pending[i] is >= 0x30 and <= 0x3F)
-                bytes[offset++] = pending[i];
+                destination[offset++] = pending[i];
         }
-
-        return Encoding.ASCII.GetString(bytes);
     }
 
-    private static bool ShouldStripCsi(byte finalByte, string parameters, EscapeContext context)
+    private static bool ShouldStripCsi(byte finalByte, ReadOnlySpan<byte> parameters, EscapeContext context)
     {
         if (context == EscapeContext.Passthrough)
             return false;
 
-        if (finalByte == (byte)'J' && parameters is "" or "0" or "1" or "2")
+        if (finalByte == (byte)'J' && IsOneOf(parameters, ""u8, "0"u8, "1"u8, "2"u8))
             return true;
 
         if (context == EscapeContext.AfterAlternateScreenExit && finalByte == (byte)'K')
             return true;
 
-        if ((finalByte == (byte)'H' || finalByte == (byte)'f') && !parameters.StartsWith("?", StringComparison.Ordinal))
+        if ((finalByte == (byte)'H' || finalByte == (byte)'f') && !parameters.StartsWith("?"u8))
             return true;
 
-        if (finalByte == (byte)'m' && parameters is "" or "0")
+        if (finalByte == (byte)'m' && IsOneOf(parameters, ""u8, "0"u8))
             return true;
 
         return IsStripPrivateMode(finalByte, parameters);
     }
 
-    private static bool IsStripPrivateMode(byte finalByte, string parameters)
+    private static bool IsStripPrivateMode(byte finalByte, ReadOnlySpan<byte> parameters)
     {
-        if (finalByte is not ((byte)'h' or (byte)'l') || !parameters.StartsWith("?", StringComparison.Ordinal))
+        if (finalByte is not ((byte)'h' or (byte)'l') || !parameters.StartsWith("?"u8))
             return false;
 
-        var modes = parameters[1..].Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        return modes.Length > 0 && modes.All(static mode => mode is "25" or "9001" or "1004" or "2004");
+        var anyMode = false;
+        foreach (var mode in SplitModes(parameters[1..]))
+        {
+            anyMode = true;
+            if (!IsOneOf(mode, "25"u8, "9001"u8, "1004"u8, "2004"u8))
+                return false;
+        }
+
+        return anyMode;
     }
 
-    private static bool IsAlternateScreenMode(byte finalByte, string parameters, out bool enabled)
+    private static bool IsAlternateScreenMode(byte finalByte, ReadOnlySpan<byte> parameters, out bool enabled)
     {
         enabled = finalByte == (byte)'h';
-        if (finalByte is not ((byte)'h' or (byte)'l') || !parameters.StartsWith("?", StringComparison.Ordinal))
+        if (finalByte is not ((byte)'h' or (byte)'l') || !parameters.StartsWith("?"u8))
             return false;
 
-        var modes = parameters[1..].Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        return modes.Any(static mode => mode is "1049" or "47" or "1047");
+        foreach (var mode in SplitModes(parameters[1..]))
+        {
+            if (IsOneOf(mode, "1049"u8, "47"u8, "1047"u8))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsOneOf(ReadOnlySpan<byte> value, ReadOnlySpan<byte> first, ReadOnlySpan<byte> second) =>
+        value.SequenceEqual(first) || value.SequenceEqual(second);
+
+    private static bool IsOneOf(ReadOnlySpan<byte> value, ReadOnlySpan<byte> first, ReadOnlySpan<byte> second, ReadOnlySpan<byte> third) =>
+        value.SequenceEqual(first) || value.SequenceEqual(second) || value.SequenceEqual(third);
+
+    private static bool IsOneOf(ReadOnlySpan<byte> value, ReadOnlySpan<byte> first, ReadOnlySpan<byte> second, ReadOnlySpan<byte> third, ReadOnlySpan<byte> fourth) =>
+        value.SequenceEqual(first) || value.SequenceEqual(second) || value.SequenceEqual(third) || value.SequenceEqual(fourth);
+
+    private static ModeSplitEnumerable SplitModes(ReadOnlySpan<byte> modes) => new(modes);
+
+    private readonly ref struct ModeSplitEnumerable
+    {
+        private readonly ReadOnlySpan<byte> modes;
+
+        public ModeSplitEnumerable(ReadOnlySpan<byte> modes)
+        {
+            this.modes = modes;
+        }
+
+        public ModeSplitEnumerator GetEnumerator() => new(modes);
+    }
+
+    private ref struct ModeSplitEnumerator
+    {
+        private ReadOnlySpan<byte> remaining;
+
+        public ModeSplitEnumerator(ReadOnlySpan<byte> modes)
+        {
+            remaining = modes;
+            Current = ReadOnlySpan<byte>.Empty;
+        }
+
+        public ReadOnlySpan<byte> Current { get; private set; }
+
+        public bool MoveNext()
+        {
+            while (true)
+            {
+                if (remaining.IsEmpty)
+                    return false;
+
+                var separator = remaining.IndexOf((byte)';');
+                var mode = separator < 0 ? remaining : remaining[..separator];
+                remaining = separator < 0 ? ReadOnlySpan<byte>.Empty : remaining[(separator + 1)..];
+                mode = TrimAsciiWhitespace(mode);
+                if (mode.IsEmpty)
+                    continue;
+
+                Current = mode;
+                return true;
+            }
+        }
+    }
+
+    private static ReadOnlySpan<byte> TrimAsciiWhitespace(ReadOnlySpan<byte> value)
+    {
+        var start = 0;
+        var end = value.Length - 1;
+        while (start <= end && value[start] is (byte)' ' or (byte)'\t')
+            start++;
+        while (end >= start && value[end] is (byte)' ' or (byte)'\t')
+            end--;
+
+        return value[start..(end + 1)];
     }
 
     private void StripPending(int length)
