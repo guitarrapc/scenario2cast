@@ -16,6 +16,7 @@ failures += Run("StripAlternateScreenExitCleanup", StripAlternateScreenExitClean
 failures += Run("StripOscAndInitOnly", StripOscAndInitOnly);
 failures += Run("KeepLineEraseDuringLeadingPhase", KeepLineEraseDuringLeadingPhase);
 failures += Run("StripPrivateModes", StripPrivateModes);
+failures += Run("KeepLargePassthroughChunk", KeepLargePassthroughChunk);
 
 return failures == 0 ? 0 : 1;
 
@@ -105,4 +106,11 @@ static bool StripPrivateModes()
 {
     var output = Filter("\u001b[?9001h\u001b[?1004l\u001b[?2004htext");
     return output == "text";
+}
+
+static bool KeepLargePassthroughChunk()
+{
+    var payload = new string('x', 100_000);
+    var output = Filter("start", payload + "\u001b[2Jtail");
+    return output == "start" + payload + "\u001b[2Jtail";
 }

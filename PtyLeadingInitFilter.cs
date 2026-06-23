@@ -94,10 +94,18 @@ internal sealed class PtyLeadingInitFilter
     private bool ProcessPassthrough(List<byte> output, out bool incomplete)
     {
         incomplete = false;
-        if (pending[0] != Esc)
+
+        var escIndex = pending.IndexOf(Esc);
+        if (escIndex < 0)
         {
-            output.Add(pending[0]);
-            pending.RemoveAt(0);
+            AppendAndClear(output, pending);
+            return true;
+        }
+
+        if (escIndex > 0)
+        {
+            AppendRange(output, pending, 0, escIndex);
+            pending.RemoveRange(0, escIndex);
             return true;
         }
 
