@@ -1,0 +1,9 @@
+title: "PTY Screen State"
+width: 40
+height: 8
+steps:
+  - printf 'before pty\n'
+  - name: "pty screen state"
+    run: printf 'pty-cmd-output\n'
+    pty: true
+  - printf 'after pty\n'

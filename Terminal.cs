@@ -1,4 +1,4 @@
-using System.Buffers;
+﻿using System.Buffers;
 using System.Buffers.Text;
 using System.Globalization;
 using System.Text;
@@ -64,6 +64,7 @@ internal sealed class ScreenBuffer
     private int _savedCol;
     private int _savedMainRow;
     private int _savedMainCol;
+    private bool _savedMainPendingWrap;
     private int _scrollTop;
     private int _scrollBottom;
     private bool _pendingWrap;
@@ -248,6 +249,7 @@ internal sealed class ScreenBuffer
             _savedCol = _savedCol,
             _savedMainRow = _savedMainRow,
             _savedMainCol = _savedMainCol,
+            _savedMainPendingWrap = _savedMainPendingWrap,
             _isAltScreen = _isAltScreen,
             _scrollTop = _scrollTop,
             _scrollBottom = _scrollBottom,
@@ -553,10 +555,12 @@ internal sealed class ScreenBuffer
 
             _savedMainRow = CursorRow;
             _savedMainCol = CursorCol;
+            _savedMainPendingWrap = _pendingWrap;
             _altCells = CreateBlankCells();
             _cells = _altCells;
             CursorRow = 0;
             CursorCol = 0;
+            _pendingWrap = false;
             _scrollTop = 0;
             _scrollBottom = Height - 1;
             _isAltScreen = true;
@@ -570,6 +574,7 @@ internal sealed class ScreenBuffer
         _isAltScreen = false;
         CursorRow = Clamp(_savedMainRow, 0, Height - 1);
         CursorCol = Clamp(_savedMainCol, 0, Width - 1);
+        _pendingWrap = _savedMainPendingWrap;
         _scrollTop = 0;
         _scrollBottom = Height - 1;
     }
@@ -1352,6 +1357,127 @@ internal readonly record struct CastEvent(
     internal static CastEvent Marker(double time, string label) => new(time, CastEventKind.Marker, label);
 }
 
+internal static class CastEventLayout
+{
+    internal static string NameCommentPrefixForLastEvent(IReadOnlyList<CastEvent> events)
+    {
+        if (events.Count == 0)
+            return "";
+
+        var last = events[^1];
+        if (last.Kind != CastEventKind.Output)
+            return "\r\n";
+
+        const int suffixLimit = 4096;
+        var suffixParts = new List<string>();
+        var suffixLength = 0;
+        for (var i = events.Count - 1; i >= 0 && events[i].Kind == CastEventKind.Output && suffixLength < suffixLimit; i--)
+        {
+            var output = events[i].HasUtf8Output
+                ? Encoding.UTF8.GetString(events[i].Utf8Output.Span)
+                : events[i].Data;
+            if (output.Length == 0)
+                continue;
+
+            var remaining = suffixLimit - suffixLength;
+            if (output.Length > remaining)
+            {
+                suffixParts.Add(output[^remaining..]);
+                suffixLength = suffixLimit;
+                break;
+            }
+
+            suffixParts.Add(output);
+            suffixLength += output.Length;
+        }
+
+        if (suffixParts.Count == 0)
+            return "";
+
+        suffixParts.Reverse();
+        return VisualOutputEndsWithNewline(string.Concat(suffixParts)) ? "" : "\r\n";
+    }
+
+    static bool VisualOutputEndsWithNewline(string output)
+    {
+        var endsWithNewline = false;
+        for (var i = 0; i < output.Length;)
+        {
+            var ch = output[i];
+            if (ch == '\u001b')
+            {
+                i = SkipAnsiEscape(output, i);
+                continue;
+            }
+
+            if (ch == '\n')
+            {
+                endsWithNewline = true;
+                i++;
+                continue;
+            }
+
+            if (char.IsControl(ch))
+            {
+                i++;
+                continue;
+            }
+
+            endsWithNewline = false;
+            i += char.IsHighSurrogate(ch) && i + 1 < output.Length && char.IsLowSurrogate(output[i + 1]) ? 2 : 1;
+        }
+
+        return endsWithNewline;
+    }
+
+    static int SkipAnsiEscape(string output, int index)
+    {
+        if (index + 1 >= output.Length)
+            return output.Length;
+
+        var introducer = output[index + 1];
+        if (introducer == '[')
+            return SkipAnsiFinalByteSequence(output, index + 2);
+        if (introducer == ']')
+            return SkipAnsiStringSequence(output, index + 2);
+        if (introducer is 'P' or '^' or '_')
+            return SkipAnsiStringSequence(output, index + 2);
+        if (introducer is '(' or ')' or '*' or '+' or '-' or '.' or '/')
+            return Math.Min(index + 3, output.Length);
+
+        return Math.Min(index + 2, output.Length);
+    }
+
+    static int SkipAnsiFinalByteSequence(string output, int index)
+    {
+        while (index < output.Length)
+        {
+            var ch = output[index++];
+            if (ch >= '@' && ch <= '~')
+                break;
+        }
+
+        return index;
+    }
+
+    static int SkipAnsiStringSequence(string output, int index)
+    {
+        while (index < output.Length)
+        {
+            var ch = output[index++];
+            if (ch == '\a')
+                break;
+            if (ch == '\u001b' && index < output.Length && output[index] == '\\')
+            {
+                index++;
+                break;
+            }
+        }
+
+        return index;
+    }
+}
+
 internal sealed class ReplayFrame
 {
     internal ReplayFrame(double time, ScreenBuffer buffer, int viewportWidth, int viewportHeight, ulong? signature = null)
@@ -1570,4 +1696,3 @@ internal static class TerminalReplay
         return false;
     }
 }
-

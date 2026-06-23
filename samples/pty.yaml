@@ -11,7 +11,11 @@ settings:
   post-delay: 1.0 # pause after output before next step
 
 steps:
-  - echo "Showing a simple PTY demo with matrix https://github.com/guitarrapc/matrix"
-  - name: pty demo
-    run: matrix 5
+  - echo "Showing a simple PTY with matrix https://github.com/guitarrapc/matrix"
+  - name: echo in PTY
+    run: echo "Running inside PTY"
     pty: true
+  - name: TUI command in PTY
+    run: matrix 3
+    pty: true
+  - echo "Continue after PTY"

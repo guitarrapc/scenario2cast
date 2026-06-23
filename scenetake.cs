@@ -11,6 +11,7 @@
 #:include Svg.cs
 #:include CastReader.cs
 #:include JsonEscape.cs
+#:include PtyLeadingInitFilter.cs
 
 using MiniPty;
 using MiniPty.Capture;
@@ -750,33 +751,13 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
 
         if (TryFormatNameComment(command.Name, command.Cmd, out var nameLine, out var nameDisplayText))
         {
-            var prefix = NameCommentPrefixForLastEvent(events);
+            var prefix = CastEventLayout.NameCommentPrefixForLastEvent(events);
             events.Add(CastEvent.Marker(Math.Round(t, 6), nameDisplayText));
             events.Add(CastEvent.Output(Math.Round(t, 6), prefix + nameLine));
             t += 0.05;
         }
 
-        if (!usePty)
-        {
-            events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
-            t += 0.05;
-
-            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-                events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
-
-            foreach (var ch in command.Cmd)
-            {
-                events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
-                var delay = cmdSpeed + rng.NextDouble() * 2 * cmdJitter - cmdJitter;
-                t += Math.Max(delay, 0.005);
-            }
-
-            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-                events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
-
-            events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
-            t += 0.15;
-        }
+        EmitTypedCommand(events, ref t, prompt, command.Cmd, cmdSpeed, cmdJitter, rng, hasRunHighlight, runHighlightStyle);
 
         Console.Error.WriteLine($"  running: {command.Cmd}");
         var execution = await RunCommandCoreAsync(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24, verbose);
@@ -785,14 +766,33 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         if (execution.IsPty)
         {
             var commandStart = t;
+            var ptyFilter = new PtyLeadingInitFilter();
+            TimeSpan? lastChunkTime = null;
             foreach (var chunk in execution.PtyByteChunks!)
             {
-                if (chunk.Data.IsEmpty)
+                lastChunkTime = chunk.Time;
+                var data = ptyFilter?.Process(chunk.Data) ?? chunk.Data;
+                if (data.IsEmpty)
                     continue;
 
                 events.Add(CastEvent.OutputUtf8(
                     Math.Round(commandStart + chunk.Time.TotalSeconds, 6),
-                    chunk.Data));
+                    data));
+            }
+
+            if (ptyFilter is not null)
+            {
+                var tail = ptyFilter.Complete();
+                if (!tail.IsEmpty)
+                {
+                    var tailTime = lastChunkTime ?? TimeSpan.Zero;
+                    events.Add(CastEvent.OutputUtf8(
+                        Math.Round(commandStart + tailTime.TotalSeconds, 6),
+                        tail));
+                }
+
+                if (verbose)
+                    Console.Error.WriteLine($"scenetake: pty cleanup: stripped {ptyFilter.StrippedByteCount} bytes");
             }
 
             t = execution.PtyByteChunks.Count > 0
@@ -823,37 +823,36 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
     return events;
 }
 
-static string NameCommentPrefix(string? precedingOutput)
+static void EmitTypedCommand(
+    List<CastEvent> events,
+    ref double t,
+    string prompt,
+    string cmd,
+    double speed,
+    double jitter,
+    Random rng,
+    bool hasRunHighlight,
+    string runHighlightStyle)
 {
-    if (string.IsNullOrEmpty(precedingOutput)) return "";
-    return precedingOutput.EndsWith("\r\n", StringComparison.Ordinal) || precedingOutput.EndsWith('\n')
-        ? ""
-        : "\r\n";
-}
+    events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
+    t += 0.05;
 
-static string NameCommentPrefixForLastEvent(IReadOnlyList<CastEvent> events)
-{
-    if (events.Count == 0)
-        return "";
+    if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+        events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
 
-    var last = events[^1];
-    if (last.Kind != CastEventKind.Output)
-        return "\r\n";
-
-    if (last.HasUtf8Output)
+    foreach (var ch in cmd)
     {
-        var span = last.Utf8Output.Span;
-        if (span.IsEmpty)
-            return "";
-        return Utf8EndsWithNewline(span) ? "" : "\r\n";
+        events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
+        var delay = speed + rng.NextDouble() * 2 * jitter - jitter;
+        t += Math.Max(delay, 0.005);
     }
 
-    return NameCommentPrefix(last.Data);
-}
+    if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+        events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
 
-static bool Utf8EndsWithNewline(ReadOnlySpan<byte> span) =>
-    span[^1] == (byte)'\n'
-    || (span.Length >= 2 && span[^2] == (byte)'\r' && span[^1] == (byte)'\n');
+    events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
+    t += 0.15;
+}
 
 static CommandEntry ParseCommand(object? item)
 {
@@ -2202,10 +2201,12 @@ static string CreateInitialScenarioYaml()
             color: "fg:white bg:212"
           - at: "4"
             color: "fg:black bg:114"
-
       - name: "[bright-yellow]stderr color override"
         run: echo "stderr sample" 1>&2
         stderr-color: "bold fg:red"
+      - name: "run in a PTY"
+        run: echo "Running in a PTY, which is useful for TUI app and tty-based output"
+        pty: true
 
     # Optional teardown commands. They run after the cast file is written, but are not recorded in the cast.
     # post:
