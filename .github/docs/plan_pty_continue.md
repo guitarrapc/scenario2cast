@@ -40,8 +40,8 @@ ESC[?25l ESC[2J ESC[m ESC[H …実際の echo 出力… ESC[?25h
 
 ### ユーザーが期待すること
 
-- 通常 step → 軽い PTY step（`echo` など）→ 通常 step、という混在シナリオで、PTY 出力が **前のプロンプト行の続き** として見えること。
-- `matrix` や `vim` のようなフルスクリーン TUI は、これまで通りクリアや alternate screen を含む生ストリームのまま録画できること。TUI終了後は、前 step の画面が復元されること。
+- 通常 step → PTY step（`echo` や `matrix` など）→ 通常 step、という混在シナリオで、PTY 出力後も **前の履歴画面へ戻れる** こと。
+- `matrix` や `vim` のようなフルスクリーン TUI は、alternate screen を含む TUI 本体のストリームを保ったまま録画できること。TUI終了後は、前 step の画面が復元されること。
 
 ## Goals
 
@@ -57,7 +57,7 @@ ESC[?25l ESC[2J ESC[m ESC[H …実際の echo 出力… ESC[?25h
 | # | Non-Goal | 理由 |
 |---|---|---|
 | N1 | `pty: true` でもタイピング演出（プロンプト + 1 文字入力 + Enter）を復活させる | 別機能。本 plan のスコープ外 |
-| N2 | PTY 実行中・実行後の意図的な `clear` / `cls` / TUI の画面操作を抑制する | コマンド本体の挙動であり、初期化フィルタでは判別不能 |
+| N2 | PTY 実行中の意図的な `clear` / `cls` / TUI の画面操作を抑制する | コマンド本体の挙動であり、初期化フィルタでは判別不能。alternate screen 終了直後の main screen cleanup は例外的に対象 |
 | N3 | シェル起動方式の変更（`-lc` → `-c` など）をデフォルトで行う | 副作用（プロファイル未読込、環境変数差分）が大きい |
 | N4 | 外部 `.cast` の `svg` 変換時にフィルタを適用する | シナリオ録画パスのみが対象 |
 | N5 | カーソル位置を「前 step の末尾」へ明示的に再配置する | 初期化シーケンス除去でカーソルは自然に前位置を維持する想定。不足があれば follow-up |
@@ -96,7 +96,7 @@ steps:
 
 ```
 PTY child bytes
-    → (pty-continue) leading-init filter  ← 新規
+    → (pty-continue) leading-init / alt-exit cleanup filter
     → CastEvent.OutputUtf8 × N
     → cast file
 ```
@@ -154,7 +154,7 @@ PTY child bytes
 2. **alternate screen 入場** — `?1049h` 等の検出
 3. **バッファ上限** — 先頭 **4096 バイト** を超えても Phase が終了しない場合はフィルタを打ち切り、残りは生のまま通す（安全弁）
 
-> **設計意図:** `echo` のような軽い PTY step では、シェル初期化の直後にすぐ本文が来る。`matrix` で `pty-continue: true` を誤指定した場合でも、`?1049h` または本文出現で Phase が終わるため、TUI 本体への影響を最小化する（ただし先頭の `2J` は除去される — 誤指定時は画面はクリアされない点に注意。デフォルト `false` で回避）。
+> **設計意図:** `echo` のような軽い PTY step では、シェル初期化の直後にすぐ本文が来る。`matrix` のような alternate screen TUI では、先頭のシェル初期化 `2J` / `H` を除去しつつ、`?1049h` 以降の TUI 本体は保持する。TUI 終了時は `?1049l` 自体を保持し、その直後の main screen cleanup だけを除去することで、前 step の main screen 履歴へ戻れる。
 
 ### チャンク境界
 
@@ -196,9 +196,9 @@ $ printf 'after'
 - `# pty demo` コメント行（`name` キー）は従来通り PTY 実行前に emit される
 - PTY 出力は `before` の次行以降に追記される（カーソルは前 step 終了位置を維持）
 
-### `samples/pty.yaml`（`matrix`）— デフォルト維持
+### `samples/pty.yaml`（`matrix`）— `pty-continue` 有効
 
-`pty-continue` 未指定のため、現状どおりシェル `2J` → `matrix` → alternate screen の流れを保持。
+`matrix` step に `pty-continue: true` を指定すると、シェル初期化の `2J` / `H` は除去し、`matrix` の alternate screen 入退場（`?1049h` / `?1049l`）は保持する。`?1049l` 直後の main screen cleanup は除去するため、`matrix` 終了後は前 step の履歴画面へ戻る。
 
 ## Interactions
 
@@ -216,7 +216,7 @@ $ printf 'after'
 | Risk | Mitigation |
 |---|---|
 | シェルや OS ごとに初期化シーケンスが異なる | 代表パターンを fixture + integration test で固定。未知シーケンスは安全弁（4096 バイト）で打ち切り |
-| `pty-continue: true` を TUI step に誤用 | ドキュメントで用途を明示。デフォルト `false` |
+| 意図的に main screen を消したい TUI step で `pty-continue: true` を使う | ドキュメントで用途を明示。デフォルト `false` |
 | フィルタがコマンド出力の ANSI を誤除去 | Phase は先頭区間のみ。印刷可能文字出現後はフィルタ停止 |
 | `2J` 除去後に `H` が残ると左上から上書き | `H` / `f` もセットで除去（本 plan の要件） |
 | 前 step 終了時カーソルが行末でなく画面下部 | 自然な継続は「その位置から追記」。スクロールは既存ターミナルエミュレータに委ねる |
@@ -238,7 +238,7 @@ $ printf 'after'
 
 | Fixture | Assert |
 |---|---|
-| `tests/fixtures/pty-continue.yaml`（新規） | 通常 step → `pty-continue` PTY echo → 通常 step。生成 cast に `2J` が含まれないこと |
+| `tests/fixtures/pty-continue.yaml`（新規） | 通常 step → `pty-continue` PTY echo/TUI → 通常 step。生成 cast に先頭 `2J` や alt exit 後 cleanup が含まれないこと |
 | 既存 `pty.yaml` / `pty-unix.yaml` 等 | **回帰なし**（バイト列同一） |
 
 ### Manual / sample update
@@ -296,5 +296,5 @@ $ printf 'after'
 ## Lessons Learned（調査時点）
 
 - PTY 起動時の `2J` はシェルプロファイルだけでなく、ConPTY / 対話シェル初期化でも発生する。
-- `matrix` は `2J` の後に `?1049h` で alternate screen に入るため、「メイン画面の復元」では前 step の内容は戻らない（alternate screen の仕様）。
+- `matrix` は `2J` の後に `?1049h` で alternate screen に入り、`?1049l` の直後に main screen cleanup を出すことがある。`2J` と alt exit 後 cleanup を除去し、alternate screen 入退場を保持すると、前 step の main screen 履歴へ戻れる。
 - `2J` と `H` はセットで扱わないと、クリアは防げても左上からの上書きが残る。

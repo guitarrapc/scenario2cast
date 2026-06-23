@@ -38,11 +38,11 @@ When a map-form step has `pty: true` (default `false`):
 
 ### Continuing from previous screen state
 
-When a map-form step sets both `pty: true` and `pty-continue: true`, scenetake removes shell initialization sequences from the beginning of that PTY capture before writing cast `o` events. This supports mixed scenarios where an ordinary step is followed by a lightweight PTY command such as `echo`, and the PTY shell startup would otherwise clear the accumulated terminal state.
+When a map-form step sets both `pty: true` and `pty-continue: true`, scenetake removes shell initialization sequences from the beginning of that PTY capture before writing cast `o` events. This supports mixed scenarios where an ordinary step is followed by a PTY command and the PTY shell startup would otherwise clear the accumulated terminal state. It applies both to lightweight commands such as `echo` and alternate-screen TUI commands such as `matrix`, where the TUI should run full-screen and then return to the previous main-screen history.
 
-The filter applies only to the leading initialization phase, before the first meaningful user output. It strips common shell startup controls such as full-screen erase (`CSI 2 J`), erase-to-screen-end (`CSI J`, `CSI 0 J`, `CSI 1 J`), cursor home / position (`CSI H`, `CSI row;col H`, `CSI row;col f`), cursor visibility toggles, SGR reset, OSC title updates, and platform mode toggles such as ConPTY/focus/bracketed-paste private modes.
+The filter applies first to the leading initialization phase, before the first meaningful user output. It strips common shell startup controls such as full-screen erase (`CSI 2 J`), erase-to-screen-end (`CSI J`, `CSI 0 J`, `CSI 1 J`), cursor home / position (`CSI H`, `CSI row;col H`, `CSI row;col f`), cursor visibility toggles, SGR reset, OSC title updates, and platform mode toggles such as ConPTY/focus/bracketed-paste private modes.
 
-The leading phase ends as soon as printable output appears, an alternate-screen mode (`?1049`, `?1047`, or `?47`) appears, or a 4096-byte safety limit is reached. After the phase ends, bytes are recorded unchanged. Alternate-screen sequences are not stripped, so TUI commands retain their own terminal behavior. `pty-continue` is ignored with a warning when `pty: true` is not set.
+The leading phase ends as soon as printable output appears, an alternate-screen mode (`?1049`, `?1047`, or `?47`) appears, or a 4096-byte safety limit is reached. Alternate-screen enter/exit sequences are not stripped, so TUI commands retain their own terminal behavior. When an alternate-screen exit is followed immediately by main-screen cleanup controls such as cursor home, line erase, blank-line advancement, cursor visibility toggles, SGR reset, or platform private-mode toggles, those cleanup controls are stripped so the restored main-screen history remains visible. Other bytes after the leading phase are recorded unchanged. `pty-continue` is ignored with a warning when `pty: true` is not set.
 
 When `pty: false` (default):
 
@@ -96,5 +96,5 @@ Integration tests require `SCENETAKE_BIN` pointing at a published scenetake bina
 
 - Pipe redirect is not a PTY; ConPTY is required on Windows for TUI tools.
 - Keeping `pty` opt-in preserves simpler pipe behavior for ordinary commands.
-- Keeping `pty-continue` opt-in preserves raw PTY streams for TUI demos while allowing lightweight PTY commands to coexist with pipe-recorded steps.
+- Keeping `pty-continue` opt-in preserves raw PTY streams by default while allowing PTY commands, including alternate-screen TUI demos, to coexist with pipe-recorded steps without erasing prior history after startup or TUI exit cleanup.
 - Recorded step failures belong in the cast as demo content; only infrastructure failures (spawn, drain timeout) should abort the run. See [spec_scenario.md](spec_scenario.md) → Step exit codes.

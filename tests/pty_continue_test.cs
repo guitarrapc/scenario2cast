@@ -11,6 +11,8 @@ failures += Run("StripClearHomeAndText", StripClearHomeAndText);
 failures += Run("SplitCsiAcrossChunks", SplitCsiAcrossChunks);
 failures += Run("KeepClearAfterPhaseEnd", KeepClearAfterPhaseEnd);
 failures += Run("KeepAlternateScreenAndEndPhase", KeepAlternateScreenAndEndPhase);
+failures += Run("KeepAlternateScreenExitAndFollowingText", KeepAlternateScreenExitAndFollowingText);
+failures += Run("StripAlternateScreenExitCleanup", StripAlternateScreenExitCleanup);
 failures += Run("StripOscAndInitOnly", StripOscAndInitOnly);
 failures += Run("KeepLineEraseDuringLeadingPhase", KeepLineEraseDuringLeadingPhase);
 failures += Run("StripPrivateModes", StripPrivateModes);
@@ -73,6 +75,18 @@ static bool KeepAlternateScreenAndEndPhase()
 {
     var output = Filter("\u001b[2J\u001b[?1049hmatrix\u001b[2J");
     return output == "\u001b[?1049hmatrix\u001b[2J";
+}
+
+static bool KeepAlternateScreenExitAndFollowingText()
+{
+    var output = Filter("\u001b[2J\u001b[H\u001b[?1049hmatrix\u001b[?1049lafter");
+    return output == "\u001b[?1049hmatrix\u001b[?1049lafter";
+}
+
+static bool StripAlternateScreenExitCleanup()
+{
+    var output = Filter("\u001b[2J", "\u001b[H\u001b[?1049hmatrix\u001b[?1049l", "\u001b[?25l\u001b[H\u001b[K\r\n\u001b[K\r\n\u001b[H\u001b[?25hafter");
+    return output == "\u001b[?1049hmatrix\u001b[?1049lafter";
 }
 
 static bool StripOscAndInitOnly()
