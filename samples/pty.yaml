@@ -1,6 +1,6 @@
 title: "PTY Demo"
-width: 80
-height: 24
+width: 60
+height: 14
 shell: bash
 
 settings:
