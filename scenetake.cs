@@ -12,6 +12,8 @@
 #:include CastReader.cs
 #:include JsonEscape.cs
 #:include PtyLeadingInitFilter.cs
+#:include CastTimingPipeline.cs
+#:include PipeStreamCapture.cs
 
 using MiniPty;
 using MiniPty.Capture;
@@ -32,6 +34,8 @@ const double DefaultJitter = 0.015;
 const double DefaultPreDelay = 0.2;
 const double DefaultPostDelay = 0.5;
 const double DefaultExecutionDuration = 0.05;
+const double DefaultSilenceThreshold = 2.0;
+const double DefaultMaxIdle = 0.2;
 const string DefaultStderrColorSpec = "red";
 const string SgrReset = "\u001b[0m";
 
@@ -742,7 +746,9 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         var cmdPre    = GetDouble(command.Extra, preDelay, "pre-delay");
         var cmdPost   = GetDouble(command.Extra, postDelay, "post-delay");
         var cmdExecutionDuration = GetDouble(command.Extra, defaultExecutionDuration, "execution-duration");
+        var cmdCastTiming = ResolveCastTiming(settings, command.Extra);
         var cmdStderrStyle = GetOverrideStyle(command.Extra, "stderr-color", defaultStderrStyle, "stderr-color", command.Cmd);
+        var cmdHighlights = GetHighlights(command.Extra, command.Cmd);
         var hasRunHighlight = TryGetStepStyle(command.Extra, "run-highlight", "run-highlight", command.Cmd, out var runHighlightStyle);
         var usePty = GetBool(command.Extra, false, "pty");
 
@@ -763,79 +769,28 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         var execution = await RunCommandCoreAsync(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24, verbose);
         if (execution.ExitCode != 0)
             WarnStepExitCode(command.Name, command.Cmd, execution.ExitCode);
+        var commandStart = t;
         if (execution.IsPty)
         {
-            var commandStart = t;
-            var ptyFilter = new PtyLeadingInitFilter();
-            TimeSpan? lastChunkTime = null;
-            var startupOffset = 0.0;
-            var startupOffsetResolved = false;
-            var emittedAny = false;
-            var lastAdjustedSeconds = cmdExecutionDuration;
-
-            foreach (var chunk in execution.PtyByteChunks!)
-            {
-                lastChunkTime = chunk.Time;
-                var chunkSeconds = chunk.Time.TotalSeconds;
-                var data = ptyFilter.Process(chunk.Data);
-                if (data.IsEmpty)
-                    continue;
-
-                if (!startupOffsetResolved)
-                {
-                    startupOffset = PtyCastTiming.ComputeStartupOffset(chunkSeconds, cmdExecutionDuration);
-                    startupOffsetResolved = true;
-                    if (verbose && startupOffset > 0)
-                        Console.Error.WriteLine($"scenetake: pty startup compress: {startupOffset:F3}s");
-                }
-
-                var adjusted = PtyCastTiming.AdjustChunkSeconds(chunkSeconds, startupOffset);
-                lastAdjustedSeconds = adjusted;
-                emittedAny = true;
-                events.Add(CastEvent.OutputUtf8(
-                    Math.Round(commandStart + adjusted, 6),
-                    data));
-            }
-
-            var tail = ptyFilter.Complete();
-            if (!tail.IsEmpty)
-            {
-                var tailSeconds = (lastChunkTime ?? TimeSpan.Zero).TotalSeconds;
-                if (!startupOffsetResolved)
-                {
-                    startupOffset = PtyCastTiming.ComputeStartupOffset(tailSeconds, cmdExecutionDuration);
-                    startupOffsetResolved = true;
-                    if (verbose && startupOffset > 0)
-                        Console.Error.WriteLine($"scenetake: pty startup compress: {startupOffset:F3}s");
-                }
-
-                var adjusted = PtyCastTiming.AdjustChunkSeconds(tailSeconds, startupOffset);
-                lastAdjustedSeconds = adjusted;
-                emittedAny = true;
-                events.Add(CastEvent.OutputUtf8(
-                    Math.Round(commandStart + adjusted, 6),
-                    tail));
-            }
-
-            if (verbose)
-                Console.Error.WriteLine($"scenetake: pty cleanup: stripped {ptyFilter.StrippedByteCount} bytes");
-
-            t = emittedAny
-                ? Math.Max(t + cmdExecutionDuration, commandStart + lastAdjustedSeconds)
-                : t + cmdExecutionDuration;
+            t = EmitPtyStepOutput(
+                events,
+                commandStart,
+                execution.PtyByteChunks!,
+                cmdExecutionDuration,
+                cmdCastTiming,
+                verbose);
         }
         else
         {
-            t += cmdExecutionDuration;
-            var mergedOutput = MergePipeOutput(execution.Output, execution.Stderr, cmdStderrStyle);
-
-            if (!string.IsNullOrEmpty(mergedOutput))
-            {
-                var output = GetHighlights(command.Extra, command.Cmd) is { } highlights
-                    ? ApplyHighlights(mergedOutput, highlights, command.Cmd)
-                    : mergedOutput;
-                events.Add(CastEvent.Output(Math.Round(t, 6), NormalizeNewlines(output)));
-            }
+            t = EmitPipeStepOutput(
+                events,
+                commandStart,
+                execution.PipeStreamChunks!,
+                cmdStderrStyle,
+                cmdHighlights,
+                command.Cmd,
+                cmdExecutionDuration,
+                cmdCastTiming);
         }
 
         t += cmdPost;
@@ -846,6 +801,181 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
 
     return events;
+}
+
+static CastTimingSettings ResolveCastTiming(ScenarioSettings settings, Dictionary<string, object?>? stepExtra)
+{
+    var silenceThreshold = settings.SilenceThreshold ?? DefaultSilenceThreshold;
+    var maxIdle = settings.MaxIdle ?? DefaultMaxIdle;
+    double? maxDuration = settings.MaxDuration;
+    if (stepExtra is null)
+        return new CastTimingSettings(silenceThreshold, maxIdle, maxDuration);
+
+    return new CastTimingSettings(
+        GetDouble(stepExtra, silenceThreshold, "silence-threshold"),
+        GetDouble(stepExtra, maxIdle, "max-idle"),
+        GetOptionalDouble(stepExtra, maxDuration, "max-duration"));
+}
+
+static double EmitPipeStepOutput(
+    List<CastEvent> events,
+    double commandStart,
+    IReadOnlyList<PipeStreamChunk> chunks,
+    string stderrStyle,
+    List<HighlightSpec>? highlights,
+    string cmd,
+    double executionDuration,
+    CastTimingSettings timing)
+{
+    if (chunks.Count == 0)
+        return commandStart + executionDuration;
+
+    var timedChunks = BuildStartupAdjustedPipeChunks(chunks, executionDuration, stderrStyle);
+    ApplyCastTimingToChunks(timedChunks, timing);
+    var coalesced = CastTimingPipeline.CoalesceTimedText(timedChunks);
+    EmitTimedTextCastEvents(events, commandStart, coalesced, highlights, cmd);
+    return Math.Max(commandStart + executionDuration, commandStart + coalesced[^1].Time);
+}
+
+static double EmitPtyStepOutput(
+    List<CastEvent> events,
+    double commandStart,
+    IReadOnlyList<PtyCaptureChunk> chunks,
+    double executionDuration,
+    CastTimingSettings timing,
+    bool verbose)
+{
+    var ptyFilter = new PtyLeadingInitFilter();
+    var timedChunks = new List<(double Time, ReadOnlyMemory<byte> Data)>();
+    var startupOffset = 0.0;
+    var startupOffsetResolved = false;
+
+    void AddChunk(double chunkSeconds, ReadOnlyMemory<byte> data)
+    {
+        if (!startupOffsetResolved)
+        {
+            startupOffset = PtyCastTiming.ComputeStartupOffset(chunkSeconds, executionDuration);
+            startupOffsetResolved = true;
+            if (verbose && startupOffset > 0)
+                Console.Error.WriteLine($"scenetake: pty startup compress: {startupOffset:F3}s");
+        }
+
+        timedChunks.Add((PtyCastTiming.AdjustChunkSeconds(chunkSeconds, startupOffset), data));
+    }
+
+    foreach (var chunk in chunks)
+    {
+        var data = ptyFilter.Process(chunk.Data);
+        if (data.IsEmpty)
+            continue;
+
+        AddChunk(chunk.Time.TotalSeconds, data);
+    }
+
+    var tail = ptyFilter.Complete();
+    if (!tail.IsEmpty)
+    {
+        var tailSeconds = chunks.Count > 0
+            ? chunks[^1].Time.TotalSeconds
+            : 0.0;
+        AddChunk(tailSeconds, tail);
+    }
+
+    if (verbose)
+        Console.Error.WriteLine($"scenetake: pty cleanup: stripped {ptyFilter.StrippedByteCount} bytes");
+
+    if (timedChunks.Count == 0)
+        return commandStart + executionDuration;
+
+    ApplyCastTimingToUtf8Chunks(timedChunks, timing);
+    var coalesced = CastTimingPipeline.CoalesceTimedUtf8(timedChunks);
+    foreach (var (time, data) in coalesced)
+    {
+        events.Add(CastEvent.OutputUtf8(
+            Math.Round(commandStart + time, 6),
+            data));
+    }
+
+    return Math.Max(commandStart + executionDuration, commandStart + coalesced[^1].Time);
+}
+
+static List<(double Time, string Text)> BuildStartupAdjustedPipeChunks(
+    IReadOnlyList<PipeStreamChunk> chunks,
+    double executionDuration,
+    string stderrStyle)
+{
+    var startupOffset = PtyCastTiming.ComputeStartupOffset(chunks[0].Time.TotalSeconds, executionDuration);
+    var timedChunks = new List<(double Time, string Text)>(chunks.Count);
+    foreach (var chunk in chunks)
+    {
+        var adjusted = PtyCastTiming.AdjustChunkSeconds(chunk.Time.TotalSeconds, startupOffset);
+        var text = FormatPipeChunkText(chunk, stderrStyle);
+        timedChunks.Add((adjusted, text));
+    }
+
+    return timedChunks;
+}
+
+static string FormatPipeChunkText(PipeStreamChunk chunk, string stderrStyle)
+{
+    if (!chunk.IsStderr)
+        return chunk.Text;
+
+    if (string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(chunk.Text))
+        return chunk.Text;
+
+    return WrapWithStylePreserveTrailingNewlines(chunk.Text, stderrStyle);
+}
+
+static void ApplyCastTimingToChunks(List<(double Time, string Text)> chunks, CastTimingSettings timing)
+{
+    if (chunks.Count == 0)
+        return;
+
+    var times = chunks.Select(static chunk => chunk.Time).ToArray();
+    var adjusted = CastTimingPipeline.AdjustTimeline(times, timing);
+    for (var i = 0; i < chunks.Count; i++)
+        chunks[i] = (adjusted[i], chunks[i].Text);
+}
+
+static void ApplyCastTimingToUtf8Chunks(List<(double Time, ReadOnlyMemory<byte> Data)> chunks, CastTimingSettings timing)
+{
+    if (chunks.Count == 0)
+        return;
+
+    var times = chunks.Select(static chunk => chunk.Time).ToArray();
+    var adjusted = CastTimingPipeline.AdjustTimeline(times, timing);
+    for (var i = 0; i < chunks.Count; i++)
+        chunks[i] = (adjusted[i], chunks[i].Data);
+}
+
+static void EmitTimedTextCastEvents(
+    List<CastEvent> events,
+    double commandStart,
+    IReadOnlyList<(double Time, string Text)> coalesced,
+    List<HighlightSpec>? highlights,
+    string cmd)
+{
+    if (coalesced.Count == 0)
+        return;
+
+    if (highlights is null)
+    {
+        foreach (var (time, text) in coalesced)
+            events.Add(CastEvent.Output(Math.Round(commandStart + time, 6), NormalizeNewlines(text)));
+        return;
+    }
+
+    var merged = string.Concat(coalesced.Select(static chunk => chunk.Text));
+    var highlighted = ApplyHighlights(merged, highlights, cmd);
+    var rawSegments = coalesced.Select(static chunk => chunk.Text).ToList();
+    var split = HighlightSplitter.SplitByRawSegments(highlighted, rawSegments);
+    for (var i = 0; i < coalesced.Count; i++)
+    {
+        events.Add(CastEvent.Output(
+            Math.Round(commandStart + coalesced[i].Time, 6),
+            NormalizeNewlines(split[i])));
+    }
 }
 
 static void EmitTypedCommand(
@@ -942,10 +1072,11 @@ static async Task<CommandExecution> RunCommandCoreAsync(string cmd, string? cwd,
 
     using var proc = new Process { StartInfo = psi };
     proc.Start();
-    var stdout = proc.StandardOutput.ReadToEnd();
-    var stderr = proc.StandardError.ReadToEnd();
-    proc.WaitForExit();
-    return CommandExecution.FromPipe(stdout, stderr, proc.ExitCode);
+    var pipeChunks = await PipeStreamCapture.ReadAsync(proc);
+    await proc.WaitForExitAsync();
+    var stdout = string.Concat(pipeChunks.Where(static chunk => !chunk.IsStderr).Select(static chunk => chunk.Text));
+    var stderr = string.Concat(pipeChunks.Where(static chunk => chunk.IsStderr).Select(static chunk => chunk.Text));
+    return CommandExecution.FromPipeStream(stdout, stderr, proc.ExitCode, pipeChunks);
 }
 
 static string[] BuildPtyShellArguments(ShellLaunch shell, string cmd)
@@ -1015,25 +1146,6 @@ static void PrintScenarioCommandFailure(string phase, string cmd, int exitCode)
 {
     Console.Error.WriteLine($"{phase} failed (exit code {exitCode}):");
     Console.Error.WriteLine(cmd);
-}
-
-static string MergePipeOutput(string stdout, string stderr, string stderrStyle)
-{
-    if (string.IsNullOrEmpty(stdout))
-    {
-        if (string.IsNullOrEmpty(stderr) || string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(stderr))
-            return stderr;
-
-        return WrapWithStylePreserveTrailingNewlines(stderr, stderrStyle);
-    }
-
-    if (string.IsNullOrEmpty(stderr))
-        return stdout;
-
-    if (string.IsNullOrEmpty(stderrStyle) || ContainsAnsiSgr(stderr))
-        return string.Concat(stdout, stderr);
-
-    return string.Concat(stdout, WrapWithStylePreserveTrailingNewlines(stderr, stderrStyle));
 }
 
 static string WrapWithStylePreserveTrailingNewlines(string text, string styleOpen)
@@ -1974,6 +2086,20 @@ static double GetDouble(Dictionary<string, object?> d, double def, params string
     return def;
 }
 
+static double? GetOptionalDouble(Dictionary<string, object?> d, double? def, params string[] keys)
+{
+    foreach (var key in keys)
+    {
+        if (d.TryGetValue(key, out var value) &&
+            double.TryParse(value?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
+        {
+            return parsed;
+        }
+    }
+
+    return def;
+}
+
 static bool GetBool(Dictionary<string, object?> d, bool def, params string[] keys)
 {
     foreach (var key in keys)
@@ -2303,13 +2429,21 @@ readonly record struct CommandExecution(
     bool IsPty,
     string Output,
     string Stderr,
-    IReadOnlyList<PtyCaptureChunk>? PtyByteChunks)
+    IReadOnlyList<PtyCaptureChunk>? PtyByteChunks,
+    IReadOnlyList<PipeStreamChunk>? PipeStreamChunks)
 {
     public static CommandExecution FromCapture(PtyCaptureResult result) =>
-        new(result.ExitCode, true, "", "", result.Chunks);
+        new(result.ExitCode, true, "", "", result.Chunks, null);
+
+    public static CommandExecution FromPipeStream(
+        string stdout,
+        string stderr,
+        int exitCode,
+        IReadOnlyList<PipeStreamChunk> chunks) =>
+        new(exitCode, false, stdout, stderr, null, chunks);
 
     public static CommandExecution FromPipe(string stdout, string stderr, int exitCode) =>
-        new(exitCode, false, stdout, stderr, null);
+        new(exitCode, false, stdout, stderr, null, []);
 }
 
 record ShellLaunch(string FileName, string[] Arguments, string EnvValue, string DisplayName);
@@ -2338,6 +2472,9 @@ public partial class ScenarioSettings
     public double? PreDelay { get; set; }
     public double? PostDelay { get; set; }
     public double? ExecutionDuration { get; set; }
+    public double? SilenceThreshold { get; set; }
+    public double? MaxIdle { get; set; }
+    public double? MaxDuration { get; set; }
     public string? StderrColor { get; set; }
 }
 
