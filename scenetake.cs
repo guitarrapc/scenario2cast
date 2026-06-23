@@ -2201,10 +2201,12 @@ static string CreateInitialScenarioYaml()
             color: "fg:white bg:212"
           - at: "4"
             color: "fg:black bg:114"
-
       - name: "[bright-yellow]stderr color override"
         run: echo "stderr sample" 1>&2
         stderr-color: "bold fg:red"
+      - name: "run in a PTY"
+        run: echo "Running in a PTY, which is useful for TUI app and tty-based output"
+        pty: true
 
     # Optional teardown commands. They run after the cast file is written, but are not recorded in the cast.
     # post:
