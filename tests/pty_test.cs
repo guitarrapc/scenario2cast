@@ -34,6 +34,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     failures += await RunAsync("IntegrationPtyCmdFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-cmd.yaml", "pty-cmd-output")));
     failures += await RunAsync("IntegrationPtyTtyFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-tty-check.yaml", "redirected=False")));
     failures += await RunAsync("IntegrationPtyContinueFixture", () => Task.FromResult(IntegrationPtyContinueFixture(repoRoot, "pty-continue-cmd.yaml")));
+    failures += await RunAsync("IntegrationPtyDefaultTypingFixture", () => Task.FromResult(IntegrationPtyDefaultTypingFixture(repoRoot, "pty-default-typing-cmd.yaml", "echo pty-typed-output")));
     if (TryResolvePwsh(out var pwshForFixture))
         failures += await RunAsync("IntegrationMatrixFixture", () => Task.FromResult(IntegrationMatrixFixture(repoRoot, "matrix-pwsh-pty.yaml")));
 }
@@ -42,6 +43,7 @@ else
     failures += await RunAsync("IntegrationPtyCmdFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-unix.yaml", "pty-cmd-output")));
     failures += await RunAsync("IntegrationPtyTtyFixture", () => Task.FromResult(IntegrationFixture(repoRoot, "pty-tty-check-unix.yaml", "redirected=False")));
     failures += await RunAsync("IntegrationPtyContinueFixture", () => Task.FromResult(IntegrationPtyContinueFixture(repoRoot, "pty-continue.yaml")));
+    failures += await RunAsync("IntegrationPtyDefaultTypingFixture", () => Task.FromResult(IntegrationPtyDefaultTypingFixture(repoRoot, "pty-default-typing.yaml", "printf 'pty-typed-output\\n'")));
     if (!TryFindExecutable("matrix", out _))
         Console.Error.WriteLine("skip IntegrationMatrixFixture: matrix not found");
     else
@@ -386,6 +388,36 @@ static bool IntegrationPtyContinueFixture(string repoRoot, string fixtureName)
             && combinedOutput.Contains("pty-cmd-output", StringComparison.Ordinal)
             && combinedOutput.Contains("after pty", StringComparison.Ordinal)
             && !combinedOutput.Contains("\u001b[2J", StringComparison.Ordinal);
+    }
+    finally
+    {
+        foreach (var path in new[] { outputStem + ".cast", outputStem + ".svg" })
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+}
+
+static bool IntegrationPtyDefaultTypingFixture(string repoRoot, string fixtureName, string typedCommand)
+{
+    if (!IntegrationTestsEnabled(repoRoot))
+        return true;
+
+    var fixturePath = Path.Combine(repoRoot, "tests", "fixtures", fixtureName);
+    var outputStem = Path.Combine(Path.GetTempPath(), $"scenetake-pty-default-typing-{Guid.NewGuid():N}");
+    try
+    {
+        if (!RunScenetake(repoRoot, fixturePath, outputStem, out var exitCode))
+            return false;
+        if (exitCode != 0)
+            return false;
+
+        var castPath = outputStem + ".cast";
+        var events = ReadCastOutputEvents(castPath);
+        var combinedOutput = string.Concat(events);
+        return combinedOutput.Contains($"$ {typedCommand}\r\n", StringComparison.Ordinal)
+            && combinedOutput.Contains("pty-typed-output", StringComparison.Ordinal);
     }
     finally
     {

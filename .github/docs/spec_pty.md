@@ -28,13 +28,13 @@ PTY mode stays opt-in so ordinary steps keep predictable pipe-based stdout/stder
 
 When a map-form step has `pty: true` (default `false`):
 
-- **No simulated typing** — the cast does not emit prompt, per-character typing, or synthetic Enter for that step. Other steps without `pty` keep the usual typing recording.
+- **Simulated typing** — scenetake emits the same prompt, per-character typed command, optional `run-highlight`, and synthetic Enter used by non-PTY steps before the PTY output begins. The command is still executed as a PTY shell command; typing is a recording effect, not PTY stdin.
 - **PTY geometry** — uses scenario `width` × `height` (same as cast header terminal size).
 - **Shell interpretation** — the `run` string is passed to the scenario `shell` the same way as non-PTY execution (`pwsh -Command`, `cmd /c`, `bash -lc`, etc.). PTY does not bypass the shell.
 - **Merged output** — stdout and stderr are one byte stream. `stderr-color` and pipe-style `highlight` do not apply to PTY output for that step.
 - **Timestamped chunks** — output is read while the child runs; cast `o` events use `command_start + chunk_time` on the scenario timeline.
 - **Raw byte stream by default** — no newline normalization; ANSI sequences may span chunk boundaries. When `pty-continue: true` is set, only leading shell initialization ANSI is filtered before cast events are written.
-- **No fallback** — if a PTY cannot be created, the run fails fatally. scenetake does not fall back to pipe redirect or simulated typing.
+- **No PTY fallback** — if a PTY cannot be created, the run fails fatally. scenetake does not fall back to pipe redirect execution.
 
 ### Continuing from previous screen state
 

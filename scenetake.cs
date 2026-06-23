@@ -763,27 +763,7 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
             t += 0.05;
         }
 
-        if (!usePty)
-        {
-            events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
-            t += 0.05;
-
-            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-                events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
-
-            foreach (var ch in command.Cmd)
-            {
-                events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
-                var delay = cmdSpeed + rng.NextDouble() * 2 * cmdJitter - cmdJitter;
-                t += Math.Max(delay, 0.005);
-            }
-
-            if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
-                events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
-
-            events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
-            t += 0.15;
-        }
+        EmitTypedCommand(events, ref t, prompt, command.Cmd, cmdSpeed, cmdJitter, rng, hasRunHighlight, runHighlightStyle);
 
         Console.Error.WriteLine($"  running: {command.Cmd}");
         var execution = await RunCommandCoreAsync(command.Cmd, scenario.Cwd, shell, usePty, scenario.Width ?? 120, scenario.Height ?? 24, verbose);
@@ -847,6 +827,37 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
         events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
 
     return events;
+}
+
+static void EmitTypedCommand(
+    List<CastEvent> events,
+    ref double t,
+    string prompt,
+    string cmd,
+    double speed,
+    double jitter,
+    Random rng,
+    bool hasRunHighlight,
+    string runHighlightStyle)
+{
+    events.Add(CastEvent.Output(Math.Round(t, 6), prompt));
+    t += 0.05;
+
+    if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+        events.Add(CastEvent.Output(Math.Round(t, 6), runHighlightStyle));
+
+    foreach (var ch in cmd)
+    {
+        events.Add(CastEvent.Output(Math.Round(t, 6), TypingChars.Get(ch)));
+        var delay = speed + rng.NextDouble() * 2 * jitter - jitter;
+        t += Math.Max(delay, 0.005);
+    }
+
+    if (hasRunHighlight && !string.IsNullOrEmpty(runHighlightStyle))
+        events.Add(CastEvent.Output(Math.Round(t, 6), SgrReset));
+
+    events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
+    t += 0.15;
 }
 
 static string NameCommentPrefix(string? precedingOutput)
