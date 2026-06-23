@@ -757,7 +757,7 @@ static async Task<List<CastEvent>> GenerateAsync(Scenario scenario, ShellLaunch 
 
         if (TryFormatNameComment(command.Name, command.Cmd, out var nameLine, out var nameDisplayText))
         {
-            var prefix = NameCommentPrefixForLastEvent(events);
+            var prefix = CastEventLayout.NameCommentPrefixForLastEvent(events);
             events.Add(CastEvent.Marker(Math.Round(t, 6), nameDisplayText));
             events.Add(CastEvent.Output(Math.Round(t, 6), prefix + nameLine));
             t += 0.05;
@@ -859,38 +859,6 @@ static void EmitTypedCommand(
     events.Add(CastEvent.Output(Math.Round(t, 6), "\r\n"));
     t += 0.15;
 }
-
-static string NameCommentPrefix(string? precedingOutput)
-{
-    if (string.IsNullOrEmpty(precedingOutput)) return "";
-    return precedingOutput.EndsWith("\r\n", StringComparison.Ordinal) || precedingOutput.EndsWith('\n')
-        ? ""
-        : "\r\n";
-}
-
-static string NameCommentPrefixForLastEvent(IReadOnlyList<CastEvent> events)
-{
-    if (events.Count == 0)
-        return "";
-
-    var last = events[^1];
-    if (last.Kind != CastEventKind.Output)
-        return "\r\n";
-
-    if (last.HasUtf8Output)
-    {
-        var span = last.Utf8Output.Span;
-        if (span.IsEmpty)
-            return "";
-        return Utf8EndsWithNewline(span) ? "" : "\r\n";
-    }
-
-    return NameCommentPrefix(last.Data);
-}
-
-static bool Utf8EndsWithNewline(ReadOnlySpan<byte> span) =>
-    span[^1] == (byte)'\n'
-    || (span.Length >= 2 && span[^2] == (byte)'\r' && span[^1] == (byte)'\n');
 
 static CommandEntry ParseCommand(object? item)
 {

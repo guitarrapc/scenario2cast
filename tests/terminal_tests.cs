@@ -1,4 +1,4 @@
-#:sdk Microsoft.NET.Sdk
+﻿#:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
 #:property Nullable=enable
 #:property ImplicitUsings=enable
@@ -21,6 +21,8 @@ failures += Run("CsiParameterWhitespace", CsiParameterWhitespace);
 failures += Run("InvalidUtf8Replacement", InvalidUtf8Replacement);
 failures += Run("InsertBlankCharacters", InsertBlankCharacters);
 failures += Run("ScrollRegion", ScrollRegion);
+failures += Run("NameCommentPrefixIgnoresTrailingAnsiControls", NameCommentPrefixIgnoresTrailingAnsiControls);
+failures += Run("AlternateScreenRestoreKeepsNextPromptAdjacent", AlternateScreenRestoreKeepsNextPromptAdjacent);
 
 return failures == 0 ? 0 : 1;
 
@@ -237,6 +239,43 @@ static bool ScrollRegion()
         && buffer.GetCell(1, 0).Text == "C"
         && buffer.GetCell(2, 0).Text == " "
         && buffer.GetCell(3, 0).Text == "D";
+}
+
+static bool NameCommentPrefixIgnoresTrailingAnsiControls()
+{
+    var events = new List<CastEvent>
+    {
+        CastEvent.OutputUtf8(0, Encoding.UTF8.GetBytes("Running inside PTY\r\n\u001b]0;bash\a\u001b[?25h")),
+        CastEvent.OutputUtf8(0.1, Encoding.UTF8.GetBytes("\u001b[?9001l\u001b[?1004l")),
+    };
+
+    return CastEventLayout.NameCommentPrefixForLastEvent(events) == "";
+}
+
+static bool AlternateScreenRestoreKeepsNextPromptAdjacent()
+{
+    var theme = DarkTheme();
+    var buffer = new ScreenBuffer(80, 24, theme);
+    var parser = new AnsiParser(buffer, theme);
+    parser.Process("$ matrix 3\r\n");
+    parser.Process("\u001b[?1049h");
+    parser.Process("\u001b[80GX");
+    parser.Process("\u001b[?1049l");
+    parser.Process("$ ");
+
+    return RowText(buffer, 0).StartsWith("$ matrix 3", StringComparison.Ordinal)
+        && RowText(buffer, 1) == "$"
+        && buffer.IsRowBlank(2)
+        && buffer.CursorRow == 1
+        && buffer.CursorCol == 2;
+}
+
+static string RowText(ScreenBuffer buffer, int row)
+{
+    var chars = new char[buffer.Width];
+    for (var col = 0; col < buffer.Width; col++)
+        chars[col] = buffer.GetCell(row, col).Text.Length == 1 ? buffer.GetCell(row, col).Text[0] : ' ';
+    return new string(chars).TrimEnd();
 }
 
 internal readonly record struct ResolvedTheme(string Fg, string Bg, string Palette);
