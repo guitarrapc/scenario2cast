@@ -8,6 +8,7 @@ failures += Run("CompressSlowStartup", CompressSlowStartup);
 failures += Run("KeepFastStartup", KeepFastStartup);
 failures += Run("PreserveChunkSpacing", PreserveChunkSpacing);
 failures += Run("NoOffsetWhenFirstChunkMatchesExecutionDuration", NoOffsetWhenFirstChunkMatchesExecutionDuration);
+failures += Run("IgnoreNegativeExecutionDuration", IgnoreNegativeExecutionDuration);
 
 return failures == 0 ? 0 : 1;
 
@@ -33,7 +34,7 @@ static int Run(string name, Func<bool> test)
 
 // Mirrors PtyCastTiming in scenetake.cs
 static double ComputeStartupOffset(double firstEmittedChunkSeconds, double executionDuration) =>
-    Math.Max(0.0, firstEmittedChunkSeconds - executionDuration);
+    Math.Max(0.0, firstEmittedChunkSeconds - Math.Max(0.0, executionDuration));
 
 static double AdjustChunkSeconds(double chunkSeconds, double startupOffset) =>
     chunkSeconds - startupOffset;
@@ -64,3 +65,11 @@ static bool PreserveChunkSpacing()
 
 static bool NoOffsetWhenFirstChunkMatchesExecutionDuration() =>
     ComputeStartupOffset(0.05, 0.05) == 0.0;
+
+static bool IgnoreNegativeExecutionDuration()
+{
+    const double firstChunkSeconds = 0.30;
+    var offset = ComputeStartupOffset(firstChunkSeconds, -1.0);
+    return offset == firstChunkSeconds
+        && AdjustChunkSeconds(firstChunkSeconds, offset) >= 0.0;
+}

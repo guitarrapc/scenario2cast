@@ -2274,7 +2274,7 @@ enum OutputFormat
 internal static class PtyCastTiming
 {
     internal static double ComputeStartupOffset(double firstEmittedChunkSeconds, double executionDuration) =>
-        Math.Max(0.0, firstEmittedChunkSeconds - executionDuration);
+        Math.Max(0.0, firstEmittedChunkSeconds - Math.Max(0.0, executionDuration));
 
     internal static double AdjustChunkSeconds(double chunkSeconds, double startupOffset) =>
         chunkSeconds - startupOffset;
